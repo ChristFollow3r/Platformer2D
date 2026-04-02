@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 374477853f9b0d248aac54e2f4ee0b17, type: 3}
   m_Name: Grass
   m_EditorClassIdentifier: 
-  blockType: 
-  sprite: {fileID: 0}
+  blockType: Grass
+  sprite: {fileID: -1347532211411968617, guid: 0176299560908a44e9a0e1d80acf31ce, type: 3}
+  type: 1

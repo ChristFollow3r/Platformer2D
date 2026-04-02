@@ -6,4 +6,12 @@ public class Block : ScriptableObject
     public string blockType;
     public Sprite sprite;
     BoxCollider2D boxCollider;
+    public BlockType type;
+    public enum BlockType
+    {
+        DIRT,
+        GRASS,
+        STONE,
+        SAND,
+    }
 }
