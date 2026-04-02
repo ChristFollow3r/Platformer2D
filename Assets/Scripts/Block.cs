@@ -5,4 +5,5 @@ public class Block : ScriptableObject
 {
     public string blockType;
     public Sprite sprite;
+    BoxCollider2D boxCollider;
 }
