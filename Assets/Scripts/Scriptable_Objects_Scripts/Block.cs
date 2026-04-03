@@ -3,15 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Block", menuName = "Scriptable Objects/Block")]
 public class Block : ScriptableObject
 {
-    public string blockType;
+    public string blockName;
     public Sprite sprite;
-    BoxCollider2D boxCollider;
     public BlockType type;
-    public enum BlockType
-    {
-        DIRT,
-        GRASS,
-        STONE,
-        SAND,
-    }
+    public Hardness hardness;
 }
