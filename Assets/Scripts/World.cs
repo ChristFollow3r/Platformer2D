@@ -3,6 +3,7 @@ using UnityEngine;
 public class World 
 {
     public int width, height;
+    private BlockType[] blocks;
 
     public World(int width, int height)
     {
