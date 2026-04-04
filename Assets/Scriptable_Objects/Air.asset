@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 374477853f9b0d248aac54e2f4ee0b17, type: 3}
-  m_Name: Stone
+  m_Name: Air
   m_EditorClassIdentifier: 
-  blockName: Stone
-  sprite: {fileID: 3619076919395414356, guid: 92121547bcd0a5b4092b27165b405215, type: 3}
-  type: 3
-  hardness: 2
+  blockName: Air
+  sprite: {fileID: 0}
+  type: 0
+  hardness: 0

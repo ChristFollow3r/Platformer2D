@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class World 
 {
-    public int width, height;
-    private BlockType[] blocks;
+    public int width = 200;
+    public int height = 100;
+
+    public BlockType[] blocks;
 
     public World(int width, int height)
     {
