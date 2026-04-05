@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Stone
   m_EditorClassIdentifier: 
   blockName: Stone
-  sprite: {fileID: 3619076919395414356, guid: 92121547bcd0a5b4092b27165b405215, type: 3}
+  sprite: {fileID: 4567956584966768155, guid: acbcc002814d95140895a811f9df112f, type: 3}
   type: 3
   hardness: 2

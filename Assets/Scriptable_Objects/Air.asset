@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Air
   m_EditorClassIdentifier: 
   blockName: Air
-  sprite: {fileID: 0}
+  sprite: {fileID: 6667281360410286266, guid: 8cad37d29522c5143b38f1bdb8293400, type: 3}
   type: 0
   hardness: 0
