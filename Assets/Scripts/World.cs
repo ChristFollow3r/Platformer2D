@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class World 
 {
-    public int width = 200;
+    public int width = 200; // Idk why I have this here XD
     public int height = 100;
 
     public BlockType[] blocks;
@@ -23,7 +23,7 @@ public class World
         blocks[(y * width) + x] = type;
     }
 
-    public bool SafeCheck(int x, int y) // Will return true if  it's safe to check; if it's out of bounds it won't crash.
+    public bool SafeCheck(int x, int y) // Will return true if it's safe to check; if it's out of bounds it won't crash.
     {
         return (x >= 0 && x < width && y >= 0 && y < height);
     }

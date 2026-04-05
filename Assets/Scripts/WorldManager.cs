@@ -6,6 +6,9 @@ public class WorldManager : MonoBehaviour
 {
     [SerializeField] private Block[] blocks;
     [SerializeField] private Tilemap tileMap;
+
+    public int worldWidth = 200; // It's duplicated cause I don't feel like writing every time WorldData.World.Width
+    public int worldHeight = 100;
     public static WorldManager wManagerSingleton { get; private set; }
     public float scale = 0.05f;
 
@@ -25,36 +28,36 @@ public class WorldManager : MonoBehaviour
 
     private void Start()
     {
-        WorldData.world = new World(200, 100);
+        WorldData.world = new World(worldHeight, worldWidth);
         GenerateWolrd();
         RenderWorld();
     }
 
     private void GenerateWolrd()
     {
-        for (int i = 0; i < WorldData.world.width; i++)
+        for (int x = 0; x < worldWidth; x++)
         {
-            for (int j = 0; j < WorldData.world.height; j++)
+            for (int y = 0; y < worldHeight; y++)
             {
                 BlockType blockType = BlockType.Air;
-                float noiseValue = Mathf.PerlinNoise(i * scale, 0 );
-                int groundLevel = (int)(noiseValue * WorldData.world.width * 0.5);
+                float noiseValue = Mathf.PerlinNoise(x * scale, 0 );
+                int groundLevel = (int)(noiseValue * worldHeight * 0.5); // * 0.5 so the terrain has a reasonable height
 
-                if (j > groundLevel) blockType = BlockType.Air;
-                else if (i == groundLevel) blockType = BlockType.Grass;
-                else if (j >= groundLevel - 4) blockType = BlockType.Dirt; // I asked AI how to put the Random.Range cause it was conflicting with another library
+                if (y > groundLevel) blockType = BlockType.Air;
+                else if (y == groundLevel) blockType = BlockType.Grass;
+                else if (y >= groundLevel - 4) blockType = BlockType.Dirt; 
                 else blockType = BlockType.Stone;
 
-                WorldData.world.SetBlockType(i, j, blockType);
+                WorldData.world.SetBlockType(x, y, blockType);
             }
         }
     }
 
     private void RenderWorld()
     {
-        for (int i = 0; i < WorldData.world.width; i++)
+        for (int i = 0; i < worldWidth; i++)
         {
-            for (int j = 0; j < WorldData.world.height; j++)
+            for (int j = 0; j < worldHeight; j++)
             {
                 BlockType blockType = WorldData.world.GetBlockTypes(i, j);
                 if (blockType == BlockType.Air) continue;
