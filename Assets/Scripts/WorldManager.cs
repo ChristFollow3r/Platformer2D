@@ -12,6 +12,10 @@ public class WorldManager : MonoBehaviour
     public static WorldManager wManagerSingleton { get; private set; }
     public float scale = 0.05f;
 
+    private Chunk[,] chunks;
+
+    public Tilemap TileMapGetter => tileMap;
+
     private void Awake()
     {
         foreach (var block in blocks) WorldData.blockDictionary[block.type] = block;
@@ -29,11 +33,12 @@ public class WorldManager : MonoBehaviour
     private void Start()
     {
         WorldData.world = new World(worldHeight, worldWidth);
-        GenerateWolrd();
-        RenderWorld();
+        chunks = new Chunk[(worldWidth + 15) / 16, (worldHeight + 15) / 16]; // Plus 15 to round up
+        GenerateWorld();
+        PopulateChunks();
     }
 
-    private void GenerateWolrd()
+    private void GenerateWorld()
     {
         for (int x = 0; x < worldWidth; x++)
         {
@@ -53,21 +58,19 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    private void RenderWorld()
+    private void PopulateChunks()
     {
-        for (int i = 0; i < worldWidth; i++)
+        for(int x = 0;x < chunks.GetLength(0); x++)
         {
-            for (int j = 0; j < worldHeight; j++)
+            for (int y = 0; y < chunks.GetLength(1); y++)
             {
-                BlockType blockType = WorldData.world.GetBlockTypes(i, j);
-                if (blockType == BlockType.Air) continue;
-
-                Tile tile = ScriptableObject.CreateInstance<Tile>(); // AI helped me with this
-                tile.sprite = WorldData.blockDictionary[blockType].sprite;
-                if (tile.sprite == null) Debug.Log("FUCK");
-
-                tileMap.SetTile(new Vector3Int (i, j, 0), tile);
+                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), TileMapGetter);
             }
         }
     }
+    private void RenderChunks()
+    {
+
+    }
+    
 }
