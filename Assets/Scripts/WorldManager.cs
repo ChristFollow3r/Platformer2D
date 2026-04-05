@@ -67,7 +67,7 @@ public class WorldManager : MonoBehaviour
 
                 if (y > groundLevel) blockType = BlockType.Air;
                 else if (y == groundLevel) blockType = BlockType.Grass;
-                else if (y >= groundLevel - 8) blockType = BlockType.Dirt; 
+                else if (y >= groundLevel - 5) blockType = BlockType.Dirt; 
                 else blockType = BlockType.Stone;
 
                 WorldData.world.SetBlockType(x, y, blockType);
