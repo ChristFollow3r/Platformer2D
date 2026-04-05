@@ -414,9 +414,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f835584a11143664a9a0067a77f5ec74, type: 2}
   - {fileID: 11400000, guid: 2584d299030f14d42bfa779ca8704647, type: 2}
   tileMap: {fileID: 1258230146}
-  worldWidth: 300
-  worldHeight: 200
-  scale: 0.05
+  worldWidth: 150
+  worldHeight: 90
+  scale: 0.008
 --- !u!4 &1465408505
 Transform:
   m_ObjectHideFlags: 0

@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class World 
 {
-    public int width = 200; // Idk why I have this here XD
-    public int height = 100;
+    public int width;
+    public int height;
 
     public BlockType[] blocks;
 

@@ -7,8 +7,8 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private Block[] blocks;
     [SerializeField] private Tilemap tileMap;
 
-    public int worldWidth = 200; // It's duplicated cause I don't feel like writing every time WorldData.World.Width
-    public int worldHeight = 100;
+    public int worldWidth = WorldData.world.width;
+    public int worldHeight = WorldData.world.height;
     public static WorldManager wManagerSingleton { get; private set; }
     public float scale = 0.05f;
 
