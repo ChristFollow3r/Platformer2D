@@ -417,9 +417,9 @@ MonoBehaviour:
   mainCamera: {fileID: 519420031}
   worldWidth: 3000
   worldHeight: 400
-  tallMountains: 0.004
-  mediumMountains: 0.06
-  smallMountains: 0.08
+  tallMountains: 0.014
+  mediumMountains: 0.036
+  smallMountains: 0.048
 --- !u!4 &1465408505
 Transform:
   m_ObjectHideFlags: 0
