@@ -417,6 +417,7 @@ MonoBehaviour:
   mainCamera: {fileID: 519420031}
   worldWidth: 3000
   worldHeight: 400
+  worldSeed: 0.74
   tallMountains: 0.014
   mediumMountains: 0.036
   smallMountains: 0.048

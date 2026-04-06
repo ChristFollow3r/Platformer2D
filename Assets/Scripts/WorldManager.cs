@@ -11,6 +11,7 @@ public class WorldManager : MonoBehaviour
 
     public int worldWidth = 150; // Using World width and height gives errr :V
     public int worldHeight = 90;
+    public float worldSeed;
     public static WorldManager wManagerSingleton { get; private set; }
     public float tallMountains = 0.05f; // This names are the worst names ever but it does the trick.
     public float mediumMountains = 0.1f;
@@ -59,9 +60,9 @@ public class WorldManager : MonoBehaviour
             {
                 BlockType blockType = BlockType.Air;
                 float noiseValue = 0f; // From here
-                noiseValue += Mathf.PerlinNoise(x * tallMountains, 0) * 1.0f; // Copy paste from claude cause my way of using perlin noise was making VERY ugly terrain and so I asked it to help me.
-                noiseValue += Mathf.PerlinNoise(x * mediumMountains, 0) * 0.3f; 
-                noiseValue += Mathf.PerlinNoise(x * smallMountains, 0) * 0.1f; 
+                noiseValue += Mathf.PerlinNoise((x * worldSeed) * tallMountains, 0) * 1.0f; // Copy paste from claude cause my way of using perlin noise was making VERY ugly terrain and so I asked it to help me.
+                noiseValue += Mathf.PerlinNoise((x * worldSeed) * mediumMountains, 0) * 0.3f; 
+                noiseValue += Mathf.PerlinNoise((x * worldSeed) * smallMountains, 0) * 0.1f; 
                 noiseValue /= 1.75f; // To here
                 int groundLevel = (int)(noiseValue * worldHeight * 0.3); 
 
@@ -69,6 +70,8 @@ public class WorldManager : MonoBehaviour
                 else if (y == groundLevel) blockType = BlockType.Grass;
                 else if (y >= groundLevel - 5) blockType = BlockType.Dirt; 
                 else blockType = BlockType.Stone;
+
+                // To add, wood (trees) , water, coal, copper, tin, iron, gold , silver
 
                 WorldData.world.SetBlockType(x, y, blockType);
             }
