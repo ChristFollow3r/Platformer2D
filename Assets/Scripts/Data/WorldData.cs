@@ -1,10 +1,14 @@
 using System.Collections.Generic;
+using Scriptable_Objects_Scripts;
 
-public enum BlockType { Air, Dirt, Grass, Stone, Sand }
-public enum Hardness { Level1, Level2, Level3, Level4, Level5 }
-
-public static class WorldData
+namespace Data
 {
-    public static Dictionary<BlockType, Block> blockDictionary = new();
-    public static World world;
+    public enum BlockType { Air, Dirt, Grass, Stone, Sand }
+    public enum Hardness { Level1, Level2, Level3, Level4, Level5 }
+
+    public static class WorldData
+    {
+        public static readonly Dictionary<BlockType, Block> BlockDictionary = new();
+        public static World World;
+    }
 }
