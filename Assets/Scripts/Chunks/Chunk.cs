@@ -7,13 +7,11 @@ public class Chunk
     public bool isLoaded;
     public Vector2Int chunkPosition;
     private Tilemap tileMap;
-    private Tilemap skyFuckUnityTileMap;
-    public Chunk(bool isLoaded, Vector2Int chunkPosition, Tilemap tilemap, Tilemap skyFuckUnityTileMap)
+    public Chunk(bool isLoaded, Vector2Int chunkPosition, Tilemap tilemap)
     {
         this.isLoaded = isLoaded;
         this.chunkPosition = chunkPosition;
         this.tileMap = tilemap;
-        this.skyFuckUnityTileMap = skyFuckUnityTileMap;
     }
 
     public void LoadChunk()
@@ -28,13 +26,7 @@ public class Chunk
                 if (i >= WorldData.world.width || j >= WorldData.world.height) continue;
                 BlockType blockType = WorldData.world.GetBlockTypes(i, j);
 
-                if (blockType == BlockType.Air)
-                {
-                    Tile skyTile = ScriptableObject.CreateInstance<Tile>();
-                    skyTile.sprite = WorldData.blockDictionary[blockType].sprite;
-                    skyFuckUnityTileMap.SetTile(new Vector3Int(i, j, 0), skyTile);
-                    continue;
-                }
+                if (blockType == BlockType.Air) continue;
 
                 Tile tile = ScriptableObject.CreateInstance<Tile>(); // So you cannot do new Tile() cause it gives error
                 tile.sprite = WorldData.blockDictionary[blockType].sprite;
@@ -54,8 +46,7 @@ public class Chunk
         {
             for (int j = y; j < y + 16; j++)
             {
-                tileMap.SetTile(new Vector3Int(i, j, 0), null);
-                skyFuckUnityTileMap.SetTile(new Vector3Int(i, j, 0), null);
+                tileMap.SetTile(new Vector3Int(i, j, 0), null); //  The sky will be a background Image, I won't have a separate tilemap for the sky.
             }
         }
 

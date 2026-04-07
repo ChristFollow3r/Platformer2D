@@ -7,7 +7,6 @@ public class WorldManager : MonoBehaviour
 {
     [SerializeField] private Block[] blocks;
     [SerializeField] private Tilemap tileMap;
-    [SerializeField] private Tilemap skyTileMap;
     [SerializeField] private Camera mainCamera;
 
     public int worldWidth = 150; // Using World width and height gives errr :V
@@ -85,7 +84,7 @@ public class WorldManager : MonoBehaviour
         {
             for (int y = 0; y < chunks.GetLength(1); y++)
             {
-                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), TileMapGetter, skyTileMap);
+                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), TileMapGetter);
             }
         }
     }
