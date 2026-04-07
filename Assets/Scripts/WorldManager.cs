@@ -13,12 +13,12 @@ public class WorldManager : MonoBehaviour
     public int worldWidth = 150; // Using World width and height gives error :V
     public int worldHeight = 90;
     public float worldSeed;
-    private static WorldManager WManagerSingleton { get; set; }
+    public static WorldManager Instance { get; private set; }
     public float tallMountains = 0.05f; // To be changed
     public float mediumMountains = 0.1f;
     public float smallMountains = 0.02f;
 
-    private Chunk[,] chunks;
+    public Chunk[,] chunks;
     private readonly int renderDistance = 1;
     private Vector3 cameraPosition;
 
@@ -28,19 +28,19 @@ public class WorldManager : MonoBehaviour
     {
         foreach (var block in blocks) WorldData.BlockDictionary[block.type] = block;
 
-        if (WManagerSingleton != null)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
         }
 
-        WManagerSingleton = this;
+        Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
     {
-        WorldData.World = new World(worldHeight, worldWidth);
+        WorldData.World = new World(worldWidth, worldHeight);
         chunks = new Chunk[(worldWidth + 15) / 16, (worldHeight + 15) / 16]; // Plus 15 to round up
         cameraPosition = mainCamera.transform.position;
         GenerateWorld();

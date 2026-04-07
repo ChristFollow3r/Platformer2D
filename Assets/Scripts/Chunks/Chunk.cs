@@ -57,5 +57,19 @@ namespace Chunks
 
             isLoaded = false;
         }
+
+        public void UpdateTile(int x, int y)
+        {
+            BlockType blockType = WorldData.World.GetBlockTypes(x, y);
+            
+            if (blockType == BlockType.Air)
+                tileMap.SetTile(new Vector3Int(x, y, 0), null);
+            else
+            {
+                Tile tile = ScriptableObject.CreateInstance<Tile>();
+                tile.sprite = WorldData.BlockDictionary[blockType].sprite;
+                tileMap.SetTile(new Vector3Int(x, y, 0), tile);
+            }
+        }
     }
 }
