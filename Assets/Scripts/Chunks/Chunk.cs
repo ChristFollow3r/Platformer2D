@@ -9,15 +9,17 @@ namespace Chunks
         public bool isLoaded;
         private Vector2Int chunkPosition;
         private readonly Tilemap tileMap;
+        private bool notCreated;
 
         public Chunk(bool isLoaded, Vector2Int chunkPosition, Tilemap tilemap)
         {
             this.isLoaded = isLoaded;
             this.chunkPosition = chunkPosition;
             this.tileMap = tilemap;
+            notCreated = true;
         }
 
-        public void LoadChunk()
+        public void BuildTiles()
         {
             int x = chunkPosition.x * 16;
             int y = chunkPosition.y * 16;
@@ -38,23 +40,20 @@ namespace Chunks
                 }
             }
 
+            notCreated = false;
+        }
+
+        public void LoadChunk()
+        {
+            if (notCreated) 
+                BuildTiles();
+            tileMap.gameObject.SetActive(true);
             isLoaded = true;
         }
 
         public void UnLoadChunk()
         {
-            var x = chunkPosition.x * 16;
-            var y = chunkPosition.y * 16;
-
-            for (var i = x; i < x + 16; i++)
-            {
-                for (var j = y; j < y + 16; j++)
-                {
-                    tileMap.SetTile(new Vector3Int(i, j, 0),
-                        null); //  The sky will be a background Image, I won't have a separate tilemap for the sky.
-                }
-            }
-
+            tileMap.gameObject.SetActive(false);
             isLoaded = false;
         }
 

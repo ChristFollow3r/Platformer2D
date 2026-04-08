@@ -8,14 +8,16 @@ using UnityEngine.Tilemaps;
 public class WorldManager : MonoBehaviour
 {
     [SerializeField] private Block[] blocks;
-    [SerializeField] private Tilemap tileMap;
+    [SerializeField] private Grid gridParent;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private string worldSeed;
-    private float seedOffset;
+    
 
     public int worldWidth = 150; // Using World width and height gives error :V
     public int worldHeight = 90;
     public static WorldManager Instance { get; private set; }
+    
+    private float seedOffset;
     public float tallMountains = 0.05f; // To be changed
     public float mediumMountains = 0.1f;
     public float smallMountains = 0.02f;
@@ -23,8 +25,7 @@ public class WorldManager : MonoBehaviour
     public Chunk[,] chunks;
     private readonly int renderDistance = 1;
     private Vector3 cameraPosition;
-
-    private Tilemap TileMapGetter => tileMap;
+    
 
     private void Awake()
     {
@@ -107,7 +108,7 @@ public class WorldManager : MonoBehaviour
 
         foreach (char x in seed)
         {
-            hash ^= (uint)x; // Bitwise operator. I'll come back and try and understand this later.
+            hash ^= (uint)x;
             hash *= 16777619; 
         }
 
@@ -120,7 +121,14 @@ public class WorldManager : MonoBehaviour
         {
             for (int y = 0; y < chunks.GetLength(1); y++)
             {
-                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), TileMapGetter);
+                var chunk = new GameObject();
+                chunk.transform.parent = transform;
+                var tileMap =  chunk.AddComponent<Tilemap>();
+                chunk.AddComponent<TilemapRenderer>();
+                chunk.AddComponent<TilemapCollider2D>();
+                chunk.name = $"Chunk_{x}_{y}";
+                chunk.transform.parent = gridParent.transform;
+                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), tileMap);
             }
         }
     }
