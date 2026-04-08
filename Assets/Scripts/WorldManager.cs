@@ -29,7 +29,7 @@ public class WorldManager : MonoBehaviour
 
     private void Awake()
     {
-        foreach (var block in blocks) WorldData.BlockDictionary[block.type] = block;
+        foreach (Block block in blocks) WorldData.BlockDictionary[block.type] = block;
 
         if (Instance != null)
         {
@@ -62,7 +62,7 @@ public class WorldManager : MonoBehaviour
     {
         for (int x = 0; x < worldWidth; x++)
         {
-                float noiseValue = 0f;
+                var noiseValue = 0f;
                 noiseValue += Mathf.PerlinNoise((x * tallMountains) + seedOffset, 0) * 1.0f;
                 noiseValue += Mathf.PerlinNoise((x * mediumMountains) + seedOffset, 0) * 0.3f;
                 noiseValue += Mathf.PerlinNoise((x * smallMountains) + seedOffset, 0) * 0.1f;
@@ -89,7 +89,7 @@ public class WorldManager : MonoBehaviour
         {
             for (int y = 0; y < worldHeight; y++)
             {
-                BlockType blockType = WorldData.World.GetBlockTypes(x, y);
+                var blockType = WorldData.World.GetBlockTypes(x, y);
                 if (blockType == BlockType.Air) continue;
 
                 float caveNoise = Mathf.PerlinNoise((x * 0.05f) + seedOffset, (y * 0.05f) + seedOffset);
@@ -122,24 +122,21 @@ public class WorldManager : MonoBehaviour
             for (int y = 0; y < chunks.GetLength(1); y++)
             {
                 var chunk = new GameObject();
-                var tileMap =  chunk.AddComponent<Tilemap>();
+                chunk.AddComponent<Tilemap>();
                 chunk.AddComponent<TilemapRenderer>();
                 chunk.AddComponent<TilemapCollider2D>();
                 chunk.name = $"Chunk_{x}_{y}";
                 chunk.transform.parent = gridParent.transform;
-                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), tileMap);
+                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), chunk.GetComponent<Tilemap>());
             }
         }
     }
 
     private void UpdateChunks()
     {
-        Vector2Int
-            cameraChunk =
-                new Vector2Int((int)cameraPosition.x / 16,
-                    (int)cameraPosition.y /
-                    16); // Since our chunks are a 16 x 16, if we divide by 16, we get the chunk we currently
-        // are at.
+        var cameraChunk = new Vector2Int((int)cameraPosition.x / 16, (int)cameraPosition.y / 16); 
+        // Since our chunks are 16 x 16, if we divide by 16, we get the chunk we currently are at.
+        
         for (int x = 0; x < chunks.GetLength(0); x++)
         {
             for (int y = 0; y < chunks.GetLength(1); y++)
@@ -156,7 +153,7 @@ public class WorldManager : MonoBehaviour
         }
     }
 
-    private bool CheckCameraMovement()
+    private bool CheckCameraMovement() // We check every time the camera moves. A bit much inefficient, but it works just fine.
     {
         if (mainCamera.transform.position != cameraPosition)
         {
