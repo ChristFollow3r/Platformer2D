@@ -44,7 +44,7 @@ public class WorldManager : MonoBehaviour
     private void Start()
     {
         WorldData.World = new World(worldWidth, worldHeight);
-        chunks = new Chunk[(worldWidth + 15) / Chunk.chunkSize, (worldHeight + 15) / Chunk.chunkSize]; // Plus 15 to round up
+        chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize]; // Plus 15 to round up
         cameraPosition = mainCamera.transform.position;
         seedOffset =  ComputeSeedOffset(worldSeed);
         GenerateWorld();
@@ -134,7 +134,7 @@ public class WorldManager : MonoBehaviour
 
     private void UpdateChunks()
     {
-        var cameraChunk = new Vector2Int((int)cameraPosition.x / Chunk.chunkSize, (int)cameraPosition.y / Chunk.chunkSize); 
+        var cameraChunk = new Vector2Int((int)cameraPosition.x / Chunk.ChunkSize, (int)cameraPosition.y / Chunk.ChunkSize); 
         // Since our chunks are 16 x 16, if we divide by 16, we get the chunk we currently are at.
         
         for (int x = 0; x < chunks.GetLength(0); x++)
