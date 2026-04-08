@@ -7,6 +7,8 @@ namespace Chunks
     public class Chunk
     {
         public bool isLoaded;
+        public const int chunkSize = 16;
+        
         private Vector2Int chunkPosition;
         private readonly Tilemap tileMap;
         private bool notCreated;
@@ -21,12 +23,12 @@ namespace Chunks
 
         public void BuildTiles()
         {
-            int x = chunkPosition.x * 16;
-            int y = chunkPosition.y * 16;
+            int x = chunkPosition.x * chunkSize;
+            int y = chunkPosition.y * chunkSize;
             
-            for (int i = x; i < x + 16; i++)
+            for (int i = x; i < x + chunkSize; i++)
             {
-                for (int j = y; j < y + 16; j++)
+                for (int j = y; j < y + chunkSize; j++)
                 {
                     if (i >= WorldData.World.width || j >= WorldData.World.height) continue;
                     var blockType = WorldData.World.GetBlockTypes(i, j);
