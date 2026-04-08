@@ -21,7 +21,7 @@ namespace Chunks
         {
             int x = chunkPosition.x * 16;
             int y = chunkPosition.y * 16;
-
+            
             for (int i = x; i < x + 16; i++)
             {
                 for (int j = y; j < y + 16; j++)

@@ -1,3 +1,4 @@
+using System;
 using Chunks;
 using Data;
 using Scriptable_Objects_Scripts;
@@ -60,15 +61,16 @@ public class WorldManager : MonoBehaviour
     {
         for (int x = 0; x < worldWidth; x++)
         {
-            float noiseValue = 0f;
-            noiseValue += Mathf.PerlinNoise((x * tallMountains) + seedOffset, 0) * 1.0f;
-            noiseValue += Mathf.PerlinNoise((x * mediumMountains) + seedOffset, 0) * 0.3f;
-            noiseValue += Mathf.PerlinNoise((x * smallMountains) + seedOffset, 0) * 0.1f;
-            noiseValue /= 1.75f;
-            var groundLevel = (int)(noiseValue * worldHeight * 0.75f);
+                float noiseValue = 0f;
+                noiseValue += Mathf.PerlinNoise((x * tallMountains) + seedOffset, 0) * 1.0f;
+                noiseValue += Mathf.PerlinNoise((x * mediumMountains) + seedOffset, 0) * 0.3f;
+                noiseValue += Mathf.PerlinNoise((x * smallMountains) + seedOffset, 0) * 0.1f;
+                noiseValue /= 1.75f;
+                var groundLevel = (int)(noiseValue * worldHeight * 0.75f);
             
             for (int y = 0; y < worldHeight; y++)
             {
+                
                 BlockType blockType;
 
                 if (y > groundLevel) blockType = BlockType.Air;
@@ -79,6 +81,20 @@ public class WorldManager : MonoBehaviour
                 // To add, wood (trees) , water, coal, copper, tin, iron, gold , silver
 
                 WorldData.World.SetBlockType(x, y, blockType);
+            }
+        }
+        
+        for (int x = 0; x < worldWidth; x++)
+        {
+            for (int y = 0; y < worldHeight; y++)
+            {
+                BlockType blockType = WorldData.World.GetBlockTypes(x, y);
+                if (blockType == BlockType.Air) continue;
+
+                float caveNoise = Mathf.PerlinNoise((x * 0.05f) + seedOffset, (y * 0.05f) + seedOffset);
+                
+                if (caveNoise < 0.35f) 
+                    WorldData.World.SetBlockType(x, y, BlockType.Air);
             }
         }
     }
@@ -95,7 +111,7 @@ public class WorldManager : MonoBehaviour
             hash *= 16777619; 
         }
 
-        return (float)hash;
+        return (hash % 1000) / 10000f;
     }
 
     private void PopulateChunks()
