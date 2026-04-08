@@ -122,7 +122,6 @@ public class WorldManager : MonoBehaviour
             for (int y = 0; y < chunks.GetLength(1); y++)
             {
                 var chunk = new GameObject();
-                chunk.transform.parent = transform;
                 var tileMap =  chunk.AddComponent<Tilemap>();
                 chunk.AddComponent<TilemapRenderer>();
                 chunk.AddComponent<TilemapCollider2D>();
