@@ -9,10 +9,11 @@ public class WorldManager : MonoBehaviour
     [SerializeField] private Block[] blocks;
     [SerializeField] private Tilemap tileMap;
     [SerializeField] private Camera mainCamera;
+    [SerializeField] private string worldSeed;
+    private float seedOffset;
 
     public int worldWidth = 150; // Using World width and height gives error :V
     public int worldHeight = 90;
-    public float worldSeed;
     public static WorldManager Instance { get; private set; }
     public float tallMountains = 0.05f; // To be changed
     public float mediumMountains = 0.1f;
@@ -43,6 +44,7 @@ public class WorldManager : MonoBehaviour
         WorldData.World = new World(worldWidth, worldHeight);
         chunks = new Chunk[(worldWidth + 15) / 16, (worldHeight + 15) / 16]; // Plus 15 to round up
         cameraPosition = mainCamera.transform.position;
+        seedOffset =  ComputeSeedOffset(worldSeed);
         GenerateWorld();
         PopulateChunks();
         UpdateChunks(); // Call it once at start cause in update we call it only when the camera moves
@@ -58,17 +60,16 @@ public class WorldManager : MonoBehaviour
     {
         for (int x = 0; x < worldWidth; x++)
         {
+            float noiseValue = 0f;
+            noiseValue += Mathf.PerlinNoise((x * tallMountains) + seedOffset, 0) * 1.0f;
+            noiseValue += Mathf.PerlinNoise((x * mediumMountains) + seedOffset, 0) * 0.3f;
+            noiseValue += Mathf.PerlinNoise((x * smallMountains) + seedOffset, 0) * 0.1f;
+            noiseValue /= 1.75f;
+            var groundLevel = (int)(noiseValue * worldHeight * 0.75f);
+            
             for (int y = 0; y < worldHeight; y++)
             {
                 BlockType blockType;
-                var noiseValue = 0f; // From here
-                noiseValue +=
-                    Mathf.PerlinNoise((x * worldSeed) * tallMountains, 0) *
-                    1.0f; // I will change this perlin noise thing it sucks.
-                noiseValue += Mathf.PerlinNoise((x * worldSeed) * mediumMountains, 0) * 0.3f;
-                noiseValue += Mathf.PerlinNoise((x * worldSeed) * smallMountains, 0) * 0.1f;
-                noiseValue /= 1.75f; // To here
-                int groundLevel = (int)(noiseValue * worldHeight * 0.3);
 
                 if (y > groundLevel) blockType = BlockType.Air;
                 else if (y == groundLevel) blockType = BlockType.Grass;
@@ -80,6 +81,21 @@ public class WorldManager : MonoBehaviour
                 WorldData.World.SetBlockType(x, y, blockType);
             }
         }
+    }
+
+    private float ComputeSeedOffset(string seed) 
+    { // AI helped me with this I wanted to make my perlin noise world generation less shit.
+        if (string.IsNullOrEmpty(seed)) return 0f;
+        uint hash = 2166136261; // This weird ass numbers are official constants (whatever that is)
+        // from the FNV-1a hash algorithm
+
+        foreach (char x in seed)
+        {
+            hash ^= (uint)x; // Bitwise operator. I'll come back and try and understand this later.
+            hash *= 16777619; 
+        }
+
+        return (float)hash;
     }
 
     private void PopulateChunks()
