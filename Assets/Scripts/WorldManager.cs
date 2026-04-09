@@ -1,4 +1,3 @@
-using System;
 using Chunks;
 using Data;
 using Scriptable_Objects_Scripts;
@@ -108,7 +107,7 @@ public class WorldManager : MonoBehaviour
 
         foreach (char x in seed)
         {
-            hash ^= (uint)x;
+            hash ^= x;
             hash *= 16777619; 
         }
 
