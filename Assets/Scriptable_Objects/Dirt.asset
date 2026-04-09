@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Dirt
   m_EditorClassIdentifier: 
   blockName: Dirt
-  sprite: {fileID: -1928389942, guid: a8cf2d7f60093584496ab255bbc5795f, type: 3}
+  sprite: {fileID: 1927863885425484986, guid: f7a25f9828e1f6647ab28be02b394d66, type: 3}
   type: 1
   hardness: 1
