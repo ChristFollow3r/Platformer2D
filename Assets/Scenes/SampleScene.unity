@@ -291,7 +291,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2584d299030f14d42bfa779ca8704647, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
-  worldSeed: 
+  worldSeed: Minecraft
   worldWidth: 3000
   worldHeight: 400
   tallMountains: 0.014

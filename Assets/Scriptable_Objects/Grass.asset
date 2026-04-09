@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Grass
   m_EditorClassIdentifier: 
   blockName: Grass
-  sprite: {fileID: -1705631060475465365, guid: 6d8ddc1ac3e08824b9bba44ca12bf249, type: 3}
+  sprite: {fileID: 4664948647741177346, guid: bd696fed6a5449f4fac3a4484281e11b, type: 3}
   type: 2
   hardness: 0
