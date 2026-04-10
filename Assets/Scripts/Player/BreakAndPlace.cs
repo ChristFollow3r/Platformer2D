@@ -24,13 +24,13 @@ namespace Player
 
             if (Mathf.Abs(distance) > reachDistance) return;
 
-            if (Mouse.current.rightButton.isPressed)
+            if (Mouse.current.leftButton.isPressed)
             {
                 WorldData.World.SetBlockType(mouseX, mouseY, BlockType.Air);
                 WorldManager.Instance.chunks[(mouseX / 16), (mouseY / 16)].UpdateTile(mouseX, mouseY);
             }
 
-            if (Mouse.current.leftButton.isPressed)
+            if (Mouse.current.rightButton.isPressed)
             {
                 WorldData.World.SetBlockType(mouseX, mouseY, BlockType.Grass);
                 WorldManager.Instance.chunks[(mouseX / 16), (mouseY / 16)].UpdateTile(mouseX, mouseY);

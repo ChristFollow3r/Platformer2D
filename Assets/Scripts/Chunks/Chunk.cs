@@ -7,7 +7,7 @@ namespace Chunks
     public class Chunk
     {
         public bool isLoaded;
-        public const int ChunkSize = 16;
+        public const int ChunkSize = 32;
         
         private Vector2Int chunkPosition;
         private readonly Tilemap tileMap;
@@ -67,10 +67,11 @@ namespace Chunks
                 tileMap.SetTile(new Vector3Int(x, y, 0), null);
             else
             {
-                Tile tile = ScriptableObject.CreateInstance<Tile>();
+                Tile tile = ScriptableObject.CreateInstance<Tile>(); // This broke when changing the chubk size.
                 tile.sprite = WorldData.BlockDictionary[blockType].sprite;
                 tileMap.SetTile(new Vector3Int(x, y, 0), tile);
-            }
+            } // I'm going to change this so that instead of creating a new tile we just update the one that we are clicking 
+            // (both the visual tile and the data).
         }
     }
 }
