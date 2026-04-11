@@ -7,6 +7,8 @@ using UnityEngine.Tilemaps;
 public class WorldManager : MonoBehaviour
 {
     [SerializeField] private Block[] blocks;
+    [SerializeField] private Prop[] props;
+    
     [SerializeField] private Grid gridParent;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private string worldSeed;
@@ -28,7 +30,8 @@ public class WorldManager : MonoBehaviour
 
     private void Awake()
     {
-        foreach (Block block in blocks) WorldData.BlockDictionary[block.type] = block;
+        foreach (var block in blocks) WorldData.BlockDictionary[block.type] = block;
+        foreach (var prop in props) WorldData.PropDictionary[prop.type] = prop;
 
         if (Instance != null)
         {
