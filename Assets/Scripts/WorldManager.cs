@@ -112,13 +112,12 @@ public class WorldManager : MonoBehaviour
             {
                 if (!WorldData.World.SafeCheck(i, j) || !WorldData.World.SafeCheck(i, j + 1)) continue;
                 
-                if (WorldData.World.GetBlockTypes(i, j) == BlockType.Grass && WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air)
-                {
-                    int chance = Random.Range(0, 100);
-                    WorldData.World.SetPropType(i, j, (chance >= 70 ? PropType.Bush : PropType.None));
-                }
-                
-                else WorldData.World.SetPropType(i, j, PropType.None);
+                bool isSurface = WorldData.World.GetBlockTypes(i, j) == BlockType.Grass 
+                                 && WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air;
+                if (isSurface && Random.Range(0, 101) >= 70)
+                    WorldData.World.SetPropType(i, j + 1, PropType.Bush);
+                else 
+                    WorldData.World.SetPropType(i, j + 1, PropType.None);
             }
         }
     }

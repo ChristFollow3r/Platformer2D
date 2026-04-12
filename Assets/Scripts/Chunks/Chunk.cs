@@ -44,7 +44,7 @@ namespace Chunks
                         blockTileMap.SetTile(new Vector3Int(i, j, 0), tile);
                     }
 
-                    if (propType == PropType.None)
+                    if (propType != PropType.None)
                     {
                         var propTile = ScriptableObject.CreateInstance<Tile>();
                         propTile.sprite = WorldData.PropDictionary[propType].sprite;
