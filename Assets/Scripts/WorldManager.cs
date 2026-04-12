@@ -112,10 +112,27 @@ public class WorldManager : MonoBehaviour
                 
                 bool isSurface = WorldData.World.GetBlockTypes(i, j) == BlockType.Grass 
                                  && WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air;
+                bool isSurfaceForTree = WorldData.World.GetBlockTypes(i, j) == BlockType.Grass
+                                        && WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air
+                                        && WorldData.World.GetBlockTypes(i + 1, j + 1) == BlockType.Air
+                                        && WorldData.World.GetBlockTypes(i + 2, j + 2) == BlockType.Air
+                                        && WorldData.World.GetBlockTypes(i - 1, j - 1) == BlockType.Air
+                                        && WorldData.World.GetBlockTypes(i - 2, j - 2) == BlockType.Air;
+                
                 if (isSurface && Random.Range(0, 101) >= 70)
+                {
                     WorldData.World.SetPropType(i, j + 1, PropType.Bush);
-                else 
-                    WorldData.World.SetPropType(i, j + 1, PropType.None);
+                    continue;       
+                }
+
+                if (isSurfaceForTree && Random.Range(0, 101) >= 30)
+                {
+                    WorldData.World.SetPropType(i, j + 1, PropType.Tree);
+                    Debug.Log("Created a tree at");
+                    continue;
+                }
+                WorldData.World.SetPropType(i, j + 1, PropType.Tree);
+                WorldData.World.SetPropType(i, j + 1, PropType.None);
             }
         }
     }

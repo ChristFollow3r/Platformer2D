@@ -38,18 +38,26 @@ namespace Player
             {
                 if (WorldData.World.GetPropType(mouseX, mouseY) == PropType.Bush)
                 {
-                    Instantiate(drops[0], new Vector2(mouseX , mouseY), Quaternion.identity);
+                    Instantiate(drops[0], new Vector2(mouseX , mouseY), Quaternion.identity); // I have to add despawn 
                     WorldData.World.SetPropType(mouseX, mouseY, PropType.None);
-                    WorldManager.Instance.chunks[(mouseX / Chunks.Chunk.ChunkSize), (mouseY / Chunks.Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
+                    WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
+                    return;
                 }
 
-                return;
+                if (WorldData.World.GetPropType(mouseX, mouseY) == PropType.Tree)
+                {
+                    for (int i = 0; i < 5; i++) Instantiate(drops[1], new Vector2(mouseX , mouseY + i), Quaternion.identity);
+                    WorldData.World.SetPropType(mouseX, mouseY, PropType.None);
+                    WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
+                    return;
+                }
+
             }
 
             if (Mouse.current.rightButton.isPressed)
             {
                 WorldData.World.SetBlockType(mouseX, mouseY, BlockType.Grass);
-                WorldManager.Instance.chunks[(mouseX / Chunks.Chunk.ChunkSize), (mouseY / Chunks.Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
+                WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
             }
         }
 

@@ -244,6 +244,7 @@ MonoBehaviour:
   reachDistance: 6
   drops:
   - {fileID: 4509493131310187354, guid: 7e7de0f26264f1342ac1569e2256a039, type: 3}
+  - {fileID: 5962397315976043965, guid: c48e62a6036df8b43a61377cb660e5e4, type: 3}
 --- !u!114 &139018188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -706,6 +707,7 @@ MonoBehaviour:
   props:
   - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
   - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}
+  - {fileID: 11400000, guid: 348e613dcdb0a494cbdc03f622cecf08, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
   worldSeed: Minecraft
