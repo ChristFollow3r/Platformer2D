@@ -73,19 +73,36 @@ namespace Chunks
             isLoaded = false;
         }
 
-        public void UpdateTile(int x, int y) // I'll have to change this for the props also I think
+        public void UpdateTile(int x, int y) 
         {
+            var position = new Vector3Int(x, y, 0);
             BlockType blockType = WorldData.World.GetBlockTypes(x, y);
+            PropType propType = WorldData.World.GetPropType(x, y);
             
-            if (blockType == BlockType.Air)
-                blockTileMap.SetTile(new Vector3Int(x, y, 0), null);
+            if (blockType == BlockType.Air) blockTileMap.SetTile(position, null);
+
             else
             {
-                Tile tile = ScriptableObject.CreateInstance<Tile>(); // This broke when changing the chubk size.
-                tile.sprite = WorldData.BlockDictionary[blockType].sprite;
-                blockTileMap.SetTile(new Vector3Int(x, y, 0), tile);
-            } // I'm going to change this so that instead of creating a new tile we just update the one that we are clicking 
-            // (both the visual tile and the data).
+                Tile blockTile = blockTileMap.GetTile<Tile>(position);
+                if (blockTile is not null)
+                {
+                    blockTile.sprite = WorldData.BlockDictionary[blockType].sprite;
+                    blockTileMap.RefreshTile(position);
+                }
+            }
+            
+            if (propType == PropType.None)  propTileMap.SetTile(position, null);
+
+            else
+            {
+                Tile propTile = propTileMap.GetTile<Tile>(position);
+                if (propTile is not null)
+                {
+                    propTile.sprite = WorldData.PropDictionary[propType].sprite;
+                    propTileMap.RefreshTile(position);
+                }
+            }
+            
         }
     }
 }

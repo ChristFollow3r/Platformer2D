@@ -4,9 +4,10 @@ namespace Player
 {
     public class PlayerInventory : MonoBehaviour
     {
-        private static PlayerInventory Instance { get; set; }
+        public static PlayerInventory Instance { get; private set; }
         public ScriptableObject[] items;
-    
+        public ScriptableObject[] itemSlots;
+        public readonly ScriptableObject currentHeldItem;
 
         private void Awake()
         {
@@ -18,7 +19,7 @@ namespace Player
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-    
+        
     
     
     }

@@ -83,8 +83,6 @@ public class WorldManager : MonoBehaviour
                 else if (y >= groundLevel - 5) blockType = BlockType.Dirt;
                 else blockType = BlockType.Stone;
 
-                // To add, wood (trees) , water, coal, copper, tin, iron, gold , silver
-
                 WorldData.World.SetBlockType(x, y, blockType);
             }
         }
