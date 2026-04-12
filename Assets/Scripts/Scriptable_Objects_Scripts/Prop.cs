@@ -7,6 +7,7 @@ namespace Scriptable_Objects_Scripts
     public class Prop : ScriptableObject
     {
         public ScriptableObject drop;
+        public Sprite sprite;
         public new string name;
         public PropType type;
         public int hardness;

@@ -1,3 +1,5 @@
+using Scriptable_Objects_Scripts;
+
 namespace Data
 {
     public class World 
@@ -13,6 +15,7 @@ namespace Data
             this.width = width;
             this.height = height;
             blocks = new BlockType[width * height];
+            props = new PropType[width * height];
         }
 
         #region Blocks
@@ -29,6 +32,11 @@ namespace Data
         #endregion
         
         #region Props
+
+        public void SetPropType(int x, int y, PropType type)
+        {
+            props[(y * width) + x] = type;
+        }
         public PropType GetPropType(int x, int y)
         {
             return props[(y * width) + x];

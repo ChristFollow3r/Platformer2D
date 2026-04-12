@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c93a5e15f225eb4da5fad2220b9e280, type: 3}
-  m_Name: Bush
+  m_Name: None
   m_EditorClassIdentifier: 
-  drop: {fileID: 11400000, guid: 51eef3b63066fec4dbceee03c2c71cef, type: 2}
-  sprite: {fileID: 1577876167838132355, guid: 26565825e09921a4c8a504e7635a7078, type: 3}
-  name: Bush
-  type: 1
-  hardness: 1
+  drop: {fileID: 0}
+  sprite: {fileID: 0}
+  name: 
+  type: 0
+  hardness: 0

@@ -50,6 +50,7 @@ public class WorldManager : MonoBehaviour
         cameraPosition = mainCamera.transform.position;
         seedOffset =  ComputeSeedOffset(worldSeed);
         GenerateWorld();
+        GenerateProps();
         PopulateChunks();
         UpdateChunks(); // Call it once at start cause in update we call it only when the camera moves
     }
@@ -74,7 +75,8 @@ public class WorldManager : MonoBehaviour
             for (int y = 0; y < worldHeight; y++)
             {
                 
-                BlockType blockType;
+                BlockType blockType; // I think this is useless
+                
 
                 if (y > groundLevel) blockType = BlockType.Air;
                 else if (y == groundLevel) blockType = BlockType.Grass;
@@ -102,6 +104,25 @@ public class WorldManager : MonoBehaviour
         }
     }
 
+    private void GenerateProps()
+    {
+        for (int i = 0; i < worldWidth; i++)
+        {
+            for (int j = 0; j < worldHeight; j++)
+            {
+                if (!WorldData.World.SafeCheck(i, j) || !WorldData.World.SafeCheck(i, j + 1)) continue;
+                
+                if (WorldData.World.GetBlockTypes(i, j) == BlockType.Grass && WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air)
+                {
+                    int chance = Random.Range(0, 100);
+                    WorldData.World.SetPropType(i, j, (chance >= 70 ? PropType.Bush : PropType.None));
+                }
+                
+                else WorldData.World.SetPropType(i, j, PropType.None);
+            }
+        }
+    }
+
     private float ComputeSeedOffset(string seed) 
     { // AI helped me with this I wanted to make my perlin noise world generation less shit.
         if (string.IsNullOrEmpty(seed)) return 0f;
@@ -123,13 +144,24 @@ public class WorldManager : MonoBehaviour
         {
             for (int y = 0; y < chunks.GetLength(1); y++)
             {
+                if (chunks[x, y] != null) continue;
+                
                 var chunk = new GameObject();
-                chunk.AddComponent<Tilemap>();
-                chunk.AddComponent<TilemapRenderer>();
-                chunk.AddComponent<TilemapCollider2D>();
                 chunk.name = $"Chunk_{x}_{y}";
                 chunk.transform.parent = gridParent.transform;
-                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), chunk.GetComponent<Tilemap>());
+                
+                var blockChunkChild = new GameObject("blocks");
+                blockChunkChild.transform.parent = chunk.transform;
+                blockChunkChild.AddComponent<Tilemap>();
+                blockChunkChild.AddComponent<TilemapRenderer>();
+                blockChunkChild.AddComponent<TilemapCollider2D>();
+                
+                var propChunkChild = new GameObject("props");
+                propChunkChild.transform.parent = chunk.transform;
+                propChunkChild.AddComponent<Tilemap>();
+                propChunkChild.AddComponent<TilemapRenderer>();
+                
+                chunks[x, y] = new Chunk(false, new Vector2Int(x, y), blockChunkChild.GetComponent<Tilemap>(), propChunkChild.GetComponent<Tilemap>());
             }
         }
     }

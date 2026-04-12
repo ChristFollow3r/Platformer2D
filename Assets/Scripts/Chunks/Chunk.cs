@@ -10,14 +10,16 @@ namespace Chunks
         public const int ChunkSize = 32;
         
         private Vector2Int chunkPosition;
-        private readonly Tilemap tileMap;
+        private readonly Tilemap blockTileMap;
+        private readonly Tilemap propTileMap;
         private bool notCreated;
 
-        public Chunk(bool isLoaded, Vector2Int chunkPosition, Tilemap tilemap)
+        public Chunk(bool isLoaded, Vector2Int chunkPosition, Tilemap bTilemap, Tilemap pTilemap)
         {
             this.isLoaded = isLoaded;
             this.chunkPosition = chunkPosition;
-            this.tileMap = tilemap;
+            blockTileMap = bTilemap;
+            propTileMap = pTilemap;
             notCreated = true;
         }
 
@@ -32,13 +34,23 @@ namespace Chunks
                 {
                     if (i >= WorldData.World.width || j >= WorldData.World.height) continue;
                     var blockType = WorldData.World.GetBlockTypes(i, j);
+                    var propType = WorldData.World.GetPropType(i, j);
 
-                    if (blockType == BlockType.Air) continue;
+                    if (blockType != BlockType.Air)
+                    {
+                        var tile = ScriptableObject
+                            .CreateInstance<Tile>(); 
+                        tile.sprite = WorldData.BlockDictionary[blockType].sprite;
+                        blockTileMap.SetTile(new Vector3Int(i, j, 0), tile);
+                    }
 
-                    var tile = ScriptableObject
-                        .CreateInstance<Tile>(); // So you cannot do new Tile() cause it gives error
-                    tile.sprite = WorldData.BlockDictionary[blockType].sprite;
-                    tileMap.SetTile(new Vector3Int(i, j, 0), tile);
+                    if (propType == PropType.None)
+                    {
+                        var propTile = ScriptableObject.CreateInstance<Tile>();
+                        propTile.sprite = WorldData.PropDictionary[propType].sprite;
+                        propTileMap.SetTile(new Vector3Int(i, j, 0), propTile);
+                    }
+                    
                 }
             }
 
@@ -49,27 +61,29 @@ namespace Chunks
         {
             if (notCreated) 
                 BuildTiles();
-            tileMap.gameObject.SetActive(true);
+            blockTileMap.gameObject.SetActive(true);
+            propTileMap.gameObject.SetActive(true);
             isLoaded = true;
         }
 
         public void UnLoadChunk()
         {
-            tileMap.gameObject.SetActive(false);
+            blockTileMap.gameObject.SetActive(false);
+            propTileMap.gameObject.SetActive(false);
             isLoaded = false;
         }
 
-        public void UpdateTile(int x, int y)
+        public void UpdateTile(int x, int y) // I'll have to change this for the props also I think
         {
             BlockType blockType = WorldData.World.GetBlockTypes(x, y);
             
             if (blockType == BlockType.Air)
-                tileMap.SetTile(new Vector3Int(x, y, 0), null);
+                blockTileMap.SetTile(new Vector3Int(x, y, 0), null);
             else
             {
                 Tile tile = ScriptableObject.CreateInstance<Tile>(); // This broke when changing the chubk size.
                 tile.sprite = WorldData.BlockDictionary[blockType].sprite;
-                tileMap.SetTile(new Vector3Int(x, y, 0), tile);
+                blockTileMap.SetTile(new Vector3Int(x, y, 0), tile);
             } // I'm going to change this so that instead of creating a new tile we just update the one that we are clicking 
             // (both the visual tile and the data).
         }
