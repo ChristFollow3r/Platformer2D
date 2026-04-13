@@ -128,7 +128,7 @@ public class WorldManager : MonoBehaviour
                 if (isSurfaceForTree && Random.Range(0, 101) >= 30)
                 {
                     WorldData.World.SetPropType(i, j + 1, PropType.Tree);
-                    Debug.Log("Created a tree at");
+                    Debug.Log("Created a tree at" + i / 32 + j / 32);
                     continue;
                 }
                 WorldData.World.SetPropType(i, j + 1, PropType.Tree);

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 917331457377686215}
   - component: {fileID: 479964767024288917}
   - component: {fileID: 8638140639543557364}
+  - component: {fileID: 7421168028027254283}
+  - component: {fileID: 7312587968282079609}
   m_Layer: 0
   m_Name: Stick
   m_TagString: Untagged
@@ -170,3 +172,51 @@ PolygonCollider2D:
       - {x: 0.21069336, y: 0.12635803}
       - {x: 0.2074585, y: 0.20747375}
   m_UseDelaunayMesh: 0
+--- !u!58 &7421168028027254283
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4509493131310187354}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 1.5
+--- !u!114 &7312587968282079609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4509493131310187354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19507406fb458ae459dbacbeea3dda76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

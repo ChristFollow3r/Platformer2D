@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c93a5e15f225eb4da5fad2220b9e280, type: 3}
   m_Name: Oak_Tree
   m_EditorClassIdentifier: 
-  drop: {fileID: 0}
-  sprite: {fileID: 6215267202064938543, guid: 6d977b190b2fb8f48ade4b34db86ffcd, type: 3}
+  sprite: {fileID: 21300000, guid: 6d977b190b2fb8f48ade4b34db86ffcd, type: 3}
   name: Oak_Tree
   type: 3
   hardness: 2
