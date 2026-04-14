@@ -67,17 +67,16 @@ public class WorldManager : MonoBehaviour
         {
                 var noiseValue = 0f;
                 noiseValue += Mathf.PerlinNoise((x * tallMountains) + seedOffset, 0) * 1.0f;
-                noiseValue += Mathf.PerlinNoise((x * mediumMountains) + seedOffset, 0) * 0.3f;
-                noiseValue += Mathf.PerlinNoise((x * smallMountains) + seedOffset, 0) * 0.1f;
-                noiseValue /= 1.75f;
+                noiseValue += Mathf.PerlinNoise((x * mediumMountains) + seedOffset, 0) * 0.15f;
+                noiseValue += Mathf.PerlinNoise((x * smallMountains) + seedOffset, 0) * 0.05f;
+                noiseValue /= 1.2f;
+                noiseValue = Mathf.Lerp(0.4f, 0.6f, noiseValue);
                 var groundLevel = (int)(noiseValue * worldHeight * 0.75f);
             
             for (int y = 0; y < worldHeight; y++)
             {
-                
                 BlockType blockType; // I think this is useless
                 
-
                 if (y > groundLevel) blockType = BlockType.Air;
                 else if (y == groundLevel) blockType = BlockType.Grass;
                 else if (y >= groundLevel - 5) blockType = BlockType.Dirt;
