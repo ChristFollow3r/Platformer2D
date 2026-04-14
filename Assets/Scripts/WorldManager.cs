@@ -108,29 +108,38 @@ public class WorldManager : MonoBehaviour
             for (int j = 0; j < worldHeight; j++)
             {
                 if (!WorldData.World.SafeCheck(i, j) || !WorldData.World.SafeCheck(i, j + 1)) continue;
-                
-                bool isSurface = WorldData.World.GetBlockTypes(i, j) == BlockType.Grass 
+
+                int spawnRate = Random.Range(0, 101);
+
+                bool isSurface = WorldData.World.GetBlockTypes(i, j) == BlockType.Grass
                                  && WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air;
-                bool isSurfaceForTree = WorldData.World.GetBlockTypes(i, j) == BlockType.Grass
-                                        && WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air
-                                        && WorldData.World.GetBlockTypes(i + 1, j + 1) == BlockType.Air
-                                        && WorldData.World.GetBlockTypes(i + 2, j + 2) == BlockType.Air
-                                        && WorldData.World.GetBlockTypes(i - 1, j - 1) == BlockType.Air
-                                        && WorldData.World.GetBlockTypes(i - 2, j - 2) == BlockType.Air;
+
+                bool hasSpace = WorldData.World.SafeCheck(i - 1, j + 1) 
+                                && WorldData.World.SafeCheck(i + 1, j + 1)
+                                && WorldData.World.GetBlockTypes(i - 1, j + 1) == BlockType.Air
+                                && WorldData.World.GetBlockTypes(i + 1, j + 1) == BlockType.Air;
+
+                bool hasSpaceForTree = WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air
+                                       && WorldData.World.GetBlockTypes(i - 1, j) == BlockType.Grass
+                                       && WorldData.World.GetBlockTypes(i + 1, j) == BlockType.Grass
+                                       && WorldData.World.GetPropType(i - 1, j + 1) != PropType.Tree
+                                       && WorldData.World.GetPropType(i + 1, j + 1) != PropType.Tree
+                                       && WorldData.World.GetPropType(i - 1, j) != PropType.Tree
+                                       && WorldData.World.GetPropType(i + 1, j) != PropType.Tree;
+
                 
-                if (isSurface && Random.Range(0, 101) >= 70)
+                if (isSurface && hasSpace && spawnRate <= 30)
                 {
                     WorldData.World.SetPropType(i, j + 1, PropType.Bush);
-                    continue;       
-                }
-
-                if (isSurfaceForTree && Random.Range(0, 101) >= 30)
-                {
-                    WorldData.World.SetPropType(i, j + 1, PropType.Tree);
-                    Debug.Log("Created a tree at" + i / 32 + j / 32);
                     continue;
                 }
-                WorldData.World.SetPropType(i, j + 1, PropType.Tree);
+
+                if (isSurface && hasSpaceForTree && spawnRate >= 70)
+                {
+                    WorldData.World.SetPropType(i, j + 1, PropType.Tree);
+                    continue;
+                }
+
                 WorldData.World.SetPropType(i, j + 1, PropType.None);
             }
         }
