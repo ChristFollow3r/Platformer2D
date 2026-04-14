@@ -1,19 +1,32 @@
+using System;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class DropBehavior : MonoBehaviour
 {
-    private float pickUpRadius = 0.2f;
+    private PolygonCollider2D collisionCollider;
+    private readonly float pickUpRadius = 0.2f;
+    private readonly float speed = 10f;
 
-    void OnTriggerEnter2D(Collider2D other) // Fix this shit with events? That might be the move ngl
+    private void Start()
     {
-        if (other.CompareTag("Player"))
-                transform.position =
-                    Vector2.MoveTowards(transform.position, other.transform.position, 10 * Time.deltaTime);
-        
-        if (Vector2.Distance(transform.position, other.transform.position) < pickUpRadius)
-            Destroy(gameObject);
-
+        collisionCollider = GetComponent<PolygonCollider2D>();
     }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        
+        collisionCollider.enabled = false;
+        transform.position = Vector2.MoveTowards(
+            transform.position, other.transform.position, speed * Time.deltaTime);
+        
+        if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
+            Destroy(gameObject);
+        
+    }
+    
+    
+    
 }
