@@ -1,6 +1,8 @@
-    using UnityEngine;
-    using Scriptable_Objects_Scripts;
+using Scriptable_Objects_Scripts;
+using UnityEngine;
 
+namespace Data
+{
     public class InventorySlot
     {
         public Item item;
@@ -33,3 +35,4 @@
         }
         
     }
+}
