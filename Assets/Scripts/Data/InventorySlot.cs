@@ -1,4 +1,5 @@
 using Scriptable_Objects_Scripts;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Data
@@ -32,6 +33,25 @@ namespace Data
             }
                 
             return amountToAdd;
+        }
+
+        public int Remove(int amountToRemove)
+        {
+            if (!IsEmpty)
+            {
+                int removed = Mathf.Min(amountToRemove, amount);
+                amount -= removed;
+                if (amount <= 0) ClearSlot();
+                return (removed);
+            }
+
+            return 0;
+        }
+        
+        public void ClearSlot()
+        {
+            item = null;
+            amount = 0;
         }
         
     }
