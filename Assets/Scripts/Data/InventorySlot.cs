@@ -1,16 +1,18 @@
 using Scriptable_Objects_Scripts;
 using UnityEngine;
+using System;
 
 namespace Data
 {
     public class InventorySlot
     {
-        public Item item;
-        public int amount = 0;
+        private Item item;
+        private int amount = 0;
 
+        public event Action OnSlotChanged;
+        
         public bool IsEmpty => item is null || amount <= 0;
         public bool IsFull => item is not null && amount >= item.maxStack;
-
         public bool CanBeStacked(Item otherItem) => item is not null && otherItem is not null && item == otherItem;
 
         public int AddItem(Item newItem, int amountToAdd)
@@ -19,6 +21,7 @@ namespace Data
             {
                 item = newItem;
                 amount = Mathf.Min(amountToAdd, item.maxStack); // Returns the smallest number
+                OnSlotChanged?.Invoke();
                 return amountToAdd - amount;
             }
 
@@ -28,6 +31,7 @@ namespace Data
                 int newAmountToAdd = Mathf.Min(spaceLeft, amountToAdd);
                 
                 amount += newAmountToAdd;
+                OnSlotChanged?.Invoke();
                 return amountToAdd - newAmountToAdd;
             }
                 
@@ -41,13 +45,14 @@ namespace Data
                 int removed = Mathf.Min(amountToRemove, amount);
                 amount -= removed;
                 if (amount <= 0) ClearSlot();
+                OnSlotChanged?.Invoke();
                 return (removed);
             }
 
             return 0;
         }
         
-        public void ClearSlot()
+        private void ClearSlot()
         {
             item = null;
             amount = 0;

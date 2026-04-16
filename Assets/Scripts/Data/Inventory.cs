@@ -1,12 +1,11 @@
 using Scriptable_Objects_Scripts;
-using System.Linq;
 
 namespace data
 {
     public class Inventory
     {
-        private Data.InventorySlot[,] inventorySlots =  new Data.InventorySlot[3, 9];
-        private Data.InventorySlot[] hotBarSlots = new Data.InventorySlot[9];
+        private readonly Data.InventorySlot[,] inventorySlots =  new Data.InventorySlot[3, 9];
+        private readonly Data.InventorySlot[] hotBarSlots = new Data.InventorySlot[9];
 
         public Inventory()
         {

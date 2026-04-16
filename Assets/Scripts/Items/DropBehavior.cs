@@ -1,4 +1,5 @@
 using System;
+using data;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -21,6 +22,7 @@ public class DropBehavior : MonoBehaviour
         collisionCollider.enabled = false;
         transform.position = Vector2.MoveTowards(
             transform.position, other.transform.position, speed * Time.deltaTime);
+        // var playerInventory = other.GetComponent<Inventory>();
         
         if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
             Destroy(gameObject);
