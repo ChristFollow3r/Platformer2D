@@ -23,8 +23,6 @@ namespace data
                 hotBarSlots[i] = new Data.InventorySlot();
             }
         }
-    
-        // Add global inventory method (loop through arrays and call AddItem() when needed
 
         public void AddItemToHotbar(Item item, int amount)
         {
@@ -46,13 +44,35 @@ namespace data
                 if (amount <= 0) return;
             }
             
-            AddItemToInventary(item, amount);
+            AddItemToInventory(item, amount);
             
         }
 
-        public void AddItemToInventary(Item item, int amount)
+        private void AddItemToInventory(Item item, int amount)
         {
-            return;
+            if (item is null || amount <= 0) return;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (!inventorySlots[i, j].CanBeStacked(item))
+                        continue;
+                    amount = inventorySlots[i, j].AddItem(item, amount);
+                    if (amount <= 0) return;
+                }
+            }
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (!inventorySlots[i, j].IsEmpty)
+                        continue;
+                    amount = inventorySlots[i, j].AddItem(item, amount);
+                    if (amount <= 0) return;
+                }
+            }
         }
     
         // Add two getters for the arrays
