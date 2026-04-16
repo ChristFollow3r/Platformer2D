@@ -1,26 +1,60 @@
+using Scriptable_Objects_Scripts;
+using System.Linq;
 
-public class Inventory
+namespace data
 {
-    private Data.InventorySlot[,] slots =  new Data.InventorySlot[3, 9];
-    private Data.InventorySlot[] hotBarSlots = new Data.InventorySlot[9];
-
-    public Inventory()
+    public class Inventory
     {
-        for (int i = 0; i < 3; i++)
+        private Data.InventorySlot[,] inventorySlots =  new Data.InventorySlot[3, 9];
+        private Data.InventorySlot[] hotBarSlots = new Data.InventorySlot[9];
+
+        public Inventory()
         {
-            for (int j = 0; j < 9; j++)
+            for (int i = 0; i < 3; i++)
             {
-                slots[i, j] = new Data.InventorySlot();
+                for (int j = 0; j < 9; j++)
+                {
+                    inventorySlots[i, j] = new Data.InventorySlot();
+                }
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                hotBarSlots[i] = new Data.InventorySlot();
             }
         }
+    
+        // Add global inventory method (loop through arrays and call AddItem() when needed
 
-        for (int i = 0; i < 9; i++)
+        public void AddItemToHotbar(Item item, int amount)
         {
-            hotBarSlots[i] = new Data.InventorySlot();
+            if (item is null || amount <= 0) return;
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (!hotBarSlots[i].CanBeStacked(item)) 
+                    continue;
+                amount = hotBarSlots[i].AddItem(item, amount);
+                if (amount <= 0) return;
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (!hotBarSlots[i].IsEmpty)
+                    continue;
+                amount = hotBarSlots[i].AddItem(item, amount);
+                if (amount <= 0) return;
+            }
+            
+            AddItemToInventary(item, amount);
+            
         }
+
+        public void AddItemToInventary(Item item, int amount)
+        {
+            return;
+        }
+    
+        // Add two getters for the arrays
     }
-    
-    // Add global inventory method (loop through arrays and call AddItem() when needed
-    
-    // Add two getters for the arrays
 }
