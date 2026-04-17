@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,8 @@ namespace UI
                 hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = true;
                 Sprite itemSprite = hotBarSlots[i].GetItem().itemIcon;
                 hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = itemSprite;
+                hotbar.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+                    hotBarSlots[i].GetAmount().ToString();
             }
         }
     }
