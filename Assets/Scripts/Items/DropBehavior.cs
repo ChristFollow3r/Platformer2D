@@ -2,12 +2,12 @@ using Player;
 using Prefabs;
 using UnityEngine;
 
-namespace Items
+namespace Items // Maybe I should add this to items?
 {
     public class DropBehavior : MonoBehaviour
     {
         private PolygonCollider2D collisionCollider;
-        private readonly float pickUpRadius = 0.2f;
+        private readonly float pickUpRadius = 0.4f;
         private readonly float speed = 10f;
 
         private void Start()

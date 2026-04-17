@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,12 @@ namespace UI
         {
             foreach (var slot in playerManager.Inventory.GetHotBarSlots())
                 slot.OnSlotChanged += UpdateHotbarUI;
+        }
+
+        private void Start()
+        {
+            for (int i =  0; i < 9; i++)
+                hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
         }
 
         private void UpdateHotbarUI()
