@@ -1,4 +1,6 @@
+using Data;
 using Scriptable_Objects_Scripts;
+using UnityEngine;
 
 namespace data
 {
@@ -26,7 +28,8 @@ namespace data
         public void AddItemToHotbar(Item item, int amount)
         {
             if (item is null || amount <= 0) return;
-
+            Debug.Log("Adding Item to Hotbar");
+            
             for (int i = 0; i < 9; i++)
             {
                 if (!hotBarSlots[i].CanBeStacked(item)) 
@@ -73,7 +76,16 @@ namespace data
                 }
             }
         }
-    
-        // Add two getters for the arrays
+
+        public InventorySlot[] GetHotBarSlots()
+        {
+            return hotBarSlots;
+        }
+
+        public InventorySlot[,] GetInventorySlots()
+        {
+            return inventorySlots;
+        }
+
     }
 }

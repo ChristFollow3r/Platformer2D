@@ -10,13 +10,13 @@ namespace Data
         private int amount = 0;
 
         public event Action OnSlotChanged;
-        
         public bool IsEmpty => item is null || amount <= 0;
         public bool IsFull => item is not null && amount >= item.maxStack;
         public bool CanBeStacked(Item otherItem) => item is not null && otherItem is not null && item == otherItem;
 
         public int AddItem(Item newItem, int amountToAdd)
         {
+            Debug.Log("Adding Item to slot");
             if (IsEmpty)
             {
                 item = newItem;
@@ -57,6 +57,10 @@ namespace Data
             item = null;
             amount = 0;
         }
-        
+
+        public Item GetItem()
+        {
+            return item;
+        }
     }
 }

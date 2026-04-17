@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8638140639543557364}
   - component: {fileID: 7421168028027254283}
   - component: {fileID: 7312587968282079609}
+  - component: {fileID: 7202460048981194002}
   m_Layer: 0
   m_Name: Stick
   m_TagString: Drop
@@ -220,3 +221,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19507406fb458ae459dbacbeea3dda76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7202460048981194002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4509493131310187354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fb7ff8ddc15aab4492a692638ee3885, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 11400000, guid: 51eef3b63066fec4dbceee03c2c71cef, type: 2}

@@ -1,34 +1,41 @@
-using System;
-using data;
-using Unity.Cinemachine;
-using Unity.VisualScripting;
+using Player;
+using Prefabs;
 using UnityEngine;
 
-public class DropBehavior : MonoBehaviour
+namespace Items
 {
-    private PolygonCollider2D collisionCollider;
-    private readonly float pickUpRadius = 0.2f;
-    private readonly float speed = 10f;
-
-    private void Start()
+    public class DropBehavior : MonoBehaviour
     {
-        collisionCollider = GetComponent<PolygonCollider2D>();
-    }
+        private PolygonCollider2D collisionCollider;
+        private readonly float pickUpRadius = 0.2f;
+        private readonly float speed = 10f;
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-        if (!other.CompareTag("Player")) return;
+        private void Start()
+        {
+            collisionCollider = GetComponent<PolygonCollider2D>();
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (!other.CompareTag("Player")) return;
         
-        collisionCollider.enabled = false;
-        transform.position = Vector2.MoveTowards(
-            transform.position, other.transform.position, speed * Time.deltaTime);
-        // var playerInventory = other.GetComponent<Inventory>();
+            var playerManager = other.GetComponent<PlayerManager>();
+            collisionCollider.enabled = false;
+            transform.position = Vector2.MoveTowards(
+                transform.position, other.transform.position, speed * Time.deltaTime);
+
+            if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
+            {
+                Debug.Log("Picking Up item");
+                var item = GetComponent<ItemReference>().GetItem();
+                playerManager.Inventory.AddItemToHotbar(item, 1);
+                Destroy(gameObject);
+            }
+            
         
-        if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
-            Destroy(gameObject);
-        
+        }
+    
+    
+    
     }
-    
-    
-    
 }
