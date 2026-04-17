@@ -30,7 +30,8 @@ namespace Player // Rider yellow underlying was telling me to use a namespace
 
             Vector2 origin = new Vector3(transform.position.x, playerCollider.bounds.min.y); // Dude still gets stuck on the wall
             var hit = Physics2D.Raycast(origin, Vector2.down, 0.2f);
-            if (playerInput.Player.Jump.WasPerformedThisFrame() && hit.collider is not null) rb.linearVelocityY = jumpForce; 
+            if (playerInput.Player.Jump.WasPerformedThisFrame() && hit.collider is not null
+                && !hit.collider.CompareTag("Drop")) rb.linearVelocityY = jumpForce; 
         }
    
     }
