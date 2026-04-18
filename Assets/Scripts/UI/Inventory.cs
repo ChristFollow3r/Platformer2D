@@ -17,12 +17,22 @@ namespace UI
         {
             foreach (var slot in playerManager.Inventory.GetHotBarSlots())
                 slot.OnSlotChanged += UpdateHotbarUI;
+            foreach (var slot in playerManager.Inventory.GetInventorySlots())
+                slot.OnSlotChanged += UpdateInventoryUI;
         }
 
         private void Start()
         {
             for (int i =  0; i < 9; i++)
                 hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().enabled = false;
+                }
+            }
         }
 
         private void Update()
@@ -63,7 +73,7 @@ namespace UI
         private void UpdateInventoryUI()
         {
             var inventorySlots = playerManager.Inventory.GetInventorySlots();
-            Debug.Log("I'm being called from inventory UI");
+            // Debug.Log("I'm being called from inventory UI");
 
             for (int i = 0; i < 3; i++)
             {
@@ -71,9 +81,15 @@ namespace UI
                 {
                     if (inventorySlots[i, j].IsEmpty)
                     {
-                        inventory.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
+                        inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().enabled = false;
+                        continue;
                     }
                     
+                    inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().enabled = true;
+                    Sprite itemSprite = inventorySlots[i, j].GetItem().itemIcon;
+                    inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().sprite = itemSprite;
+                    inventory.transform.GetChild(i * 9 + j).GetChild(1).GetComponent<TextMeshProUGUI>().text =
+                        inventorySlots[i, j].GetAmount().ToString();
                     
                 }
             }
