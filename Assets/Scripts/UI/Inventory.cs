@@ -33,7 +33,7 @@ namespace UI
         private void UpdateHotbarUI()
         {
             var hotBarSlots = playerManager.Inventory.GetHotBarSlots();
-            Debug.Log("I'm being called");
+            Debug.Log("I'm being called from  hotbar UI");
             for (int i = 0; i < 9; i++)
             {
                 Debug.Log("Hotbar Slot: " + i +  "being filled");
@@ -57,6 +57,25 @@ namespace UI
             {
                 inventoryOpened = !inventoryOpened;
                 inventory.SetActive(inventoryOpened);
+            }
+        }
+
+        private void UpdateInventoryUI()
+        {
+            var inventorySlots = playerManager.Inventory.GetInventorySlots();
+            Debug.Log("I'm being called from inventory UI");
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (inventorySlots[i, j].IsEmpty)
+                    {
+                        inventory.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
+                    }
+                    
+                    
+                }
             }
         }
         
