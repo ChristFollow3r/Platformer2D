@@ -6,7 +6,7 @@ namespace Player // Rider yellow underlying was telling me to use a namespace
     {
         private Rigidbody2D rb;
         private Collider2D playerCollider;
-        private InputSystem_Actions playerInput;
+        public InputSystem_Actions playerInput;
 
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;

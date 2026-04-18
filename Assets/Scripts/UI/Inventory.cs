@@ -8,7 +8,10 @@ namespace UI
     public class Inventory : MonoBehaviour
     {
         [SerializeField] private GameObject hotbar;
+        [SerializeField] private GameObject inventory;
         [SerializeField] private Player.PlayerManager playerManager;
+        
+        bool inventoryOpened = false;
 
         private void Awake()
         {
@@ -20,6 +23,11 @@ namespace UI
         {
             for (int i =  0; i < 9; i++)
                 hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
+        }
+
+        private void Update()
+        {
+            OpenInventoryUI();
         }
 
         private void UpdateHotbarUI()
@@ -42,5 +50,15 @@ namespace UI
                     hotBarSlots[i].GetAmount().ToString();
             }
         }
+
+        private void OpenInventoryUI()
+        {
+            if (playerManager.PlayerMovement.playerInput.Player.InventoryToggle.WasPerformedThisFrame()) // Maybe disable player movement while in the inventory?
+            {
+                inventoryOpened = !inventoryOpened;
+                inventory.SetActive(inventoryOpened);
+            }
+        }
+        
     }
 }
