@@ -43,10 +43,8 @@ namespace UI
         private void UpdateHotbarUI()
         {
             var hotBarSlots = playerManager.Inventory.GetHotBarSlots();
-            Debug.Log("I'm being called from  hotbar UI");
             for (int i = 0; i < 9; i++)
             {
-                Debug.Log("Hotbar Slot: " + i +  "being filled");
                 if (hotBarSlots[i].IsEmpty)
                 {
                     hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
@@ -73,7 +71,6 @@ namespace UI
         private void UpdateInventoryUI()
         {
             var inventorySlots = playerManager.Inventory.GetInventorySlots();
-            // Debug.Log("I'm being called from inventory UI");
 
             for (int i = 0; i < 3; i++)
             {
@@ -90,7 +87,6 @@ namespace UI
                     inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().sprite = itemSprite;
                     inventory.transform.GetChild(i * 9 + j).GetChild(1).GetComponent<TextMeshProUGUI>().text =
                         inventorySlots[i, j].GetAmount().ToString();
-                    
                 }
             }
         }
