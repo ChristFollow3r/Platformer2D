@@ -860,6 +860,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotbar: {fileID: 1157729845}
+  inventory: {fileID: 1236105047}
   playerManager: {fileID: 139018192}
 --- !u!4 &873210151
 Transform:
