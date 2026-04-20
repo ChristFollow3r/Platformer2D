@@ -527,7 +527,7 @@ GameObject:
   m_Component:
   - component: {fileID: 73342275}
   - component: {fileID: 73342276}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Character_Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -620,7 +620,7 @@ GameObject:
   - component: {fileID: 139018190}
   - component: {fileID: 139018193}
   - component: {fileID: 139018194}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -659,6 +659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 7
   jumpForce: 12
+  wallJumpForce: {x: 5, y: 3}
 --- !u!4 &139018189
 Transform:
   m_ObjectHideFlags: 0
@@ -1323,7 +1324,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
