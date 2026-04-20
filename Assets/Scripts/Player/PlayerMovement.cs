@@ -8,9 +8,7 @@
             private Collider2D playerCollider;
             private Animator playerAnimator;
             
-            // private static readonly int IsMoving = Animator.StringToHash("isMoving");
-            // private static readonly int IsMovingRight = Animator.StringToHash("isMovingRight");
-            // I'm fucking up animations too much
+            bool canDoulbeJump = false;
             
             public InputSystem_Actions playerInput;
 
@@ -35,17 +33,30 @@
                 var movement = playerInput.Player.Move.ReadValue<Vector2>();
                 rb.linearVelocityX = movement.x * speed;
                 
-                /*
-                if (Mathf.Abs(rb.linearVelocityX) > 0)
-                    playerAnimator.SetBool(IsMovingRight, rb.linearVelocityX > 0);
-                else
-                    playerAnimator.SetBool(IsMoving, false);
-                 */
-                
                 Vector2 origin = new Vector3(transform.position.x, playerCollider.bounds.min.y); // Dude still gets stuck on the wall
                 var hit = Physics2D.Raycast(origin, Vector2.down, 0.2f);
-                if (playerInput.Player.Jump.WasPerformedThisFrame() && hit.collider is not null
-                    && !hit.collider.CompareTag("Drop")) rb.linearVelocityY = jumpForce; 
+                
+                bool isGrounded = hit.collider is not null;
+                if (isGrounded) canDoulbeJump = true;
+
+                if (playerInput.Player.Jump.WasPerformedThisFrame())
+                {
+                    if (isGrounded)
+                        rb.linearVelocityY = jumpForce;
+                    
+                    else if (canDoulbeJump)
+                    {
+                        rb.linearVelocityY = jumpForce;
+                        canDoulbeJump = false;
+                    }
+                }
+                
+            }
+
+            private void WallJump(bool isGrounded)
+            {
+                var leftHit = Physics2D.Raycast(playerCollider.bounds.min, Vector2.left, 0.2f);
+                var rightHit = Physics2D.Raycast(playerCollider.bounds.min, Vector2.right, 0.2f);
             }
             
         }
