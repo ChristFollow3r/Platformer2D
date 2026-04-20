@@ -6,8 +6,6 @@
         {
             private Rigidbody2D rb;
             private Collider2D playerCollider;
-            private Animator playerAnimator;
-            
             
             public InputSystem_Actions playerInput;
 
@@ -23,7 +21,6 @@
             {
                 rb = GetComponent<Rigidbody2D>();   
                 playerCollider = GetComponent<Collider2D>();
-                // playerAnimator = GetComponent<Animator>();
                 playerInput = new InputSystem_Actions();
                 playerInput.Enable();
             }
@@ -44,10 +41,12 @@
                 
                 if (isTouchingLeftWall || isTouchingRightWall && !isGrounded)
                     rb.gravityScale = 1.5f;
+                
                 else rb.gravityScale = rb.linearVelocityY < 0 ? 5f : 3f;
                 
                 if (wallJumpTime > 0f)
                     wallJumpTime -= Time.deltaTime;
+                
                 else
                     rb.linearVelocityX = movement * speed;
 
