@@ -9,87 +9,40 @@ namespace UI
     {
         [SerializeField] private GameObject hotbar;
         [SerializeField] private GameObject inventory;
+        [SerializeField] private GameObject craftingMenu;
         [SerializeField] private Player.PlayerManager playerManager;
-        
-        bool inventoryOpened = false;
 
-        private void Awake()
-        {
-            foreach (var slot in playerManager.Inventory.GetHotBarSlots())
-                slot.OnSlotChanged += UpdateHotbarUI;
-            foreach (var slot in playerManager.Inventory.GetInventorySlots())
-                slot.OnSlotChanged += UpdateInventoryUI;
-        }
+        bool inventoryOpened = false;
 
         private void Start()
         {
-            for (int i =  0; i < 9; i++)
-                hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
-
+            var hotBarData = playerManager.Inventory.GetHotBarSlots();
+            for (int i = 0; i < 9; i++)
+                hotbar.transform.GetChild(i).GetComponent<SlotUI>().SetSlot(hotBarData[i]);
+            
+            var inventoryData = playerManager.Inventory.GetInventorySlots();
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().enabled = false;
+                    inventory.transform.GetChild(i * 9 + j).GetComponent<SlotUI>().SetSlot(inventoryData[i, j]);
                 }
             }
+            for (int i = 0; i < 17; i++)
+                craftingMenu.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false; // This will be changed
+            
+            inventory.SetActive(false);
+            craftingMenu.SetActive(false);
         }
 
         private void Update()
         {
-            OpenInventoryUI();
-        }
-
-        private void UpdateHotbarUI()
-        {
-            var hotBarSlots = playerManager.Inventory.GetHotBarSlots();
-            for (int i = 0; i < 9; i++)
-            {
-                if (hotBarSlots[i].IsEmpty)
-                {
-                    hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false;
-                    continue;
-                }
-                
-                hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = true;
-                Sprite itemSprite = hotBarSlots[i].GetItem().itemIcon;
-                hotbar.transform.GetChild(i).GetChild(0).GetComponent<Image>().sprite = itemSprite;
-                hotbar.transform.GetChild(i).GetChild(1).GetComponent<TextMeshProUGUI>().text =
-                    hotBarSlots[i].GetAmount().ToString();
-            }
-        }
-
-        private void OpenInventoryUI()
-        {
-            if (playerManager.PlayerMovement.playerInput.Player.InventoryToggle.WasPerformedThisFrame()) // Maybe disable player movement while in the inventory?
+            if (playerManager.PlayerMovement.playerInput.Player.InventoryToggle.WasPerformedThisFrame())
             {
                 inventoryOpened = !inventoryOpened;
                 inventory.SetActive(inventoryOpened);
+                craftingMenu.SetActive(inventoryOpened);
             }
         }
-
-        private void UpdateInventoryUI()
-        {
-            var inventorySlots = playerManager.Inventory.GetInventorySlots();
-
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    if (inventorySlots[i, j].IsEmpty)
-                    {
-                        inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().enabled = false;
-                        continue;
-                    }
-                    
-                    inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().enabled = true;
-                    Sprite itemSprite = inventorySlots[i, j].GetItem().itemIcon;
-                    inventory.transform.GetChild(i * 9 + j).GetChild(0).GetComponent<Image>().sprite = itemSprite;
-                    inventory.transform.GetChild(i * 9 + j).GetChild(1).GetComponent<TextMeshProUGUI>().text =
-                        inventorySlots[i, j].GetAmount().ToString();
-                }
-            }
-        }
-        
     }
 }
