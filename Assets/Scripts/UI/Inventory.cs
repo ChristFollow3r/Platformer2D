@@ -7,6 +7,7 @@ namespace UI
 {
     public class Inventory : MonoBehaviour
     {
+        public static Inventory Instance;
         [SerializeField] private GameObject hotbar;
         [SerializeField] private GameObject inventory;
         [SerializeField] private GameObject craftingMenu;
@@ -14,6 +15,11 @@ namespace UI
 
         bool inventoryOpened = false;
 
+        private void Awake()
+        {
+            if (Instance == null) Instance = this;
+            else Destroy(gameObject);
+        }
         private void Start()
         {
             var hotBarData = playerManager.Inventory.GetHotBarSlots();

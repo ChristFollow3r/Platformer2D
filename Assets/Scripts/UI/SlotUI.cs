@@ -36,6 +36,6 @@ public class SlotUI : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // To do the drag and drop
+        Debug.Log("Miau miau motherfucker");
     }
 }
