@@ -1,9 +1,6 @@
-using System.Net.Mime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using UnityEngine.XR;
 
 namespace Data.Inventory
 {
@@ -15,8 +12,7 @@ namespace Data.Inventory
     
         private static InventoryManager _instance;
         public static InventoryManager Instance => _instance;
-        private readonly Data.Inventory.InventorySlot mouseSlot = new Data.Inventory.InventorySlot();
-        
+        private readonly InventorySlot mouseSlot = new InventorySlot();
         private void Awake()
         {
             if (_instance == null) _instance = this;
