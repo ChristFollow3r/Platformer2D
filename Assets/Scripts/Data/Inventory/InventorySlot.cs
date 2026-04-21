@@ -1,8 +1,8 @@
+using System;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
-using System;
 
-namespace Data
+namespace Data.Inventory
 {
     public class InventorySlot
     {

@@ -1,13 +1,12 @@
-using Data;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
 
-namespace data
+namespace Data.Inventory
 {
     public class Inventory
     {
-        private readonly Data.InventorySlot[,] inventorySlots =  new Data.InventorySlot[3, 9];
-        private readonly Data.InventorySlot[] hotBarSlots = new Data.InventorySlot[9];
+        private readonly InventorySlot[,] inventorySlots =  new InventorySlot[3, 9];
+        private readonly InventorySlot[] hotBarSlots = new InventorySlot[9];
 
         public Inventory()
         {
@@ -15,13 +14,13 @@ namespace data
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    inventorySlots[i, j] = new Data.InventorySlot();
+                    inventorySlots[i, j] = new InventorySlot();
                 }
             }
 
             for (int i = 0; i < 9; i++)
             {
-                hotBarSlots[i] = new Data.InventorySlot();
+                hotBarSlots[i] = new InventorySlot();
             }
         }
 

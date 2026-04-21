@@ -6,20 +6,15 @@ using UnityEngine.UI;
 namespace UI
 {
     public class Inventory : MonoBehaviour
-    {
-        public static Inventory Instance;
+    { 
+        
+        [Header("UI")]
         [SerializeField] private GameObject hotbar;
         [SerializeField] private GameObject inventory;
         [SerializeField] private GameObject craftingMenu;
         [SerializeField] private Player.PlayerManager playerManager;
 
         bool inventoryOpened = false;
-
-        private void Awake()
-        {
-            if (Instance == null) Instance = this;
-            else Destroy(gameObject);
-        }
         private void Start()
         {
             var hotBarData = playerManager.Inventory.GetHotBarSlots();
@@ -49,6 +44,7 @@ namespace UI
                 inventory.SetActive(inventoryOpened);
                 craftingMenu.SetActive(inventoryOpened);
             }
+            
         }
     }
 }

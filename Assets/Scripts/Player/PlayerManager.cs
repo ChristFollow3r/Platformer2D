@@ -1,4 +1,4 @@
-using data;
+using Data.Inventory;
 using UnityEngine;
 
 namespace Player

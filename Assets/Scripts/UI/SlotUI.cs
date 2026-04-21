@@ -1,41 +1,45 @@
+using Data.Inventory;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class SlotUI : MonoBehaviour, IPointerClickHandler
+namespace UI
 {
-    [SerializeField] private Image iconImage;
-    [SerializeField] private TextMeshProUGUI amountText;
-
-    private Data.InventorySlot linkedSlot;
-
-    public void SetSlot(Data.InventorySlot slot)
+    public class SlotUI : MonoBehaviour, IPointerClickHandler
     {
-        if (linkedSlot != null) linkedSlot.OnSlotChanged -= UpdateVisuals;
-        linkedSlot = slot;
-        linkedSlot.OnSlotChanged += UpdateVisuals;
-        UpdateVisuals();
-    }
+        [SerializeField] private Image iconImage;
+        [SerializeField] private TextMeshProUGUI amountText;
 
-    private void UpdateVisuals()
-    {
-        if (linkedSlot.IsEmpty)
+        private InventorySlot linkedSlot;
+
+        public void SetSlot(InventorySlot slot)
         {
-            iconImage.enabled = false;
-            amountText.text = "";
+            if (linkedSlot != null) linkedSlot.OnSlotChanged -= UpdateVisuals;
+            linkedSlot = slot;
+            linkedSlot.OnSlotChanged += UpdateVisuals;
+            UpdateVisuals();
         }
-        else
-        {
-            iconImage.enabled = true;
-            iconImage.sprite = linkedSlot.GetItem().itemIcon;
-            amountText.text = linkedSlot.GetAmount().ToString();
-            if (linkedSlot.GetAmount() == 1) amountText.text = "";
-        }
-    }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log("Miau miau motherfucker");
+        private void UpdateVisuals()
+        {
+            if (linkedSlot.IsEmpty)
+            {
+                iconImage.enabled = false;
+                amountText.text = "";
+            }
+            else
+            {
+                iconImage.enabled = true;
+                iconImage.sprite = linkedSlot.GetItem().itemIcon;
+                amountText.text = linkedSlot.GetAmount().ToString();
+                if (linkedSlot.GetAmount() == 1) amountText.text = "";
+            }
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            InventoryManager.Instance.HandleClick(linkedSlot);
+        }
     }
 }
