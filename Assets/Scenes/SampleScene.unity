@@ -2647,7 +2647,6 @@ GameObject:
   - component: {fileID: 873210151}
   - component: {fileID: 873210150}
   - component: {fileID: 873210152}
-  - component: {fileID: 873210153}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -2701,18 +2700,6 @@ MonoBehaviour:
   mouseGhost: {fileID: 1723055505}
   ghostIcon: {fileID: 862038098}
   ghostText: {fileID: 2044306946}
---- !u!114 &873210153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 873210149}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3c5b57e2420f004db1095f4f0b0c657, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &885701829
 GameObject:
   m_ObjectHideFlags: 0
@@ -5197,6 +5184,7 @@ GameObject:
   - component: {fileID: 1642879327}
   - component: {fileID: 1642879329}
   - component: {fileID: 1642879328}
+  - component: {fileID: 1642879330}
   m_Layer: 5
   m_Name: Drop Zone
   m_TagString: Untagged
@@ -5261,6 +5249,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1642879326}
   m_CullTransparentMesh: 1
+--- !u!114 &1642879330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642879326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3c5b57e2420f004db1095f4f0b0c657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1664324396
 PrefabInstance:
   m_ObjectHideFlags: 0

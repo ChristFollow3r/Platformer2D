@@ -7,9 +7,10 @@ namespace Data.Inventory
     {
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (eventData.button == PointerEventData.InputButton.Right)
+            if (eventData.button == PointerEventData.InputButton.Left)
             {
                 InventoryManager.Instance.DropItem();
+                Debug.Log("Dropping item");
             }
         }
     }
