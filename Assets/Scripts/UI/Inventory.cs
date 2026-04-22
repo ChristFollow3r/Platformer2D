@@ -29,8 +29,17 @@ namespace UI
                     inventory.transform.GetChild(i * 9 + j).GetComponent<SlotUI>().SetSlot(inventoryData[i, j]);
                 }
             }
+
             for (int i = 0; i < 17; i++)
+            {
                 craftingMenu.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false; // This will be changed
+                
+                var slotUI = craftingMenu.transform.GetChild(i).GetComponent<SlotUI>();
+                if (slotUI != null) 
+                {
+                    slotUI.SetSlot(new Data.Inventory.InventorySlot());
+                }
+            }
             
             inventory.SetActive(false);
             craftingMenu.SetActive(false);

@@ -7,7 +7,8 @@ namespace Data.Inventory
     {
         private readonly InventorySlot[,] inventorySlots =  new InventorySlot[3, 9];
         private readonly InventorySlot[] hotBarSlots = new InventorySlot[9];
-
+        // Missing the crafting inventory
+        
         public Inventory()
         {
             for (int i = 0; i < 3; i++)
