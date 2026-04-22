@@ -39,7 +39,10 @@ namespace UI
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            InventoryManager.Instance.HandleClick(linkedSlot);
+            if (eventData.button == PointerEventData.InputButton.Left)
+                InventoryManager.Instance.HandleLeftClick(linkedSlot);
+            else if (eventData.button == PointerEventData.InputButton.Right)
+                InventoryManager.Instance.HandleRightClick(linkedSlot);
         }
     }
 }

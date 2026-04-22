@@ -31,7 +31,7 @@ namespace Data.Inventory
         }
         
 
-        public void HandleClick(InventorySlot clickedSlot)
+        public void HandleLeftClick(InventorySlot clickedSlot)
         {
             if (mouseSlot.IsEmpty && !clickedSlot.IsEmpty) // Regular subtract - nothing on the mouse - slot occupied
             {
@@ -41,19 +41,36 @@ namespace Data.Inventory
 
             else if (!mouseSlot.IsEmpty && clickedSlot.IsEmpty) // Regular transfer - mouse has stuff - slot has nothing
             {
-                var temp = mouseSlot.GetItem();
-                int tempAmount = mouseSlot.GetAmount();
-
-                clickedSlot.AddItem(temp, tempAmount);
-                mouseSlot.Remove(tempAmount);
+                if (mouseSlot.CanBeStacked(clickedSlot.GetItem()))
+                {
+                    // ESTRES QUE FLIPAS
+                }
             }
-            
-            // add items to a slot (individual items)
-            // subtract items from a slot (individual items)
-            // drop items with left click
             
             MouseGhostVisuals(); // TO FIX ITEMS MAKE THE PLAYER MOVEMENT SCRIPT THINK THEY ARE WALLS
 
+        }
+
+        public void HandleRightClick(InventorySlot clickedSlot)
+        {
+            if (!mouseSlot.IsFull && !clickedSlot.IsEmpty)
+                mouseSlot.AddItem(clickedSlot.GetItem(), clickedSlot.Remove(1));
+            
+            else if (!mouseSlot.IsEmpty && !clickedSlot.IsFull)
+            {
+                clickedSlot.AddItem(mouseSlot.GetItem(), 1);
+                mouseSlot.Remove(1);
+            }
+            MouseGhostVisuals();
+        }
+
+        public void DropItem()
+        {
+            if (!mouseSlot.IsEmpty)
+            {
+                Instantiate(mouseSlot.GetItem().drop, mouseGhost.transform.position, Quaternion.identity);
+                mouseSlot.Remove(1);
+            }
         }
 
         private void MouseGhostVisuals()
