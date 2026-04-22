@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 namespace Data.Inventory
 {
@@ -33,17 +34,43 @@ namespace Data.Inventory
 
         public void HandleLeftClick(InventorySlot clickedSlot)
         {
-            if (mouseSlot.IsEmpty && !clickedSlot.IsEmpty) // Regular subtract - nothing on the mouse - slot occupied
+            if (mouseSlot.IsEmpty && !clickedSlot.IsEmpty) // Take all - WORKS
             {
                 mouseSlot.AddItem(clickedSlot.GetItem(), clickedSlot.GetAmount());
                 clickedSlot.Remove(clickedSlot.GetAmount());
+                Debug.Log("Working one");
             }
 
-            else if (!mouseSlot.IsEmpty && clickedSlot.IsEmpty) // Regular transfer - mouse has stuff - slot has nothing
+            else if (!mouseSlot.IsEmpty && clickedSlot.IsEmpty) // Put all back - WORKS
             {
-                if (mouseSlot.CanBeStacked(clickedSlot.GetItem()))
+                clickedSlot.AddItem(mouseSlot.GetItem(), mouseSlot.GetAmount());
+                mouseSlot.Remove(mouseSlot.GetAmount());
+                Debug.Log("Working two");
+            }
+            
+            else if (!mouseSlot.IsEmpty && !clickedSlot.IsEmpty) // Both have stuff
+            {
+                if (clickedSlot.CanBeStacked(mouseSlot.GetItem())) // Add stuff to mouse with stuff - WORKS
                 {
-                    // ESTRES QUE FLIPAS
+                    int mouseAmount = mouseSlot.GetAmount();
+                    int amountLeft = clickedSlot.AddItem(mouseSlot.GetItem(), mouseAmount);
+                    int amountToRemove = mouseAmount - amountLeft;
+                    mouseSlot.Remove(amountToRemove);
+                }
+
+                else // Swap - WORKS
+                {
+                    var slotItem = clickedSlot.GetItem();
+                    var  slotAmount = clickedSlot.GetAmount();
+                    
+                    var mouseItem = mouseSlot.GetItem();
+                    var mouseAmount = mouseSlot.GetAmount();
+                    
+                    clickedSlot.Remove(clickedSlot.GetAmount());
+                    mouseSlot.Remove(mouseSlot.GetAmount());
+                    
+                    clickedSlot.AddItem(mouseItem, mouseAmount);
+                    mouseSlot.AddItem(slotItem, slotAmount);
                 }
             }
             
@@ -53,14 +80,16 @@ namespace Data.Inventory
 
         public void HandleRightClick(InventorySlot clickedSlot)
         {
-            if (!mouseSlot.IsFull && !clickedSlot.IsEmpty)
-                mouseSlot.AddItem(clickedSlot.GetItem(), clickedSlot.Remove(1));
+            if (clickedSlot.IsEmpty) return;
             
-            else if (!mouseSlot.IsEmpty && !clickedSlot.IsFull)
+            if (mouseSlot.IsEmpty || (mouseSlot.CanBeStacked(clickedSlot.GetItem()) && !mouseSlot.IsFull))
             {
-                clickedSlot.AddItem(mouseSlot.GetItem(), 1);
-                mouseSlot.Remove(1);
+                mouseSlot.AddItem(clickedSlot.GetItem(), 1);
+                clickedSlot.Remove(1);
+                Debug.Log("Took one");
             }
+            
+            else Debug.Log("Mouse is full or holding something else");
             MouseGhostVisuals();
         }
 
