@@ -2284,7 +2284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotbar: {fileID: 1157729845}
-  inventory: {fileID: 0}
+  inventory: {fileID: 1671611098}
   craftingMenu: {fileID: 1638019666}
   playerManager: {fileID: 139018192}
 --- !u!4 &873210151
@@ -5221,7 +5221,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -130, y: 1.1}
-  m_SizeDelta: {x: 400, y: 140}
+  m_SizeDelta: {x: 380, y: 140}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1671611100
 MonoBehaviour:
