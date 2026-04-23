@@ -62,6 +62,8 @@ namespace Player
                         }
                     }
                 }
+                WorldData.World.SetPropType(mouseX, mouseY, PropType.None);
+                WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
             }
 
             if (Mouse.current.rightButton.isPressed) // This will be changed eventually taking into an account what the player is holding

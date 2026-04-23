@@ -10,7 +10,6 @@ namespace Data.Inventory
             if (eventData.button == PointerEventData.InputButton.Left)
             {
                 InventoryManager.Instance.DropItem();
-                Debug.Log("Dropping item");
             }
         }
     }
