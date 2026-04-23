@@ -12,6 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c93a5e15f225eb4da5fad2220b9e280, type: 3}
   m_Name: Bush
   m_EditorClassIdentifier: 
+  drops:
+  - item: {fileID: 11400000, guid: 51eef3b63066fec4dbceee03c2c71cef, type: 2}
+    amount: 1
+    dropChance: 60
+  - item: {fileID: 11400000, guid: 51eef3b63066fec4dbceee03c2c71cef, type: 2}
+    amount: 2
+    dropChance: 15
+  - item: {fileID: 11400000, guid: 23c6e5442a86e584397b0e5e913a4fb7, type: 2}
+    amount: 3
+    dropChance: 80
   sprite: {fileID: 1286674856, guid: 65071482b21a40346bd5ba5e4ea1ec14, type: 3}
   name: Bush
   type: 1
