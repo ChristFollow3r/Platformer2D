@@ -1,8 +1,9 @@
-using Player;
+using Scriptable_Objects_Scripts;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
+using System.Collections.Generic;
 using Image = UnityEngine.UI.Image;
+
 
 namespace Data.Inventory
 {
@@ -12,7 +13,8 @@ namespace Data.Inventory
         [SerializeField] private Image ghostIcon;
         [SerializeField] private TextMeshProUGUI ghostText;
         [SerializeField] private GameObject player;
-    
+
+        [SerializeField] private List<Recipe> recipes;
         private static InventoryManager _instance;
         public static InventoryManager Instance => _instance;
         private readonly InventorySlot mouseSlot = new InventorySlot();
@@ -36,63 +38,17 @@ namespace Data.Inventory
 
         public void HandleLeftClick(InventorySlot clickedSlot)
         {
-            if (mouseSlot.IsEmpty && !clickedSlot.IsEmpty) // Take all - WORKS
-            {
-                mouseSlot.AddItem(clickedSlot.GetItem(), clickedSlot.GetAmount());
-                clickedSlot.Remove(clickedSlot.GetAmount());
-                Debug.Log("Working one");
-            }
-
-            else if (!mouseSlot.IsEmpty && clickedSlot.IsEmpty) // Put all back - WORKS
-            {
-                clickedSlot.AddItem(mouseSlot.GetItem(), mouseSlot.GetAmount());
-                mouseSlot.Remove(mouseSlot.GetAmount());
-                Debug.Log("Working two");
-            }
-            
-            else if (!mouseSlot.IsEmpty && !clickedSlot.IsEmpty) // Both have stuff
-            {
-                if (clickedSlot.CanBeStacked(mouseSlot.GetItem())) // Add stuff to mouse with stuff - WORKS
-                {
-                    int mouseAmount = mouseSlot.GetAmount();
-                    int amountLeft = clickedSlot.AddItem(mouseSlot.GetItem(), mouseAmount);
-                    int amountToRemove = mouseAmount - amountLeft;
-                    mouseSlot.Remove(amountToRemove);
-                }
-
-                else // Swap - WORKS
-                {
-                    var slotItem = clickedSlot.GetItem();
-                    var  slotAmount = clickedSlot.GetAmount();
-                    
-                    var mouseItem = mouseSlot.GetItem();
-                    var mouseAmount = mouseSlot.GetAmount();
-                    
-                    clickedSlot.Remove(clickedSlot.GetAmount());
-                    mouseSlot.Remove(mouseSlot.GetAmount());
-                    
-                    clickedSlot.AddItem(mouseItem, mouseAmount);
-                    mouseSlot.AddItem(slotItem, slotAmount);
-                }
-            }
-            
-            MouseGhostVisuals(); // TO FIX ITEMS MAKE THE PLAYER MOVEMENT SCRIPT THINK THEY ARE WALLS
-
+            // Rewrite this shit
         }
 
         public void HandleRightClick(InventorySlot clickedSlot)
         {
-            if (clickedSlot.IsEmpty) return;
+            // Rewrite this shit
+        }
+
+        public void UpdateCraftingResults()
+        {
             
-            if (mouseSlot.IsEmpty || (mouseSlot.CanBeStacked(clickedSlot.GetItem()) && !mouseSlot.IsFull))
-            {
-                mouseSlot.AddItem(clickedSlot.GetItem(), 1);
-                clickedSlot.Remove(1);
-                Debug.Log("Took one");
-            }
-            
-            else Debug.Log("Mouse is full or holding something else");
-            MouseGhostVisuals();
         }
 
         public void DropItem()

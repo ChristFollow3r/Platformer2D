@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - Drop
+  - Result
+  - CraftingSlots
   layers:
   - Default
   - TransparentFX

@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot 9
       objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
+      objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -329,6 +333,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
@@ -615,6 +623,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
@@ -1330,6 +1342,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot 14
       objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
+      objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1851,6 +1867,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot 3
       objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
+      objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -1952,6 +1972,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
@@ -2481,6 +2505,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot 15
       objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
+      objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2577,6 +2605,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
@@ -3184,6 +3216,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
@@ -4109,6 +4145,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
@@ -5375,6 +5415,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot 8
       objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
+      objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5482,6 +5526,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Result
       objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: Result
+      objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5579,6 +5627,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot 4
       objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
+      objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -5675,6 +5727,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
@@ -6079,6 +6135,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot 7
       objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
+      objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6175,6 +6235,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
@@ -6599,6 +6663,10 @@ PrefabInstance:
     - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Name
       value: Slot 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617450746095913910, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
+      propertyPath: m_TagString
+      value: CraftingSlots
       objectReference: {fileID: 0}
     - target: {fileID: 8614237027538377670, guid: 7e50d839b34cf794395daec941dd0ece, type: 3}
       propertyPath: m_Pivot.x
