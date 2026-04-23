@@ -2342,6 +2342,8 @@ MonoBehaviour:
   ghostIcon: {fileID: 862038098}
   ghostText: {fileID: 2044306946}
   player: {fileID: 139018186}
+  recipes:
+  - {fileID: 11400000, guid: 612a28136a7802b4fb16e4e976788420, type: 2}
 --- !u!1001 &874963775
 PrefabInstance:
   m_ObjectHideFlags: 0

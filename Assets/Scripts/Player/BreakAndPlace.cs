@@ -1,8 +1,9 @@
-using System;
+using System.Collections.Generic;
 using Chunks;
 using Data;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Scriptable_Objects_Scripts;
 
 namespace Player
 {
@@ -11,7 +12,7 @@ namespace Player
         [SerializeField] private GameObject player;
         [SerializeField] private ScriptableObject placeHolder;
         [SerializeField] private int reachDistance;
-        [SerializeField] private GameObject[] drops;
+        [SerializeField] private List<Prop> allProps;
         
         private Camera mainCamera;
 
@@ -33,32 +34,42 @@ namespace Player
 
 
             if (Mathf.Abs(distance) > reachDistance) return;
-
             if (Mouse.current.leftButton.isPressed)
             {
-                if (WorldData.World.GetPropType(mouseX, mouseY) == PropType.Bush)
+                PropType clickedType = WorldData.World.GetPropType(mouseX, mouseY);
+                if (clickedType == PropType.None) return;
+                Prop propData = null;
+                foreach (Prop prop in allProps)
                 {
-                    Instantiate(drops[0], new Vector2(mouseX , mouseY), Quaternion.identity); // I have to add despawn 
-                    WorldData.World.SetPropType(mouseX, mouseY, PropType.None);
-                    WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
-                    return;
+                    if (prop.type == clickedType)
+                    {
+                        propData = prop;
+                        break;
+                    }
                 }
 
-                if (WorldData.World.GetPropType(mouseX, mouseY) == PropType.Tree)
+                if (propData is not null)
                 {
-                    for (int i = 0; i < 5; i++) Instantiate(drops[1], new Vector2(mouseX , mouseY + i), Quaternion.identity);
-                    WorldData.World.SetPropType(mouseX, mouseY, PropType.None);
-                    WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
-                    return;
+                    foreach (Drop drop in propData.drops)
+                    {
+                        if (Random.Range(0, 101) <= drop.dropChance)
+                        {
+                            for (int i = 0; i < drop.amount; i++)
+                            {
+                                var droppedItem = Instantiate(drop.item.drop, new Vector2(mouseX, mouseY), Quaternion.identity); // Best naming ever lol
+                                if (droppedItem is not null) Destroy(droppedItem, 300f);
+                            }
+                        }
+                    }
                 }
-
             }
 
-            if (Mouse.current.rightButton.isPressed)
+            if (Mouse.current.rightButton.isPressed) // This will be changed eventually taking into an account what the player is holding
             {
                 WorldData.World.SetBlockType(mouseX, mouseY, BlockType.Grass);
                 WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
             }
+            
         }
 
     }

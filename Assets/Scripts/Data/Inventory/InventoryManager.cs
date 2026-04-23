@@ -15,6 +15,9 @@ namespace Data.Inventory
         [SerializeField] private GameObject player;
 
         [SerializeField] private List<Recipe> recipes;
+        [SerializeField] private InventorySlot[] craftingSlots;
+        [SerializeField] private InventorySlot resultSlot;
+        
         private static InventoryManager _instance;
         public static InventoryManager Instance => _instance;
         private readonly InventorySlot mouseSlot = new InventorySlot();
@@ -34,8 +37,8 @@ namespace Data.Inventory
             if (!mouseGhost.activeSelf) return;
             mouseGhost.transform.position = Input.mousePosition;
         }
-        
 
+        #region Mouse Left Click
         public void HandleLeftClick(InventorySlot clickedSlot)
         {
             // Holding nothing - Pick the entire stack - WORKS
@@ -80,7 +83,8 @@ namespace Data.Inventory
                 }
             }
         }
-
+        #endregion
+        #region Mouse Right Click
         public void HandleRightClick(InventorySlot clickedSlot)
         {
             // Holding nothing - pick half the stack
@@ -98,10 +102,34 @@ namespace Data.Inventory
                 MouseGhostVisuals();
             }
         }
+        #endregion
 
-        public void UpdateCraftingResults()
+        public void SetCraftingSlots(InventorySlot[] slots, InventorySlot output)
         {
-            
+            craftingSlots = slots;
+            resultSlot = output;
+        }
+
+        public void UpdateCraftingOutput() // Not finishedd
+        {
+            if (resultSlot is null) return;
+            foreach (Recipe recipe in recipes)
+            {
+                if (Matches(recipe))
+                {
+                    Debug.Log("Recipe matches!");
+                }
+            }
+        }
+
+        private bool Matches(Recipe recipe)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                if (craftingSlots[i].GetItem() != recipe.ingredients[i]) 
+                    return false;
+            }
+            return true;
         }
 
         public void DropItem()
