@@ -26,7 +26,6 @@ namespace Items // Maybe I should add this to items?
 
             if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
             {
-                Debug.Log("Picking Up item");
                 var item = GetComponent<ItemReference>().GetItem();
                 playerManager.Inventory.AddItemToHotbar(item, 1);
                 Destroy(gameObject);

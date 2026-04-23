@@ -19,7 +19,6 @@ namespace Data.Inventory
 
         public int AddItem(Item newItem, int amountToAdd)
         {
-            Debug.Log("Adding Item to slot");
             if (IsEmpty)
             {
                 item = newItem;

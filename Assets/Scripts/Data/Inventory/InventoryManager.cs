@@ -15,8 +15,10 @@ namespace Data.Inventory
         [SerializeField] private GameObject player;
 
         [SerializeField] private List<Recipe> recipes;
-        [SerializeField] private InventorySlot[] craftingSlots;
-        [SerializeField] private InventorySlot resultSlot;
+        
+        private InventorySlot[] craftingSlots;
+        private InventorySlot resultSlot;
+        private Color ghostIconColor;
         
         private static InventoryManager _instance;
         public static InventoryManager Instance => _instance;
@@ -29,24 +31,46 @@ namespace Data.Inventory
 
         private void Start()
         {
+            ghostIconColor = ghostIcon.color;
             MouseGhostVisuals();
         }
         
         private void Update()
         {
-            if (!mouseGhost.activeSelf) return;
+            if (mouseSlot.IsEmpty) return;
             mouseGhost.transform.position = Input.mousePosition;
+        }
+        
+        public void SetCraftingSlots(InventorySlot[] slots, InventorySlot result)
+        {
+            craftingSlots = slots;
+            resultSlot = result;
+            Debug.Log("Crafting slots assigned to Manager!");
         }
 
         #region Mouse Left Click
         public void HandleLeftClick(InventorySlot clickedSlot)
         {
+            if (clickedSlot.IsEmpty && mouseSlot.IsEmpty) return;
+            // Result slot shit
+            if (clickedSlot == resultSlot)
+            {
+                if (resultSlot.IsEmpty || !mouseSlot.IsEmpty) return;
+                
+                mouseSlot.AddItem(clickedSlot.GetItem(), clickedSlot.GetAmount());
+                resultSlot.Remove(resultSlot.GetAmount());
+
+                foreach (var s in craftingSlots) s.Remove(1);
+                
+                UpdateCraftingOutput();
+                MouseGhostVisuals();
+                return;
+            }
             // Holding nothing - Pick the entire stack - WORKS
             if (mouseSlot.IsEmpty)
             {
                 mouseSlot.AddItem(clickedSlot.GetItem(), clickedSlot.GetAmount());
                 clickedSlot.Remove(clickedSlot.GetAmount());
-                MouseGhostVisuals();
             }
             else if (!mouseSlot.IsEmpty)
             {
@@ -55,7 +79,6 @@ namespace Data.Inventory
                 {
                     clickedSlot.AddItem(mouseSlot.GetItem(), mouseSlot.GetAmount());
                     mouseSlot.Remove(mouseSlot.GetAmount());
-                    MouseGhostVisuals();
                 }
                 // Holding same item - Fill stack until full - WORKS
                 else if (clickedSlot.CanBeStacked(mouseSlot.GetItem()))
@@ -63,7 +86,6 @@ namespace Data.Inventory
                     int startingAmount = mouseSlot.GetAmount();
                     int remainingAmount = clickedSlot.AddItem(mouseSlot.GetItem(), startingAmount);
                     mouseSlot.Remove(startingAmount - remainingAmount);
-                    MouseGhostVisuals();
                 }
                 // Holding different item - swap entire stack - WORKS
                 else if (!clickedSlot.CanBeStacked(mouseSlot.GetItem()))
@@ -79,57 +101,82 @@ namespace Data.Inventory
                     
                     mouseSlot.AddItem(clickedSlotItem, clickedSlotAmount);
                     clickedSlot.AddItem(mouseSlotItem ,mouseSlotAmount);
-                    MouseGhostVisuals();
                 }
             }
+            if (IsCraftingSLot(clickedSlot))
+                UpdateCraftingOutput();
+            MouseGhostVisuals();
         }
         #endregion
+        
         #region Mouse Right Click
         public void HandleRightClick(InventorySlot clickedSlot)
         {
+            if (clickedSlot.IsEmpty && mouseSlot.IsEmpty) return;
             // Holding nothing - pick half the stack
             if (mouseSlot.IsEmpty)
             {
                 mouseSlot.AddItem(clickedSlot.GetItem(), clickedSlot.GetAmount() / 2);
                 clickedSlot.Remove(clickedSlot.GetAmount() / 2);
-                MouseGhostVisuals();
             }
             // Holding something - Drope one
             else if (!mouseSlot.IsEmpty)
             {
                 clickedSlot.AddItem(mouseSlot.GetItem(), 1);
                 mouseSlot.Remove(1);
-                MouseGhostVisuals();
             }
+            if (IsCraftingSLot(clickedSlot))
+                UpdateCraftingOutput();
+            MouseGhostVisuals();
         }
         #endregion
 
-        public void SetCraftingSlots(InventorySlot[] slots, InventorySlot output)
+        private void UpdateCraftingOutput() // Not finished
         {
-            craftingSlots = slots;
-            resultSlot = output;
-        }
-
-        public void UpdateCraftingOutput() // Not finishedd
-        {
-            if (resultSlot is null) return;
+            if (resultSlot is null)
+            {
+                Debug.Log("ResultSlot is null");
+                return;
+            }
+            resultSlot.Remove(resultSlot.GetAmount());
+            
             foreach (Recipe recipe in recipes)
             {
+                Debug.Log("UpdateCraftingOutput does something");
                 if (Matches(recipe))
                 {
                     Debug.Log("Recipe matches!");
+                    resultSlot.AddItem(recipe.result, 1);
+                    return;
                 }
             }
         }
 
         private bool Matches(Recipe recipe)
         {
+            Debug.Log("I AM WORKING");
             for (int i = 0; i < 16; i++)
             {
-                if (craftingSlots[i].GetItem() != recipe.ingredients[i]) 
+                Item slotItem = craftingSlots[i].GetItem();
+                Item recipeItem = recipe.ingredients[i];
+                if (slotItem != recipeItem) 
                     return false;
             }
             return true;
+        }
+
+        private bool IsCraftingSLot(InventorySlot slot)
+        {
+            Debug.Log($"Checking slot. CraftingSlots size: {(craftingSlots?.Length ?? -1)}");
+            if (slot == resultSlot) return true;
+            if (craftingSlots is null)  return false;
+            
+            foreach (var s in craftingSlots)
+            {
+                if (s == slot) return true;
+            }
+
+            return false;
         }
 
         public void DropItem()
@@ -148,14 +195,16 @@ namespace Data.Inventory
         private void MouseGhostVisuals()
         {
             if (mouseSlot.IsEmpty)
-                mouseGhost.SetActive(false);
+                ghostIconColor.a = 0f;
 
             else
             {
-                mouseGhost.SetActive(true);
+                ghostIconColor.a = 1f;
                 ghostIcon.sprite = mouseSlot.GetItem().itemIcon;
                 ghostText.text = mouseSlot.GetAmount() <= 1 ? "" : mouseSlot.GetAmount().ToString();
             }
+            
+            ghostIcon.color = ghostIconColor;
         }
     }
 }

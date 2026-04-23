@@ -18,10 +18,12 @@ namespace UI
         private void Start()
         {
             var hotBarData = playerManager.Inventory.GetHotBarSlots();
+            
             for (int i = 0; i < 9; i++)
                 hotbar.transform.GetChild(i).GetComponent<SlotUI>().SetSlot(hotBarData[i]);
             
             var inventoryData = playerManager.Inventory.GetInventorySlots();
+            
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 9; j++)
@@ -30,17 +32,21 @@ namespace UI
                 }
             }
 
-            for (int i = 0; i < 17; i++)
+            var craftingData = playerManager.Inventory.GetCraftingSlots();
+            var resultData = playerManager.Inventory.GetResultSlot();
+            
+            for (int i = 0; i < 16; i++)
             {
-                craftingMenu.transform.GetChild(i).GetChild(0).GetComponent<Image>().enabled = false; // This will be changed
-                
                 var slotUI = craftingMenu.transform.GetChild(i).GetComponent<SlotUI>();
-                if (slotUI != null) 
-                {
-                    slotUI.SetSlot(new Data.Inventory.InventorySlot());
-                }
+                if (slotUI != null)
+                    slotUI.SetSlot(craftingData[i]);
             }
             
+            var resultUI = craftingMenu.transform.GetChild(16).GetComponent<SlotUI>();
+            if (resultUI != null)
+                resultUI.SetSlot(resultData);
+            
+            Data.Inventory.InventoryManager.Instance.SetCraftingSlots(craftingData, resultData); // This I had to ask AI. I've been here for 4 hours debugging this shit just to realize I was using different fucking arrays
             inventory.SetActive(false);
             craftingMenu.SetActive(false);
         }

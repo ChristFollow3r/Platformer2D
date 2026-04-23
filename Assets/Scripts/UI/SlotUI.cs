@@ -23,6 +23,9 @@ namespace UI
 
         private void UpdateVisuals()
         {
+            if (iconImage == null || amountText == null) return;
+            if (linkedSlot == null) return;
+            
             if (linkedSlot.IsEmpty)
             {
                 iconImage.enabled = false;

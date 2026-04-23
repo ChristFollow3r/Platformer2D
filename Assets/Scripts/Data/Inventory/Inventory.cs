@@ -7,7 +7,9 @@ namespace Data.Inventory
     {
         private readonly InventorySlot[,] inventorySlots =  new InventorySlot[3, 9];
         private readonly InventorySlot[] hotBarSlots = new InventorySlot[9];
-        // Missing the crafting inventory
+        
+        private readonly InventorySlot[] craftingSlots = new InventorySlot[16];
+        private readonly InventorySlot resultSlot = new InventorySlot();
         
         public Inventory()
         {
@@ -23,12 +25,16 @@ namespace Data.Inventory
             {
                 hotBarSlots[i] = new InventorySlot();
             }
+
+            for (int i = 0; i < 16; i++)
+            {
+                craftingSlots[i] = new InventorySlot();
+            }
         }
 
         public void AddItemToHotbar(Item item, int amount)
         {
             if (item is null || amount <= 0) return;
-            Debug.Log("Adding Item to Hotbar");
             
             for (int i = 0; i < 9; i++)
             {
@@ -77,15 +83,10 @@ namespace Data.Inventory
             }
         }
 
-        public InventorySlot[] GetHotBarSlots()
-        {
-            return hotBarSlots;
-        }
-
-        public InventorySlot[,] GetInventorySlots()
-        {
-            return inventorySlots;
-        }
+        public InventorySlot[] GetHotBarSlots() => hotBarSlots;
+        public InventorySlot[,] GetInventorySlots() => inventorySlots;
+        public InventorySlot[] GetCraftingSlots() => craftingSlots;
+        public InventorySlot GetResultSlot() => resultSlot;
 
     }
 }
