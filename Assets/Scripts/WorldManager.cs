@@ -130,9 +130,15 @@ public class WorldManager : MonoBehaviour
                 
                 if (isSurface && hasSpace && spawnRate <= 30)
                 {
-                    WorldData.World.SetPropType(i, j + 1, PropType.Bush);
+                    if (Random.Range(0, 101) <= 50)
+                    {
+                        WorldData.World.SetPropType(i, j + 1, PropType.Bush);
+                        continue;
+                    }
+                    WorldData.World.SetPropType(i, j + 1, PropType.Stone);
                     continue;
                 }
+                
 
                 if (isSurface && hasSpaceForTree && spawnRate >= 70)
                 {

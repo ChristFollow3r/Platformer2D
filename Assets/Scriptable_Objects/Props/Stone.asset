@@ -10,10 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c93a5e15f225eb4da5fad2220b9e280, type: 3}
-  m_Name: Weaping_Willow_Tree
+  m_Name: Stone
   m_EditorClassIdentifier: 
-  drop: {fileID: 0}
-  sprite: {fileID: -8256086614813508247, guid: 7f0b15bcd35d4be4496ceaa45338c293, type: 3}
-  name: Weaping Willow Tree
-  type: 3
-  hardness: 2
+  drops:
+  - item: {fileID: 11400000, guid: fb89e45ed90d2404c8dccb75e8a362ee, type: 2}
+    amount: 1
+    dropChance: 80
+  - item: {fileID: 11400000, guid: fb89e45ed90d2404c8dccb75e8a362ee, type: 2}
+    amount: 2
+    dropChance: 30
+  sprite: {fileID: -8683477458368390101, guid: a9cd264e2e56fae4eb33bb95700069c3, type: 3}
+  name: Stone
+  type: 2
+  hardness: 1

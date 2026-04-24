@@ -4483,6 +4483,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
   - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}
   - {fileID: 11400000, guid: 348e613dcdb0a494cbdc03f622cecf08, type: 2}
+  - {fileID: 11400000, guid: 782b2cc49984eed45b3f33107e206ce7, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
   worldSeed: Minecraft

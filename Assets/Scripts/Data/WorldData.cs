@@ -5,7 +5,7 @@ namespace Data
 {
     public enum BlockType { Air, Dirt, Grass, Stone, Sand }
 
-    public enum PropType { None, Bush, Pebble, Tree, Copper, Iron, Coal, Sulphur }
+    public enum PropType { None, Bush, Stone, Tree, Copper, Iron, Coal, Sulphur }
 
     public enum Hardness { Level1, Level2, Level3, Level4, Level5 }
 
