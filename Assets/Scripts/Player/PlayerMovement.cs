@@ -4,7 +4,9 @@
     {
         public class PlayerMovement : MonoBehaviour
         {
+            private static readonly int IsRunning = Animator.StringToHash("isRunning");
             private Rigidbody2D rb;
+            private Animator animator;
             private Collider2D playerCollider;
             
             public InputSystem_Actions playerInput;
@@ -20,6 +22,7 @@
             private void Awake()
             {
                 rb = GetComponent<Rigidbody2D>();   
+                animator = transform.GetChild(0).GetComponent<Animator>();
                 playerCollider = GetComponent<Collider2D>();
                 playerInput = new InputSystem_Actions();
                 playerInput.Enable();
@@ -33,6 +36,7 @@
                 bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.2f).collider is not null;
                 
                 Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
+                PlayerAnimations(isGrounded);
             }
 
             private void Movement(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
@@ -74,7 +78,20 @@
                 }
                 
             }
-            
+
+            private void PlayerAnimations(bool isGrounded)
+            {
+                if (rb.linearVelocityX != 0f && isGrounded)
+                {
+                    animator.SetBool(IsRunning, true);
+                    if (rb.linearVelocityX > 0f)
+                        transform.localScale = new Vector3(1f, 1f, 1f);
+                    else if (rb.linearVelocityX < 0f)
+                        transform.localScale = new Vector3(-1f, 1f, 1f);
+                }
+                
+                else animator.SetBool(IsRunning, false);
+            }
             
         }
     }
