@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c93a5e15f225eb4da5fad2220b9e280, type: 3}
-  m_Name: Stone
+  m_Name: Stone_Prop
   m_EditorClassIdentifier: 
   drops:
   - item: {fileID: 11400000, guid: fb89e45ed90d2404c8dccb75e8a362ee, type: 2}

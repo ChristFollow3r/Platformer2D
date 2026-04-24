@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: Stone
+  m_Name: Stone_Drop
   m_EditorClassIdentifier: 
   drop: {fileID: 508241068605276912, guid: 19d027134e934dc478881f6974735e60, type: 3}
   itemName: Stone
-  itemIcon: {fileID: 2433071110994812001, guid: bb9270c7a71f919489e4f0010337b308, type: 3}
+  itemIcon: {fileID: 2094347899734262227, guid: bf1e1139835840b42829d053142af262, type: 3}
   maxStack: 64
