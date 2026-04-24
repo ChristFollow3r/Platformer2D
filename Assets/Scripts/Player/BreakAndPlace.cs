@@ -38,7 +38,6 @@ namespace Player
             {
                 PropType clickedType = WorldData.World.GetPropType(mouseX, mouseY);
                 if (clickedType == PropType.None) return;
-                if (clickedType == PropType.Stone) Debug.Log("You just hit a stone");
                 Prop propData = null;
                 foreach (Prop prop in allProps)
                 {
