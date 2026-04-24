@@ -5,6 +5,8 @@
         public class PlayerMovement : MonoBehaviour
         {
             private static readonly int IsRunning = Animator.StringToHash("isRunning");
+            private static readonly int IsJumping = Animator.StringToHash("isJumping");
+            private static readonly int IsFalling = Animator.StringToHash("isFalling");
             private Rigidbody2D rb;
             private Animator animator;
             private Collider2D playerCollider;
@@ -81,16 +83,35 @@
 
             private void PlayerAnimations(bool isGrounded)
             {
-                if (rb.linearVelocityX != 0f && isGrounded)
-                {
-                    animator.SetBool(IsRunning, true);
-                    if (rb.linearVelocityX > 0f)
-                        transform.localScale = new Vector3(1f, 1f, 1f);
-                    else if (rb.linearVelocityX < 0f)
-                        transform.localScale = new Vector3(-1f, 1f, 1f);
-                }
+                if (rb.linearVelocityX > 0f)
+                    transform.localScale = new Vector3(1f, 1f, 1f);
+                else if (rb.linearVelocityX < 0f)
+                    transform.localScale = new Vector3(-1f, 1f, 1f);
                 
-                else animator.SetBool(IsRunning, false);
+                bool isRunning = Mathf.Abs(rb.linearVelocityX) > 0f && isGrounded;
+                animator.SetBool(IsRunning, isRunning);
+
+                if (!isGrounded)
+                {
+                    
+                    if (rb.linearVelocityY > 0.1f || playerInput.Player.Jump.WasPerformedThisFrame())
+                    {
+                        animator.SetBool(IsJumping, true);
+                        animator.SetBool(IsFalling, false);
+                    }
+                    
+                    else if (rb.linearVelocityY < -0.1f)
+                    {
+                        animator.SetBool(IsJumping, false);
+                        animator.SetBool(IsFalling, true);
+                    }
+                }
+
+                else
+                {
+                    animator.SetBool(IsJumping, false);
+                    animator.SetBool(IsFalling, false);
+                }
             }
             
         }
