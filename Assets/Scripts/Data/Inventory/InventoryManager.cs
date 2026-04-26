@@ -42,6 +42,8 @@ namespace Data.Inventory
         
         private void Update()
         {
+            GetKeyboardIndex();
+            
             if (mouseSlot.IsEmpty) return;
             mouseGhost.transform.position = Input.mousePosition;
         }

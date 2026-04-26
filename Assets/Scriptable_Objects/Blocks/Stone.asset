@@ -16,4 +16,4 @@ MonoBehaviour:
   blockName: Stone
   sprite: {fileID: -1004003828, guid: 65071482b21a40346bd5ba5e4ea1ec14, type: 3}
   type: 4
-  hardness: 2
+  hardness: 10

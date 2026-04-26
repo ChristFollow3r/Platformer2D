@@ -117,16 +117,18 @@ namespace Player
             if (Mouse.current.rightButton.isPressed) // This will be changed eventually taking into an account what the player is holding
             {
                 var heldItem = Data.Inventory.InventoryManager.Instance.GetHeldItem();
+                Debug.Log($"UI says I'm holding Grass, but InventoryManager says I'm holding: {heldItem.itemName}");
                 if (heldItem is null) return;
-                if (heldItem.blockType != BlockType.None)
+                
+                if (heldItem.blockType != BlockType.None && heldItem.blockType != BlockType.Air)
                 {
                     if (WorldData.World.GetBlockTypes(mouseX, mouseY) == BlockType.Air && WorldData.World.GetPropType(mouseX, mouseY) == PropType.None)
                     {
                         WorldData.World.SetBlockType(mouseX, mouseY, heldItem.blockType);
+                        WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
                     }
                 }
                 
-                WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
             }
             
         }

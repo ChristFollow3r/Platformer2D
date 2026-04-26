@@ -1,5 +1,6 @@
 using Data;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Scriptable_Objects_Scripts
 {

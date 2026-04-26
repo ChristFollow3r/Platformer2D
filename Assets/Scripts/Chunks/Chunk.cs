@@ -83,15 +83,13 @@ namespace Chunks
 
             else
             {
-                Tile blockTile = blockTileMap.GetTile<Tile>(position);
-                if (blockTile is not null)
-                {
-                    blockTile.sprite = WorldData.BlockDictionary[blockType].sprite;
-                    blockTileMap.RefreshTile(position);
-                }
+                var tile = ScriptableObject.CreateInstance<Tile>(); 
+                tile.sprite = WorldData.BlockDictionary[blockType].sprite;
+                blockTileMap.SetTile(position, tile);
             }
             
-            if (propType == PropType.None)  propTileMap.SetTile(position, null);
+            if (propType == PropType.None)
+                propTileMap.SetTile(position, null);
 
             else
             {
