@@ -232,5 +232,11 @@ namespace Data.Inventory
             else if (Input.GetKeyDown(KeyCode.Alpha8)) heldItemIndex = 7;
             else if (Input.GetKeyDown(KeyCode.Alpha9)) heldItemIndex = 8;
         }
+
+        public void UseBlock()
+        {
+            var hotbar = playerInvetory.GetHotBarSlots();
+            hotbar[heldItemIndex].Remove(1);
+        }
     }
 }
