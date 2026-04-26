@@ -75,7 +75,7 @@ public class WorldManager : MonoBehaviour
             
             for (int y = 0; y < worldHeight; y++)
             {
-                BlockType blockType; // I think this is useless
+                BlockType blockType;
                 
                 if (y > groundLevel) blockType = BlockType.Air;
                 else if (y == groundLevel) blockType = BlockType.Grass;
@@ -135,7 +135,7 @@ public class WorldManager : MonoBehaviour
                         WorldData.World.SetPropType(i, j + 1, PropType.Bush);
                         continue;
                     }
-                    WorldData.World.SetPropType(i, j + 1, PropType.Stone);
+                    WorldData.World.SetPropType(i, j + 1, PropType.StoneProp);
                     continue;
                 }
                 

@@ -16,3 +16,4 @@ MonoBehaviour:
   itemName: Stick
   itemIcon: {fileID: -1141101900747284964, guid: 9a63c1fae8d6c2a4ba561eaf8bc68986, type: 3}
   maxStack: 64
+  tier: 2

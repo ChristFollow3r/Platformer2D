@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Dirt
   m_EditorClassIdentifier: 
+  drop: {fileID: 5499974657267223093, guid: 9d5e7c9b7d433094e9bbf90ec068d530, type: 3}
+  blockType: 2
   itemName: Dirt
-  itemIcon: {fileID: 1927863885425484986, guid: f7a25f9828e1f6647ab28be02b394d66, type: 3}
+  itemIcon: {fileID: -43794925, guid: 65071482b21a40346bd5ba5e4ea1ec14, type: 3}
   maxStack: 64
+  tier: 2

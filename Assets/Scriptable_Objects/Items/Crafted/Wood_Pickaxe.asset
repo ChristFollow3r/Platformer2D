@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2feaac6a9f262c54cb239fbd09226c22, type: 3}
   m_Name: Wood_Pickaxe
   m_EditorClassIdentifier: 
-  drop: {fileID: 0}
+  drop: {fileID: 1459662223925734311, guid: 47e8461957d0d8b43b92bda8c7baa47d, type: 3}
+  blockType: 0
   itemName: Wood Pickaxe
   itemIcon: {fileID: -5400379413324805042, guid: 9a0b8391ba903c04499010be9209ea45, type: 3}
   maxStack: 1
-  tier: 1
+  tier: 7
   durability: 30

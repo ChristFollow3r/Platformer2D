@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 374477853f9b0d248aac54e2f4ee0b17, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
+  blockPrefab: {fileID: 8411808859423680847, guid: 61a70d617d613ce45a94478267fe183f, type: 3}
   blockName: Stone
   sprite: {fileID: -1004003828, guid: 65071482b21a40346bd5ba5e4ea1ec14, type: 3}
-  type: 3
+  type: 4
   hardness: 2

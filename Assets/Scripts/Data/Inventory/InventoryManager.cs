@@ -2,6 +2,7 @@ using Scriptable_Objects_Scripts;
 using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
+using Player;
 using Image = UnityEngine.UI.Image;
 
 
@@ -19,6 +20,9 @@ namespace Data.Inventory
         private InventorySlot[] craftingSlots;
         private InventorySlot resultSlot;
         private Color ghostIconColor;
+
+        private Inventory playerInvetory;
+        private int heldItemIndex = 0;
         
         private static InventoryManager _instance;
         public static InventoryManager Instance => _instance;
@@ -31,6 +35,7 @@ namespace Data.Inventory
 
         private void Start()
         {
+            playerInvetory = player.GetComponent<Player.PlayerManager>().Inventory;
             ghostIconColor = ghostIcon.color;
             MouseGhostVisuals();
         }
@@ -205,6 +210,25 @@ namespace Data.Inventory
             }
             
             ghostIcon.color = ghostIconColor;
+        }
+
+        public Item GetHeldItem()
+        {
+            var hotbar = playerInvetory.GetHotBarSlots();
+            return hotbar[heldItemIndex].GetItem();
+        }
+
+        private void GetKeyboardIndex()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1)) heldItemIndex = 0;
+            else if (Input.GetKeyDown(KeyCode.Alpha2)) heldItemIndex = 1;
+            else if (Input.GetKeyDown(KeyCode.Alpha3)) heldItemIndex = 2;
+            else if (Input.GetKeyDown(KeyCode.Alpha4)) heldItemIndex = 3;
+            else if (Input.GetKeyDown(KeyCode.Alpha5)) heldItemIndex = 4;
+            else if (Input.GetKeyDown(KeyCode.Alpha6)) heldItemIndex = 5;
+            else if (Input.GetKeyDown(KeyCode.Alpha7)) heldItemIndex = 6;
+            else if (Input.GetKeyDown(KeyCode.Alpha8)) heldItemIndex = 7;
+            else if (Input.GetKeyDown(KeyCode.Alpha9)) heldItemIndex = 8;
         }
     }
 }

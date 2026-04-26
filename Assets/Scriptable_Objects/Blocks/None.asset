@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 374477853f9b0d248aac54e2f4ee0b17, type: 3}
-  m_Name: Air
+  m_Name: None
   m_EditorClassIdentifier: 
   blockPrefab: {fileID: 0}
-  blockName: Air
-  sprite: {fileID: 6667281360410286266, guid: 8cad37d29522c5143b38f1bdb8293400, type: 3}
-  type: 1
+  blockName: 
+  sprite: {fileID: 0}
+  type: 0
   hardness: 0

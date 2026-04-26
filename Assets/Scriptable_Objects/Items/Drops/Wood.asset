@@ -16,3 +16,4 @@ MonoBehaviour:
   itemName: Wood
   itemIcon: {fileID: -2640195610763654411, guid: bf1e1139835840b42829d053142af262, type: 3}
   maxStack: 16
+  tier: 2

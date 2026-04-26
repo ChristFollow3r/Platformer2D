@@ -16,3 +16,4 @@ MonoBehaviour:
   itemName: Stone
   itemIcon: {fileID: 2094347899734262227, guid: bf1e1139835840b42829d053142af262, type: 3}
   maxStack: 64
+  tier: 2

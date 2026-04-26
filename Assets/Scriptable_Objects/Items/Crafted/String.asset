@@ -16,3 +16,4 @@ MonoBehaviour:
   itemName: String
   itemIcon: {fileID: -839063520895100450, guid: 6f2110cff3d308f4eb5c4804774e5672, type: 3}
   maxStack: 128
+  tier: 2
