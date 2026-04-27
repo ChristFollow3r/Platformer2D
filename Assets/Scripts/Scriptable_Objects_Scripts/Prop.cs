@@ -19,5 +19,6 @@ namespace Scriptable_Objects_Scripts
         public new string name;
         public PropType type;
         public int hardness;
+        public int spawnRate;
     }
 }
