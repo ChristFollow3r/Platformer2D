@@ -7,6 +7,7 @@
             private static readonly int IsRunning = Animator.StringToHash("isRunning");
             private static readonly int IsJumping = Animator.StringToHash("isJumping");
             private static readonly int IsFalling = Animator.StringToHash("isFalling");
+            private static readonly int IsSliding = Animator.StringToHash("isSliding");
             private Rigidbody2D rb;
             private Animator animator;
             private Collider2D playerCollider;
@@ -38,7 +39,7 @@
                 bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.2f).collider is not null;
                 
                 Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
-                PlayerAnimations(isGrounded);
+                PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             }
 
             private void Movement(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
@@ -81,7 +82,7 @@
                 
             }
 
-            private void PlayerAnimations(bool isGrounded)
+            private void PlayerAnimations(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
             {
                 if (rb.linearVelocityX > 0f)
                     transform.localScale = new Vector3(1f, 1f, 1f);
@@ -100,10 +101,24 @@
                         animator.SetBool(IsFalling, false);
                     }
                     
-                    else if (rb.linearVelocityY < -0.1f)
+                    else if (rb.linearVelocityY < -0.1f && !isTouchingLeftWall && !isTouchingRightWall)
                     {
                         animator.SetBool(IsJumping, false);
                         animator.SetBool(IsFalling, true);
+                    }
+                    
+                    else if (rb.linearVelocityY < -0.1f && isTouchingLeftWall)
+                    {
+                        transform.localScale = new Vector3(1f, 1f, 1f);
+                        animator.SetBool(IsJumping, false);
+                        animator.SetBool(IsSliding, true);
+                    }
+                    
+                    else if (rb.linearVelocityY < -0.1f && isTouchingRightWall)
+                    {
+                        transform.localScale = new Vector3(-1f, 1f, 1f);
+                        animator.SetBool(IsJumping, false);
+                        animator.SetBool(IsSliding, true);
                     }
                 }
 
@@ -111,6 +126,7 @@
                 {
                     animator.SetBool(IsJumping, false);
                     animator.SetBool(IsFalling, false);
+                    animator.SetBool(IsSliding, false);
                 }
             }
             
