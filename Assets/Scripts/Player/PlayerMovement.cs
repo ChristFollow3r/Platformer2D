@@ -32,11 +32,11 @@
             }
             private void Update()
             {
-                bool isGrounded = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + 0.2f).collider is not null;
+                bool isGrounded = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + 0.2f, 3).collider is not null;
                 bool isTouchingLeftWall =
                     Physics2D.Raycast(playerCollider.bounds.center, Vector2.left,
-                        playerCollider.bounds.extents.x + 0.2f).collider is not null;
-                bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.2f).collider is not null;
+                        playerCollider.bounds.extents.x + 0.2f, 3).collider is not null;
+                bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.2f, 3).collider is not null;
                 
                 Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
                 PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);
