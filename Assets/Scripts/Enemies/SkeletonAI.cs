@@ -10,6 +10,7 @@ namespace Enemies
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;
         [Header("Attack Settings")]
+        [SerializeField] private int attackDamage;
         [SerializeField] private Vector2 hitBoxSize;
         [SerializeField] private LayerMask playerLayerMask;
 
@@ -29,7 +30,7 @@ namespace Enemies
         private bool isAttacking = false;
         [SerializeField] private Vector2 attackPosition;
         [SerializeField] private float attackCooldown;
-        public static event Action onPlayerHit;
+        public static event Action<int> OnPlayerHit;
 
         private void Awake()
         {
@@ -48,7 +49,7 @@ namespace Enemies
                 skeletonRigidBody.linearVelocityX = 0;
                 return;
             }
-            
+
             float distanceToPlayer = Vector3.Distance(transform.position, target.position);
 
             if (distanceToPlayer <= 1f)
@@ -86,12 +87,7 @@ namespace Enemies
         private void HandleAnimations(bool isGrounded)
         {
             bool isWalking = Mathf.Abs(skeletonRigidBody.linearVelocityX) > 0.1f && isGrounded;
-            
-            if (isWalking)
-                skeletonAnimator.SetBool(IsWalking, true);
-            
-            else
-                skeletonAnimator.SetBool(IsWalking, false);
+            skeletonAnimator.SetBool(IsWalking, isWalking);
         }
 
         private IEnumerator Attack()
@@ -99,12 +95,14 @@ namespace Enemies
             isAttacking = true;
             skeletonRigidBody.linearVelocityX = 0f;
             skeletonAnimator.SetBool(IsAttacking, true);
-            yield return new WaitForSeconds(0.6f);
+            yield return new WaitForSeconds(0.5f);
             skeletonAnimator.SetBool(IsAttacking, false);
-            Collider2D hit = Physics2D.OverlapBox(attackPosition, hitBoxSize, 0, playerLayerMask);
+            
+            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(attackPosition.x * transform.localScale.x, attackPosition.y);
+            Collider2D hit = Physics2D.OverlapBox(finalAttackPosition, hitBoxSize, 0, playerLayerMask);
             if (hit is not null)
             {
-                onPlayerHit?.Invoke();
+                OnPlayerHit?.Invoke(attackDamage);
             }
             yield return new WaitForSeconds(attackCooldown);
             isAttacking = false;

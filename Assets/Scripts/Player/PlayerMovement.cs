@@ -1,3 +1,4 @@
+    using System.Collections;
     using UnityEngine;
 
     namespace Player // Rider yellow underlying was telling me to use a namespace
@@ -8,6 +9,9 @@
             private static readonly int IsJumping = Animator.StringToHash("isJumping");
             private static readonly int IsFalling = Animator.StringToHash("isFalling");
             private static readonly int IsSliding = Animator.StringToHash("isSliding");
+            private static readonly int IsHit = Animator.StringToHash("isHit");
+            
+            
             private Rigidbody2D rb;
             private Animator animator;
             private Collider2D playerCollider;
@@ -20,6 +24,7 @@
             [SerializeField] private Vector2 wallJumpForce = new Vector2(7f, 12f);
 
             private bool canDoubleJump;
+            private bool isStunned;
             private float wallJumpTime = 0.25f;
             
             private void Awake()
@@ -30,8 +35,20 @@
                 playerInput = new InputSystem_Actions();
                 playerInput.Enable();
             }
+
+            private void OnEnable()
+            {
+                Enemies.SkeletonAI.OnPlayerHit += HandleHit;
+            }
+
+            private void OnDisable()
+            {
+                Enemies.SkeletonAI.OnPlayerHit -= HandleHit;
+            }
             private void Update()
             {
+                if (isStunned) return;
+                
                 bool isGrounded = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + 0.2f, 3).collider is not null;
                 bool isTouchingLeftWall =
                     Physics2D.Raycast(playerCollider.bounds.center, Vector2.left,
@@ -128,6 +145,20 @@
                     animator.SetBool(IsFalling, false);
                     animator.SetBool(IsSliding, false);
                 }
+            }
+
+            private void HandleHit(int xd) // Doing nothing with this XD
+            {
+                StartCoroutine(PlayerHitAnimation());
+            }
+            private IEnumerator PlayerHitAnimation()
+            {
+                isStunned = true;
+                rb.linearVelocityX = 0f;
+                animator.SetBool(IsHit, true);
+                yield return new WaitForSeconds(0.3f);
+                animator.SetBool(IsHit, false);
+                isStunned = false;
             }
             
         }

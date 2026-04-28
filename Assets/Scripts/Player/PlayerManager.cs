@@ -6,6 +6,7 @@ namespace Player
     public class PlayerManager : MonoBehaviour
     {
         public PlayerMovement PlayerMovement { get; private set; }
+        public Shared.Health PlayerHealth { get; private set; }
         public BreakAndPlace BreakPlace { get; private set; }
         public Inventory Inventory { get; private set; }
         
@@ -13,9 +14,10 @@ namespace Player
 
         private void Awake()
         {
-            Inventory = new Inventory();
             PlayerMovement = GetComponent<PlayerMovement>();
+            PlayerHealth = GetComponent<Shared.Health>();
             BreakPlace = GetComponent<BreakAndPlace>();
+            Inventory = new Inventory();
         }
     }
 }
