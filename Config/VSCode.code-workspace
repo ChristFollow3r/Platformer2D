@@ -1,0 +1,122 @@
+{
+  "folders": [
+    {
+      "name": "Unity",
+      "path": "..",
+    },
+    {
+      "name": "Scripts",
+      "path": "../Assets/Scripts",
+    },
+    {
+      "name": "UI",
+      "path": "../Assets/UI",
+    },
+  ],
+
+  // ─────────────────────────────────────────────
+  //  SETTINGS
+  // ─────────────────────────────────────────────
+  "settings": {
+    // ── File associations ─────────────────────────
+    "files.associations": {
+      // Unity text-based formats
+      "*.unity": "yaml",
+      "*.prefab": "yaml",
+      "*.asset": "yaml",
+      "*.meta": "yaml",
+      "*.mat": "yaml",
+      "*.anim": "yaml",
+      "*.controller": "yaml",
+      "*.overrideController": "yaml",
+      "*.physicMaterial": "yaml",
+      "*.physicsMaterial2D": "yaml",
+      "*.playable": "yaml",
+      "*.mask": "yaml",
+      "*.brush": "yaml",
+      "*.flare": "yaml",
+      "*.fontsettings": "yaml",
+      "*.guiskin": "yaml",
+      "*.renderTexture": "yaml",
+      "*.spriteatlas": "yaml",
+      "*.terrainlayer": "yaml",
+      "*.mixer": "yaml",
+      // Shader variants
+      "*.cginc": "hlsl",
+      "*.hlsl": "hlsl",
+      "*.glsl": "glsl",
+      "*.shader": "shaderlab",
+      "*.compute": "hlsl",
+      // Misc
+      "*.asmdef": "json",
+      "*.asmref": "json",
+      "*.inputactions": "json",
+      "*.json": "json",
+      "*.rsp": "text",
+      "*.editorconfig": "ini",
+    },
+
+    // ── Files to exclude from Explorer ───────────
+    "files.exclude": {
+      // Unity generated folders
+      "Library/": true,
+      "Temp/": true,
+      "Obj/": true,
+      "Build/": true,
+      "Builds/": true,
+      "Logs/": true,
+      "UserSettings/": true,
+      "MemoryCaptures/": true,
+      // macOS junk
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      // JetBrains
+      "**/.idea/": true,
+      // VS Code local (keep .vscode itself visible for team reference)
+      "**/.vs/": true,
+      "**/*.meta": true,
+    },
+
+    // ── Search exclusions (faster greps) ─────────
+    "search.exclude": {
+      "Library/": true,
+      "Temp/": true,
+      "Obj/": true,
+      "Build/": true,
+      "Builds/": true,
+      "Logs/": true,
+      "*.sln": true,
+      "*.csproj": true,
+      "**/.git/": true,
+      "**/.idea/": true,
+      "**/.vs/": true,
+      "**/node_modules/": true,
+    },
+
+    // ── Watcher exclusions (reduce CPU hammering) ─
+    "files.watcherExclude": {
+      "**/.git/objects/**": true,
+      "**/.git/subtree-cache/**": true,
+      "**/Library/**": true,
+      "**/Temp/**": true,
+      "**/Obj/**": true,
+      "**/Builds/**": true,
+      "**/Logs/**": true,
+      "**/node_modules/**": true,
+    },
+  }, // end settings
+
+  // ─────────────────────────────────────────────
+  //  EXTENSIONS  (recommendations shown on open)
+  // ─────────────────────────────────────────────
+  "extensions": {
+    "recommendations": [
+      "ms-dotnettools.csharp", // C# language support
+      "ms-dotnettools.csdevkit", // C# Dev Kit (optional but nice)
+      "visualstudiotoolsforunity.vstuc", // Unity Tools for VS Code (official)
+      "editorconfig.editorconfig", // Respect .editorconfig
+      "eamodio.gitlens", // Git superpowers
+    ],
+    "unwantedRecommendations": [],
+  },
+}
