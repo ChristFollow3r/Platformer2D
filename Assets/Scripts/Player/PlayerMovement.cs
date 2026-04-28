@@ -147,16 +147,18 @@
                 }
             }
 
-            private void HandleHit(int xd) // Doing nothing with this XD
+            private void HandleHit(int damage, int direction)
             {
-                StartCoroutine(PlayerHitAnimation());
+                StartCoroutine(PlayerHitAnimation(direction));
             }
-            private IEnumerator PlayerHitAnimation()
+            private IEnumerator PlayerHitAnimation(int direction)
             {
                 isStunned = true;
-                rb.linearVelocityX = 0f;
+                rb.linearVelocity = new Vector2(Enemies.SkeletonAI.GetKnockBack * direction, 4f);
                 animator.SetBool(IsHit, true);
+                
                 yield return new WaitForSeconds(0.3f);
+                
                 animator.SetBool(IsHit, false);
                 isStunned = false;
             }

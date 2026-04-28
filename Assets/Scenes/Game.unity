@@ -7076,6 +7076,7 @@ MonoBehaviour:
   speed: 3
   jumpForce: 9
   attackDamage: 13
+  attackKnockback: 4
   hitBoxSize: {x: 0.3, y: 0.3}
   playerLayerMask:
     serializedVersion: 2

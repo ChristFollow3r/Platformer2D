@@ -26,7 +26,7 @@ namespace Shared
             Enemies.SkeletonAI.OnPlayerHit -= TakeDamage;
         }
 
-        private void TakeDamage(int damage)
+        private void TakeDamage(int damage, int direction)
         {
             currentHealth -= damage;
             float healthPercentage = (float)currentHealth / this.maxHealth;

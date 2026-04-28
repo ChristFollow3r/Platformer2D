@@ -9,10 +9,14 @@ namespace Enemies
         [Header("Movement Settings")]
         [SerializeField] private float speed;
         [SerializeField] private float jumpForce;
+        private int direction;
         [Header("Attack Settings")]
         [SerializeField] private int attackDamage;
+        [SerializeField] private float attackKnockback;
         [SerializeField] private Vector2 hitBoxSize;
         [SerializeField] private LayerMask playerLayerMask;
+
+        public static float GetKnockBack { get; private set; }
 
         private Rigidbody2D skeletonRigidBody;
         private CapsuleCollider2D skeletonCollider;
@@ -30,7 +34,7 @@ namespace Enemies
         private bool isAttacking = false;
         [SerializeField] private Vector2 attackPosition;
         [SerializeField] private float attackCooldown;
-        public static event Action<int> OnPlayerHit;
+        public static event Action<int, int> OnPlayerHit;
 
         private void Awake()
         {
@@ -38,6 +42,7 @@ namespace Enemies
             skeletonCollider =  GetComponent<CapsuleCollider2D>();
             skeletonAnimator = GetComponent<Animator>();
             target = GameObject.FindGameObjectWithTag("Player").transform;
+            GetKnockBack = attackKnockback;
         }
 
         private void Update()
@@ -52,7 +57,7 @@ namespace Enemies
 
             float distanceToPlayer = Vector3.Distance(transform.position, target.position);
 
-            if (distanceToPlayer <= 1f)
+            if (distanceToPlayer <= 1f && !isAttacking)
                 StartCoroutine(Attack());
             
             else
@@ -73,7 +78,7 @@ namespace Enemies
 
         private void CheckForObstacles()
         {
-            int direction = target.position.x > transform.position.x ? 1 : -1;
+            direction = target.position.x > transform.position.x ? 1 : -1;
             
             skeletonIsGrounded = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f).collider is not null;
             theresBlockInFront = Physics2D.Raycast(transform.position, Vector2.right * direction, 0.6f).collider is not null;
@@ -94,16 +99,22 @@ namespace Enemies
         {
             isAttacking = true;
             skeletonRigidBody.linearVelocityX = 0f;
+            
+            skeletonAnimator.SetBool(IsWalking, false);
             skeletonAnimator.SetBool(IsAttacking, true);
+            
             yield return new WaitForSeconds(0.5f);
-            skeletonAnimator.SetBool(IsAttacking, false);
             
             Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(attackPosition.x * transform.localScale.x, attackPosition.y);
             Collider2D hit = Physics2D.OverlapBox(finalAttackPosition, hitBoxSize, 0, playerLayerMask);
             if (hit is not null)
             {
-                OnPlayerHit?.Invoke(attackDamage);
+                OnPlayerHit?.Invoke(attackDamage, direction);
             }
+
+            yield return new WaitForSeconds(0.17f);
+            skeletonAnimator.SetBool(IsAttacking, false);
+            
             yield return new WaitForSeconds(attackCooldown);
             isAttacking = false;
         }
