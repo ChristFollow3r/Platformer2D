@@ -12,7 +12,6 @@ namespace UI.Components
         #endregion
 
         #region Backers
-
         #endregion
 
         #region Elements
