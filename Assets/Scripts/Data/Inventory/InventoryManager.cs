@@ -52,7 +52,6 @@ namespace Data.Inventory
         {
             craftingSlots = slots;
             resultSlot = result;
-            Debug.Log("Crafting slots assigned to Manager!");
         }
 
         #region Mouse Left Click
@@ -140,16 +139,12 @@ namespace Data.Inventory
 
         private void UpdateCraftingOutput() // Not finished
         {
-            if (resultSlot is null)
-            {
-                Debug.Log("ResultSlot is null");
-                return;
-            }
+            if (resultSlot is null) return;
+            
             resultSlot.Remove(resultSlot.GetAmount());
             
             foreach (Recipe recipe in recipes)
             {
-                Debug.Log("UpdateCraftingOutput does something");
                 if (Matches(recipe))
                 {
                     Debug.Log("Recipe matches!");
@@ -161,7 +156,6 @@ namespace Data.Inventory
 
         private bool Matches(Recipe recipe)
         {
-            Debug.Log("I AM WORKING");
             for (int i = 0; i < 16; i++)
             {
                 Item slotItem = craftingSlots[i].GetItem();
@@ -174,7 +168,6 @@ namespace Data.Inventory
 
         private bool IsCraftingSLot(InventorySlot slot)
         {
-            Debug.Log($"Checking slot. CraftingSlots size: {(craftingSlots?.Length ?? -1)}");
             if (slot == resultSlot) return true;
             if (craftingSlots is null)  return false;
             
@@ -188,7 +181,7 @@ namespace Data.Inventory
 
         public void DropItem()
         {
-            if (!mouseSlot.IsEmpty) // My first approach was working but wrong cause unity UI is trash, so I asked AI to fix it and called it a day.
+            if (!mouseSlot.IsEmpty) // We can change this to drop the stuff on the player's feet
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // If the camera is Null GG
                 Vector3 spawnPos = Physics.Raycast(ray, out RaycastHit hit) ? hit.point + Vector3.up * 0.5f : ray.GetPoint(5f); // Copy-paste from AI

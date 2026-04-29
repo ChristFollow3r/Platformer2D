@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Enemies.Skeleton;
 
 namespace Shared
 {
@@ -11,31 +12,20 @@ namespace Shared
         public event Action<float> OnHealthChanged;
         public event Action OnDeath;
 
-        private void Awake()
-        {
-            currentHealth = maxHealth;
-        }
+        private void Awake() => currentHealth = maxHealth;
 
-        private void OnEnable()
-        {
-            Enemies.SkeletonAI.OnPlayerHit += TakeDamage; // Fucking cool
-        }
+        private void OnEnable() => SkeletonAnimations.OnPlayerHit += TakeDamage;
+        private void OnDisable() => SkeletonAnimations.OnPlayerHit -= TakeDamage;
 
-        private void OnDisable()
-        {
-            Enemies.SkeletonAI.OnPlayerHit -= TakeDamage;
-        }
-
-        private void TakeDamage(int damage, int direction)
+        private void TakeDamage(int damage, int direction, float knockback)
         {
             currentHealth -= damage;
-            float healthPercentage = (float)currentHealth / this.maxHealth;
-            OnHealthChanged?.Invoke(healthPercentage); // Call the take hit animation for the player and update UI
+            float healthPercentage = (float)currentHealth / maxHealth;
+            OnHealthChanged?.Invoke(healthPercentage); 
+            
             if (currentHealth <= 0) Die();
         }
-        private void Die()
-        {
-            OnDeath?.Invoke(); // Call the death animation
-        }
+
+        private void Die() => OnDeath?.Invoke();
     }
 }
