@@ -1,6 +1,6 @@
 using Data;
 using UnityEngine;
-using UnityEngine.Serialization;
+
 
 namespace Scriptable_Objects_Scripts
 {
@@ -10,7 +10,7 @@ namespace Scriptable_Objects_Scripts
         public GameObject drop;
         public BlockType blockType;
         public string itemName;
-        public Sprite itemIcon;
+        public Texture itemIcon;
         public int maxStack;
         public int tier; // Fuck this shit
     }
