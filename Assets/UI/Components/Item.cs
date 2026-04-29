@@ -1,31 +1,29 @@
 
-using Scriptable_Objects_Scripts;
 using UnityEngine.UIElements;
 
 namespace UI.Components
 {
     [UxmlElement]
-    public partial class Slot : VisualElement
+    public partial class Item : VisualElement
     {
 
         #region Data
-        [UxmlAttribute] public Item item { get => _item; set => SetItem(value); }
-
-        public bool hasItem => item != null;
+        [UxmlAttribute] public Scriptable_Objects_Scripts.Item item { get => _item; set => SetItem(value); }
+        [UxmlAttribute] public int amount { get => int.Parse(amountElm.text); set => amountElm.text = value.ToString(); }
         #endregion
 
         #region Backers
-        private Item _item;
+        private Scriptable_Objects_Scripts.Item _item;
         #endregion
 
         #region Elements
         private VisualElement rootElm;
-        private VisualElement itemHolderElm;
+        private Image iconElm;
         private Label amountElm;
         #endregion
 
         #region Constructor
-        public Slot()
+        public Item()
         {
             VisualTreeAsset tree = UnityEngine.Resources.Load<VisualTreeAsset>("UI/Components/Slot/Slot");
             tree.CloneTree(this);
@@ -35,11 +33,11 @@ namespace UI.Components
         #endregion
 
         #region Setters
-        private void SetItem(Item item)
+        private void SetItem(Scriptable_Objects_Scripts.Item item)
         {
             #region SetItem
             _item = item;
-            itemHolderElm.Add(item);
+            iconElm.image = _item.itemIcon;
             #endregion
         }
         #endregion
@@ -49,7 +47,7 @@ namespace UI.Components
         {
             #region GetElements
             rootElm = this.Q<VisualElement>("root");
-            itemHolderElm = this.Q<Image>("holder");
+            iconElm = this.Q<Image>("icon");
             amountElm = this.Q<Label>("amount");
             #endregion
         }

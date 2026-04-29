@@ -1,0 +1,37 @@
+
+
+.item-root {
+    flex-grow: 0;
+    width: 75px;
+    height: 75px;
+    flex-shrink: 0;
+}
+
+.item-image {
+    flex-grow: 0;
+    flex-shrink: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.item-amount {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    -unity-text-align: upper-right;
+    -unity-font-style: bold;
+    color: rgb(255, 255, 255);
+}
+
+.item-root {
+    align-items: center;
+    justify-content: center;
+    padding-top: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+}

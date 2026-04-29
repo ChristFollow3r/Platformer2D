@@ -16,14 +16,14 @@ namespace Data.Inventory
         [SerializeField] private GameObject player;
 
         [SerializeField] private List<Recipe> recipes;
-        
+
         private InventorySlot[] craftingSlots;
         private InventorySlot resultSlot;
         private Color ghostIconColor;
 
         private Inventory playerInvetory;
         private int heldItemIndex = 0;
-        
+
         private static InventoryManager _instance;
         public static InventoryManager Instance => _instance;
         private readonly InventorySlot mouseSlot = new InventorySlot();
@@ -35,19 +35,18 @@ namespace Data.Inventory
 
         private void Start()
         {
-            playerInvetory = player.GetComponent<Player.PlayerManager>().Inventory;
             ghostIconColor = ghostIcon.color;
             MouseGhostVisuals();
         }
-        
+
         private void Update()
         {
             GetKeyboardIndex();
-            
+
             if (mouseSlot.IsEmpty) return;
             mouseGhost.transform.position = Input.mousePosition;
         }
-        
+
         public void SetCraftingSlots(InventorySlot[] slots, InventorySlot result)
         {
             craftingSlots = slots;
@@ -63,12 +62,12 @@ namespace Data.Inventory
             if (clickedSlot == resultSlot)
             {
                 if (resultSlot.IsEmpty || !mouseSlot.IsEmpty) return;
-                
+
                 mouseSlot.AddItem(clickedSlot.GetItem(), clickedSlot.GetAmount());
                 resultSlot.Remove(resultSlot.GetAmount());
 
                 foreach (var s in craftingSlots) s.Remove(1);
-                
+
                 UpdateCraftingOutput();
                 MouseGhostVisuals();
                 return;
@@ -99,15 +98,15 @@ namespace Data.Inventory
                 {
                     var mouseSlotItem = mouseSlot.GetItem();
                     var clickedSlotItem = clickedSlot.GetItem();
-                    
+
                     int mouseSlotAmount = mouseSlot.GetAmount();
-                    int clickedSlotAmount =  clickedSlot.GetAmount();
-                    
+                    int clickedSlotAmount = clickedSlot.GetAmount();
+
                     mouseSlot.Remove(mouseSlotAmount);
                     clickedSlot.Remove(clickedSlotAmount);
-                    
+
                     mouseSlot.AddItem(clickedSlotItem, clickedSlotAmount);
-                    clickedSlot.AddItem(mouseSlotItem ,mouseSlotAmount);
+                    clickedSlot.AddItem(mouseSlotItem, mouseSlotAmount);
                 }
             }
             if (IsCraftingSLot(clickedSlot))
@@ -115,7 +114,7 @@ namespace Data.Inventory
             MouseGhostVisuals();
         }
         #endregion
-        
+
         #region Mouse Right Click
         public void HandleRightClick(InventorySlot clickedSlot)
         {
@@ -146,7 +145,7 @@ namespace Data.Inventory
                 return;
             }
             resultSlot.Remove(resultSlot.GetAmount());
-            
+
             foreach (Recipe recipe in recipes)
             {
                 Debug.Log("UpdateCraftingOutput does something");
@@ -166,7 +165,7 @@ namespace Data.Inventory
             {
                 Item slotItem = craftingSlots[i].GetItem();
                 Item recipeItem = recipe.ingredients[i];
-                if (slotItem != recipeItem) 
+                if (slotItem != recipeItem)
                     return false;
             }
             return true;
@@ -176,8 +175,8 @@ namespace Data.Inventory
         {
             Debug.Log($"Checking slot. CraftingSlots size: {(craftingSlots?.Length ?? -1)}");
             if (slot == resultSlot) return true;
-            if (craftingSlots is null)  return false;
-            
+            if (craftingSlots is null) return false;
+
             foreach (var s in craftingSlots)
             {
                 if (s == slot) return true;
@@ -207,10 +206,9 @@ namespace Data.Inventory
             else
             {
                 ghostIconColor.a = 1f;
-                ghostIcon.sprite = mouseSlot.GetItem().itemIcon;
                 ghostText.text = mouseSlot.GetAmount() <= 1 ? "" : mouseSlot.GetAmount().ToString();
             }
-            
+
             ghostIcon.color = ghostIconColor;
         }
 
