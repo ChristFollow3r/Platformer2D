@@ -8,9 +8,12 @@ namespace Player
     {
         private Animator animator;
         private Rigidbody2D playerRigidBody;
-        private static readonly int IsActive  = Animator.StringToHash("isActive");
-        private static readonly int IsRunning  = Animator.StringToHash("isRunning");
+        
+        private static readonly int Active  = Animator.StringToHash("isActive");
+        private static readonly int Running = Animator.StringToHash("isRunning");
+        
         private InputSystem_Actions input;
+        private bool isAttacking;
 
         private void Awake()
         {
@@ -27,8 +30,8 @@ namespace Player
 
         private void PlayAnimation()
         {
-            animator.SetBool(IsActive, Mouse.current.leftButton.isPressed);
-            animator.SetBool(IsRunning, Mathf.Abs(playerRigidBody.linearVelocityX) > 0.1f);
+            animator.SetBool(Active, Mouse.current.leftButton.isPressed);
+            animator.SetBool(Running, Mathf.Abs(playerRigidBody.linearVelocityX) > 0.1f);
         }
     }
 }
