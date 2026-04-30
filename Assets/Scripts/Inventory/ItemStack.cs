@@ -4,9 +4,9 @@ using Data;
 
 namespace Items
 {
-  public record Item
+  public record ItemStack
   {
-    public ItemData itemData;
+    public ItemData data;
     public short amount;
     public int durability;
   }
