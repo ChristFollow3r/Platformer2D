@@ -183,6 +183,11 @@ public class WorldManager : MonoBehaviour
                 blockChunkChild.AddComponent<Tilemap>();
                 blockChunkChild.AddComponent<TilemapRenderer>();
                 blockChunkChild.AddComponent<TilemapCollider2D>();
+                blockChunkChild.AddComponent<CompositeCollider2D>();
+                
+                blockChunkChild.GetComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
+                blockChunkChild.GetComponent<Rigidbody2D>().bodyType                 = RigidbodyType2D.Static;
+                blockChunkChild.GetComponent<CompositeCollider2D>().geometryType     = CompositeCollider2D.GeometryType.Outlines;
                 
                 var propChunkChild = new GameObject("props");
                 propChunkChild.transform.parent = chunk.transform;
