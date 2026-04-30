@@ -32,6 +32,7 @@ namespace Items
     private bool IsFull()
     {
       #region IsFull
+      if (isEmpty) return false;
       return item.amount >= item.data.stack;
       #endregion
     }
@@ -39,6 +40,14 @@ namespace Items
     public void Add(ItemStack itemToAdd)
     {
       #region Add
+      if (isEmpty)
+      {
+        item = new ItemStack()
+        {
+          data = itemToAdd.data,
+        };
+      }
+
       int amountToAdd = GetCapacity(itemToAdd, out int surplus);
       item.amount += (short)amountToAdd;
       itemToAdd.amount -= (short)surplus;

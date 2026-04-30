@@ -1,5 +1,5 @@
 
-using Scriptable_Objects_Scripts;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI.Components
@@ -48,7 +48,8 @@ namespace UI.Components
     {
       #region GetElements
       rootElm = this.Q<VisualElement>("root");
-      itemHolderElm = this.Q<Image>("holder");
+      itemHolderElm = this.Q<VisualElement>("item-holder");
+      if (itemHolderElm is null) Debug.LogError("Can't get the holder dingy");
       #endregion
     }
     #endregion

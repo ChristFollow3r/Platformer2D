@@ -2,6 +2,7 @@
 
 using System;
 using Data;
+using UnityEngine;
 
 namespace Items
 {
@@ -22,6 +23,17 @@ namespace Items
 
 
     #region Methods
+    [RuntimeInitializeOnLoadMethod]
+    public static void Init()
+    {
+      #region Init
+      for (int i = 0; i < slots.Length; i++)
+      {
+        slots[i] = new Slot();
+      }
+      #endregion
+    }
+
     public static void Add(ItemStack item)
     {
       #region Pickup
@@ -78,7 +90,8 @@ namespace Items
       #region GetSlotOfItem
       foreach (Slot slot in slots)
       {
-        if (slot.item.data == itemData && !slot.isFull) return slot;
+        Debug.Log(slot);
+        if (slot.isEmpty || (slot.item.data == itemData && !slot.isFull)) return slot;
       }
       return null;
       #endregion

@@ -73,9 +73,13 @@ namespace UI.Components
       #region OnSlotChange
       if (slotId >= Items.Inventory.HotbarItems) return;
 
-      // Create new slot item elem and inject it
+      Item newItem = new Item
+      {
+        item = item.data,
+        amount = item.amount
+      };
 
-      // slots[slotId]
+      slots[slotId].item = newItem;
       #endregion
     }
     #endregion

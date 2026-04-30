@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/UI/Components/Item/ItemStyles.uss?fileID=7433441132597879392&amp;guid=5aa44926d477c1a458f3db8dac93ce9b&amp;type=3#ItemStyles"/>
     <ui:VisualElement name="root" class="item-root">
-        <ui:Image name="image" source="project://database/Assets/Sprites/Nil_Sprites/String_Nil.png?fileID=-839063520895100450&amp;guid=6f2110cff3d308f4eb5c4804774e5672&amp;type=3#String_Nil_0" scale-mode="ScaleToFit" class="item-image"/>
+        <ui:Image name="icon" source="" scale-mode="ScaleToFit" class="item-image"/>
         <ui:Label text="0" name="amount" class="item-amount"/>
     </ui:VisualElement>
 </ui:UXML>
