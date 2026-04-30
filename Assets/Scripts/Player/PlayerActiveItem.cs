@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -20,8 +19,6 @@ namespace Player
         
         private InputSystem_Actions  input;
         private bool                 isAttacking;
-
-        public event Action<int>     OnEnemyHit;
     
         private void Awake()
         {
@@ -66,7 +63,13 @@ namespace Player
             
             animator.SetBool(Active, true);
             Collider2D hit = Physics2D.OverlapCircle(attackPoint, 1f, 5);
-            if (hit is not null) OnEnemyHit?.Invoke(10); // Use here the get current item method to know the dmg to be applied
+            if (hit is not null)
+            {
+                if (hit.TryGetComponent(out Shared.Health enemyHealth))
+                {
+                    enemyHealth.TakeDamage(10, playerRigidbody.linearVelocityX > 0 ? 1 : -1, 10);
+                }
+            }
             yield return new WaitForSeconds(swingClipDuration);
             
             activeColor.a       = 0;

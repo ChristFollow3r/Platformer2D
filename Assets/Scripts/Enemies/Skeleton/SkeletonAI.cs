@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
 
@@ -8,28 +9,37 @@ namespace Enemies.Skeleton
     {
         [SerializeField] private Enemy skeletonData;
         [SerializeField] private LayerMask groundLayer;
+        
         private Rigidbody2D        skeletonRigidBody;
         private CapsuleCollider2D  skeletonCollider;
+        private Shared.Health      skeletonHealth;
         private Transform          target;
         private SkeletonAnimations animations;
-
+        
+        private static readonly int Hit = Animator.StringToHash("isHit");
+        
         private int                direction;
         private bool               isGrounded;
         private bool               theresBlockInFront;
-        
+        private bool               isStunned;
         public event Action<bool, int> OnRange; 
 
         private void Awake()
         {
             skeletonRigidBody = GetComponent<Rigidbody2D>();
             skeletonCollider  = GetComponent<CapsuleCollider2D>();
+            skeletonHealth    = GetComponent<Shared.Health>();
             animations        = GetComponent<SkeletonAnimations>();
             target = GameObject.FindGameObjectWithTag("Player")?.transform;
         }
+        
+        private void Start() => isStunned = false;
+        private void OnEnable() => skeletonHealth.OnKnockbackRecieved += HandleHit;
+        private void OnDisable() => skeletonHealth.OnKnockbackRecieved -= HandleHit;
 
         private void Update()
         {
-            if (target is null) return;
+            if (target is null || isStunned) return;
 
             if (animations.isAttacking)
             {
@@ -67,6 +77,21 @@ namespace Enemies.Skeleton
             {
                 skeletonRigidBody.linearVelocityY = skeletonData.jumpForce;
             }
+        }
+
+        private void HandleHit(int playerDirection, float knockback)
+        {
+            StartCoroutine(SkeletonHitAnimation(playerDirection, knockback));
+        }
+
+        private IEnumerator SkeletonHitAnimation(int playerDirection, float knockback)
+        {
+            isStunned                        = true;
+            skeletonRigidBody.linearVelocity =  Vector2.zero;
+            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 3f), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.3f);
+            isStunned                        = false;
+
         }
     }
 }

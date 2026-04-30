@@ -10,9 +10,10 @@ namespace Enemies.Skeleton
     {
         [SerializeField] private Enemy skeletonData;
         
-        private Animator skeletonAnimator;
-        private Rigidbody2D skeletonRigidbody;
-        private SkeletonAI aiScript;
+        private Animator      skeletonAnimator;
+        private Rigidbody2D   skeletonRigidbody;
+        private SkeletonAI    aiScript;
+        private Shared.Health skeletonHealth;
         
         private static readonly int Walking = Animator.StringToHash("isWalking");
         private static readonly int Attacking = Animator.StringToHash("isAttacking");
@@ -20,20 +21,19 @@ namespace Enemies.Skeleton
         private static readonly int Dead = Animator.StringToHash("isDead");
         
         [HideInInspector] public bool isAttacking = false;
-        
-        // Event now sends Damage, Direction, and Knockback Force
-        public static event Action<int, int, float> OnPlayerHit;
 
         private void Awake()
         {
             skeletonRigidbody = GetComponent<Rigidbody2D>();
-            skeletonAnimator = GetComponent<Animator>();
-            aiScript = GetComponent<SkeletonAI>();
+            skeletonAnimator  = GetComponent<Animator>();
+            aiScript          = GetComponent<SkeletonAI>();
+            skeletonHealth    = GetComponent<Shared.Health>();
         }
 
         private void OnEnable()
         {
             aiScript.OnRange += HandleAttackTrigger;
+            if (skeletonHealth != null) skeletonHealth.OnKnockbackRecieved += PlayHitAnimation;
         }
         private void OnDisable() => aiScript.OnRange -= HandleAttackTrigger;
 
@@ -75,5 +75,11 @@ namespace Enemies.Skeleton
             yield return new WaitForSeconds(skeletonData.attackCooldown);
             isAttacking = false;
         }
+
+        private void PlayHitAnimation(int direction, float knockback)
+        {
+            skeletonAnimator.SetTrigger(Hit);
+        }
+        
     }
 }
