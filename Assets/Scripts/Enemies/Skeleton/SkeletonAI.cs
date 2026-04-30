@@ -81,10 +81,10 @@ namespace Enemies.Skeleton
 
         private void HandleHit(int playerDirection, float knockback)
         {
-            StartCoroutine(SkeletonHitAnimation(playerDirection, knockback));
+            StartCoroutine(SkeletonHit(playerDirection, knockback));
         }
 
-        private IEnumerator SkeletonHitAnimation(int playerDirection, float knockback)
+        private IEnumerator SkeletonHit(int playerDirection, float knockback)
         {
             isStunned                        = true;
             skeletonRigidBody.linearVelocity =  Vector2.zero;

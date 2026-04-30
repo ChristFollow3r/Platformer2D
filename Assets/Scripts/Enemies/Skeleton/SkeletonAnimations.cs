@@ -78,8 +78,17 @@ namespace Enemies.Skeleton
 
         private void PlayHitAnimation(int direction, float knockback)
         {
-            skeletonAnimator.SetTrigger(Hit);
+            StartCoroutine(SkeletonHitAnimation(direction, knockback));
         }
-        
+
+        private IEnumerator SkeletonHitAnimation(int direction, float knockback)
+        {
+            skeletonAnimator.SetBool(Hit, true);
+            skeletonAnimator.SetBool(Walking, false);
+            skeletonAnimator.SetBool(Attacking, false);
+            yield return new WaitForSeconds(0.5f);
+            
+            skeletonAnimator.SetBool(Hit, false);
+        }
     }
 }
