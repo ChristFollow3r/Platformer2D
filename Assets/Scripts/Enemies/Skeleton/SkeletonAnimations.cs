@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using Player;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
 
@@ -78,16 +76,15 @@ namespace Enemies.Skeleton
 
         private void PlayHitAnimation(int direction, float knockback)
         {
-            StartCoroutine(SkeletonHitAnimation(direction, knockback));
+            StartCoroutine(SkeletonHitAnimation());
         }
 
-        private IEnumerator SkeletonHitAnimation(int direction, float knockback)
+        private IEnumerator SkeletonHitAnimation()
         {
             skeletonAnimator.SetBool(Hit, true);
             skeletonAnimator.SetBool(Walking, false);
             skeletonAnimator.SetBool(Attacking, false);
             yield return new WaitForSeconds(0.5f);
-            
             skeletonAnimator.SetBool(Hit, false);
         }
     }

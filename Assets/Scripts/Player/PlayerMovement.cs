@@ -52,8 +52,8 @@ namespace Player
             if (isStunned) return;
             
             bool isGrounded = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + 0.2f, groundLayer).collider is not null;
-            bool isTouchingLeftWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.left, playerCollider.bounds.extents.x + 0.2f, groundLayer).collider is not null;
-            bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.2f, groundLayer).collider is not null;
+            bool isTouchingLeftWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.left, playerCollider.bounds.extents.x + 0.1f, groundLayer).collider is not null;
+            bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.1f, groundLayer).collider is not null;
             
             Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);
@@ -104,10 +104,12 @@ namespace Player
                 {
                     animator.SetBool(IsJumping, true);
                     animator.SetBool(IsFalling, false);
+                    animator.SetBool(IsSliding, false);
                 }
                 else if (rb.linearVelocityY < -0.1f && !isTouchingLeftWall && !isTouchingRightWall)
                 {
                     animator.SetBool(IsJumping, false);
+                    animator.SetBool(IsSliding, false);
                     animator.SetBool(IsFalling, true);
                 }
                 else if (rb.linearVelocityY < -0.1f && isTouchingLeftWall)
