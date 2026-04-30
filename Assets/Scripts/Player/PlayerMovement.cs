@@ -25,7 +25,8 @@ namespace Player
         private bool  canDoubleJump;
         private bool  isStunned;
         private float wallJumpTime = 0.25f;
-        
+
+        [SerializeField] private LayerMask groundLayer;
         private void Awake()
         {
             rb             = GetComponent<Rigidbody2D>();   
@@ -50,9 +51,9 @@ namespace Player
         {
             if (isStunned) return;
             
-            bool isGrounded = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + 0.2f, 3).collider is not null;
-            bool isTouchingLeftWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.left, playerCollider.bounds.extents.x + 0.2f, 3).collider is not null;
-            bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.2f, 3).collider is not null;
+            bool isGrounded = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + 0.2f, groundLayer).collider is not null;
+            bool isTouchingLeftWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.left, playerCollider.bounds.extents.x + 0.2f, groundLayer).collider is not null;
+            bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.2f, groundLayer).collider is not null;
             
             Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);

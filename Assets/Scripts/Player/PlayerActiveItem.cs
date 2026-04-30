@@ -65,7 +65,7 @@ namespace Player
             Vector2 attackPoint = (Vector2)transform.position + new Vector2(playerDirection * 0.2f, 0f);
             
             animator.SetBool(Active, true);
-            Collider2D hit = Physics2D.OverlapCircle(attackPoint, 1f, 4);
+            Collider2D hit = Physics2D.OverlapCircle(attackPoint, 1f, 5);
             if (hit is not null) OnEnemyHit?.Invoke(10); // Use here the get current item method to know the dmg to be applied
             yield return new WaitForSeconds(swingClipDuration);
             

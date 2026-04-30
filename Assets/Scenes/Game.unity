@@ -903,6 +903,9 @@ MonoBehaviour:
   speed: 7
   jumpForce: 12
   wallJumpForce: {x: 5, y: 12}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!4 &139018189
 Transform:
   m_ObjectHideFlags: 0
@@ -7220,6 +7223,7 @@ GameObject:
   - component: {fileID: 2117553317}
   - component: {fileID: 2117553322}
   - component: {fileID: 2117553323}
+  - component: {fileID: 2117553324}
   m_Layer: 2
   m_Name: Skeleton
   m_TagString: Untagged
@@ -7240,6 +7244,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonData: {fileID: 11400000, guid: d28b6fbfda4698147a0b3fbc96558e58, type: 2}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!50 &2117553318
 Rigidbody2D:
   serializedVersion: 5
@@ -7414,6 +7421,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skeletonData: {fileID: 11400000, guid: d28b6fbfda4698147a0b3fbc96558e58, type: 2}
   isAttacking: 0
+--- !u!114 &2117553324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2117553316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6984fe322394a04e8611dc773d4e5f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
+  maxHealth: 40
 --- !u!1001 &2121765858
 PrefabInstance:
   m_ObjectHideFlags: 0

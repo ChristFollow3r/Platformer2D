@@ -23,7 +23,7 @@ namespace Chunks
             notCreated = true;
         }
 
-        public void BuildTiles()
+        private void BuildTiles()
         {
             int x = chunkPosition.x * ChunkSize;
             int y = chunkPosition.y * ChunkSize;
@@ -42,6 +42,7 @@ namespace Chunks
                             .CreateInstance<Tile>(); 
                         tile.sprite = WorldData.BlockDictionary[blockType].sprite;
                         blockTileMap.SetTile(new Vector3Int(i, j, 0), tile);
+                        blockTileMap.gameObject.layer = LayerMask.NameToLayer("Block");
                     }
 
                     if (propType != PropType.None)

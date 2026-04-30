@@ -7,6 +7,7 @@ namespace Enemies.Skeleton
     public class SkeletonAI : MonoBehaviour
     {
         [SerializeField] private Enemy skeletonData;
+        [SerializeField] private LayerMask groundLayer;
         private Rigidbody2D        skeletonRigidBody;
         private CapsuleCollider2D  skeletonCollider;
         private Transform          target;
@@ -59,8 +60,8 @@ namespace Enemies.Skeleton
 
         private void CheckForObstacles()
         {
-            isGrounded         = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f).collider is not null;
-            theresBlockInFront = Physics2D.Raycast(transform.position, Vector2.right * direction, 0.6f).collider is not null;
+            isGrounded         = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
+            theresBlockInFront = Physics2D.Raycast(transform.position, Vector2.right * direction, 0.8f, groundLayer).collider is not null;
             
             if (isGrounded && theresBlockInFront)
             {
