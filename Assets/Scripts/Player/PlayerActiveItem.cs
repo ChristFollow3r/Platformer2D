@@ -6,21 +6,36 @@ namespace Player
 {
     public class PlayerActiveItem : MonoBehaviour
     {
-        private Animator animator;
-        private Rigidbody2D playerRigidBody;
+        private static AnimationClip _swingClip;
         
-        private static readonly int Active  = Animator.StringToHash("isActive");
-        private static readonly int Running = Animator.StringToHash("isRunning");
+        private Animator             animator;
+        private SpriteRenderer       toolSprite;
+        private Color                activeColor;
         
-        private InputSystem_Actions input;
-        private bool isAttacking;
-
+        private static readonly int  Active = Animator.StringToHash("isActive");
+        private float                swingClipDuration;
+        
+        private InputSystem_Actions  input;
+        private bool                 isAttacking;
+    
         private void Awake()
         {
-            input = new InputSystem_Actions();
-            playerRigidBody = transform.parent.GetComponent<Rigidbody2D>();
+            input             = new InputSystem_Actions();
             input.Enable();
-            animator = GetComponent<Animator>();
+            
+            animator          = GetComponent<Animator>();
+            _swingClip        = animator.runtimeAnimatorController.animationClips[0];
+            swingClipDuration = _swingClip.length;
+
+            toolSprite        = transform.GetChild(0).GetComponent<SpriteRenderer>();
+            activeColor       = toolSprite.color;
+        }
+
+        private void Start()
+        {
+            isAttacking        = false;
+            activeColor.a      = 0;
+            toolSprite.color   = activeColor;
         }
 
         private void Update()
@@ -30,8 +45,26 @@ namespace Player
 
         private void PlayAnimation()
         {
-            animator.SetBool(Active, Mouse.current.leftButton.isPressed);
-            animator.SetBool(Running, Mathf.Abs(playerRigidBody.linearVelocityX) > 0.1f);
+            if (!Mouse.current.leftButton.isPressed || isAttacking) return;
+            isAttacking       = true;
+            StartCoroutine(Attack());
+
+        }
+
+        private IEnumerator Attack()
+        {
+            activeColor.a    = 1;
+            toolSprite.color = activeColor;
+            
+            animator.SetBool(Active, true);
+            yield return new WaitForSeconds(swingClipDuration);
+            
+            activeColor.a    = 0;
+            toolSprite.color = activeColor;
+            
+            animator.SetBool(Active, false);
+            isAttacking      = false;
+            yield return null;
         }
     }
 }
