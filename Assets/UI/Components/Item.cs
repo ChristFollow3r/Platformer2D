@@ -41,7 +41,7 @@ namespace UI.Components
     {
       #region SetItem
       _item = item;
-      iconElm.image = _item.icon;
+      iconElm.image = _item.sprite.texture;
       #endregion
     }
 

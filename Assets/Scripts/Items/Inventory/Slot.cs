@@ -50,7 +50,7 @@ namespace Items
 
       int amountToAdd = GetCapacity(itemToAdd, out int surplus);
       item.amount += (short)amountToAdd;
-      itemToAdd.amount -= (short)surplus;
+      itemToAdd.amount = (short)surplus;
       #endregion
     }
   }
