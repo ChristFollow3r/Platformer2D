@@ -19,8 +19,8 @@ namespace Enemies.Skeleton
         private static readonly int Attacking = Animator.StringToHash("isAttacking");
         private static readonly int Hit = Animator.StringToHash("isHit");
         private static readonly int Dead = Animator.StringToHash("isDead");
-        
-        [HideInInspector] public bool isAttacking = false;
+
+        [HideInInspector] public bool isAttacking;
 
         private void Awake()
         {
