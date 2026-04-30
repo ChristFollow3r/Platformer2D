@@ -13,7 +13,7 @@ namespace Items
     public const short HotbarItems = 10;
     public const short Rows = 10;
     public const short Cols = 10;
-    public static Slot[] items = new Slot[HotbarItems + Cols + Rows];
+    public static Slot[] slots = new Slot[HotbarItems + Cols + Rows];
     #endregion
 
     #region Events
@@ -22,10 +22,9 @@ namespace Items
 
 
     #region Methods
-    static public void Add(ItemStack item)
+    public static void Add(ItemStack item)
     {
       #region Pickup
-
       Slot slot;
       do
       {
@@ -48,10 +47,36 @@ namespace Items
       #endregion
     }
 
+
+    public static ItemStack ClearSlot(int slotId)
+    {
+      #region ClearSlot
+      Slot slot = slots[slotId];
+      if (slot.isEmpty) return null;
+
+      ItemStack itemStack = slot.item;
+      slot.item = null;
+
+      OnSlotChanged?.Invoke(slotId, null);
+      return itemStack;
+      #endregion
+    }
+
+    public static void AddToSlot(ItemStack item, int slotId)
+    {
+      #region AddToSlot
+      Slot slot = slots[slotId];
+      if (!slot.isEmpty && slot.item.data != item.data) return;
+
+      slot.Add(item);
+      OnSlotChanged?.Invoke(slotId, null);
+      #endregion
+    }
+
     private static Slot GetSlotOfItem(ItemData itemData)
     {
       #region GetSlotOfItem
-      foreach (Slot slot in items)
+      foreach (Slot slot in slots)
       {
         if (slot.item.data == itemData && !slot.isFull) return slot;
       }
