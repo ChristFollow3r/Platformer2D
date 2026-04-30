@@ -103,50 +103,30 @@ public class WorldManager : MonoBehaviour
 
     private void GenerateProps()
     {
-        for (int i = 0; i < worldWidth; i++)
+        for (int x = 0; x < worldWidth; x++)
         {
-            for (int j = 0; j < worldHeight; j++)
+            for (int y = 0; y < worldHeight; y++)
             {
-                if (!WorldData.World.SafeCheck(i, j) || !WorldData.World.SafeCheck(i, j + 1)) continue;
-
-                int spawnRate = Random.Range(0, 101);
-
-                bool isSurface = WorldData.World.GetBlockTypes(i, j) == BlockType.Grass
-                                 && WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air;
-
-                bool hasSpace = WorldData.World.SafeCheck(i - 1, j + 1) 
-                                && WorldData.World.SafeCheck(i + 1, j + 1)
-                                && WorldData.World.GetBlockTypes(i - 1, j + 1) == BlockType.Air
-                                && WorldData.World.GetBlockTypes(i + 1, j + 1) == BlockType.Air;
-
-                bool hasSpaceForTree = WorldData.World.GetBlockTypes(i, j + 1) == BlockType.Air
-                                       && WorldData.World.GetBlockTypes(i - 1, j) == BlockType.Grass
-                                       && WorldData.World.GetBlockTypes(i + 1, j) == BlockType.Grass
-                                       && WorldData.World.GetPropType(i - 1, j + 1) != PropType.Tree
-                                       && WorldData.World.GetPropType(i + 1, j + 1) != PropType.Tree
-                                       && WorldData.World.GetPropType(i - 1, j) != PropType.Tree
-                                       && WorldData.World.GetPropType(i + 1, j) != PropType.Tree;
-
+                if (!WorldData.World.SafeCheck(x, y) || !WorldData.World.SafeCheck(x, y + 1)) continue;
                 
-                if (isSurface && hasSpace && spawnRate <= 30)
-                {
-                    if (Random.Range(0, 101) <= 50)
-                    {
-                        WorldData.World.SetPropType(i, j + 1, PropType.Bush);
-                        continue;
-                    }
-                    WorldData.World.SetPropType(i, j + 1, PropType.StoneProp);
-                    continue;
-                }
+                if (WorldData.World.GetBlockTypes(x, y) != BlockType.Grass || 
+                    WorldData.World.GetBlockTypes(x, y + 1) != BlockType.Air) continue;
+
+                int spawnRoll = Random.Range(0, 101);
                 
-
-                if (isSurface && hasSpaceForTree && spawnRate >= 70)
+                if (spawnRoll >= 70 && CanSpawnTree(x, y))
                 {
-                    WorldData.World.SetPropType(i, j + 1, PropType.Tree);
-                    continue;
+                    WorldData.World.SetPropType(x, y + 1, PropType.Tree);
                 }
-
-                WorldData.World.SetPropType(i, j + 1, PropType.None);
+                else if (spawnRoll <= 30 && HasSideSpace(x, y + 1))
+                {
+                    PropType type = (Random.value > 0.5f) ? PropType.Bush : PropType.StoneProp;
+                    WorldData.World.SetPropType(x, y + 1, type);
+                }
+                else
+                {
+                    WorldData.World.SetPropType(x, y + 1, PropType.None);
+                }
             }
         }
     }
@@ -201,7 +181,12 @@ public class WorldManager : MonoBehaviour
 
     private void UpdateChunks()
     {
-        var cameraChunk = new Vector2Int((int)cameraPosition.x / Chunk.ChunkSize, (int)cameraPosition.y / Chunk.ChunkSize); 
+        float cellSize  = gridParent.cellSize.x;
+        
+        int cameraTileX = Mathf.FloorToInt(cameraPosition.x / cellSize);
+        int cameraTileY = Mathf.FloorToInt(cameraPosition.y / cellSize);
+        
+        var cameraChunk = new Vector2Int(cameraTileX / Chunk.ChunkSize, cameraTileY / Chunk.ChunkSize);
         // Since our chunks are 16 x 16, if we divide by 16, we get the chunk we currently are at.
         
         for (int x = 0; x < chunks.GetLength(0); x++)
@@ -228,7 +213,33 @@ public class WorldManager : MonoBehaviour
             return true;
         }
 
-        else return false;
+        return false;
+    }
+    
+    private bool CanSpawnTree(int x, int y)
+    {
+        int treeSpacing = 4; 
+
+        for (int i = -treeSpacing; i <= treeSpacing; i++)
+        {
+            if (i == 0) continue;
+
+            int checkX = x + i;
+            
+            if (!WorldData.World.SafeCheck(checkX, y + 1)) continue;
+            if (WorldData.World.GetPropType(checkX, y + 1) == PropType.Tree) return false;
+        }
+        
+        return WorldData.World.GetBlockTypes(x - 1, y) == BlockType.Grass && 
+               WorldData.World.GetBlockTypes(x + 1, y) == BlockType.Grass;
+    }
+    
+    private bool HasSideSpace(int x, int y)
+    {
+        return WorldData.World.SafeCheck(x - 1, y) && 
+               WorldData.World.SafeCheck(x + 1, y) &&
+               WorldData.World.GetBlockTypes(x - 1, y) == BlockType.Air &&
+               WorldData.World.GetBlockTypes(x + 1, y) == BlockType.Air;
     }
 
 }

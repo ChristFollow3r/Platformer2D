@@ -33,8 +33,10 @@ namespace Player
             Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
             float distance = Vector2.Distance(mousePosition, player.transform.position);
             
-            int mouseX = Mathf.FloorToInt(mousePosition.x);
-            int mouseY = Mathf.FloorToInt(mousePosition.y);
+            float cellSize = 0.5f;
+            
+            int mouseX = Mathf.FloorToInt(mousePosition.x / cellSize);
+            int mouseY = Mathf.FloorToInt(mousePosition.y / cellSize);
 
 
             if (Mathf.Abs(distance) > reachDistance)
@@ -77,10 +79,14 @@ namespace Player
                 breakTimer += Time.deltaTime * itemStrength;
                 if (breakTimer >= targetHardness)
                 {
+                    Vector2 spawnPos = new Vector2(mouseX * cellSize, mouseY * cellSize);
+                    
+                    int chunkX = mouseX / Chunk.ChunkSize;
+                    int chunkY = mouseY / Chunk.ChunkSize;
+                    
                     if (isBreakingABlock)
                     {
-                        var blockData = WorldData.BlockDictionary[clickedBlock];
-                        var drop = Instantiate(WorldData.BlockDictionary[clickedBlock].blockPrefab, new Vector2(mouseX, mouseY), Quaternion.identity);
+                        var drop = Instantiate(WorldData.BlockDictionary[clickedBlock].blockPrefab, spawnPos, Quaternion.identity);
                         Destroy(drop, 300f);
                         WorldData.World.SetBlockType(mouseX, mouseY, BlockType.Air);
                     }
@@ -95,7 +101,7 @@ namespace Player
                             {
                                 for (int i = 0; i < drop.amount; i++)
                                 {
-                                    var droppedItem = Instantiate(drop.item.drop, new Vector2(mouseX, mouseY), Quaternion.identity);
+                                    var droppedItem = Instantiate(drop.item.drop, spawnPos, Quaternion.identity);
                                     if (droppedItem is not null) Destroy(droppedItem, 300f);
                                 }
                             }
@@ -104,7 +110,7 @@ namespace Player
                     }
 
                     // Update the visual tile
-                    WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
+                    WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(mouseX, mouseY);
                     breakTimer = 0f;
                 }
             }
@@ -127,7 +133,10 @@ namespace Player
                     if (WorldData.World.GetBlockTypes(mouseX, mouseY) == BlockType.Air && WorldData.World.GetPropType(mouseX, mouseY) == PropType.None)
                     {
                         WorldData.World.SetBlockType(mouseX, mouseY, heldItem.blockType);
-                        WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
+                        
+                        int chunkX = mouseX / Chunk.ChunkSize;
+                        int chunkY = mouseY / Chunk.ChunkSize;
+                        WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(mouseX, mouseY);
                         Data.Inventory.InventoryManager.Instance.UseBlock();
                     }
                 }
