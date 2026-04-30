@@ -7,20 +7,21 @@ namespace Shared
     public class Health : MonoBehaviour
     {
         [SerializeField] private int maxHealth;
-        private int currentHealth;
+        private int                  currentHealth;
         
         public event Action<float> OnHealthChanged;
         public event Action OnDeath;
 
+        public event Action<int, float> OnKnockbackRecieved;
+
         private void Awake() => currentHealth = maxHealth;
 
-        private void OnEnable() => SkeletonAnimations.OnPlayerHit += TakeDamage;
-        private void OnDisable() => SkeletonAnimations.OnPlayerHit -= TakeDamage;
-
-        private void TakeDamage(int damage, int direction, float knockback)
+        public void TakeDamage(int damage, int direction, float knockback)
         {
             currentHealth -= damage;
-            float healthPercentage = (float)currentHealth / maxHealth;
+            OnKnockbackRecieved?.Invoke(direction, knockback);
+            
+            float healthPercentage = (float)currentHealth / maxHealth;  
             OnHealthChanged?.Invoke(healthPercentage); 
             
             if (currentHealth <= 0) Die();

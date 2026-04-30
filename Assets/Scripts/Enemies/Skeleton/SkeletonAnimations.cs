@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Player;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
 
@@ -30,7 +31,10 @@ namespace Enemies.Skeleton
             aiScript = GetComponent<SkeletonAI>();
         }
 
-        private void OnEnable() => aiScript.OnRange += HandleAttackTrigger;
+        private void OnEnable()
+        {
+            aiScript.OnRange += HandleAttackTrigger;
+        }
         private void OnDisable() => aiScript.OnRange -= HandleAttackTrigger;
 
         private void Update()
@@ -59,7 +63,10 @@ namespace Enemies.Skeleton
             
             if (hit is not null) // Fixed: changed from 'is null'
             {
-                OnPlayerHit?.Invoke(skeletonData.attackDamage, direction, skeletonData.attackKnockback);
+                if (hit.TryGetComponent(out Shared.Health health))
+                {
+                    health.TakeDamage(skeletonData.attackDamage, direction, skeletonData.attackKnockback);
+                }
             }
 
             yield return new WaitForSeconds(0.17f);

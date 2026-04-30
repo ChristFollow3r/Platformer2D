@@ -1,5 +1,4 @@
 using System.Collections;
-using Enemies.Skeleton;
 using UnityEngine;
 
 namespace Player 
@@ -12,31 +11,40 @@ namespace Player
         private static readonly int IsSliding = Animator.StringToHash("isSliding");
         private static readonly int IsHit = Animator.StringToHash("isHit");
         
-        private Rigidbody2D rb;
-        private Animator animator;
-        private Collider2D playerCollider;
-        public InputSystem_Actions playerInput;
+        private Rigidbody2D         rb;
+        private Animator            animator;
+        private Collider2D          playerCollider;
+        private Shared.Health       playerHealth;
+        public InputSystem_Actions  playerInput;
 
         [Header("Movement settings")]
-        [SerializeField] private float speed;
-        [SerializeField] private float jumpForce;
+        [SerializeField] private float   speed;
+        [SerializeField] private float   jumpForce;
         [SerializeField] private Vector2 wallJumpForce = new Vector2(7f, 12f);
 
-        private bool canDoubleJump;
-        private bool isStunned;
+        private bool  canDoubleJump;
+        private bool  isStunned;
         private float wallJumpTime = 0.25f;
         
         private void Awake()
         {
-            rb = GetComponent<Rigidbody2D>();   
-            animator = transform.GetChild(0).GetComponent<Animator>();
+            rb             = GetComponent<Rigidbody2D>();   
+            animator       = transform.GetChild(0).GetComponent<Animator>();
             playerCollider = GetComponent<Collider2D>();
-            playerInput = new InputSystem_Actions();
+            playerHealth   = GetComponent<Shared.Health>();
+            playerInput    = new InputSystem_Actions();
             playerInput.Enable();
         }
 
-        private void OnEnable() => SkeletonAnimations.OnPlayerHit += HandleHit;
-        private void OnDisable() => SkeletonAnimations.OnPlayerHit -= HandleHit;
+        private void OnEnable()
+        {
+            if (playerInput != null) playerHealth.OnKnockbackRecieved += HandleHit;
+        }
+
+        private void OnDisable()
+        {
+            if (playerInput != null) playerHealth.OnKnockbackRecieved -= HandleHit;
+        }
 
         private void Update()
         {
@@ -121,7 +129,7 @@ namespace Player
         }
 
         // Receiving the knockback value from the SkeletonAnimations event
-        private void HandleHit(int damage, int direction, float knockback)
+        private void HandleHit(int direction, float knockback)
         {
             StartCoroutine(PlayerHitAnimation(direction, knockback));
         }
@@ -129,6 +137,8 @@ namespace Player
         private IEnumerator PlayerHitAnimation(int direction, float knockback)
         {
             isStunned = true;
+            
+            rb.linearVelocity = Vector2.zero;
             rb.linearVelocity = new Vector2(knockback * direction, 4f);
             animator.SetBool(IsHit, true);
             

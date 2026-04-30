@@ -7,22 +7,22 @@ namespace Enemies.Skeleton
     public class SkeletonAI : MonoBehaviour
     {
         [SerializeField] private Enemy skeletonData;
-        private Rigidbody2D skeletonRigidBody;
-        private CapsuleCollider2D skeletonCollider;
-        private Transform target;
+        private Rigidbody2D        skeletonRigidBody;
+        private CapsuleCollider2D  skeletonCollider;
+        private Transform          target;
         private SkeletonAnimations animations;
 
-        private int direction;
-        private bool isGrounded;
-        private bool theresBlockInFront;
+        private int                direction;
+        private bool               isGrounded;
+        private bool               theresBlockInFront;
         
         public event Action<bool, int> OnRange; 
 
         private void Awake()
         {
             skeletonRigidBody = GetComponent<Rigidbody2D>();
-            skeletonCollider = GetComponent<CapsuleCollider2D>();
-            animations = GetComponent<SkeletonAnimations>();
+            skeletonCollider  = GetComponent<CapsuleCollider2D>();
+            animations        = GetComponent<SkeletonAnimations>();
             target = GameObject.FindGameObjectWithTag("Player")?.transform;
         }
 
@@ -59,8 +59,8 @@ namespace Enemies.Skeleton
 
         private void CheckForObstacles()
         {
-            isGrounded = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f).collider != null;
-            theresBlockInFront = Physics2D.Raycast(transform.position, Vector2.right * direction, 0.6f).collider != null;
+            isGrounded         = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f).collider is not null;
+            theresBlockInFront = Physics2D.Raycast(transform.position, Vector2.right * direction, 0.6f).collider is not null;
             
             if (isGrounded && theresBlockInFront)
             {
