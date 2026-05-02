@@ -12,8 +12,8 @@ namespace Items
 
     #region Data
     public const short HotbarItems = 10;
-    public const short Rows = 10;
-    public const short Cols = 10;
+    public const short Rows = 6;
+    public const short Cols = 5;
     public static Slot[] slots = new Slot[HotbarItems + Cols + Rows];
     public static ItemStack hand => slots[handIndex].item;
     private static short handIndex

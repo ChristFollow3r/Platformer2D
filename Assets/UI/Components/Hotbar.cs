@@ -11,8 +11,7 @@ namespace UI.Components
 
     #region Data
     [UxmlAttribute] public bool isMain { get; set; }
-
-    private Slot[] slots = new Slot[10];
+    private Slot[] slots = new Slot[Items.Inventory.HotbarItems];
     #endregion
 
     #region Backers
@@ -34,7 +33,7 @@ namespace UI.Components
       GetElements();
       CreateElements();
       SubscribeEvents();
-      OnHandChanged(0);
+      if (isMain) OnHandChanged(0);
     }
     #endregion
 
@@ -53,10 +52,10 @@ namespace UI.Components
     private void CreateElements()
     {
       #region CreateElements
-      for (int i = 0; i < 10; i++)
+      for (int i = 0; i < slots.Length; i++)
       {
         Slot slot = new Slot();
-        if (i != 9) slot.AddToClassList("spaced-right");
+        if (i != slots.Length - 1) slot.AddToClassList("spaced-right");
         rootElm.Add(slot);
         slots[i] = slot;
       }

@@ -1,5 +1,7 @@
 
+using Items;
 using Scriptable_Objects_Scripts;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI.Components
@@ -9,6 +11,7 @@ namespace UI.Components
   {
 
     #region Data
+    private Slot[] slots = new Slot[Items.Inventory.Cols * Items.Inventory.Rows];
     #endregion
 
     #region Backers
@@ -25,6 +28,7 @@ namespace UI.Components
       tree.CloneTree(this);
 
       GetElements();
+      SubscribeEvents();
     }
     #endregion
 
@@ -36,6 +40,41 @@ namespace UI.Components
     {
       #region GetElements
       rootElm = this.Q<VisualElement>("root");
+
+      for (int i = 0; i < slots.Length; i++)
+      {
+        Slot slot = new Slot();
+
+        int col = i % Items.Inventory.Cols;
+        int row = i / Items.Inventory.Cols;
+
+        if (col < Items.Inventory.Cols - 1) slot.AddToClassList("spaced-right");
+        if (row < Items.Inventory.Rows - 1) slot.AddToClassList("spaced-bottom");
+
+        rootElm.Add(slot);
+        slots[i] = slot;
+      }
+      #endregion
+    }
+
+    private void SubscribeEvents()
+    {
+      #region SubscribeEvents
+      Items.Inventory.OnSlotChanged += OnSlotChange;
+      #endregion
+    }
+    private void OnSlotChange(int slotId, ItemStack item)
+    {
+      #region OnSlotChange
+      if (slotId < Items.Inventory.HotbarItems) return;
+
+      Item newItem = new Item
+      {
+        item = item.data,
+        amount = item.amount
+      };
+
+      slots[slotId - Items.Inventory.HotbarItems].item = newItem;
       #endregion
     }
     #endregion

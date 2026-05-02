@@ -23,6 +23,12 @@
 .spaced-right {
     margin-top: 0;
     margin-right: 10px;
-    margin-bottom: 0;
     margin-left: 0;
 }
+
+.spaced-bottom {
+    margin-top: 0;
+    margin-bottom: 10px;
+    margin-left: 0;
+}
+
