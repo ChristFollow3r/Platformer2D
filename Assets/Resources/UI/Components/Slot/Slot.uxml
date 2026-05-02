@@ -1,7 +1,7 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/UI/Components/Slot/SlotStyles.uss?fileID=7433441132597879392&amp;guid=cfcb635883a137c4eb7614cc3bbc1765&amp;type=3#SlotStyles"/>
     <ui:VisualElement name="root" class="slot-root">
-        <ui:VisualElement name="item-holder" class="item-holder"/>
         <ui:VisualElement name="bg" class="slot-bg"/>
+        <ui:VisualElement name="item-holder" class="item-holder"/>
     </ui:VisualElement>
 </ui:UXML>

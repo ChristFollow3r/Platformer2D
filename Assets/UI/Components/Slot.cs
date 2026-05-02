@@ -39,6 +39,7 @@ namespace UI.Components
       _item = item;
       if (itemHolderElm.childCount != 0) itemHolderElm.RemoveAt(0);
       itemHolderElm.Add(item);
+      item.slot = this;
       #endregion
     }
     #endregion

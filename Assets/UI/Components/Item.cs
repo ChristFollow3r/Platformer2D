@@ -1,5 +1,6 @@
 
 using Data;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI.Components
@@ -10,12 +11,16 @@ namespace UI.Components
 
     #region Data
     [UxmlAttribute] public ItemData item { get => _item; set => SetItem(value); }
+    [UxmlAttribute] public Slot slot { get => _slot; set => _slot = value; }
     [UxmlAttribute] public int amount { get => int.Parse(amountElm.text); set => amountElm.text = value.ToString(); }
     [UxmlAttribute] public bool isBeingDragged { get => _isBeingDragged; set => SetIsBeingDragged(value); }
+
+    private Vector2 _dragOffset;
     #endregion
 
     #region Backers
     private ItemData _item;
+    private Slot _slot;
     private bool _isBeingDragged = false;
     #endregion
 
@@ -49,14 +54,13 @@ namespace UI.Components
     {
       #region SetIsBeingDragged
       _isBeingDragged = isBeingDragged;
-      if (_isBeingDragged) rootElm.AddToClassList("item-dragged");
-      else rootElm.RemoveFromClassList("item-dragged");
+      if (_isBeingDragged) AddToClassList("item-dragged");
+      else RemoveFromClassList("item-dragged");
       #endregion
     }
     #endregion
 
     #region Methods
-
     private void GetElements()
     {
       #region GetElements
@@ -69,6 +73,50 @@ namespace UI.Components
     private void SubscribeEvents()
     {
       #region SubscribeEvents
+      Debug.Log($"rootElm is null: {rootElm == null}");
+      Debug.Log($"rootElm pickingMode: {rootElm?.pickingMode}");
+
+      rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
+      rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+      rootElm.RegisterCallback<PointerUpEvent>(OnPointerUp);
+      #endregion
+    }
+
+
+    private void OnPointerDown(PointerDownEvent e)
+    {
+      #region OnPointerDown
+      var panelRoot = panel.visualTree.Q<VisualElement>();
+      panelRoot.Add(this);
+
+      isBeingDragged = true;
+      _dragOffset = e.localPosition;
+      rootElm.CapturePointer(e.pointerId);
+      e.StopPropagation();
+      #endregion
+    }
+
+    private void OnPointerMove(PointerMoveEvent e)
+    {
+      #region OnPointerMove
+      if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
+      Vector2 localPos = parent.WorldToLocal(e.position);
+      style.left = localPos.x - _dragOffset.x;
+      style.top = localPos.y - _dragOffset.y;
+      #endregion
+    }
+
+    private void OnPointerUp(PointerUpEvent e)
+    {
+      #region OnPointerUp
+      isBeingDragged = false;
+      rootElm.ReleasePointer(e.pointerId);
+
+      RemoveFromHierarchy();
+      slot.item = this;
+
+      style.left = 0;
+      style.top = 0;
       #endregion
     }
     #endregion

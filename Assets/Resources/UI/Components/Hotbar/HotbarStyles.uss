@@ -19,3 +19,18 @@
     border-top-color: rgba(92, 52, 30, 0.7);
     border-bottom-color: rgba(92, 52, 30, 0.7);
 }
+
+.hand {
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+    border-left-color: rgb(204, 168, 114);
+    border-right-color: rgb(204, 168, 114);
+    border-top-color: rgb(204, 168, 114);
+    border-bottom-color: rgb(204, 168, 114);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}

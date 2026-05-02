@@ -10,7 +10,7 @@ namespace UI.Components
   {
 
     #region Data
-    [UxmlAttribute] public bool hasBackground { get; set; }
+    [UxmlAttribute] public bool isMain { get; set; }
 
     private Slot[] slots = new Slot[10];
     #endregion
@@ -22,6 +22,7 @@ namespace UI.Components
     #region Elements
     private VisualElement rootElm;
     private VisualElement backgroundElm;
+    private Slot currentHand;
     #endregion
 
     #region Constructor
@@ -33,6 +34,7 @@ namespace UI.Components
       GetElements();
       CreateElements();
       SubscribeEvents();
+      OnHandChanged(0);
     }
     #endregion
 
@@ -64,6 +66,10 @@ namespace UI.Components
     private void SubscribeEvents()
     {
       #region SubscribeEvents
+      if (isMain)
+      {
+        Items.Inventory.OnHandChanged += OnHandChanged;
+      }
       Items.Inventory.OnSlotChanged += OnSlotChange;
       #endregion
     }
@@ -80,6 +86,16 @@ namespace UI.Components
       };
 
       slots[slotId].item = newItem;
+      #endregion
+    }
+
+    /// <summary>Method</summary>
+    private void OnHandChanged(short handIndex)
+    {
+      #region OnHandChanged
+      if (currentHand != null) currentHand.RemoveFromClassList("hand");
+      currentHand = slots[handIndex];
+      currentHand.AddToClassList("hand");
       #endregion
     }
     #endregion
