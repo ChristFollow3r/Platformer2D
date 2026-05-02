@@ -15,10 +15,21 @@ namespace Items
     public const short Rows = 10;
     public const short Cols = 10;
     public static Slot[] slots = new Slot[HotbarItems + Cols + Rows];
+    public static ItemStack hand => slots[handIndex].item;
+    private static short handIndex
+    {
+      get => _handIndex; set
+      {
+        _handIndex = value;
+        OnHandChanged?.Invoke(_handIndex);
+      }
+    }
+    private static short _handIndex = 0;
     #endregion
 
     #region Events
     public static event Action<int, ItemStack> OnSlotChanged;
+    public static event Action<short> OnHandChanged;
     #endregion
 
 
@@ -62,7 +73,6 @@ namespace Items
       // TODO
       #endregion
     }
-
 
     public static ItemStack ClearSlot(int slotId)
     {
