@@ -29,6 +29,12 @@ namespace Items // Maybe I should add this to items?
 
       if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
       {
+        ItemStack itemStack = new()
+        {
+          amount = 1,
+          data = itemData,
+        };
+        Inventory.Add(itemStack);
         Destroy(gameObject);
       }
     }

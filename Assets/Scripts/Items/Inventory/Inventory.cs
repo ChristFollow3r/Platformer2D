@@ -45,9 +45,7 @@ namespace Items
       {
         slot = GetSlotOfItem(item.data);
         if (slot is null) break;
-        Debug.Log($"Adding {item.amount} to slot {slot.id}");
         slot.Add(item);
-        Debug.Log($"New amount is {item.amount}");
 
         OnSlotChanged?.Invoke(slot.id, slot.item);
       } while (item.amount > 0);
