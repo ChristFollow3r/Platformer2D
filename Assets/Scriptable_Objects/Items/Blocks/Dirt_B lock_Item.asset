@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: Grass
+  m_Name: Dirt_B lock_Item
   m_EditorClassIdentifier: 
-  drop: {fileID: 6338159172816223235, guid: ba3271a1067f21440a2315b5ef9d40cc, type: 3}
-  blockType: 3
-  itemName: Grass
-  itemIcon: {fileID: -887617798, guid: 65071482b21a40346bd5ba5e4ea1ec14, type: 3}
+  drop: {fileID: 5499974657267223093, guid: 9d5e7c9b7d433094e9bbf90ec068d530, type: 3}
+  blockType: 2
+  itemName: Dirt
+  itemIcon: {fileID: 5265270087198661167, guid: 709ac7071b8ce8842b5b0da8a0b9d56f, type: 3}
   maxStack: 64
   tier: 2

@@ -9,7 +9,7 @@ namespace Chunks
         public bool isLoaded;
         public const int ChunkSize = 32;
         
-        private Vector2Int chunkPosition;
+        private readonly Vector2Int chunkPosition;
         private readonly Tilemap blockTileMap;
         private readonly Tilemap propTileMap;
         private bool notCreated;
@@ -43,6 +43,13 @@ namespace Chunks
                         tile.sprite = WorldData.BlockDictionary[blockType].sprite;
                         blockTileMap.SetTile(new Vector3Int(i, j, 0), tile);
                         blockTileMap.gameObject.layer = LayerMask.NameToLayer("Block");
+                        
+                        int randomRotation = Random.Range(0, 4);
+                        
+                        if (blockType != BlockType.Grass)
+                        {
+                            blockTileMap.SetTransformMatrix(new Vector3Int(i, j, 0), Matrix4x4.Rotate(Quaternion.Euler(0, 0, randomRotation * 90f)));
+                        }
                     }
 
                     if (propType != PropType.None)
