@@ -73,8 +73,6 @@ namespace UI.Components
     private void SubscribeEvents()
     {
       #region SubscribeEvents
-      Debug.Log($"rootElm is null: {rootElm == null}");
-      Debug.Log($"rootElm pickingMode: {rootElm?.pickingMode}");
 
       rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
       rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);

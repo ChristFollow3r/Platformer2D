@@ -95,7 +95,7 @@ namespace Items
       if (!slot.isEmpty && slot.item.data != item.data) return;
 
       slot.Add(item);
-      OnSlotChanged?.Invoke(slotId, null);
+      OnSlotChanged?.Invoke(slotId, item);
       #endregion
     }
 
@@ -104,7 +104,6 @@ namespace Items
       #region GetSlotOfItem
       foreach (Slot slot in slots)
       {
-        Debug.Log(slot);
         if (slot.isEmpty || (slot.item.data == itemData && !slot.isFull)) return slot;
       }
       return null;

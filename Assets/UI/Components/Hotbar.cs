@@ -1,6 +1,5 @@
-
 using Items;
-using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI.Components
@@ -76,15 +75,18 @@ namespace UI.Components
     private void OnSlotChange(int slotId, ItemStack item)
     {
       #region OnSlotChange
-      if (slotId >= Items.Inventory.HotbarItems) return;
-
-      Item newItem = new Item
+      if (slotId < Items.Inventory.HotbarItems) return;
+      Item itemElm = null;
+      if (item is not null)
       {
-        item = item.data,
-        amount = item.amount
-      };
+        itemElm = new Item
+        {
+          item = item.data,
+          amount = item.amount
+        };
+      }
 
-      slots[slotId].item = newItem;
+      slots[slotId - Items.Inventory.HotbarItems].item = itemElm;
       #endregion
     }
 

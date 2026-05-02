@@ -67,14 +67,17 @@ namespace UI.Components
     {
       #region OnSlotChange
       if (slotId < Items.Inventory.HotbarItems) return;
-
-      Item newItem = new Item
+      Item itemElm = null;
+      if (item is not null)
       {
-        item = item.data,
-        amount = item.amount
-      };
+        itemElm = new Item
+        {
+          item = item.data,
+          amount = item.amount
+        };
+      }
 
-      slots[slotId - Items.Inventory.HotbarItems].item = newItem;
+      slots[slotId - Items.Inventory.HotbarItems].item = itemElm;
       #endregion
     }
     #endregion
