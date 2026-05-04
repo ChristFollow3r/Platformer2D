@@ -90,14 +90,6 @@ namespace Enemies.Skeleton
             isStunned = true;
             skeletonRigidBody.linearVelocity = Vector2.zero;
             skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse);
-            
-            float yAngle = playerDirection > 0 ? 0f : 180f;
-            Quaternion rotation = Quaternion.Euler(0, yAngle, 0);
-            
-            ParticleSystem dustInstance = Instantiate(dustParticles, transform.position, rotation);
-            
-            dustInstance.transform.position += new Vector3(0, 0, 5f);
-            Destroy(dustInstance.gameObject, dustInstance.main.duration);
     
             yield return new WaitForSeconds(0.3f);
             isStunned = false;

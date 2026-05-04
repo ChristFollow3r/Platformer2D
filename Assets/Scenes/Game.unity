@@ -1766,7 +1766,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.624911, g: 0.723085, b: 0.8773585, a: 0}
+  m_BackGroundColor: {r: 0.56470275, g: 0.82918864, b: 0.8490566, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4931,6 +4931,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9184c3a91bed334db5b405c5ad17880, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dustParticles: {fileID: 7696928053657088342, guid: 5746c6ce00fe56c4f82c2192359ebc5e, type: 3}
 --- !u!1001 &1527940766
 PrefabInstance:
   m_ObjectHideFlags: 0

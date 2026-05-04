@@ -6,6 +6,7 @@ namespace Player
 {
     public class PlayerActiveItem : MonoBehaviour
     {
+        [SerializeField] private ParticleSystem dustParticles;
         private static AnimationClip _swingClip;
         
         private Rigidbody2D playerRigidbody;
@@ -68,6 +69,8 @@ namespace Player
             Collider2D hit = Physics2D.OverlapCircle(attackPoint, 1f, 5);
             if (hit is not null)
             {
+                SpawnHitParticles(hit.bounds.ClosestPoint(attackPoint));
+                
                 if (hit.TryGetComponent(out Shared.Health enemyHealth))
                 {
                     enemyHealth.TakeDamage(10, playerDirection, 10);
@@ -89,6 +92,15 @@ namespace Player
             
             if (moveInput.x > 0.1f) facingDirection = 1;
             else if (moveInput.x < -0.1f) facingDirection = -1;
+        }
+
+        private void SpawnHitParticles(Vector2 position)
+        {
+            float yAngle = playerDirection > 0 ? 0f : 180f;
+            Quaternion rotation = Quaternion.Euler(0, yAngle, 0);
+    
+            ParticleSystem instance = Instantiate(dustParticles, position, rotation);
+            Destroy(instance.gameObject, instance.main.duration);
         }
     }
 }
