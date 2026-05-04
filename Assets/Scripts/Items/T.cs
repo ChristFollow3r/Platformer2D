@@ -25,8 +25,8 @@ public class T : MonoBehaviour
       data = itemData2,
       amount = 10
     };
+    Inventory.AddToSlot(testStack3, 15);
     Inventory.Add(testStack);
-    Inventory.Add(testStack3);
     Inventory.Add(testStack2);
   }
 

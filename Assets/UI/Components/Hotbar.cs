@@ -26,7 +26,7 @@ namespace UI.Components
     #region Constructor
     public Hotbar()
     {
-      VisualTreeAsset tree = UnityEngine.Resources.Load<VisualTreeAsset>("UI/Components/Hotbar/Hotbar");
+      VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Components/Hotbar/Hotbar");
       tree.CloneTree(this);
 
       GetElements();
@@ -75,7 +75,7 @@ namespace UI.Components
     private void OnSlotChange(int slotId, ItemStack item)
     {
       #region OnSlotChange
-      if (slotId < Items.Inventory.HotbarItems) return;
+      if (slotId >= Items.Inventory.HotbarItems) return;
       Item itemElm = null;
       if (item is not null)
       {
@@ -86,7 +86,7 @@ namespace UI.Components
         };
       }
 
-      slots[slotId - Items.Inventory.HotbarItems].item = itemElm;
+      slots[slotId].item = itemElm;
       #endregion
     }
 

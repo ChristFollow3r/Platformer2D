@@ -104,6 +104,10 @@ namespace Items
       #region GetSlotOfItem
       foreach (Slot slot in slots)
       {
+        if (!slot.isEmpty && slot.item.data == itemData && !slot.isFull) return slot;
+      }
+      foreach (Slot slot in slots)
+      {
         if (slot.isEmpty || (slot.item.data == itemData && !slot.isFull)) return slot;
       }
       return null;
