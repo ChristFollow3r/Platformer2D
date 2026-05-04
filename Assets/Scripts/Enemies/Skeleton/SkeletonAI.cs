@@ -9,6 +9,7 @@ namespace Enemies.Skeleton
     {
         [SerializeField] private Enemy skeletonData;
         [SerializeField] private LayerMask groundLayer;
+        [SerializeField] private ParticleSystem particles;  
         
         private Rigidbody2D        skeletonRigidBody;
         private CapsuleCollider2D  skeletonCollider;
@@ -80,6 +81,8 @@ namespace Enemies.Skeleton
 
         private void HandleHit(int playerDirection, float knockback)
         {
+            ParticleSystem dustParticles = Instantiate(particles, transform.position, Quaternion.identity);
+            Destroy(dustParticles.gameObject, dustParticles.main.duration);
             StartCoroutine(SkeletonHit(playerDirection, knockback));
         }
 

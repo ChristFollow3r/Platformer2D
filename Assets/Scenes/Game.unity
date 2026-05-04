@@ -7248,6 +7248,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
+  particles: {fileID: 7696928053657088342, guid: 5746c6ce00fe56c4f82c2192359ebc5e, type: 3}
 --- !u!50 &2117553318
 Rigidbody2D:
   serializedVersion: 5
