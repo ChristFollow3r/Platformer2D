@@ -8,6 +8,7 @@ TagManager:
   - Result
   - CraftingSlots
   - Platform
+  - Enemy
   layers:
   - Default
   - TransparentFX

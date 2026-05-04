@@ -9,6 +9,12 @@ namespace Player
         [SerializeField] private ParticleSystem dustParticles;
         private static AnimationClip _swingClip;
         
+        [Header("Temporary Audio")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip swingSound;
+        [SerializeField] private AudioClip hitSound;
+        private readonly float pitchVariation = 0.1f;
+        
         private Rigidbody2D playerRigidbody;
         private Animator animator;
         private SpriteRenderer toolSprite; // To do: Add listener method that gets the item in the hotbar to change the sprite
@@ -62,13 +68,17 @@ namespace Player
         {
             activeColor.a       = 1;
             toolSprite.color    = activeColor;
+            PlayRandomizedSound(swingSound);
+            
             playerDirection = facingDirection;
             Vector2 attackPoint = (Vector2)transform.position + new Vector2(playerDirection * 0.2f, 0f);
             
             animator.SetBool(Active, true);
             Collider2D hit = Physics2D.OverlapCircle(attackPoint, 1f, 5);
-            if (hit is not null)
+            
+            if (hit is not null && hit.CompareTag("Enemy"))
             {
+                PlayRandomizedSound(hitSound);
                 SpawnHitParticles(hit.bounds.ClosestPoint(attackPoint));
                 
                 if (hit.TryGetComponent(out Shared.Health enemyHealth))
@@ -102,6 +112,15 @@ namespace Player
     
             ParticleSystem instance = Instantiate(dustParticles, position + offset, rotation);
             Destroy(instance.gameObject, instance.main.duration);
+        }
+        
+        private void PlayRandomizedSound(AudioClip clip)
+        {
+            if (clip is null) return;
+            float randomPitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
+    
+            audioSource.pitch = randomPitch;
+            audioSource.PlayOneShot(clip);
         }
     }
 }

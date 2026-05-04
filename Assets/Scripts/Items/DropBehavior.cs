@@ -6,6 +6,8 @@ namespace Items // Maybe I should add this to items?
 {
     public class DropBehavior : MonoBehaviour
     {
+        [SerializeField] private AudioClip dropSound;
+        
         private PolygonCollider2D collisionCollider;
         private readonly float pickUpRadius = 0.4f;
         private readonly float speed = 10f;
@@ -26,6 +28,7 @@ namespace Items // Maybe I should add this to items?
 
             if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
             {
+                AudioSource.PlayClipAtPoint(dropSound, transform.position);
                 var item = GetComponent<ItemReference>().GetItem();
                 playerManager.Inventory.AddItemToHotbar(item, 1);
                 Destroy(gameObject);
@@ -33,8 +36,7 @@ namespace Items // Maybe I should add this to items?
             
         
         }
-    
-    
+        
     
     }
 }
