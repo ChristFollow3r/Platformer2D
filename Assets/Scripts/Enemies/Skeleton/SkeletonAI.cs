@@ -81,18 +81,23 @@ namespace Enemies.Skeleton
 
         private void HandleHit(int playerDirection, float knockback)
         {
-            ParticleSystem dustParticles = Instantiate(particles, transform.position, Quaternion.identity);
-            Destroy(dustParticles.gameObject, dustParticles.main.duration);
             StartCoroutine(SkeletonHit(playerDirection, knockback));
         }
 
         private IEnumerator SkeletonHit(int playerDirection, float knockback)
         {
-            isStunned                        = true;
-            skeletonRigidBody.linearVelocity =  Vector2.zero;
+            isStunned = true;
+            skeletonRigidBody.linearVelocity = Vector2.zero;
             skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 3f), ForceMode2D.Impulse);
+            
+            float angle = playerDirection == 1 ? 180f : -180f;
+            Quaternion rotation = Quaternion.Euler(0, angle, 0);
+            ParticleSystem dustParticles = Instantiate(particles, transform.position, rotation, transform);
+            dustParticles.transform.localPosition = new Vector3(0, 0, 5f);
+            Destroy(dustParticles.gameObject, dustParticles.main.duration);
+            
             yield return new WaitForSeconds(0.3f);
-            isStunned                        = false;
+            isStunned = false;
 
         }
     }
