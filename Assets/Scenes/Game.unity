@@ -1013,6 +1013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  deathDrop: {fileID: 0}
 --- !u!1 &139953880
 GameObject:
   m_ObjectHideFlags: 0
@@ -7379,7 +7380,7 @@ Transform:
   m_GameObject: {fileID: 2117553316}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 83.7, y: 77.5, z: 0}
+  m_LocalPosition: {x: 82.017, y: 77.858, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7434,6 +7435,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 40
+  deathDrop: {fileID: 1173184710220314676, guid: 72d6062399e1ef14ab98406b24cf8ef9, type: 3}
 --- !u!1001 &2121765858
 PrefabInstance:
   m_ObjectHideFlags: 0

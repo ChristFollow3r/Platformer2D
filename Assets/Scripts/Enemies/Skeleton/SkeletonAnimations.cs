@@ -123,6 +123,8 @@ namespace Enemies.Skeleton
             float animationLength = skeletonAnimator.GetCurrentAnimatorStateInfo(0).length;
             yield return new WaitForSeconds(animationLength);
             
+            yield return new WaitForSeconds(2.0f);
+            skeletonHealth.SpawnDeathDrops();
             Destroy(gameObject);
         }
     }
