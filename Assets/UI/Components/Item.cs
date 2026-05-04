@@ -16,6 +16,7 @@ namespace UI.Components
     [UxmlAttribute] public bool isBeingDragged { get => _isBeingDragged; set => SetIsBeingDragged(value); }
 
     private Vector2 _dragOffset;
+    private bool isDraggable;
     #endregion
 
     #region Backers
@@ -31,13 +32,11 @@ namespace UI.Components
     #endregion
 
     #region Constructor
-    public Item()
+    public Item() { Init(); }
+    public Item(bool isDraggable)
     {
-      VisualTreeAsset tree = UnityEngine.Resources.Load<VisualTreeAsset>("UI/Components/Item/Item");
-      tree.CloneTree(this);
-
-      GetElements();
-      SubscribeEvents();
+      this.isDraggable = isDraggable;
+      Init();
     }
     #endregion
 
@@ -61,6 +60,18 @@ namespace UI.Components
     #endregion
 
     #region Methods
+    /// <summary>Method</summary>
+    private void Init()
+    {
+      #region Init
+      VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Components/Item/Item");
+      tree.CloneTree(this);
+
+      GetElements();
+      SubscribeEvents();
+      #endregion
+    }
+
     private void GetElements()
     {
       #region GetElements
@@ -73,7 +84,7 @@ namespace UI.Components
     private void SubscribeEvents()
     {
       #region SubscribeEvents
-
+      if (!isDraggable) return;
       rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
       rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);
       rootElm.RegisterCallback<PointerUpEvent>(OnPointerUp);

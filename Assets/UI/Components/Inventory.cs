@@ -70,7 +70,7 @@ namespace UI.Components
       Item itemElm = null;
       if (item is not null)
       {
-        itemElm = new Item
+        itemElm = new Item(true)
         {
           item = item.data,
           amount = item.amount
