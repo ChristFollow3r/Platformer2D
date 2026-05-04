@@ -740,7 +740,7 @@ Transform:
   m_GameObject: {fileID: 91711886}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 84.699, y: 77.67799, z: -10.018238}
+  m_LocalPosition: {x: 74.99, y: 81.27, z: -10.018238}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -915,7 +915,7 @@ Transform:
   m_GameObject: {fileID: 139018186}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 84.499, y: 77.478, z: -0.018237974}
+  m_LocalPosition: {x: 74.79, y: 81.07, z: -0.018237974}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1816,7 +1816,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 84.699, y: 77.67799, z: -10.018238}
+  m_LocalPosition: {x: 74.99, y: 81.27, z: -10.018238}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7248,7 +7248,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  particles: {fileID: 7696928053657088342, guid: 5746c6ce00fe56c4f82c2192359ebc5e, type: 3}
+  dustParticles: {fileID: 7696928053657088342, guid: 5746c6ce00fe56c4f82c2192359ebc5e, type: 3}
 --- !u!50 &2117553318
 Rigidbody2D:
   serializedVersion: 5
@@ -7381,7 +7381,7 @@ Transform:
   m_GameObject: {fileID: 2117553316}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 82.017, y: 77.858, z: 0}
+  m_LocalPosition: {x: 77.51, y: 81.36, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7422,6 +7422,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skeletonData: {fileID: 11400000, guid: d28b6fbfda4698147a0b3fbc96558e58, type: 2}
+  boneDustParticles: {fileID: 7984994820258352716, guid: fa33159383f0b894b96abdb794539800, type: 3}
   isAttacking: 0
 --- !u!114 &2117553324
 MonoBehaviour:

@@ -8,17 +8,19 @@ namespace Player
     {
         private static AnimationClip _swingClip;
         
-        private Rigidbody2D          playerRigidbody;
-        private Animator             animator;
-        private SpriteRenderer       toolSprite; // To do: Add listener method that gets the item in the hotbar to change the sprite
-        private Color                activeColor;
+        private Rigidbody2D playerRigidbody;
+        private Animator animator;
+        private SpriteRenderer toolSprite; // To do: Add listener method that gets the item in the hotbar to change the sprite
+        private Color activeColor;
         
-        private static readonly int  Active = Animator.StringToHash("isActive");
-        private float                swingClipDuration;
-        private float                playerDirection;
+        private static readonly int Active = Animator.StringToHash("isActive");
+        private float swingClipDuration;
         
-        private InputSystem_Actions  input;
-        private bool                 isAttacking;
+        private int playerDirection;
+        private int facingDirection;
+        
+        private InputSystem_Actions input;
+        private bool isAttacking;
     
         private void Awake()
         {
@@ -43,6 +45,7 @@ namespace Player
 
         private void Update()
         {
+            UpdateFacingDirection();
             PlayAnimation();
         }
 
@@ -58,7 +61,7 @@ namespace Player
         {
             activeColor.a       = 1;
             toolSprite.color    = activeColor;
-            playerDirection     = playerRigidbody.linearVelocityX >= 0 ? 1f : -1f;
+            playerDirection = facingDirection;
             Vector2 attackPoint = (Vector2)transform.position + new Vector2(playerDirection * 0.2f, 0f);
             
             animator.SetBool(Active, true);
@@ -67,7 +70,7 @@ namespace Player
             {
                 if (hit.TryGetComponent(out Shared.Health enemyHealth))
                 {
-                    enemyHealth.TakeDamage(10, playerRigidbody.linearVelocityX > 0 ? 1 : -1, 10);
+                    enemyHealth.TakeDamage(10, playerDirection, 10);
                 }
             }
             yield return new WaitForSeconds(swingClipDuration);
@@ -78,6 +81,14 @@ namespace Player
             animator.SetBool(Active, false);
             isAttacking         = false;
             yield return null;
+        }
+
+        private void UpdateFacingDirection()
+        {
+            Vector2 moveInput = input.Player.Move.ReadValue<Vector2>();
+            
+            if (moveInput.x > 0.1f) facingDirection = 1;
+            else if (moveInput.x < -0.1f) facingDirection = -1;
         }
     }
 }

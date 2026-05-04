@@ -7,6 +7,7 @@ namespace Enemies.Skeleton
     public class SkeletonAnimations : MonoBehaviour
     {
         [SerializeField] private Enemy skeletonData;
+        [SerializeField] private ParticleSystem boneDustParticles;
         
         private Animator      skeletonAnimator;
         private Rigidbody2D   skeletonRigidbody;
@@ -72,7 +73,7 @@ namespace Enemies.Skeleton
             Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(skeletonData.attackOffset.x * transform.localScale.x, skeletonData.attackOffset.y);
             Collider2D hit = Physics2D.OverlapBox(finalAttackPosition, skeletonData.hitBoxSize, 0, skeletonData.playerLayer);
             
-            if (hit is not null) // Fixed: changed from 'is null'
+            if (hit is not null)
             {
                 if (hit.TryGetComponent(out Shared.Health health))
                 {
@@ -125,6 +126,8 @@ namespace Enemies.Skeleton
             
             yield return new WaitForSeconds(2.0f);
             skeletonHealth.SpawnDeathDrops();
+            var boneDust = Instantiate(boneDustParticles, transform.position, Quaternion.identity); 
+            Destroy(boneDust, boneDust.main.duration);
             Destroy(gameObject);
         }
     }

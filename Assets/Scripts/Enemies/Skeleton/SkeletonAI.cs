@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Enemies.Skeleton
 {
@@ -9,7 +10,7 @@ namespace Enemies.Skeleton
     {
         [SerializeField] private Enemy skeletonData;
         [SerializeField] private LayerMask groundLayer;
-        [SerializeField] private ParticleSystem particles;  
+        [SerializeField] private ParticleSystem dustParticles;  
         
         private Rigidbody2D        skeletonRigidBody;
         private CapsuleCollider2D  skeletonCollider;
@@ -88,14 +89,16 @@ namespace Enemies.Skeleton
         {
             isStunned = true;
             skeletonRigidBody.linearVelocity = Vector2.zero;
-            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 3f), ForceMode2D.Impulse);
+            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse);
             
-            float angle = playerDirection == 1 ? 180f : -180f;
-            Quaternion rotation = Quaternion.Euler(0, angle, 0);
-            ParticleSystem dustParticles = Instantiate(particles, transform.position, rotation, transform);
-            dustParticles.transform.localPosition = new Vector3(0, 0, 5f);
-            Destroy(dustParticles.gameObject, dustParticles.main.duration);
+            float yAngle = playerDirection > 0 ? 0f : 180f;
+            Quaternion rotation = Quaternion.Euler(0, yAngle, 0);
             
+            ParticleSystem dustInstance = Instantiate(dustParticles, transform.position, rotation);
+            
+            dustInstance.transform.position += new Vector3(0, 0, 5f);
+            Destroy(dustInstance.gameObject, dustInstance.main.duration);
+    
             yield return new WaitForSeconds(0.3f);
             isStunned = false;
 
