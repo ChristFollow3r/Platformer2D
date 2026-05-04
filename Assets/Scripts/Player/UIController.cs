@@ -39,7 +39,7 @@ namespace Player
     private void Start()
     {
       #region Start
-      // overlay.rootVisualElement.style.display = DisplayStyle.None;
+      CloseOverlay();
       #endregion
     }
     /// <summary>Ran by unity each frame</summary>
@@ -75,6 +75,9 @@ namespace Player
       #region OpenOverlay
       OnOverlayOpen?.Invoke(overlayType);
       // TODO: set type of overlay for ui
+      hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
+      overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
+      isOverlayOpen = true;
       #endregion
     }
 
@@ -83,6 +86,9 @@ namespace Player
     {
       #region CloseOverlay
       OnOverlayClose?.Invoke();
+      hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
+      overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
+      isOverlayOpen = false;
       #endregion
     }
   }
