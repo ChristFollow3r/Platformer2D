@@ -69,7 +69,8 @@ namespace Enemies.Skeleton
         private void CheckForObstacles()
         {
             isGrounded         = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
-            theresBlockInFront = Physics2D.Raycast(transform.position, Vector2.right * direction, 0.8f, groundLayer).collider is not null;
+            theresBlockInFront = Physics2D.Raycast(new Vector2(transform.position.x, skeletonCollider.bounds.min.y + 0.1f), 
+                         Vector2.right * direction, 0.4f, groundLayer).collider is not null;
             
             if (isGrounded && theresBlockInFront)
             {
