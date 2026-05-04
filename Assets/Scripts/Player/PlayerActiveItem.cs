@@ -98,8 +98,9 @@ namespace Player
         {
             float yAngle = playerDirection > 0 ? 0f : 180f;
             Quaternion rotation = Quaternion.Euler(0, yAngle, 0);
+            Vector2 offset = new Vector2(0.2f, 0f);
     
-            ParticleSystem instance = Instantiate(dustParticles, position, rotation);
+            ParticleSystem instance = Instantiate(dustParticles, position + offset, rotation);
             Destroy(instance.gameObject, instance.main.duration);
         }
     }
