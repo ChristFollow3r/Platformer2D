@@ -91,6 +91,12 @@ namespace UI.Components
       _dragOffset = e.localPosition;
       rootElm.CapturePointer(e.pointerId);
       e.StopPropagation();
+
+      Vector2 localPos = parent.WorldToLocal(e.position);
+      style.left = localPos.x - _dragOffset.x;
+      style.top = localPos.y - _dragOffset.y;
+
+      Debug.Log("Drag start");
       #endregion
     }
 

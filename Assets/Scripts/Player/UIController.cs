@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -17,8 +18,12 @@ namespace Player
     public UIDocument overlay;
     public UIDocument hud;
 
-    private bool isOverlayOpen;
-    private bool canOpenInventory;
+    [SerializeField] private bool isOverlayOpen;
+    #endregion
+
+    #region Events
+    public static event Action<OverlayType> OnOverlayOpen;
+    public static event Action OnOverlayClose;
     #endregion
 
     #region Unity
@@ -28,6 +33,13 @@ namespace Player
       #region Awake
       playerInput = new InputSystem_Actions();
       playerInput.Enable();
+      #endregion
+    }
+    /// <summary>Ran by unity on first enable</summary>
+    private void Start()
+    {
+      #region Start
+      // overlay.rootVisualElement.style.display = DisplayStyle.None;
       #endregion
     }
     /// <summary>Ran by unity each frame</summary>
@@ -48,20 +60,11 @@ namespace Player
         isOverlayOpen = !isOverlayOpen;
 
         if (isOverlayOpen) OpenOverlay(OverlayType.Inventory);
-        else
-        {
-          overlay.enabled = false;
-          hud.enabled = true;
-        }
+        else CloseOverlay();
         return;
       }
 
-      if (playerInput.UI.CloseOverlay.WasPressedThisFrame() && isOverlayOpen)
-      {
-        overlay.enabled = false;
-        hud.enabled = true;
-        isOverlayOpen = false;
-      }
+      if (playerInput.UI.CloseOverlay.WasPressedThisFrame() && isOverlayOpen) CloseOverlay();
       #endregion
     }
     #endregion
@@ -70,9 +73,16 @@ namespace Player
     private void OpenOverlay(OverlayType overlayType)
     {
       #region OpenOverlay
-      overlay.enabled = false;
+      OnOverlayOpen?.Invoke(overlayType);
       // TODO: set type of overlay for ui
-      hud.enabled = true;
+      #endregion
+    }
+
+
+    private void CloseOverlay()
+    {
+      #region CloseOverlay
+      OnOverlayClose?.Invoke();
       #endregion
     }
   }
