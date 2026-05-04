@@ -9,12 +9,12 @@ namespace UI.Components
   {
 
     #region Data
-    [UxmlAttribute] public bool isMain { get; set; }
+    [UxmlAttribute] public bool isMain { get => _isMain; set => SetIsMain(value); }
     private Slot[] slots = new Slot[Items.Inventory.HotbarItems];
     #endregion
 
     #region Backers
-
+    private bool _isMain = false;
     #endregion
 
     #region Elements
@@ -37,6 +37,15 @@ namespace UI.Components
     #endregion
 
     #region Setters
+    private void SetIsMain(bool isMain)
+    {
+      #region SetIsMain
+      _isMain = isMain;
+      if (isMain) backgroundElm.AddToClassList("hotbar-background-show");
+      else backgroundElm.RemoveFromClassList("hotbar-background-show");
+
+      #endregion
+    }
     #endregion
 
     #region Methods
