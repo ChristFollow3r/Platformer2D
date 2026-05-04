@@ -31,9 +31,22 @@ namespace Enemies.Skeleton
         private void OnEnable()
         {
             aiScript.OnRange += HandleAttackTrigger;
-            if (skeletonHealth != null) skeletonHealth.OnKnockbackRecieved += PlayHitAnimation;
+            if (skeletonHealth != null)
+            {
+                skeletonHealth.OnKnockbackRecieved += PlayHitAnimation;
+                skeletonHealth.OnDeath += PlayDeathAnimation;
+            }
         }
-        private void OnDisable() => aiScript.OnRange -= HandleAttackTrigger;
+
+        private void OnDisable()
+        {
+            aiScript.OnRange -= HandleAttackTrigger;
+            if (skeletonHealth != null)
+            {
+                skeletonHealth.OnKnockbackRecieved -= PlayHitAnimation;
+                skeletonHealth.OnDeath -= PlayDeathAnimation;
+            }
+        }
 
         private void Update()
         {
@@ -86,6 +99,31 @@ namespace Enemies.Skeleton
             skeletonAnimator.SetBool(Attacking, false);
             yield return new WaitForSeconds(0.5f);
             skeletonAnimator.SetBool(Hit, false);
+        }
+        
+        private void PlayDeathAnimation()
+        {
+            StopAllCoroutines();
+            aiScript.enabled = false;
+            skeletonRigidbody.bodyType = RigidbodyType2D.Static;
+            if (TryGetComponent(out Collider2D col)) col.enabled = false;
+                
+            StartCoroutine(SkeletonDeathAnimation());
+        }
+
+        private IEnumerator SkeletonDeathAnimation()
+        {
+            skeletonAnimator.SetBool(Walking, false);
+            skeletonAnimator.SetBool(Attacking, false);
+            skeletonAnimator.SetBool(Hit, false);
+    
+            skeletonAnimator.SetTrigger(Dead);
+            yield return new WaitForEndOfFrame();
+            
+            float animationLength = skeletonAnimator.GetCurrentAnimatorStateInfo(0).length;
+            yield return new WaitForSeconds(animationLength);
+            
+            Destroy(gameObject);
         }
     }
 }

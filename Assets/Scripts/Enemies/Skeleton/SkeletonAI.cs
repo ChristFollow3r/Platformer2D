@@ -16,8 +16,6 @@ namespace Enemies.Skeleton
         private Transform          target;
         private SkeletonAnimations animations;
         
-        private static readonly int Hit = Animator.StringToHash("isHit");
-        
         private int                direction;
         private bool               isGrounded;
         private bool               theresBlockInFront;

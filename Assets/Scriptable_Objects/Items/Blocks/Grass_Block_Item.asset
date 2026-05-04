@@ -15,6 +15,6 @@ MonoBehaviour:
   drop: {fileID: 6338159172816223235, guid: ba3271a1067f21440a2315b5ef9d40cc, type: 3}
   blockType: 3
   itemName: Grass
-  itemIcon: {fileID: -8810848654829227637, guid: 85041bd3fd0583745a241941dd43448d, type: 3}
+  itemIcon: {fileID: -7310187216160194262, guid: 639707e2568ebe74a871c3a1f7f8e534, type: 3}
   maxStack: 64
   tier: 2

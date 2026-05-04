@@ -15,6 +15,6 @@ MonoBehaviour:
   drop: {fileID: 5499974657267223093, guid: 9d5e7c9b7d433094e9bbf90ec068d530, type: 3}
   blockType: 2
   itemName: Dirt
-  itemIcon: {fileID: 5265270087198661167, guid: 709ac7071b8ce8842b5b0da8a0b9d56f, type: 3}
+  itemIcon: {fileID: -275371228395926533, guid: 341468477d20b5b499b7d0b2ba9f0575, type: 3}
   maxStack: 64
   tier: 2

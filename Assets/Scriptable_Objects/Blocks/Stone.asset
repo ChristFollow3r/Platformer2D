@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockPrefab: {fileID: 8411808859423680847, guid: 61a70d617d613ce45a94478267fe183f, type: 3}
   blockName: Stone
-  sprite: {fileID: -307663048766948221, guid: aac8ee5d823d8364393df78e5455b019, type: 3}
+  sprite: {fileID: -8783898613374323236, guid: e942ef862794d9541919afc1ab35fc20, type: 3}
   type: 4
   hardness: 10
