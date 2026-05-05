@@ -13,16 +13,15 @@ namespace UI.Components
     [UxmlAttribute] public ItemData item { get => _item; set => SetItem(value); }
     [UxmlAttribute] public Slot slot { get => _slot; set => _slot = value; }
     [UxmlAttribute] public int amount { get => int.Parse(amountElm.text); set => amountElm.text = value.ToString(); }
-    [UxmlAttribute] public bool isBeingDragged { get => _isBeingDragged; set => SetIsBeingDragged(value); }
 
-    private Vector2 _dragOffset;
+    private Vector2 _dragOffset = new Vector2(50, 50);
     private bool isDraggable;
     #endregion
 
     #region Backers
     private ItemData _item;
     private Slot _slot;
-    private bool _isBeingDragged = false;
+    private bool isBeingDragged = false;
     #endregion
 
     #region Elements
@@ -48,19 +47,9 @@ namespace UI.Components
       iconElm.image = _item.sprite.texture;
       #endregion
     }
-
-    private void SetIsBeingDragged(bool isBeingDragged)
-    {
-      #region SetIsBeingDragged
-      _isBeingDragged = isBeingDragged;
-      if (_isBeingDragged) AddToClassList("item-dragged");
-      else RemoveFromClassList("item-dragged");
-      #endregion
-    }
     #endregion
 
     #region Methods
-    /// <summary>Method</summary>
     private void Init()
     {
       #region Init
@@ -95,19 +84,16 @@ namespace UI.Components
     private void OnPointerDown(PointerDownEvent e)
     {
       #region OnPointerDown
-      var panelRoot = panel.visualTree.Q<VisualElement>();
-      panelRoot.Add(this);
 
       isBeingDragged = true;
-      _dragOffset = e.localPosition;
       rootElm.CapturePointer(e.pointerId);
       e.StopPropagation();
 
       Vector2 localPos = parent.WorldToLocal(e.position);
-      style.left = localPos.x - _dragOffset.x;
-      style.top = localPos.y - _dragOffset.y;
+      Vector2 target = localPos - _dragOffset;
+      TweenTo(target, 100);
 
-      Debug.Log("Drag start");
+      rootElm.AddToClassList("item-dragged");
       #endregion
     }
 
@@ -115,6 +101,9 @@ namespace UI.Components
     {
       #region OnPointerMove
       if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
+
+      StopTween();
+
       Vector2 localPos = parent.WorldToLocal(e.position);
       style.left = localPos.x - _dragOffset.x;
       style.top = localPos.y - _dragOffset.y;
@@ -127,12 +116,41 @@ namespace UI.Components
       isBeingDragged = false;
       rootElm.ReleasePointer(e.pointerId);
 
-      RemoveFromHierarchy();
-      slot.item = this;
 
-      style.left = 0;
-      style.top = 0;
+      TweenTo(Vector2.zero, 100);
+      rootElm.RemoveFromClassList("item-dragged");
       #endregion
+    }
+    #endregion
+
+    #region Utils
+    private IVisualElementScheduledItem _positionTween;
+
+    private void TweenTo(Vector2 target, float duration)
+    {
+      StopTween();
+
+      float elapsed = 0f;
+      float startX = style.left.value.value;
+      float startY = style.top.value.value;
+
+      _positionTween = schedule.Execute(() =>
+      {
+        elapsed += 16;
+        float t = Mathf.Clamp01(elapsed / duration);
+        float ease = t * t * t; // ease in cubic
+
+        style.left = Mathf.Lerp(startX, target.x, ease);
+        style.top = Mathf.Lerp(startY, target.y, ease);
+
+        if (t >= 1f) StopTween();
+      }).Every(16);
+    }
+
+    private void StopTween()
+    {
+      _positionTween?.Pause();
+      _positionTween = null;
     }
     #endregion
   }
