@@ -3,7 +3,9 @@
     width: 75px;
     height: 75px;
     flex-shrink: 0;
-    transition-duration: 0.1s;
+
+    transition-property: all;
+    transition-duration: 100ms;
     transition-timing-function: ease-in;
 }
 
@@ -37,7 +39,6 @@
 }
 
 .item-dragged {
-    /* position: absolute; */
     width: 100px;
     height: 100px;
     z-index: 100;

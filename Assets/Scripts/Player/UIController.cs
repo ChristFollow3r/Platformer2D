@@ -22,7 +22,7 @@ namespace Player
     #endregion
 
     #region Events
-    public static event Action<OverlayType> OnOverlayOpen;
+    public static event Action<OverlayType, object> OnOverlayOpen;
     public static event Action OnOverlayClose;
     #endregion
 
@@ -70,10 +70,10 @@ namespace Player
     #endregion
 
 
-    private void OpenOverlay(OverlayType overlayType)
+    public void OpenOverlay(OverlayType overlayType, object data = null)
     {
       #region OpenOverlay
-      OnOverlayOpen?.Invoke(overlayType);
+      OnOverlayOpen?.Invoke(overlayType, data);
       // TODO: set type of overlay for ui
       hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
       overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
@@ -82,7 +82,7 @@ namespace Player
     }
 
 
-    private void CloseOverlay()
+    public void CloseOverlay()
     {
       #region CloseOverlay
       OnOverlayClose?.Invoke();
