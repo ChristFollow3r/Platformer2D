@@ -34,7 +34,7 @@ namespace Items // Maybe I should add this to items?
           amount = 1,
           data = itemData,
         };
-        Inventory.Add(itemStack);
+        Inventory.Singleton.Add(itemStack);
         Destroy(gameObject);
       }
     }

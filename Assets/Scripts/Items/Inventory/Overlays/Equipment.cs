@@ -15,7 +15,8 @@ namespace Items.Overlays
     Bots
   }
 
-  public class Equipment : Overlay
+
+  public class Equipment : Overlay, IInventory
   {
     #region Data
     public const short EquipmentSlots = 5;
@@ -26,7 +27,7 @@ namespace Items.Overlays
     #endregion
 
     #region Events
-    public static event Action<int, ItemStack> OnSlotChanged;
+    public event Action<int, ItemStack> OnSlotChanged;
     #endregion
 
     #region Contructor
@@ -67,17 +68,42 @@ namespace Items.Overlays
     public bool AddToCraftingSlot(int slotId, ItemStack itemStack)
     {
       #region AddToCraftingSlot
-      if (slotId < EquipmentSlots || slotId >= EquipmentSlots + CraftingSlots) return false;
+      if (slotId < 0 || slotId >= CraftingSlots) return false;
 
-      Slot slot = craftingSlots[slotId - EquipmentSlots];
+      Slot slot = craftingSlots[slotId];
       if (!slot.isEmpty && slot.item.data != itemStack.data) return false;
 
       slot.Add(itemStack);
       OnSlotChanged?.Invoke(slot.id, slot.item);
 
       ItemStack result = CraftingUtils.EvaluateCraft(craftingSlots.Select(s => s.item).ToList());
-      // TODO: assign result
+      resultSlot.item = null;
+      resultSlot.Add(result);
+      OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
       return true;
+      #endregion
+    }
+
+
+    public void Add(ItemStack itemStack) => Inventory.Singleton.Drop(itemStack);
+
+    public bool AddToSlot(ItemStack itemStack, int slotId)
+    {
+      #region AddToSlot
+
+      #endregion
+    }
+    public bool RemoveAmount(int slotId, short amount)
+    {
+      #region RemoveAmount
+
+      #endregion
+    }
+
+    public ItemStack ClearSlot(int slotId)
+    {
+      #region ClearSlot
+      return null;
       #endregion
     }
     #endregion

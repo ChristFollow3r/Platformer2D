@@ -13,6 +13,9 @@ namespace UI.Components
     private Slot[] equipmentSlots = new Slot[Items.Overlays.Equipment.EquipmentSlots];
     private Slot[] craftingSlots = new Slot[4];
     private Slot resultSlot;
+
+    private Slot[] allSlots = new Slot[Items.Overlays.Equipment.EquipmentSlots + Items.Overlays.Equipment.CraftingSlots + 1];
+    public Items.Overlays.Equipment equipment;
     #endregion
 
     #region Backers
@@ -26,17 +29,27 @@ namespace UI.Components
     #endregion
 
     #region Constructor
-    public Equipment()
+    public Equipment() { Init(); }
+    public Equipment(Items.Overlays.Equipment equipment)
     {
+      this.equipment = equipment;
+      Init();
+    }
+    #endregion
+
+    #region Methods
+    private void Init()
+    {
+      #region Init
       VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Components/Equipment/Equipment");
       tree.CloneTree(this);
 
       GetElements();
       CreateSlots();
+      SubscribeEvents();
+      #endregion
     }
-    #endregion
 
-    #region Methods
     private void GetElements()
     {
       #region GetElements
@@ -57,6 +70,7 @@ namespace UI.Components
         equipmentList.Add(slot);
         equipmentSlots[i] = slot;
         slot.slotId = i;
+        allSlots[slot.slotId] = slot;
       }
 
       for (short i = 0; i < craftingSlots.Length; i++)
@@ -71,10 +85,35 @@ namespace UI.Components
         craftingGrid.Add(slot);
         craftingSlots[i] = slot;
         slot.slotId = (short)(equipmentSlots.Length + i);
+        allSlots[slot.slotId] = slot;
       }
 
-      resultSlot = new Slot();
+      resultSlot = new Slot() { slotId = (short)(equipmentSlots.Length + craftingSlots.Length) };
       craftingHolder.Add(resultSlot);
+      allSlots[resultSlot.slotId] = resultSlot;
+      #endregion
+    }
+    private void SubscribeEvents()
+    {
+      #region SubscribeEvents
+      if (equipment == null) return;
+      equipment.OnSlotChanged += OnSlotChanged;
+      #endregion
+    }
+
+    private void OnSlotChanged(int slotId, ItemStack item)
+    {
+      #region OnSlotChange
+      Item itemElm = null;
+      if (item is not null)
+      {
+        itemElm = new Item(equipment, true)
+        {
+          item = item.data,
+          amount = item.amount
+        };
+      }
+      allSlots[slotId].item = itemElm;
       #endregion
     }
     #endregion

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Data;
+using Items;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -18,6 +19,7 @@ namespace UI.Components
 
     private Vector2 _dragOffset = new Vector2(50, 50);
     private bool isDraggable;
+    private IInventory inventory;
     #endregion
 
     #region Backers
@@ -34,8 +36,9 @@ namespace UI.Components
 
     #region Constructor
     public Item() { Init(); }
-    public Item(bool isDraggable)
+    public Item(IInventory inventory, bool isDraggable)
     {
+      this.inventory = inventory;
       this.isDraggable = isDraggable;
       Init();
     }
@@ -93,7 +96,7 @@ namespace UI.Components
         stay = (short)Mathf.Floor(amount / 2);
         leave = (short)(amount - stay);
 
-        Item ghost = new Item(true)
+        Item ghost = new Item(inventory, true)
         {
           item = item,
           amount = leave,
@@ -110,11 +113,11 @@ namespace UI.Components
         ghost.isBeingDragged = true;
         e.StopPropagation();
 
-        Items.Inventory.RemoveAmount(slot.slotId, leave);
+        inventory.RemoveAmount(slot.slotId, leave);
       }
       else
       {
-        Item ghost = new Item(true)
+        Item ghost = new Item(inventory, true)
         {
           item = item,
           amount = amount,
@@ -131,7 +134,7 @@ namespace UI.Components
         ghost.isBeingDragged = true;
         e.StopPropagation();
 
-        Items.Inventory.ClearSlot(slot.slotId);
+        inventory.ClearSlot(slot.slotId);
       }
 
       #endregion
@@ -165,12 +168,12 @@ namespace UI.Components
         // TODO: Add drag to outside
         if (element is not Slot targetSlot) continue;
 
-        bool sucess = Items.Inventory.AddToSlot(stack, targetSlot.slotId);
+        bool sucess = inventory.AddToSlot(stack, targetSlot.slotId);
         if (sucess) { RemoveFromHierarchy(); return; }
         break;
       }
 
-      if (!Items.Inventory.AddToSlot(stack, slot.slotId)) Items.Inventory.Add(stack);
+      if (!inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
       RemoveFromHierarchy();
       #endregion
     }

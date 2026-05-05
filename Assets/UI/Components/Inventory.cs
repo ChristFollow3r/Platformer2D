@@ -61,17 +61,17 @@ namespace UI.Components
     private void SubscribeEvents()
     {
       #region SubscribeEvents
-      Items.Inventory.OnSlotChanged += OnSlotChange;
+      Items.Inventory.Singleton.OnSlotChanged += OnSlotChanged;
       #endregion
     }
-    private void OnSlotChange(int slotId, ItemStack item)
+    private void OnSlotChanged(int slotId, ItemStack item)
     {
       #region OnSlotChange
       if (slotId < Items.Inventory.HotbarSlots) return;
       Item itemElm = null;
       if (item is not null)
       {
-        itemElm = new Item(true)
+        itemElm = new Item(Items.Inventory.Singleton, true)
         {
           item = item.data,
           amount = item.amount

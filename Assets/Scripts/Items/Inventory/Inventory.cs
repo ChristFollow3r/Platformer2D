@@ -7,16 +7,17 @@ using UnityEngine;
 namespace Items
 {
 
-  public static class Inventory
+  public class Inventory : IInventory
   {
 
     #region Data
+    public static Inventory Singleton;
     public const short HotbarSlots = 10;
     public const short RowSlots = 6;
     public const short ColSlots = 5;
-    public static Slot[] slots = new Slot[HotbarSlots + ColSlots * RowSlots];
-    public static ItemStack hand => slots[handIndex].item;
-    private static short handIndex
+    public Slot[] slots = new Slot[HotbarSlots + ColSlots * RowSlots];
+    public ItemStack hand => slots[handIndex].item;
+    private short handIndex
     {
       get => _handIndex; set
       {
@@ -24,12 +25,22 @@ namespace Items
         OnHandChanged?.Invoke(_handIndex);
       }
     }
-    private static short _handIndex = 0;
+    private short _handIndex = 0;
     #endregion
 
     #region Events
-    public static event Action<int, ItemStack> OnSlotChanged;
-    public static event Action<short> OnHandChanged;
+    public event Action<int, ItemStack> OnSlotChanged;
+    public event Action<short> OnHandChanged;
+    #endregion
+
+    #region Constructor
+    private Inventory()
+    {
+      for (int i = 0; i < slots.Length; i++)
+      {
+        slots[i] = new Slot() { id = i };
+      }
+    }
     #endregion
 
 
@@ -38,14 +49,11 @@ namespace Items
     public static void Init()
     {
       #region Init
-      for (int i = 0; i < slots.Length; i++)
-      {
-        slots[i] = new Slot() { id = i };
-      }
+      Singleton = new Inventory();
       #endregion
     }
 
-    public static void Add(ItemStack item)
+    public void Add(ItemStack item)
     {
       #region Pickup
       Slot slot;
@@ -64,14 +72,14 @@ namespace Items
       #endregion
     }
 
-    public static void Drop(ItemStack item)
+    public void Drop(ItemStack item)
     {
       #region Drop
       // TODO
       #endregion
     }
 
-    public static ItemStack ClearSlot(int slotId)
+    public ItemStack ClearSlot(int slotId)
     {
       #region ClearSlot
       Slot slot = slots[slotId];
@@ -85,7 +93,7 @@ namespace Items
       #endregion
     }
 
-    public static bool AddToSlot(ItemStack item, int slotId)
+    public bool AddToSlot(ItemStack item, int slotId)
     {
       #region AddToSlot
       if (slotId < 0 || slotId >= slots.Length)
@@ -102,7 +110,7 @@ namespace Items
       #endregion
     }
 
-    public static bool RemoveAmount(int slotId, short amountToRemove)
+    public bool RemoveAmount(int slotId, short amountToRemove)
     {
       #region RemoveAmount
       if (slotId < 0 || slotId >= slots.Length)
@@ -120,7 +128,7 @@ namespace Items
       #endregion
     }
 
-    private static Slot GetSlotOfItem(ItemData itemData)
+    private Slot GetSlotOfItem(ItemData itemData)
     {
       #region GetSlotOfItem
       foreach (Slot slot in slots)
