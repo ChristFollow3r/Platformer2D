@@ -1,3 +1,4 @@
+using Items.Overlays;
 using UnityEngine;
 
 
@@ -10,6 +11,8 @@ namespace Data
     public Sprite sprite;
     public bool isStackable => stack < 0;
     public int stack = 64;
+    public bool isEquipment;
+    public EquipmentType equipmentType;
   }
 
 }

@@ -73,11 +73,13 @@ namespace Player
     public void OpenOverlay(OverlayType overlayType, object data = null)
     {
       #region OpenOverlay
-      OnOverlayOpen?.Invoke(overlayType, data);
-      // TODO: set type of overlay for ui
       hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
       overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
       isOverlayOpen = true;
+
+
+
+      OnOverlayOpen?.Invoke(overlayType, data);
       #endregion
     }
 
@@ -91,5 +93,6 @@ namespace Player
       isOverlayOpen = false;
       #endregion
     }
+
   }
 }

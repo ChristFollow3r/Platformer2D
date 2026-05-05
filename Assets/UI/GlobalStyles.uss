@@ -32,3 +32,6 @@
     margin-left: 0;
 }
 
+.space {
+    width: 50px;
+}

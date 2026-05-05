@@ -11,10 +11,10 @@ namespace Items
   {
 
     #region Data
-    public const short HotbarItems = 10;
-    public const short Rows = 6;
-    public const short Cols = 5;
-    public static Slot[] slots = new Slot[HotbarItems + Cols * Rows];
+    public const short HotbarSlots = 10;
+    public const short RowSlots = 6;
+    public const short ColSlots = 5;
+    public static Slot[] slots = new Slot[HotbarSlots + ColSlots * RowSlots];
     public static ItemStack hand => slots[handIndex].item;
     private static short handIndex
     {
@@ -40,10 +40,7 @@ namespace Items
       #region Init
       for (int i = 0; i < slots.Length; i++)
       {
-        slots[i] = new Slot()
-        {
-          id = i
-        };
+        slots[i] = new Slot() { id = i };
       }
       #endregion
     }
@@ -105,7 +102,6 @@ namespace Items
       #endregion
     }
 
-    /// <summary>Method</summary>
     public static bool RemoveAmount(int slotId, short amountToRemove)
     {
       #region RemoveAmount
@@ -123,7 +119,6 @@ namespace Items
       return true;
       #endregion
     }
-
 
     private static Slot GetSlotOfItem(ItemData itemData)
     {

@@ -10,7 +10,7 @@ namespace UI.Components
 
     #region Data
     [UxmlAttribute] public bool isMain { get => _isMain; set => SetIsMain(value); }
-    private Slot[] slots = new Slot[Items.Inventory.HotbarItems];
+    private Slot[] slots = new Slot[Items.Inventory.HotbarSlots];
     #endregion
 
     #region Backers
@@ -85,7 +85,7 @@ namespace UI.Components
     private void OnSlotChange(int slotId, ItemStack item)
     {
       #region OnSlotChange
-      if (slotId >= Items.Inventory.HotbarItems) return;
+      if (slotId >= Items.Inventory.HotbarSlots) return;
       Item itemElm = null;
       if (item is not null)
       {

@@ -11,7 +11,7 @@ namespace UI.Components
   {
 
     #region Data
-    private Slot[] slots = new Slot[Items.Inventory.Cols * Items.Inventory.Rows];
+    private Slot[] slots = new Slot[Items.Inventory.ColSlots * Items.Inventory.RowSlots];
     #endregion
 
     #region Backers
@@ -45,15 +45,15 @@ namespace UI.Components
       {
         Slot slot = new Slot();
 
-        int col = i % Items.Inventory.Cols;
-        int row = i / Items.Inventory.Cols;
+        int col = i % Items.Inventory.ColSlots;
+        int row = i / Items.Inventory.ColSlots;
 
-        if (col < Items.Inventory.Cols - 1) slot.AddToClassList("spaced-right");
-        if (row < Items.Inventory.Rows - 1) slot.AddToClassList("spaced-bottom");
+        if (col < Items.Inventory.ColSlots - 1) slot.AddToClassList("spaced-right");
+        if (row < Items.Inventory.RowSlots - 1) slot.AddToClassList("spaced-bottom");
 
         rootElm.Add(slot);
         slots[i] = slot;
-        slot.slotId = (short)(Items.Inventory.HotbarItems + i);
+        slot.slotId = (short)(Items.Inventory.HotbarSlots + i);
       }
       #endregion
     }
@@ -67,7 +67,7 @@ namespace UI.Components
     private void OnSlotChange(int slotId, ItemStack item)
     {
       #region OnSlotChange
-      if (slotId < Items.Inventory.HotbarItems) return;
+      if (slotId < Items.Inventory.HotbarSlots) return;
       Item itemElm = null;
       if (item is not null)
       {
@@ -78,7 +78,7 @@ namespace UI.Components
         };
       }
 
-      slots[slotId - Items.Inventory.HotbarItems].item = itemElm;
+      slots[slotId - Items.Inventory.HotbarSlots].item = itemElm;
       #endregion
     }
     #endregion
