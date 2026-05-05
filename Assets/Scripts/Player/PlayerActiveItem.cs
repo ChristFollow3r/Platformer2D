@@ -83,7 +83,7 @@ namespace Player
                 
                 if (hit.TryGetComponent(out Shared.Health enemyHealth))
                 {
-                    enemyHealth.TakeDamage(10, playerDirection, 10);
+                    enemyHealth.TakeDamage(10, playerDirection, 8); // Hardcoded values: HP reduction, -, knockback
                 }
             }
             yield return new WaitForSeconds(swingClipDuration);

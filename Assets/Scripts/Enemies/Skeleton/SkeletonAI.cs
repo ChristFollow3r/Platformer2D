@@ -89,7 +89,7 @@ namespace Enemies.Skeleton
         {
             isStunned = true;
             skeletonRigidBody.linearVelocity = Vector2.zero;
-            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse);
+            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse); // KnockBack hardcoded
     
             yield return new WaitForSeconds(0.3f);
             isStunned = false;
