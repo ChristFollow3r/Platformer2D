@@ -1662,7 +1662,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 58304e59464cb8448a682e53848ab7b1, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1706,7 +1706,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -7832,6 +7832,8 @@ MonoBehaviour:
   boneDustParticles: {fileID: 7984994820258352716, guid: fa33159383f0b894b96abdb794539800, type: 3}
   skeletonDeathSound: {fileID: 8300000, guid: 48c8fb3913974e94f98f5d7d05636bde, type: 3}
   skeletonDeathDropSound: {fileID: 8300000, guid: f2042e148c579e64797c62368f1eacde, type: 3}
+  airHitSound: {fileID: 8300000, guid: 8f0eab29e35e2574fbf80efca6a3c683, type: 3}
+  hitSound: {fileID: 8300000, guid: 5d17a4c73bae883489c33b7399c7012a, type: 3}
   isAttacking: 0
 --- !u!114 &2117553324
 MonoBehaviour:
