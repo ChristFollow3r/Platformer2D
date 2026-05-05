@@ -60,12 +60,13 @@ namespace UI.Components
     private void CreateElements()
     {
       #region CreateElements
-      for (int i = 0; i < slots.Length; i++)
+      for (short i = 0; i < slots.Length; i++)
       {
         Slot slot = new Slot();
         if (i != slots.Length - 1) slot.AddToClassList("spaced-right");
         rootElm.Add(slot);
         slots[i] = slot;
+        slot.slotId = i;
       }
       #endregion
     }

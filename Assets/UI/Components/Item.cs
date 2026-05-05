@@ -1,4 +1,6 @@
 
+using System;
+using System.Collections.Generic;
 using Data;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -85,15 +87,53 @@ namespace UI.Components
     {
       #region OnPointerDown
 
-      isBeingDragged = true;
-      rootElm.CapturePointer(e.pointerId);
-      e.StopPropagation();
+      if (e.button == 1)
+      {
+        short stay, leave;
+        stay = (short)Mathf.Floor(amount / 2);
+        leave = (short)(amount - stay);
 
-      Vector2 localPos = parent.WorldToLocal(e.position);
-      Vector2 target = localPos - _dragOffset;
-      TweenTo(target, 100);
+        Item ghost = new Item(true)
+        {
+          item = item,
+          amount = leave,
+          slot = slot
+        };
 
-      rootElm.AddToClassList("item-dragged");
+        ghost.style.position = Position.Absolute;
+        ghost.style.left = e.position.x - _dragOffset.x;
+        ghost.style.top = e.position.y - _dragOffset.y;
+        panel.visualTree.Add(ghost);
+
+        ghost.rootElm.CapturePointer(e.pointerId);
+        ghost.rootElm.AddToClassList("item-dragged");
+        ghost.isBeingDragged = true;
+        e.StopPropagation();
+
+        Items.Inventory.RemoveAmount(slot.slotId, leave);
+      }
+      else
+      {
+        Item ghost = new Item(true)
+        {
+          item = item,
+          amount = amount,
+          slot = slot
+        };
+
+        ghost.style.position = Position.Absolute;
+        ghost.style.left = e.position.x - _dragOffset.x;
+        ghost.style.top = e.position.y - _dragOffset.y;
+        panel.visualTree.Add(ghost);
+
+        ghost.rootElm.CapturePointer(e.pointerId);
+        ghost.rootElm.AddToClassList("item-dragged");
+        ghost.isBeingDragged = true;
+        e.StopPropagation();
+
+        Items.Inventory.ClearSlot(slot.slotId);
+      }
+
       #endregion
     }
 
@@ -102,39 +142,55 @@ namespace UI.Components
       #region OnPointerMove
       if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
 
-      StopTween();
+      CancelMove();
 
-      Vector2 localPos = parent.WorldToLocal(e.position);
-      style.left = localPos.x - _dragOffset.x;
-      style.top = localPos.y - _dragOffset.y;
+      Vector2 pos = e.position;
+      style.left = pos.x - _dragOffset.x;
+      style.top = pos.y - _dragOffset.y;
       #endregion
     }
 
     private void OnPointerUp(PointerUpEvent e)
     {
       #region OnPointerUp
-      isBeingDragged = false;
+      if (e.button == 1) return; // TODO: leave 1
+      if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
       rootElm.ReleasePointer(e.pointerId);
-
-
-      TweenTo(Vector2.zero, 100);
       rootElm.RemoveFromClassList("item-dragged");
+
+      Items.ItemStack stack = new() { data = item, amount = (short)amount, };
+      List<VisualElement> foundElements = new();
+      panel.PickAll(e.position, foundElements);
+
+      foreach (VisualElement element in foundElements)
+      {
+        // TODO: Add drag to outside
+        if (element is not Slot targetSlot) continue;
+
+        bool sucess = Items.Inventory.AddToSlot(stack, targetSlot.slotId);
+        if (sucess) { RemoveFromHierarchy(); return; }
+        break;
+      }
+
+      if (!Items.Inventory.AddToSlot(stack, slot.slotId)) Items.Inventory.Add(stack);
+      RemoveFromHierarchy();
       #endregion
     }
     #endregion
 
     #region Utils
-    private IVisualElementScheduledItem _positionTween;
+    private IVisualElementScheduledItem moveTween;
 
-    private void TweenTo(Vector2 target, float duration)
+    private void MoveTo(Vector2 target, float duration)
     {
-      StopTween();
+      #region MoveTo
+      CancelMove();
 
       float elapsed = 0f;
       float startX = style.left.value.value;
       float startY = style.top.value.value;
 
-      _positionTween = schedule.Execute(() =>
+      moveTween = schedule.Execute(() =>
       {
         elapsed += 16;
         float t = Mathf.Clamp01(elapsed / duration);
@@ -143,14 +199,17 @@ namespace UI.Components
         style.left = Mathf.Lerp(startX, target.x, ease);
         style.top = Mathf.Lerp(startY, target.y, ease);
 
-        if (t >= 1f) StopTween();
+        if (t >= 1f) CancelMove();
       }).Every(16);
+      #endregion
     }
 
-    private void StopTween()
+    private void CancelMove()
     {
-      _positionTween?.Pause();
-      _positionTween = null;
+      #region CancelMove
+      moveTween?.Pause();
+      moveTween = null;
+      #endregion
     }
     #endregion
   }

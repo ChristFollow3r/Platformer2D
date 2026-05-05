@@ -14,7 +14,7 @@ namespace Items
     public const short HotbarItems = 10;
     public const short Rows = 6;
     public const short Cols = 5;
-    public static Slot[] slots = new Slot[HotbarItems + Cols + Rows];
+    public static Slot[] slots = new Slot[HotbarItems + Cols * Rows];
     public static ItemStack hand => slots[handIndex].item;
     private static short handIndex
     {
@@ -88,16 +88,42 @@ namespace Items
       #endregion
     }
 
-    public static void AddToSlot(ItemStack item, int slotId)
+    public static bool AddToSlot(ItemStack item, int slotId)
     {
       #region AddToSlot
+      if (slotId < 0 || slotId >= slots.Length)
+      {
+        Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
+        return false;
+      }
       Slot slot = slots[slotId];
-      if (!slot.isEmpty && slot.item.data != item.data) return;
+      if (!slot.isEmpty && slot.item.data != item.data) return false;
 
       slot.Add(item);
-      OnSlotChanged?.Invoke(slotId, item);
+      OnSlotChanged?.Invoke(slotId, slot.item);
+      return true;
       #endregion
     }
+
+    /// <summary>Method</summary>
+    public static bool RemoveAmount(int slotId, short amountToRemove)
+    {
+      #region RemoveAmount
+      if (slotId < 0 || slotId >= slots.Length)
+      {
+        Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
+        return false;
+      }
+      Slot slot = slots[slotId];
+      if (!slot.isEmpty || slot.item.amount < amountToRemove) return false;
+
+      slot.item.amount -= amountToRemove;
+      if (slot.item.amount == 0) ClearSlot(slotId);
+      else OnSlotChanged(slotId, slot.item);
+      return true;
+      #endregion
+    }
+
 
     private static Slot GetSlotOfItem(ItemData itemData)
     {

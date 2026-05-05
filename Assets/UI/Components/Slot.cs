@@ -9,7 +9,7 @@ namespace UI.Components
   {
     #region Data
     [UxmlAttribute] public Item item { get => _item; set => SetItem(value); }
-
+    public short slotId;
     public bool hasItem => item != null;
     #endregion
 
@@ -19,7 +19,7 @@ namespace UI.Components
 
     #region Elements
     private VisualElement rootElm;
-    private VisualElement itemHolderElm;
+    public VisualElement itemHolderElm;
     #endregion
 
     #region Constructor
@@ -38,6 +38,7 @@ namespace UI.Components
       #region SetItem
       _item = item;
       if (itemHolderElm.childCount != 0) itemHolderElm.RemoveAt(0);
+      if (item == null) return;
       itemHolderElm.Add(item);
       item.slot = this;
       #endregion

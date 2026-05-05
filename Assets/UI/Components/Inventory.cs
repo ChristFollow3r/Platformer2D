@@ -41,7 +41,7 @@ namespace UI.Components
       #region GetElements
       rootElm = this.Q<VisualElement>("root");
 
-      for (int i = 0; i < slots.Length; i++)
+      for (short i = 0; i < slots.Length; i++)
       {
         Slot slot = new Slot();
 
@@ -53,6 +53,7 @@ namespace UI.Components
 
         rootElm.Add(slot);
         slots[i] = slot;
+        slot.slotId = (short)(Items.Inventory.HotbarItems + i);
       }
       #endregion
     }
