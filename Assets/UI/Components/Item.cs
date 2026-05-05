@@ -86,7 +86,7 @@ namespace UI.Components
     private void OnPointerDown(PointerDownEvent e)
     {
       #region OnPointerDown
-
+      if (isBeingDragged || rootElm.HasPointerCapture(e.pointerId)) return;
       if (e.button == 1)
       {
         short stay, leave;
@@ -142,8 +142,6 @@ namespace UI.Components
       #region OnPointerMove
       if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
 
-      CancelMove();
-
       Vector2 pos = e.position;
       style.left = pos.x - _dragOffset.x;
       style.top = pos.y - _dragOffset.y;
@@ -174,41 +172,6 @@ namespace UI.Components
 
       if (!Items.Inventory.AddToSlot(stack, slot.slotId)) Items.Inventory.Add(stack);
       RemoveFromHierarchy();
-      #endregion
-    }
-    #endregion
-
-    #region Utils
-    private IVisualElementScheduledItem moveTween;
-
-    private void MoveTo(Vector2 target, float duration)
-    {
-      #region MoveTo
-      CancelMove();
-
-      float elapsed = 0f;
-      float startX = style.left.value.value;
-      float startY = style.top.value.value;
-
-      moveTween = schedule.Execute(() =>
-      {
-        elapsed += 16;
-        float t = Mathf.Clamp01(elapsed / duration);
-        float ease = t * t * t; // ease in cubic
-
-        style.left = Mathf.Lerp(startX, target.x, ease);
-        style.top = Mathf.Lerp(startY, target.y, ease);
-
-        if (t >= 1f) CancelMove();
-      }).Every(16);
-      #endregion
-    }
-
-    private void CancelMove()
-    {
-      #region CancelMove
-      moveTween?.Pause();
-      moveTween = null;
       #endregion
     }
     #endregion

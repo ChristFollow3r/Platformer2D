@@ -115,7 +115,7 @@ namespace Items
         return false;
       }
       Slot slot = slots[slotId];
-      if (!slot.isEmpty || slot.item.amount < amountToRemove) return false;
+      if (slot.isEmpty || slot.item.amount < amountToRemove) return false;
 
       slot.item.amount -= amountToRemove;
       if (slot.item.amount == 0) ClearSlot(slotId);
