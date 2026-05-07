@@ -8,6 +8,7 @@
             private static readonly int IsJumping = Animator.StringToHash("isJumping");
             private static readonly int IsFalling = Animator.StringToHash("isFalling");
             private static readonly int IsSliding = Animator.StringToHash("isSliding");
+            private static readonly int hasLanded = Animator.StringToHash("hasLanded");
             private Rigidbody2D rb;
             private Animator animator;
             private Collider2D playerCollider;
@@ -106,27 +107,21 @@
                         animator.SetBool(IsJumping, false);
                         animator.SetBool(IsFalling, true);
                     }
-                    
-                    else if (rb.linearVelocityY < -0.1f && isTouchingLeftWall)
-                    {
-                        transform.localScale = new Vector3(1f, 1f, 1f);
-                        animator.SetBool(IsJumping, false);
-                        animator.SetBool(IsSliding, true);
-                    }
-                    
-                    else if (rb.linearVelocityY < -0.1f && isTouchingRightWall)
-                    {
-                        transform.localScale = new Vector3(-1f, 1f, 1f);
-                        animator.SetBool(IsJumping, false);
-                        animator.SetBool(IsSliding, true);
-                    }
                 }
 
-                else
+                if (isGrounded)
                 {
-                    animator.SetBool(IsJumping, false);
-                    animator.SetBool(IsFalling, false);
-                    animator.SetBool(IsSliding, false);
+                    if (animator.GetBool(IsFalling))
+                    {
+                        animator.SetTrigger(hasLanded);
+                        animator.SetBool(IsFalling, false);
+                    }
+                    else
+                    {
+                        animator.SetBool(IsJumping, false);
+                        animator.SetBool(IsFalling, false);
+                        animator.SetBool(IsSliding, false);
+                    }
                 }
             }
             
