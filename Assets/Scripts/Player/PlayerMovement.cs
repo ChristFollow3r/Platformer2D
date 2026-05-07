@@ -8,7 +8,9 @@
             private static readonly int IsJumping = Animator.StringToHash("isJumping");
             private static readonly int IsFalling = Animator.StringToHash("isFalling");
             private static readonly int IsSliding = Animator.StringToHash("isSliding");
-            private static readonly int hasLanded = Animator.StringToHash("hasLanded");
+            private static readonly int HasLanded = Animator.StringToHash("hasLanded");
+            private static readonly int IsIdling = Animator.StringToHash("isIdling");
+            
             private Rigidbody2D rb;
             private Animator animator;
             private Collider2D playerCollider;
@@ -72,12 +74,16 @@
                     }
                     
                     else if (isGrounded)
+                    {
                         rb.linearVelocityY = jumpForce;
+                        animator.SetTrigger(IsJumping);
+                    }
                     
                     else if (canDoubleJump)
                     {
                         rb.linearVelocityY = jumpForce;
                         canDoubleJump = false;
+                        animator.SetTrigger(IsJumping);
                     }
                 }
                 
@@ -85,43 +91,36 @@
 
             private void PlayerAnimations(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
             {
-                if (rb.linearVelocityX > 0f)
-                    transform.localScale = new Vector3(1f, 1f, 1f);
-                else if (rb.linearVelocityX < 0f)
-                    transform.localScale = new Vector3(-1f, 1f, 1f);
-                
-                bool isRunning = Mathf.Abs(rb.linearVelocityX) > 0f && isGrounded;
-                animator.SetBool(IsRunning, isRunning);
+                if (Mathf.Abs(rb.linearVelocityX) > 0.1f)
+                {
+                    float direction = Mathf.Sign(rb.linearVelocityX);
+                    transform.localScale = new Vector3(direction, 1f, 1f);
+                }
 
                 if (!isGrounded)
                 {
+                    animator.SetBool(IsIdling, false);
+                    animator.SetBool(IsRunning, false);
                     
-                    if (rb.linearVelocityY > 0.1f || playerInput.Player.Jump.WasPerformedThisFrame())
-                    {
-                        animator.SetBool(IsJumping, true);
-                        animator.SetBool(IsFalling, false);
-                    }
-                    
-                    else if (rb.linearVelocityY < -0.1f && !isTouchingLeftWall && !isTouchingRightWall)
-                    {
-                        animator.SetBool(IsJumping, false);
-                        animator.SetBool(IsFalling, true);
-                    }
+                    bool isFalling = rb.linearVelocityY < -0.1 && !isTouchingLeftWall && !isTouchingRightWall;
+                    animator.SetBool(IsFalling, isFalling);
                 }
 
-                if (isGrounded)
+                else
                 {
                     if (animator.GetBool(IsFalling))
                     {
-                        animator.SetTrigger(hasLanded);
                         animator.SetBool(IsFalling, false);
+                        animator.SetTrigger(HasLanded);
                     }
-                    else
-                    {
-                        animator.SetBool(IsJumping, false);
-                        animator.SetBool(IsFalling, false);
-                        animator.SetBool(IsSliding, false);
-                    }
+                    
+                    float moveInput = playerInput.Player.Move.ReadValue<Vector2>().x;
+                    bool isMoving = Mathf.Abs(moveInput) > 0.1f;
+                    
+                    animator.SetBool(IsRunning, isMoving);
+                    animator.SetBool(IsIdling, !isMoving);
+                    
+                    //animator.SetBool(IsSliding, false);
                 }
             }
             
