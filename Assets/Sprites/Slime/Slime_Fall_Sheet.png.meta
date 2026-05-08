@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f6fc53ab109135d4eb26b2d30b078d5c
+guid: 92195b7d031dfa048afa733b42c8db98
 TextureImporter:
   internalIDToNameTable:
   - first:
@@ -152,10 +152,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 64
-        height: 64
+        x: 151
+        y: 23
+        width: 10
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -164,8 +164,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 80d43979cea00fe4b8b5719a2b5ce681
-      internalID: 1575170049
+      spriteID: ddb71729a3a95d400800000000000000
+      internalID: 348354122546772957
       vertices: []
       indices: 
       edges: []
@@ -174,10 +174,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_1
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
-        width: 64
-        height: 64
+        x: 214
+        y: 32
+        width: 12
+        height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -186,8 +186,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d03b8b431c1b34b438db53cf101e89b1
-      internalID: -1454356146
+      spriteID: 7e33f9beab64a2180800000000000000
+      internalID: -9139414725164059673
       vertices: []
       indices: 
       edges: []
@@ -196,10 +196,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_2
       rect:
         serializedVersion: 2
-        x: 128
-        y: 0
-        width: 64
-        height: 64
+        x: 274
+        y: 41
+        width: 20
+        height: 9
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,8 +208,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e45714f5e6edd9e48a33fc4209712dc1
-      internalID: 531091008
+      spriteID: b4cefda1922022940800000000000000
+      internalID: 5269776889544698955
       vertices: []
       indices: 
       edges: []
@@ -218,10 +218,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_3
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
+        x: 342
+        y: 35
+        width: 12
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -230,8 +230,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 18236b16802ad83448d4878866f7b51f
-      internalID: 1580851815
+      spriteID: dbd4b228e1d325270800000000000000
+      internalID: 8237713869656247741
       vertices: []
       indices: 
       edges: []
@@ -240,10 +240,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_4
       rect:
         serializedVersion: 2
-        x: 256
-        y: 0
-        width: 64
-        height: 64
+        x: 86
+        y: 14
+        width: 11
+        height: 18
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -252,8 +252,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5c2eb744aaf87e74b8fde73e03c04b0f
-      internalID: -641015580
+      spriteID: 1d06aa6384cc7c4d0800000000000000
+      internalID: -3114296006776561455
       vertices: []
       indices: 
       edges: []
@@ -262,10 +262,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_5
       rect:
         serializedVersion: 2
-        x: 320
-        y: 0
-        width: 64
-        height: 64
+        x: 407
+        y: 22
+        width: 8
+        height: 17
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -274,8 +274,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f9b2232ffb97fbd42abedc2c14e3d451
-      internalID: -2116654521
+      spriteID: 98c34c99c96c411a0800000000000000
+      internalID: -6839623558171968375
       vertices: []
       indices: 
       edges: []
@@ -284,10 +284,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_6
       rect:
         serializedVersion: 2
-        x: 384
-        y: 0
-        width: 64
-        height: 64
+        x: 470
+        y: 5
+        width: 9
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -296,8 +296,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 867dcbd168d7c9646b8c6d832838dd2d
-      internalID: 1581108802
+      spriteID: 9788304e125639230800000000000000
+      internalID: 3644367719706626169
       vertices: []
       indices: 
       edges: []
@@ -306,10 +306,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_7
       rect:
         serializedVersion: 2
-        x: 448
-        y: 0
-        width: 64
-        height: 64
+        x: 22
+        y: 3
+        width: 11
+        height: 17
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -318,8 +318,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e755d4f4ad99db946a7846474c670b07
-      internalID: 1371039462
+      spriteID: 6cb3d7a26b616b420800000000000000
+      internalID: 2645326802779454406
       vertices: []
       indices: 
       edges: []
@@ -328,10 +328,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_8
       rect:
         serializedVersion: 2
-        x: 512
+        x: 533
         y: 0
-        width: 64
-        height: 64
+        width: 11
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -340,8 +340,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8a31f2d4955f3ba4cb5f31d5ab90006d
-      internalID: -297618153
+      spriteID: a52cea8505ef78be0800000000000000
+      internalID: -1474930731901861286
       vertices: []
       indices: 
       edges: []
@@ -350,20 +350,24 @@ TextureImporter:
       name: Slime_Fall_Sheet_9
       rect:
         serializedVersion: 2
-        x: 576
+        x: 593
         y: 0
-        width: 64
-        height: 64
+        width: 19
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
-      physicsShape: []
+      physicsShape:
+      - - {x: -0.5, y: 3.5}
+        - {x: -0.5, y: 3.5}
+        - {x: -0.5, y: 7.5}
+        - {x: -0.5, y: 7.5}
       tessellationDetail: 0
       bones: []
-      spriteID: 26ad2c62fd9a8204ba2873ae56f8efd0
-      internalID: 1882502951
+      spriteID: 889eb296cec3fec50800000000000000
+      internalID: 6696638156997650824
       vertices: []
       indices: 
       edges: []
@@ -372,10 +376,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_10
       rect:
         serializedVersion: 2
-        x: 640
+        x: 657
         y: 0
-        width: 64
-        height: 64
+        width: 19
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -384,8 +388,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cecbc32d462ab874bb91ae6222a165a8
-      internalID: 1284399493
+      spriteID: b4c95e39901762b20800000000000000
+      internalID: 3109296878695849035
       vertices: []
       indices: 
       edges: []
@@ -394,10 +398,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_11
       rect:
         serializedVersion: 2
-        x: 704
+        x: 721
         y: 0
-        width: 64
-        height: 64
+        width: 19
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -406,8 +410,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2a2b9ac6c4b3429469b36a15d76995b7
-      internalID: 2081376821
+      spriteID: 9ed77f99bbbfbdb80800000000000000
+      internalID: -8368818699377345047
       vertices: []
       indices: 
       edges: []
@@ -416,10 +420,10 @@ TextureImporter:
       name: Slime_Fall_Sheet_12
       rect:
         serializedVersion: 2
-        x: 768
+        x: 787
         y: 0
-        width: 64
-        height: 64
+        width: 18
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -428,8 +432,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 21f69213398a3b849b62533b45771e2d
-      internalID: 1324509496
+      spriteID: 05b812a99f35e2230800000000000000
+      internalID: 3615919882322938704
       vertices: []
       indices: 
       edges: []
@@ -438,7 +442,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4bd9b72edb36ad846a72c70d98a0e9fc
+    spriteID: df20736de07f9a345a8b89b24f63bfa6
     internalID: 0
     vertices: []
     indices: 
@@ -448,21 +452,21 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":13.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Slime_Fall_Sheet_0: 1575170049
-      Slime_Fall_Sheet_1: -1454356146
-      Slime_Fall_Sheet_10: 1284399493
-      Slime_Fall_Sheet_11: 2081376821
-      Slime_Fall_Sheet_12: 1324509496
-      Slime_Fall_Sheet_2: 531091008
-      Slime_Fall_Sheet_3: 1580851815
-      Slime_Fall_Sheet_4: -641015580
-      Slime_Fall_Sheet_5: -2116654521
-      Slime_Fall_Sheet_6: 1581108802
-      Slime_Fall_Sheet_7: 1371039462
-      Slime_Fall_Sheet_8: -297618153
-      Slime_Fall_Sheet_9: 1882502951
+      Slime_Fall_Sheet_0: 348354122546772957
+      Slime_Fall_Sheet_1: -9139414725164059673
+      Slime_Fall_Sheet_10: 3109296878695849035
+      Slime_Fall_Sheet_11: -8368818699377345047
+      Slime_Fall_Sheet_12: 3615919882322938704
+      Slime_Fall_Sheet_2: 5269776889544698955
+      Slime_Fall_Sheet_3: 8237713869656247741
+      Slime_Fall_Sheet_4: -3114296006776561455
+      Slime_Fall_Sheet_5: -6839623558171968375
+      Slime_Fall_Sheet_6: 3644367719706626169
+      Slime_Fall_Sheet_7: 2645326802779454406
+      Slime_Fall_Sheet_8: -1474930731901861286
+      Slime_Fall_Sheet_9: 6696638156997650824
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

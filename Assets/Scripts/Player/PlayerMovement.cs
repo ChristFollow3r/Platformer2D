@@ -28,7 +28,7 @@
             private void Awake()
             {
                 rb = GetComponent<Rigidbody2D>();   
-                animator = transform.GetChild(0).GetComponent<Animator>();
+                animator = GetComponent<Animator>();
                 playerCollider = GetComponent<Collider2D>();
                 playerInput = new InputSystem_Actions();
                 playerInput.Enable();
