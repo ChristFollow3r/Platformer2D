@@ -1,4 +1,5 @@
     using UnityEngine;
+    using UnityEngine.InputSystem;
 
     namespace Player // Rider yellow underlying was telling me to use a namespace
     {
@@ -9,6 +10,8 @@
             private static readonly int IsFalling = Animator.StringToHash("isFalling");
             private static readonly int IsSliding = Animator.StringToHash("isSliding");
             private static readonly int HasLanded = Animator.StringToHash("hasLanded");
+            private static readonly int HasMined = Animator.StringToHash("hasMined");
+            private static readonly int HasAttacked = Animator.StringToHash("hasAttacked");
             private static readonly int IsIdling = Animator.StringToHash("isIdling");
             
             private Rigidbody2D rb;
@@ -121,6 +124,16 @@
                     animator.SetBool(IsIdling, !isMoving);
                     
                     //animator.SetBool(IsSliding, false);
+                }
+
+                if (Mouse.current.leftButton.wasPressedThisFrame)
+                {
+                    animator.SetTrigger(HasAttacked); ;
+                }
+
+                if (Mouse.current.rightButton.wasPressedThisFrame)
+                {
+                    animator.SetTrigger(HasMined);
                 }
             }
             
