@@ -46,7 +46,7 @@ namespace Chunks
                         
                         int randomRotation = Random.Range(0, 4);
                         
-                        if (blockType != BlockType.Grass)
+                        if (blockType != BlockType.Grass) // This will be changed
                         {
                             blockTileMap.SetTransformMatrix(new Vector3Int(i, j, 0), Matrix4x4.Rotate(Quaternion.Euler(0, 0, randomRotation * 90f)));
                         }
@@ -56,6 +56,8 @@ namespace Chunks
                     {
                         var propTile = ScriptableObject.CreateInstance<Tile>();
                         propTile.sprite = WorldData.PropDictionary[propType].sprite;
+                        propTile.colliderType = Tile.ColliderType.Sprite;
+                        //propTile.SetTag("Prop");
                         propTileMap.SetTile(new Vector3Int(i, j, 0), propTile);
                     }
                     

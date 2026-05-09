@@ -1,5 +1,9 @@
+    using Chunks;
+    using Data;
     using UnityEngine;
     using UnityEngine.InputSystem;
+    using UnityEngine.Tilemaps;
+    using World;
 
     namespace Player // Rider yellow underlying was telling me to use a namespace
     {
@@ -128,9 +132,37 @@
                     //animator.SetBool(IsSliding, false);
                 }
 
-                if (Mouse.current.leftButton.wasPressedThisFrame)
+                if (Mouse.current.leftButton.wasPressedThisFrame) // Això ho canviarem farem que el tete dispari un evento
                 {
-                    animator.SetTrigger(HasAttacked); ;
+                    Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                    Vector2 attackDirection = (mousePosition - transform.position).normalized;
+
+                    float attackRange = 1.5f;
+                    float attackRadius = 1.0f;
+                    Vector2 attackCenter = (Vector2)transform.position + (attackDirection * attackRange);
+                    Collider2D[] hitObjects = Physics2D.OverlapCircleAll(attackCenter, attackRadius);
+
+                    foreach (Collider2D hitObject in hitObjects)
+                    {
+                        if (hitObject.TryGetComponent(out Tilemap tilemap))
+                        {
+                            Vector3Int cellPos = tilemap.WorldToCell(attackCenter);
+                            PropType hitType = WorldData.World.GetPropType(cellPos.x, cellPos.y);
+
+                            if (hitType == PropType.Bush) 
+                            {
+                                WorldData.World.SetPropType(cellPos.x, cellPos.y, PropType.None); // Need to update the tile
+                                Debug.Log("Dude's a bush");
+                            }
+                            else if (hitType == PropType.Tree)
+                            {
+                                WorldData.World.SetPropType(cellPos.x, cellPos.y, PropType.None);
+                                Debug.Log("Dude's a tree");
+                            }
+                        }
+                    }
+                    
+                    animator.SetTrigger(HasAttacked);
                 }
 
                 if (Mouse.current.rightButton.wasPressedThisFrame)

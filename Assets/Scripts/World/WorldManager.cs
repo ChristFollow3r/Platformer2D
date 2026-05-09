@@ -60,7 +60,7 @@ namespace World
         private void Update()
         {
             if (CheckCameraMovement())
-                UpdateChunks(); // If the camera moves perform the logic to render stuff
+                UpdateChunks(); // If the camera moves, perform the logic to render stuff
         }
 
         private void GenerateWorld()
@@ -134,10 +134,9 @@ namespace World
         }
 
         private float ComputeSeedOffset(string seed) 
-        { // AI helped me with this I wanted to make my perlin noise world generation less shit.
+        { 
             if (string.IsNullOrEmpty(seed)) return 0f;
-            uint hash = 2166136261; // This weird ass numbers are official constants (whatever that is)
-            // from the FNV-1a hash algorithm
+            uint hash = 2166136261;
 
             foreach (char x in seed)
             {
@@ -175,6 +174,8 @@ namespace World
                     propChunkChild.transform.parent = chunk.transform;
                     propChunkChild.AddComponent<Tilemap>();
                     propChunkChild.AddComponent<TilemapRenderer>();
+                    var propCollider = propChunkChild.AddComponent<TilemapCollider2D>();
+                    propCollider.isTrigger = true;
                 
                     chunks[x, y] = new Chunk(false, new Vector2Int(x, y), blockChunkChild.GetComponent<Tilemap>(), propChunkChild.GetComponent<Tilemap>());
                 }
