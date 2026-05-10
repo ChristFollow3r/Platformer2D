@@ -9,6 +9,7 @@ namespace Scriptable_Objects_Scripts
     public ItemData result;
     public int amount;
     [Header("Recipe")]
+    public int gridSize = 3;
     public ItemData[] ingredients = new ItemData[16];
   }
 }
