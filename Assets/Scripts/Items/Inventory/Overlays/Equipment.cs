@@ -145,12 +145,25 @@ namespace Items.Overlays
     protected override void CloseOverlay()
     {
       #region OnOverlayClose
-      Debug.Log("CLOSING! elm");
+      Debug.Log("Closing equipment");
       foreach (Slot slot in craftingSlots)
       {
         if (slot.isEmpty) continue;
-        Debug.Log("Returning elm");
+        Debug.Log("Returning element");
         Inventory.Singleton.Add(slot.item);
+        slot.item = null;
+      }
+      #endregion
+    }
+
+    /// <summary>Method</summary>
+    public override void RefreshUI()
+    {
+      #region RefreshUI
+      foreach (Slot slot in equipmentSlots)
+      {
+        if (slot.isEmpty) continue;
+        OnSlotChanged?.Invoke(slot.id, slot.item);
       }
       #endregion
     }

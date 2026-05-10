@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Items;
 using UI.Components;
 using UnityEngine;
@@ -35,7 +36,8 @@ namespace Player
     private VisualElement overlayRoot;
     private VisualElement hudRoot;
 
-    private Overlay currentOverlay;
+    private Items.Overlays.Equipment equipmentOverlay;
+    private Dictionary<int, Overlay> overlaysByBlockId;
 
     [Header("Controls")]
     [SerializeField] private bool isOverlayOpen;
@@ -43,7 +45,7 @@ namespace Player
     #endregion
 
     #region Events
-    public event Action<OverlayType, object> OnOverlayOpen;
+    public event Action<int, OverlayType, object> OnOverlayOpen;
     public event Action OnOverlayClose;
     #endregion
 
@@ -99,7 +101,7 @@ namespace Player
       {
         isOverlayOpen = !isOverlayOpen;
 
-        if (isOverlayOpen) OpenOverlay(OverlayType.Inventory);
+        if (isOverlayOpen) OpenOverlay(-1, OverlayType.Inventory);
         else CloseOverlay();
         return;
       }
@@ -108,7 +110,7 @@ namespace Player
       #endregion
     }
 
-    public void OpenOverlay(OverlayType overlayType, object data = null)
+    public void OpenOverlay(int blockId, OverlayType overlayType, object data = null)
     {
       #region OpenOverlay
       hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
@@ -116,12 +118,12 @@ namespace Player
       isOverlayOpen = true;
 
       var (overlayData, overlayElement) = GetOverlay(overlayType);
-      currentOverlay = overlayData;
       VisualElement left = overlay.rootVisualElement.Q("left");
       if (left.childCount != 0) left.RemoveAt(0);
       left.Add(overlayElement);
 
-      OnOverlayOpen?.Invoke(overlayType, data);
+      OnOverlayOpen?.Invoke(blockId, overlayType, data);
+      overlayData.RefreshUI();
       #endregion
     }
 
@@ -143,8 +145,12 @@ namespace Player
       {
         case OverlayType.Inventory:
           {
-            Items.Overlays.Equipment data = new Items.Overlays.Equipment();
+            Items.Overlays.Equipment data;
+            if (equipmentOverlay != null) data = equipmentOverlay;
+            else data = new Items.Overlays.Equipment();
+
             VisualElement element = new Equipment(data);
+            equipmentOverlay = data;
             return (data, element);
           }
         default:
