@@ -62,7 +62,7 @@ namespace UI.Components
       #region CreateElements
       for (short i = 0; i < slots.Length; i++)
       {
-        Slot slot = new Slot();
+        Slot slot = new Slot(Items.Inventory.Singleton, true);
         if (i != slots.Length - 1) slot.AddToClassList("spaced-right");
         rootElm.Add(slot);
         slots[i] = slot;

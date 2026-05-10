@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Items.Utils;
+using UnityEngine;
 
 
 namespace Items.Overlays
@@ -21,6 +22,7 @@ namespace Items.Overlays
     #region Data
     public const short EquipmentSlots = 5;
     public const short CraftingSlots = 4;
+    public const short MaxSlotId = EquipmentSlots + CraftingSlots;
     public Slot[] equipmentSlots = new Slot[EquipmentSlots];
     public Slot[] craftingSlots = new Slot[CraftingSlots];
     public Slot resultSlot;
@@ -89,20 +91,67 @@ namespace Items.Overlays
     public bool AddToSlot(ItemStack itemStack, int slotId)
     {
       #region AddToSlot
-      return false;
+      if (slotId < 0 || slotId > MaxSlotId)
+      {
+        Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
+        return false;
+      }
+      Slot slot;
+      if (slotId < EquipmentSlots) slot = equipmentSlots[slotId];
+      else slot = craftingSlots[slotId - EquipmentSlots];
+
+      if (!slot.isEmpty && slot.item.data != itemStack.data) return false;
+      slot.Add(itemStack);
+      OnSlotChanged?.Invoke(slotId, slot.item);
+      return true;
       #endregion
     }
     public bool RemoveAmount(int slotId, short amount)
     {
       #region RemoveAmount
-      return false;
+      if (slotId < 0 || slotId > MaxSlotId)
+      {
+        Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
+        return false;
+      }
+      Slot slot;
+      if (slotId < EquipmentSlots) slot = equipmentSlots[slotId];
+      else slot = craftingSlots[slotId - EquipmentSlots];
+
+      slot.item.amount -= amount;
+      if (slot.item.amount == 0) ClearSlot(slotId);
+      else OnSlotChanged(slotId, slot.item);
+      return true;
       #endregion
     }
 
     public ItemStack ClearSlot(int slotId)
     {
       #region ClearSlot
-      return null;
+      Slot slot;
+      if (slotId < EquipmentSlots) slot = equipmentSlots[slotId];
+      else slot = craftingSlots[slotId - EquipmentSlots];
+
+      if (slot.isEmpty) return null;
+
+      ItemStack itemStack = slot.item;
+      slot.item = null;
+
+      OnSlotChanged?.Invoke(slotId, null);
+      return itemStack;
+      #endregion
+    }
+
+    protected override void CloseOverlay()
+    {
+      #region OnOverlayClose
+      Debug.Log("CLOSING! elm");
+      foreach (Slot slot in craftingSlots)
+      {
+        if (slot.isEmpty) continue;
+        Debug.Log("Returning elm");
+        Inventory.Singleton.Add(slot.item);
+      }
       #endregion
     }
     #endregion

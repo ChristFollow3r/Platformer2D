@@ -167,8 +167,8 @@ namespace UI.Components
       {
         // TODO: Add drag to outside
         if (element is not Slot targetSlot) continue;
-
-        bool sucess = inventory.AddToSlot(stack, targetSlot.slotId);
+        if (!targetSlot.isDroppable) break;
+        bool sucess = targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
         if (sucess) { RemoveFromHierarchy(); return; }
         break;
       }

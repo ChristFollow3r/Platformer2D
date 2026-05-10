@@ -1,4 +1,5 @@
 using System;
+using Items;
 using UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -14,6 +15,18 @@ namespace Player
   [DefaultExecutionOrder(-50)]
   public class UIController : MonoBehaviour
   {
+    #region Singleton setup
+    public static UIController Singleton;
+    private void SetupSingleton()
+    {
+      #region SetupSingleton
+      if (Singleton != null && Singleton != this) { Destroy(gameObject); return; }
+      Singleton = this;
+      #endregion
+    }
+    #endregion
+
+
     #region Data
     [Header("Elements")]
     [SerializeField] private GameObject uiHolder;
@@ -22,14 +35,16 @@ namespace Player
     private VisualElement overlayRoot;
     private VisualElement hudRoot;
 
+    private Overlay currentOverlay;
+
     [Header("Controls")]
     [SerializeField] private bool isOverlayOpen;
     private InputSystem_Actions playerInput;
     #endregion
 
     #region Events
-    public static event Action<OverlayType, object> OnOverlayOpen;
-    public static event Action OnOverlayClose;
+    public event Action<OverlayType, object> OnOverlayOpen;
+    public event Action OnOverlayClose;
     #endregion
 
     #region Unity
@@ -37,6 +52,7 @@ namespace Player
     private void Awake()
     {
       #region Awake
+      SetupSingleton();
       playerInput = new InputSystem_Actions();
       playerInput.Enable();
       CreateUI();
@@ -65,7 +81,7 @@ namespace Player
       #region CreateUI
       // Create Overlay invent+hotbar
       Debug.Log($"Singleton is valid? {Items.Inventory.Singleton != null}");
-      Inventory inventory = new Inventory();
+      UI.Components.Inventory inventory = new UI.Components.Inventory();
       Hotbar overlayHotbar = new Hotbar { isMain = false };
 
       overlay.rootVisualElement.Q("inventory").Add(inventory);
@@ -99,7 +115,11 @@ namespace Player
       overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
       isOverlayOpen = true;
 
-
+      var (overlayData, overlayElement) = GetOverlay(overlayType);
+      currentOverlay = overlayData;
+      VisualElement left = overlay.rootVisualElement.Q("left");
+      if (left.childCount != 0) left.RemoveAt(0);
+      left.Add(overlayElement);
 
       OnOverlayOpen?.Invoke(overlayType, data);
       #endregion
@@ -112,6 +132,24 @@ namespace Player
       hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
       overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
       isOverlayOpen = false;
+      #endregion
+    }
+
+    /// <summary>Method</summary>
+    private (Overlay, VisualElement) GetOverlay(OverlayType overlayType)
+    {
+      #region GetSourceTree
+      switch (overlayType)
+      {
+        case OverlayType.Inventory:
+          {
+            Items.Overlays.Equipment data = new Items.Overlays.Equipment();
+            VisualElement element = new Equipment(data);
+            return (data, element);
+          }
+        default:
+          return (null, null);
+      }
       #endregion
     }
     #endregion

@@ -24,7 +24,7 @@ namespace UI.Components
     #region Constructor
     public Inventory()
     {
-      VisualTreeAsset tree = UnityEngine.Resources.Load<VisualTreeAsset>("UI/Components/Inventory/Inventory");
+      VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Components/Inventory/Inventory");
       tree.CloneTree(this);
 
       GetElements();
@@ -43,7 +43,7 @@ namespace UI.Components
 
       for (short i = 0; i < slots.Length; i++)
       {
-        Slot slot = new Slot();
+        Slot slot = new Slot(Items.Inventory.Singleton, true);
 
         int col = i % Items.Inventory.ColSlots;
         int row = i / Items.Inventory.ColSlots;

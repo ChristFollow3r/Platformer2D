@@ -41,7 +41,7 @@ namespace UI.Components
     private void Init()
     {
       #region Init
-      VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Components/Equipment/Equipment");
+      VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Overlays/Equipment/Equipment");
       tree.CloneTree(this);
 
       GetElements();
@@ -65,7 +65,7 @@ namespace UI.Components
       #region CreateSlots
       for (short i = 0; i < equipmentSlots.Length; i++)
       {
-        Slot slot = new Slot();
+        Slot slot = new Slot(equipment, true);
 
         equipmentList.Add(slot);
         equipmentSlots[i] = slot;
@@ -75,7 +75,7 @@ namespace UI.Components
 
       for (short i = 0; i < craftingSlots.Length; i++)
       {
-        Slot slot = new Slot();
+        Slot slot = new Slot(equipment, true); // TODO, run validation before drop
 
         int col = i % 2;
         int row = i / 2;
@@ -88,7 +88,7 @@ namespace UI.Components
         allSlots[slot.slotId] = slot;
       }
 
-      resultSlot = new Slot() { slotId = (short)(equipmentSlots.Length + craftingSlots.Length) };
+      resultSlot = new Slot(equipment, false) { slotId = (short)(equipmentSlots.Length + craftingSlots.Length) };
       craftingHolder.Add(resultSlot);
       allSlots[resultSlot.slotId] = resultSlot;
       #endregion
