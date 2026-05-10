@@ -84,19 +84,18 @@ namespace Items.Overlays
       #endregion
     }
 
-
     public void Add(ItemStack itemStack) => Inventory.Singleton.Drop(itemStack);
 
     public bool AddToSlot(ItemStack itemStack, int slotId)
     {
       #region AddToSlot
-
+      return false;
       #endregion
     }
     public bool RemoveAmount(int slotId, short amount)
     {
       #region RemoveAmount
-
+      return false;
       #endregion
     }
 

@@ -3,7 +3,6 @@
     <Style src="project://database/Assets/UI/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
     <ui:VisualElement name="root" style="flex-grow: 1;">
         <ui:VisualElement name="hotbar-holder" class="hotbar-holder">
-            <UI.Components.Hotbar is-main="true"/>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

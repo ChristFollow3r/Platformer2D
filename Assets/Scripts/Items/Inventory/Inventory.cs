@@ -7,11 +7,21 @@ using UnityEngine;
 namespace Items
 {
 
-  public class Inventory : IInventory
+  [DefaultExecutionOrder(-100)]
+  public class Inventory : MonoBehaviour, IInventory
   {
+    #region Singleton setup
+    public static Inventory Singleton;
+    private void SetupSingleton()
+    {
+      #region SetupSingleton
+      if (Singleton != null && Singleton != this) { Destroy(gameObject); return; }
+      Singleton = this;
+      #endregion
+    }
+    #endregion
 
     #region Data
-    public static Inventory Singleton;
     public const short HotbarSlots = 10;
     public const short RowSlots = 6;
     public const short ColSlots = 5;
@@ -33,23 +43,26 @@ namespace Items
     public event Action<short> OnHandChanged;
     #endregion
 
-    #region Constructor
-    private Inventory()
+
+    #region Unity
+    /// <summary>Ran by unity on load</summary>
+    private void Awake()
     {
+      #region Awake
+      SetupSingleton();
+      CreateSlots();
+      #endregion
+    }
+    #endregion
+
+    #region Methods
+    private void CreateSlots()
+    {
+      #region CreateElements
       for (int i = 0; i < slots.Length; i++)
       {
         slots[i] = new Slot() { id = i };
       }
-    }
-    #endregion
-
-
-    #region Methods
-    [RuntimeInitializeOnLoadMethod]
-    public static void Init()
-    {
-      #region Init
-      Singleton = new Inventory();
       #endregion
     }
 

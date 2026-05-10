@@ -1,4 +1,5 @@
 using System;
+using UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,15 +11,20 @@ namespace Player
     Inventory
   };
 
-
+  [DefaultExecutionOrder(-50)]
   public class UIController : MonoBehaviour
   {
     #region Data
-    public InputSystem_Actions playerInput;
-    public UIDocument overlay;
-    public UIDocument hud;
+    [Header("Elements")]
+    [SerializeField] private GameObject uiHolder;
+    [SerializeField] private UIDocument overlay;
+    [SerializeField] private UIDocument hud;
+    private VisualElement overlayRoot;
+    private VisualElement hudRoot;
 
+    [Header("Controls")]
     [SerializeField] private bool isOverlayOpen;
+    private InputSystem_Actions playerInput;
     #endregion
 
     #region Events
@@ -33,6 +39,7 @@ namespace Player
       #region Awake
       playerInput = new InputSystem_Actions();
       playerInput.Enable();
+      CreateUI();
       #endregion
     }
     /// <summary>Ran by unity on first enable</summary>
@@ -52,6 +59,23 @@ namespace Player
     #endregion
 
     #region Methods
+    /// <summary>Method</summary>
+    private void CreateUI()
+    {
+      #region CreateUI
+      // Create Overlay invent+hotbar
+      Debug.Log($"Singleton is valid? {Items.Inventory.Singleton != null}");
+      Inventory inventory = new Inventory();
+      Hotbar overlayHotbar = new Hotbar { isMain = false };
+
+      overlay.rootVisualElement.Q("inventory").Add(inventory);
+      overlay.rootVisualElement.Q("holder").Add(overlayHotbar);
+
+      Hotbar hudHotbar = new Hotbar { isMain = true };
+      hud.rootVisualElement.Q("hotbar-holder").Add(hudHotbar);
+      #endregion
+    }
+
     private void CheckOverlay()
     {
       #region CheckOverlay
@@ -67,8 +91,6 @@ namespace Player
       if (playerInput.UI.CloseOverlay.WasPressedThisFrame() && isOverlayOpen) CloseOverlay();
       #endregion
     }
-    #endregion
-
 
     public void OpenOverlay(OverlayType overlayType, object data = null)
     {
@@ -83,7 +105,6 @@ namespace Player
       #endregion
     }
 
-
     public void CloseOverlay()
     {
       #region CloseOverlay
@@ -93,6 +114,6 @@ namespace Player
       isOverlayOpen = false;
       #endregion
     }
-
+    #endregion
   }
 }

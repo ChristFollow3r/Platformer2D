@@ -76,9 +76,9 @@ namespace UI.Components
       #region SubscribeEvents
       if (isMain)
       {
-        Items.Inventory.OnHandChanged += OnHandChanged;
+        Items.Inventory.Singleton.OnHandChanged += OnHandChanged;
       }
-      Items.Inventory.OnSlotChanged += OnSlotChange;
+      Items.Inventory.Singleton.OnSlotChanged += OnSlotChange;
       #endregion
     }
 
@@ -89,7 +89,7 @@ namespace UI.Components
       Item itemElm = null;
       if (item is not null)
       {
-        itemElm = new Item(!isMain)
+        itemElm = new Item(Items.Inventory.Singleton, !isMain)
         {
           item = item.data,
           amount = item.amount
@@ -100,7 +100,6 @@ namespace UI.Components
       #endregion
     }
 
-    /// <summary>Method</summary>
     private void OnHandChanged(short handIndex)
     {
       #region OnHandChanged

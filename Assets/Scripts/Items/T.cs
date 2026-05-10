@@ -28,9 +28,10 @@ public class T : MonoBehaviour
       data = itemData2,
       amount = 10
     };
-    Inventory.AddToSlot(testStack3, 15);
-    Inventory.Add(testStack);
-    Inventory.Add(testStack2);
+
+    Inventory.Singleton.AddToSlot(testStack3, 15);
+    Inventory.Singleton.Add(testStack);
+    Inventory.Singleton.Add(testStack2);
   }
 
   // Update is called once per frame
