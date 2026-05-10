@@ -14,8 +14,10 @@ public class RecipeEditor : Editor
   // ── Colours ───────────────────────────────────────────────────────────
   private static readonly Color ColSlotEmpty = new(0.18f, 0.18f, 0.18f, 1f);
   private static readonly Color ColSlotFilled = new(0.22f, 0.35f, 0.22f, 1f);
+  private static readonly Color ColSlotDisabled = new(0.12f, 0.12f, 0.12f, 1f);
   private static readonly Color ColBorderEmpty = new(0.35f, 0.35f, 0.35f, 1f);
   private static readonly Color ColBorderFilled = new(0.45f, 0.75f, 0.45f, 1f);
+  private static readonly Color ColBorderDisabled = new(0.22f, 0.22f, 0.22f, 1f);
   private static readonly Color ColHover = new(1f, 1f, 1f, 0.07f);
   private static readonly Color ColResultBg = new(0.15f, 0.20f, 0.30f, 1f);
   private static readonly Color ColResultBorder = new(0.40f, 0.55f, 0.90f, 1f);
@@ -23,16 +25,18 @@ public class RecipeEditor : Editor
   // ── Serialised properties ─────────────────────────────────────────────
   private SerializedProperty _result;
   private SerializedProperty _amount;
+  private SerializedProperty _gridSize;
   private SerializedProperty _ingredients;
 
   // ── Picker tracking ───────────────────────────────────────────────────
-  private int _activePickerSlot = -1;   // -2 = result picker
+  private int _activePickerSlot = -1; // -2 = result picker
 
   // ─────────────────────────────────────────────────────────────────────
   private void OnEnable()
   {
     _result = serializedObject.FindProperty("result");
     _amount = serializedObject.FindProperty("amount");
+    _gridSize = serializedObject.FindProperty("gridSize");
     _ingredients = serializedObject.FindProperty("ingredients");
   }
 
@@ -43,13 +47,14 @@ public class RecipeEditor : Editor
 
     DrawOutputSection();
     GUILayout.Space(14f);
+    DrawGridSizeSelector();
+    GUILayout.Space(8f);
     DrawGridSection();
     GUILayout.Space(10f);
     DrawFooterButtons();
 
     serializedObject.ApplyModifiedProperties();
 
-    // Repaint every frame while a picker is open so the preview updates
     if (_activePickerSlot != -1)
       Repaint();
   }
@@ -61,17 +66,14 @@ public class RecipeEditor : Editor
 
     EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-    // Big result slot on the left
     ItemData resultItem = _result.objectReferenceValue as ItemData;
     Rect resultSlotRect = GUILayoutUtility.GetRect(SlotSize + 14, SlotSize + 14,
-                                                   GUILayout.Width(SlotSize + 14),
-                                                   GUILayout.Height(SlotSize + 14));
+                               GUILayout.Width(SlotSize + 14), GUILayout.Height(SlotSize + 14));
 
     DrawSlotBackground(resultSlotRect, resultItem != null, ColResultBg, ColResultBorder);
     DrawSlotContent(resultSlotRect, resultItem);
     HandleSlotInteraction(resultSlotRect, _result, -2);
 
-    // Fields on the right
     EditorGUILayout.BeginVertical();
     GUILayout.Space(6);
     EditorGUILayout.LabelField("Result Item", EditorStyles.miniLabel);
@@ -84,12 +86,38 @@ public class RecipeEditor : Editor
     EditorGUILayout.EndHorizontal();
   }
 
-  // ── 4×4 grid ──────────────────────────────────────────────────────────
+  // ── Grid size selector ────────────────────────────────────────────────
+  private void DrawGridSizeSelector()
+  {
+    EditorGUILayout.BeginHorizontal();
+    GUILayout.Label("Grid Size", EditorStyles.boldLabel, GUILayout.Width(70));
+
+    int[] sizes = { 2, 3, 4 };
+
+    foreach (int size in sizes)
+    {
+      bool selected = _gridSize.intValue == size;
+      GUI.backgroundColor = selected ? new Color(0.3f, 0.7f, 0.3f) : Color.white;
+
+      if (GUILayout.Button($"{size}×{size}", GUILayout.Width(50), GUILayout.Height(22)) && !selected)
+      {
+        ClearOutOfBoundsSlots(size);
+        _gridSize.intValue = size;
+      }
+    }
+
+    GUI.backgroundColor = Color.white;
+    EditorGUILayout.EndHorizontal();
+  }
+
+  // ── Grid ──────────────────────────────────────────────────────────────
   private void DrawGridSection()
   {
-    GUILayout.Label("Ingredients  (4 × 4)", EditorStyles.boldLabel);
+    int gridSize = _gridSize.intValue;
+    GUILayout.Label($"Ingredients  ({gridSize} × {gridSize})", EditorStyles.boldLabel);
     GUILayout.Space(4f);
 
+    // Always render a 4×4 frame; slots outside the active grid are dimmed and non-interactive
     float gridWidth = 4 * SlotSize + 3 * SlotPad;
 
     EditorGUILayout.BeginHorizontal();
@@ -102,17 +130,25 @@ public class RecipeEditor : Editor
       for (int col = 0; col < 4; col++)
       {
         int index = row * 4 + col;
-        SerializedProperty slot = _ingredients.GetArrayElementAtIndex(index);
-        ItemData item = slot.objectReferenceValue as ItemData;
+        bool inBounds = row < gridSize && col < gridSize;
 
         Rect rect = GUILayoutUtility.GetRect(SlotSize, SlotSize,
-                                             GUILayout.Width(SlotSize),
-                                             GUILayout.Height(SlotSize));
+                     GUILayout.Width(SlotSize), GUILayout.Height(SlotSize));
 
-        DrawSlotBackground(rect, item != null, ColSlotEmpty, ColBorderEmpty,
-                                               ColSlotFilled, ColBorderFilled);
-        DrawSlotContent(rect, item);
-        HandleSlotInteraction(rect, slot, index);
+        if (inBounds)
+        {
+          SerializedProperty slot = _ingredients.GetArrayElementAtIndex(index);
+          ItemData item = slot.objectReferenceValue as ItemData;
+
+          DrawSlotBackground(rect, item != null, ColSlotEmpty, ColBorderEmpty,
+                                                 ColSlotFilled, ColBorderFilled);
+          DrawSlotContent(rect, item);
+          HandleSlotInteraction(rect, slot, index);
+        }
+        else
+        {
+          DrawSlotBackground(rect, false, ColSlotDisabled, ColBorderDisabled);
+        }
 
         if (col < 3) GUILayout.Space(SlotPad);
       }
@@ -145,11 +181,20 @@ public class RecipeEditor : Editor
     EditorGUILayout.EndHorizontal();
   }
 
+  // ── Clears slots outside the new grid bounds before switching size ────
+  private void ClearOutOfBoundsSlots(int newSize)
+  {
+    for (int row = 0; row < 4; row++)
+      for (int col = 0; col < 4; col++)
+        if (row >= newSize || col >= newSize)
+          _ingredients.GetArrayElementAtIndex(row * 4 + col).objectReferenceValue = null;
+
+    serializedObject.ApplyModifiedProperties();
+  }
+
   // ─────────────────────────────────────────────────────────────────────
   //  Drawing helpers
   // ─────────────────────────────────────────────────────────────────────
-
-  /// Draws background + border. Pass optional filled overrides.
   private static void DrawSlotBackground(
       Rect rect, bool filled,
       Color emptyBg, Color emptyBorder,
@@ -162,7 +207,6 @@ public class RecipeEditor : Editor
     DrawBorder(rect, 1.5f, border);
   }
 
-  /// Renders the SO name (filled) or "+" placeholder (empty).
   private static void DrawSlotContent(Rect rect, ItemData item)
   {
     if (rect.Contains(Event.current.mousePosition))
@@ -196,7 +240,7 @@ public class RecipeEditor : Editor
   }
 
   // ─────────────────────────────────────────────────────────────────────
-  //  Interaction helpers  (click, drag-and-drop, right-click clear)
+  //  Interaction helpers
   // ─────────────────────────────────────────────────────────────────────
   private void HandleSlotInteraction(Rect rect, SerializedProperty slot, int slotIndex)
   {
@@ -246,9 +290,7 @@ public class RecipeEditor : Editor
 
     if (e.commandName == "ObjectSelectorClosed" &&
         EditorGUIUtility.GetObjectPickerControlID() == slotIndex)
-    {
       _activePickerSlot = -1;
-    }
 
     // ── Right-click context menu ──────────────────────────────────────
     if (e.type == EventType.ContextClick && rect.Contains(e.mousePosition))

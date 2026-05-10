@@ -71,6 +71,8 @@ namespace Items.Overlays
     {
       #region EvaluateCraft
       ItemStack result = CraftingUtils.EvaluateCraft(craftingSlots.Select(s => s.item).ToList(), 2);
+
+      Debug.Log($"Craft result is: {result}");
       resultSlot.item = null;
       if (result != null) resultSlot.Add(result);
       OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
@@ -90,7 +92,7 @@ namespace Items.Overlays
         Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
         return false;
       }
-      bool isCraftingSlot = slotId >= EquipmentSlots;
+      bool isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
       Slot slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
 
       if (!slot.isEmpty && slot.item.data != itemStack.data) return false;
@@ -122,8 +124,15 @@ namespace Items.Overlays
     public ItemStack ClearSlot(int slotId)
     {
       #region ClearSlot
-      bool isCraftingSlot = slotId >= EquipmentSlots;
-      Slot slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
+      Slot slot;
+      bool isCraftingSlot = false;
+
+      if (slotId == resultSlot.id) slot = resultSlot;
+      else
+      {
+        isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
+        slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
+      }
 
       if (slot.isEmpty) return null;
 

@@ -86,7 +86,7 @@ namespace Items.Utils
 
           if (inBounds)
           {
-            ItemData expected = recipe.ingredients[recipeRow * recipe.gridSize + recipeCol];
+            ItemData expected = recipe.ingredients[recipeRow * 4 + recipeCol];
             if (expected != provided) return false;
           }
           else
