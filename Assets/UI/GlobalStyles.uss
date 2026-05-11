@@ -3,7 +3,7 @@
     width: 1300px;
     height: 800px;
     flex-shrink: 0;
-    background-color: rgba(92, 52, 30, 0.98);
+    background-color: rgb(92, 52, 30);
 }
 
 .corners {

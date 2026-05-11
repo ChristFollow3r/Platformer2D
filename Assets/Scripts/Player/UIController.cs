@@ -30,7 +30,6 @@ namespace Player
 
     #region Data
     [Header("Elements")]
-    [SerializeField] private GameObject uiHolder;
     [SerializeField] private UIDocument overlay;
     [SerializeField] private UIDocument hud;
     private VisualElement overlayRoot;
