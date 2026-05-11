@@ -1,0 +1,37 @@
+.holder {
+    flex-grow: 0;
+    width: 1300px;
+    height: 800px;
+    flex-shrink: 0;
+    background-color: rgb(92, 52, 30);
+}
+
+.corners {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    bottom: -8px;
+    right: -8px;
+}
+
+.root {
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;
+}
+
+.spaced-right {
+    margin-top: 0;
+    margin-right: 10px;
+    margin-left: 0;
+}
+
+.spaced-bottom {
+    margin-top: 0;
+    margin-bottom: 10px;
+    margin-left: 0;
+}
+
+.space {
+    width: 50px;
+}
