@@ -38,23 +38,12 @@ namespace Chunks
                     var propType = WorldData.World.GetPropType(i, j);
                     Vector3Int pos = new Vector3Int(i, j, 0);
                     
-                    float lightValue = WorldData.World.lightValues[i, j];
-                    float bloomMultiplier = 1.5f;
-                    
-                    Color lightColor = new Color(lightValue * bloomMultiplier, lightValue * bloomMultiplier, lightValue * bloomMultiplier, 1f);
-                    
                     if (blockType != BlockType.Air)
                     {
                         var tile = ScriptableObject.CreateInstance<Tile>(); 
                         tile.sprite = WorldData.BlockDictionary[blockType].sprite;
-                        
-                        tile.flags = TileFlags.None;
-                        
                         blockTileMap.SetTile(pos, tile);
-                        blockTileMap.SetColor(pos, lightColor);
-                        
                         blockTileMap.gameObject.layer = LayerMask.NameToLayer("Block");
-
                     }
 
                     if (propType != PropType.None)
@@ -62,11 +51,8 @@ namespace Chunks
                         var propTile = ScriptableObject.CreateInstance<Tile>();
                         propTile.sprite = WorldData.PropDictionary[propType].sprite;
                         propTile.colliderType = Tile.ColliderType.Sprite;
-                        
-                        propTileMap.SetTile(new Vector3Int(i, j, 0), propTile);
-                        propTileMap.SetColor(pos, lightColor);
+                        propTileMap.SetTile(pos, propTile);
                     }
-                    
                 }
             }
 
@@ -76,7 +62,6 @@ namespace Chunks
         public void LoadChunk()
         {
             if (notCreated) BuildTiles();
-    
             blockTileMap.gameObject.SetActive(true);
             propTileMap.gameObject.SetActive(true);
             isLoaded = true;
@@ -96,7 +81,6 @@ namespace Chunks
             PropType propType = WorldData.World.GetPropType(x, y);
             
             if (blockType == BlockType.Air) blockTileMap.SetTile(position, null);
-
             else
             {
                 var tile = ScriptableObject.CreateInstance<Tile>(); 
@@ -104,9 +88,7 @@ namespace Chunks
                 blockTileMap.SetTile(position, tile);
             }
             
-            if (propType == PropType.None)
-                propTileMap.SetTile(position, null);
-
+            if (propType == PropType.None) propTileMap.SetTile(position, null);
             else
             {
                 Tile propTile = propTileMap.GetTile<Tile>(position);
@@ -116,7 +98,6 @@ namespace Chunks
                     propTileMap.RefreshTile(position);
                 }
             }
-            
         }
     }
 }

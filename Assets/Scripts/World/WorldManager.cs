@@ -15,6 +15,11 @@ namespace World
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
+        [Header("Shader Setup")]
+        [SerializeField] private Material tilemapMaterial;
+        private Texture2D lightmapTexture;
+        
+        [Header("World Settings")]
         public int worldWidth = 150; 
         public int worldHeight = 90;
         public static WorldManager Instance { get; private set; }
@@ -50,9 +55,19 @@ namespace World
             cameraPosition = mainCamera.transform.position;
             seedOffset = ComputeSeedOffset(worldSeed);
             
+            lightmapTexture = new Texture2D(worldWidth, worldHeight, TextureFormat.RGBAHalf, false);
+            lightmapTexture.filterMode = FilterMode.Bilinear;
+            lightmapTexture.wrapMode = TextureWrapMode.Clamp;
+            
+            tilemapMaterial.SetTexture("_LightMap", lightmapTexture);
+            tilemapMaterial.SetVector("_WorldSize", new Vector2(worldWidth, worldHeight));
+            tilemapMaterial.SetFloat("_CellSize", gridParent.cellSize.x);
+
+            
             GenerateWorld();
             GenerateProps();
             CalculateLighting();
+            ApplyLightingToTexture();
             PopulateChunks();
             UpdateChunks(); 
         }
@@ -162,18 +177,22 @@ namespace World
                     var blockChunkChild = new GameObject("blocks");
                     blockChunkChild.transform.parent = chunk.transform;
                     blockChunkChild.AddComponent<Tilemap>();
-                    blockChunkChild.AddComponent<TilemapRenderer>();
+                    var bRenderer = blockChunkChild.AddComponent<TilemapRenderer>();
+                    bRenderer.material = tilemapMaterial;
+                    
                     blockChunkChild.AddComponent<TilemapCollider2D>();
                     blockChunkChild.AddComponent<CompositeCollider2D>();
                     
                     blockChunkChild.GetComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
-                    blockChunkChild.GetComponent<Rigidbody2D>().bodyType                 = RigidbodyType2D.Static;
-                    blockChunkChild.GetComponent<CompositeCollider2D>().geometryType     = CompositeCollider2D.GeometryType.Outlines;
+                    blockChunkChild.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+                    blockChunkChild.GetComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Outlines;
                 
                     var propChunkChild = new GameObject("props");
                     propChunkChild.transform.parent = chunk.transform;
                     propChunkChild.AddComponent<Tilemap>();
-                    propChunkChild.AddComponent<TilemapRenderer>();
+                    var pRenderer = propChunkChild.AddComponent<TilemapRenderer>();
+                    pRenderer.material = tilemapMaterial;
+
                     var propCollider = propChunkChild.AddComponent<TilemapCollider2D>();
                     propCollider.isTrigger = true;
                 
@@ -185,10 +204,8 @@ namespace World
         private void UpdateChunks()
         {
             float cellSize  = gridParent.cellSize.x;
-        
             int cameraTileX = Mathf.FloorToInt(cameraPosition.x / cellSize);
             int cameraTileY = Mathf.FloorToInt(cameraPosition.y / cellSize);
-        
             var cameraChunk = new Vector2Int(cameraTileX / Chunk.ChunkSize, cameraTileY / Chunk.ChunkSize);
         
             for (int x = 0; x < chunks.GetLength(0); x++)
@@ -212,24 +229,19 @@ namespace World
                 cameraPosition = mainCamera.transform.position;
                 return true;
             }
-
             return false;
         }
     
         private bool CanSpawnTree(int x, int y)
         {
             int treeSpacing = 4; 
-
             for (int i = -treeSpacing; i <= treeSpacing; i++)
             {
                 if (i == 0) continue;
-
                 int checkX = x + i;
-            
                 if (!WorldData.World.SafeCheck(checkX, y + 1)) continue;
                 if (WorldData.World.GetPropType(checkX, y + 1) == PropType.Tree) return false;
             }
-        
             return WorldData.World.GetBlockTypes(x - 1, y) == BlockType.Grass && 
                    WorldData.World.GetBlockTypes(x + 1, y) == BlockType.Grass;
         }
@@ -250,14 +262,10 @@ namespace World
             for (int i = 0; i < width; i++)
             {
                 float currentSunlight = 1.0f;
-    
                 for (int j = height - 1; j >= 0; j--)
                 {
                     BlockType blockType = WorldData.World.GetBlockTypes(i, j);
-        
                     if (blockType != BlockType.Air) currentSunlight *= 0.82f;
-                    else currentSunlight *= 1.0f;
-        
                     WorldData.World.lightValues[i, j] = currentSunlight;
                 }
             }
@@ -270,7 +278,6 @@ namespace World
                     {
                         BlockType type = WorldData.World.GetBlockTypes(i, j);
                         float currentValue = WorldData.World.lightValues[i, j];
-
                         float neighbourMax = 0f;
                         if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
                         if (i < width - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
@@ -279,12 +286,24 @@ namespace World
                 
                         float decay = (type == BlockType.Air) ? 0.94f : 0.84f;
                         float spreadValue = neighbourMax * decay;
-        
-                        if (spreadValue > currentValue) 
-                            WorldData.World.lightValues[i, j] = spreadValue;
+                        if (spreadValue > currentValue) WorldData.World.lightValues[i, j] = spreadValue;
                     }
                 }
             }
+        }
+
+        private void ApplyLightingToTexture()
+        {
+            float bloomMultiplier = 1.0f;
+            for (int x = 0; x < worldWidth; x++)
+            {
+                for (int y = 0; y < worldHeight; y++)
+                {
+                    float l = WorldData.World.lightValues[x, y] * bloomMultiplier;
+                    lightmapTexture.SetPixel(x, y, new Color(l, l, l, 1f));
+                }
+            }
+            lightmapTexture.Apply();
         }
     }
 }
