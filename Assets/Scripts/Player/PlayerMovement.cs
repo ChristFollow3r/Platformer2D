@@ -45,12 +45,11 @@
             private void Update()
             {
                 bool isGrounded = Physics2D.Raycast(playerCollider.bounds.center, Vector2.down, playerCollider.bounds.extents.y + 0.2f, groundLayer).collider is not null;
-                bool isTouchingLeftWall =
-                    Physics2D.Raycast(playerCollider.bounds.center, Vector2.left,
-                        playerCollider.bounds.extents.x + 0.2f).collider is not null;
+    
+                bool isTouchingLeftWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.left, playerCollider.bounds.extents.x + 0.2f, groundLayer).collider is not null;
+    
                 bool isTouchingRightWall = Physics2D.Raycast(playerCollider.bounds.center, Vector2.right, playerCollider.bounds.extents.x + 0.2f, groundLayer).collider is not null;
-                
-                //if (isGrounded) Debug.DrawRay(playerCollider.bounds.center, Vector2.down, Color.green);
+    
                 Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
                 PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             }
@@ -58,17 +57,16 @@
             private void Movement(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
             {
                 float movement = playerInput.Player.Move.ReadValue<Vector2>().x;
-                
+    
                 if (isGrounded) canDoubleJump = true;
-                
-                if (isTouchingLeftWall || isTouchingRightWall && !isGrounded)
+    
+                if ((isTouchingLeftWall || isTouchingRightWall) && !isGrounded)
                     rb.gravityScale = 1.5f;
-                
-                else rb.gravityScale = rb.linearVelocityY < 0 ? 5f : 3f;
-                
+                else 
+                    rb.gravityScale = rb.linearVelocityY < 0 ? 5f : 3f;
+    
                 if (wallJumpTime > 0f)
                     wallJumpTime -= Time.deltaTime;
-                
                 else
                     rb.linearVelocityX = movement * speed;
 
@@ -76,19 +74,17 @@
                 {
                     if (!isGrounded && (isTouchingLeftWall || isTouchingRightWall))
                     {
-                        float direction = isTouchingLeftWall ?  1 : -1;
+                        float direction = isTouchingLeftWall ? 1 : -1;
                         rb.linearVelocity = new Vector2(direction * wallJumpForce.x, wallJumpForce.y);
-                        
+            
                         wallJumpTime = 0.25f;
                         canDoubleJump = true;
                     }
-                    
                     else if (isGrounded)
                     {
                         rb.linearVelocityY = jumpForce;
                         animator.SetTrigger(IsJumping);
                     }
-                    
                     else if (canDoubleJump)
                     {
                         rb.linearVelocityY = jumpForce;
@@ -96,7 +92,6 @@
                         animator.SetTrigger(IsJumping);
                     }
                 }
-                
             }
 
             private void PlayerAnimations(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
