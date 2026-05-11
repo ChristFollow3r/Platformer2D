@@ -11,6 +11,8 @@ namespace Scriptable_Objects_Scripts
     public int amount;
     [Range(0, 101)] public int dropChance = 100;
   }
+
+  // TODO: WTF IS THIS
   [CreateAssetMenu(fileName = "Prop", menuName = "Scriptable Objects/Prop")]
   public class Prop : ScriptableObject
   {

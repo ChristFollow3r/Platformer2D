@@ -74,8 +74,9 @@ namespace Player
 
         else return;
 
-        var heldItem = Data.Inventory.InventoryManager.Instance.GetHeldItem();
-        float itemStrength = heldItem?.tier ?? 0.5f; // Fucking rider is the goat fixing my shitty code
+        // TODO: get hand item
+
+        float itemStrength = 1; // get this from item
 
         breakTimer += Time.deltaTime * itemStrength;
         if (breakTimer >= targetHardness)
@@ -102,8 +103,10 @@ namespace Player
               {
                 for (int i = 0; i < drop.amount; i++)
                 {
-                  var droppedItem = Instantiate(drop.item.drop, spawnPos, Quaternion.identity);
-                  if (droppedItem is not null) Destroy(droppedItem, 300f);
+                  // TODO: Spawn item prefab and inject itemData
+
+                  // var droppedItem = Instantiate(drop.item.drop, spawnPos, Quaternion.identity);
+                  // if (droppedItem is not null) Destroy(droppedItem, 300f);
                 }
               }
             }
@@ -126,21 +129,23 @@ namespace Player
         if (lastMousePosition.x == mouseX && lastMousePosition.y == mouseY) return;
         lastMousePosition = new Vector2Int(mouseX, mouseY);
 
-        var heldItem = Data.Inventory.InventoryManager.Instance.GetHeldItem();
-        if (heldItem is null) return;
+        // TODO: Fix placing
 
-        if (heldItem.blockType != BlockType.None && heldItem.blockType != BlockType.Air)
-        {
-          if (WorldData.World.GetBlockTypes(mouseX, mouseY) == BlockType.Air && WorldData.World.GetPropType(mouseX, mouseY) == PropType.None)
-          {
-            WorldData.World.SetBlockType(mouseX, mouseY, heldItem.blockType);
+        // var heldItem = Data.Inventory.InventoryManager.Instance.GetHeldItem();
+        // if (heldItem is null) return;
 
-            int chunkX = mouseX / Chunk.ChunkSize;
-            int chunkY = mouseY / Chunk.ChunkSize;
-            WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(mouseX, mouseY);
-            Data.Inventory.InventoryManager.Instance.UseBlock();
-          }
-        }
+        // if (heldItem.blockType != BlockType.None && heldItem.blockType != BlockType.Air)
+        // {
+        //   if (WorldData.World.GetBlockTypes(mouseX, mouseY) == BlockType.Air && WorldData.World.GetPropType(mouseX, mouseY) == PropType.None)
+        //   {
+        //     WorldData.World.SetBlockType(mouseX, mouseY, heldItem.blockType);
+
+        //     int chunkX = mouseX / Chunk.ChunkSize;
+        //     int chunkY = mouseY / Chunk.ChunkSize;
+        //     WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(mouseX, mouseY);
+        //     // Data.Inventory.InventoryManager.Instance.UseBlock();
+        //   }
+        // }
 
       }
 
