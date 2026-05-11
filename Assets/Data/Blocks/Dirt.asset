@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockPrefab: {fileID: 5499974657267223093, guid: 9d5e7c9b7d433094e9bbf90ec068d530, type: 3}
   blockName: Dirt
-  sprite: {fileID: 121377243, guid: 65071482b21a40346bd5ba5e4ea1ec14, type: 3}
+  sprite: {fileID: -8275502208090371910, guid: a5a8dff0fab06184887c331370f7c574, type: 3}
   type: 2
   hardness: 2

@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockPrefab: {fileID: 6338159172816223235, guid: ba3271a1067f21440a2315b5ef9d40cc, type: 3}
   blockName: Grass
-  sprite: {fileID: 1417402634, guid: 65071482b21a40346bd5ba5e4ea1ec14, type: 3}
+  sprite: {fileID: -1347532211411968617, guid: f6dccec5d156e2e41b73e6b03c03e9c5, type: 3}
   type: 3
   hardness: 1

@@ -4,6 +4,7 @@ using Data;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Scriptable_Objects_Scripts;
+using World;
 
 namespace Player
 {
@@ -33,8 +34,10 @@ namespace Player
       Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
       float distance = Vector2.Distance(mousePosition, player.transform.position);
 
-      int mouseX = Mathf.FloorToInt(mousePosition.x);
-      int mouseY = Mathf.FloorToInt(mousePosition.y);
+      float cellSize = 0.5f;
+
+      int mouseX = Mathf.FloorToInt(mousePosition.x / cellSize);
+      int mouseY = Mathf.FloorToInt(mousePosition.y / cellSize);
 
 
       if (Mathf.Abs(distance) > reachDistance)
@@ -71,42 +74,46 @@ namespace Player
 
         else return;
 
-        // var heldItem = Data.Inventory.InventoryManager.Instance.GetHeldItem();
-        // float itemStrength = heldItem?.tier ?? 0.5f; // Fucking rider is the goat fixing my shitty code
+        var heldItem = Data.Inventory.InventoryManager.Instance.GetHeldItem();
+        float itemStrength = heldItem?.tier ?? 0.5f; // Fucking rider is the goat fixing my shitty code
 
-        // breakTimer += Time.deltaTime * itemStrength;
-        // if (breakTimer >= targetHardness)
-        // {
-        //   if (isBreakingABlock)
-        //   {
-        //     var blockData = WorldData.BlockDictionary[clickedBlock];
-        //     var drop = Instantiate(WorldData.BlockDictionary[clickedBlock].blockPrefab, new Vector2(mouseX, mouseY), Quaternion.identity);
-        //     Destroy(drop, 300f);
-        //     WorldData.World.SetBlockType(mouseX, mouseY, BlockType.Air);
-        //   }
+        breakTimer += Time.deltaTime * itemStrength;
+        if (breakTimer >= targetHardness)
+        {
+          Vector2 spawnPos = new Vector2(mouseX * cellSize, mouseY * cellSize);
 
-        //   else
-        //   {
-        //     // DROP LOGIC FOR PROPS (Your existing code)
-        //     Prop propData = WorldData.PropDictionary[clickedType];
-        //     foreach (Drop drop in propData.drops)
-        //     {
-        //       if (Random.Range(0, 101) <= drop.dropChance)
-        //       {
-        //         for (int i = 0; i < drop.amount; i++)
-        //         {
-        //           // var droppedItem = Instantiate(drop.item.drop, new Vector2(mouseX, mouseY), Quaternion.identity);
-        //           // if (droppedItem is not null) Destroy(droppedItem, 300f);
-        //         }
-        //       }
-        //     }
-        //     WorldData.World.SetPropType(mouseX, mouseY, PropType.None);
-        //   }
+          int chunkX = mouseX / Chunk.ChunkSize;
+          int chunkY = mouseY / Chunk.ChunkSize;
 
-        //   // Update the visual tile
-        //   WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
-        //   breakTimer = 0f;
-        // }
+          if (isBreakingABlock)
+          {
+            var drop = Instantiate(WorldData.BlockDictionary[clickedBlock].blockPrefab, spawnPos, Quaternion.identity);
+            Destroy(drop, 300f);
+            WorldData.World.SetBlockType(mouseX, mouseY, BlockType.Air);
+          }
+
+          else
+          {
+            // DROP LOGIC FOR PROPS (Your existing code)
+            Prop propData = WorldData.PropDictionary[clickedType];
+            foreach (Drop drop in propData.drops)
+            {
+              if (Random.Range(0, 101) <= drop.dropChance)
+              {
+                for (int i = 0; i < drop.amount; i++)
+                {
+                  var droppedItem = Instantiate(drop.item.drop, spawnPos, Quaternion.identity);
+                  if (droppedItem is not null) Destroy(droppedItem, 300f);
+                }
+              }
+            }
+            WorldData.World.SetPropType(mouseX, mouseY, PropType.None);
+          }
+
+          // Update the visual tile
+          WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(mouseX, mouseY);
+          breakTimer = 0f;
+        }
       }
 
       else
@@ -119,18 +126,21 @@ namespace Player
         if (lastMousePosition.x == mouseX && lastMousePosition.y == mouseY) return;
         lastMousePosition = new Vector2Int(mouseX, mouseY);
 
-        // var heldItem = Data.Inventory.InventoryManager.Instance.GetHeldItem();
-        // if (heldItem is null) return;
+        var heldItem = Data.Inventory.InventoryManager.Instance.GetHeldItem();
+        if (heldItem is null) return;
 
-        // if (heldItem.blockType != BlockType.None && heldItem.blockType != BlockType.Air)
-        // {
-        //     if (WorldData.World.GetBlockTypes(mouseX, mouseY) == BlockType.Air && WorldData.World.GetPropType(mouseX, mouseY) == PropType.None)
-        //     {
-        //         WorldData.World.SetBlockType(mouseX, mouseY, heldItem.blockType);
-        //         WorldManager.Instance.chunks[(mouseX / Chunk.ChunkSize), (mouseY / Chunk.ChunkSize)].UpdateTile(mouseX, mouseY);
-        //         Data.Inventory.InventoryManager.Instance.UseBlock();
-        //     }
-        // }
+        if (heldItem.blockType != BlockType.None && heldItem.blockType != BlockType.Air)
+        {
+          if (WorldData.World.GetBlockTypes(mouseX, mouseY) == BlockType.Air && WorldData.World.GetPropType(mouseX, mouseY) == PropType.None)
+          {
+            WorldData.World.SetBlockType(mouseX, mouseY, heldItem.blockType);
+
+            int chunkX = mouseX / Chunk.ChunkSize;
+            int chunkY = mouseY / Chunk.ChunkSize;
+            WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(mouseX, mouseY);
+            Data.Inventory.InventoryManager.Instance.UseBlock();
+          }
+        }
 
       }
 

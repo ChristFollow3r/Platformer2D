@@ -15,6 +15,6 @@ MonoBehaviour:
   drop: {fileID: 8411808859423680847, guid: 61a70d617d613ce45a94478267fe183f, type: 3}
   blockType: 4
   itemName: Stone
-  itemIcon: {fileID: -1831700366, guid: 65071482b21a40346bd5ba5e4ea1ec14, type: 3}
+  itemIcon: {fileID: -8783898613374323236, guid: e942ef862794d9541919afc1ab35fc20, type: 3}
   maxStack: 64
   tier: 2

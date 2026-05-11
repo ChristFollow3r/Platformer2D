@@ -1,0 +1,126 @@
+using System.Collections;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace Player
+{
+    public class PlayerActiveItem : MonoBehaviour
+    {
+        [SerializeField] private ParticleSystem dustParticles;
+        private static AnimationClip _swingClip;
+        
+        [Header("Temporary Audio")]
+        [SerializeField] private AudioSource audioSource;
+        [SerializeField] private AudioClip swingSound;
+        [SerializeField] private AudioClip hitSound;
+        private readonly float pitchVariation = 0.1f;
+        
+        private Rigidbody2D playerRigidbody;
+        private Animator animator;
+        private SpriteRenderer toolSprite; // To do: Add listener method that gets the item in the hotbar to change the sprite
+        private Color activeColor;
+        
+        private static readonly int Active = Animator.StringToHash("isActive");
+        private float swingClipDuration;
+        
+        private int playerDirection;
+        private int facingDirection;
+        
+        private InputSystem_Actions input;
+        private bool isAttacking;
+    
+        private void Awake()
+        {
+            input             = new InputSystem_Actions();
+            input.Enable();
+            
+            playerRigidbody   = transform.parent.GetComponent<Rigidbody2D>();
+            animator          = GetComponent<Animator>();
+            _swingClip        = animator.runtimeAnimatorController.animationClips[0];
+            swingClipDuration = _swingClip.length;
+
+            toolSprite        = transform.GetChild(0).GetComponent<SpriteRenderer>();
+            activeColor       = toolSprite.color;
+        }
+
+        private void Start()
+        {
+            isAttacking        = false;
+            activeColor.a      = 0;
+            toolSprite.color   = activeColor;
+        }
+
+        private void Update()
+        {
+            UpdateFacingDirection();
+            PlayAnimation();
+        }
+
+        private void PlayAnimation()
+        {
+            if (!Mouse.current.leftButton.isPressed || isAttacking) return;
+            isAttacking           = true;
+            StartCoroutine(Attack());
+
+        }
+        
+        private IEnumerator Attack()
+        {
+            activeColor.a       = 1;
+            toolSprite.color    = activeColor;
+            PlayRandomizedSound(swingSound);
+            
+            playerDirection = facingDirection;
+            Vector2 attackPoint = (Vector2)transform.position + new Vector2(playerDirection * 0.2f, 0f);
+            
+            animator.SetBool(Active, true);
+            Collider2D hit = Physics2D.OverlapCircle(attackPoint, 1f, 5);
+            
+            if (hit is not null && hit.CompareTag("Enemy"))
+            {
+                PlayRandomizedSound(hitSound);
+                SpawnHitParticles(hit.bounds.ClosestPoint(attackPoint));
+                
+                if (hit.TryGetComponent(out Shared.Health enemyHealth))
+                {
+                    enemyHealth.TakeDamage(10, playerDirection, 10);
+                }
+            }
+            yield return new WaitForSeconds(swingClipDuration);
+            
+            activeColor.a       = 0;
+            toolSprite.color    = activeColor;
+            
+            animator.SetBool(Active, false);
+            isAttacking         = false;
+            yield return null;
+        }
+
+        private void UpdateFacingDirection()
+        {
+            Vector2 moveInput = input.Player.Move.ReadValue<Vector2>();
+            
+            if (moveInput.x > 0.1f) facingDirection = 1;
+            else if (moveInput.x < -0.1f) facingDirection = -1;
+        }
+
+        private void SpawnHitParticles(Vector2 position)
+        {
+            float yAngle = playerDirection > 0 ? 0f : 180f;
+            Quaternion rotation = Quaternion.Euler(0, yAngle, 0);
+            Vector2 offset = new Vector2(0.2f, 0f);
+    
+            ParticleSystem instance = Instantiate(dustParticles, position + offset, rotation);
+            Destroy(instance.gameObject, instance.main.duration);
+        }
+        
+        private void PlayRandomizedSound(AudioClip clip)
+        {
+            if (clip is null) return;
+            float randomPitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
+    
+            audioSource.pitch = randomPitch;
+            audioSource.PlayOneShot(clip);
+        }
+    }
+}

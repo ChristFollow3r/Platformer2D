@@ -1,4 +1,5 @@
 using Scriptable_Objects_Scripts;
+using UnityEngine;
 
 namespace Data
 {
@@ -9,6 +10,7 @@ namespace Data
 
         private readonly BlockType[] blocks;
         private readonly PropType[] props;
+        public float[,] lightValues;
 
         public World(int width, int height)
         {
@@ -16,6 +18,7 @@ namespace Data
             this.height = height;
             blocks = new BlockType[width * height];
             props = new PropType[width * height];
+            lightValues = new float [width, height];
         }
 
         #region Blocks
