@@ -16,7 +16,7 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: 8bccc04a6493cad44924dda7a77d8b01, type: 2}
     amount: 5
     dropChance: 101
-  sprite: {fileID: 6853316077166303748, guid: 009b9bdb060022f4184feadca566ebae, type: 3}
+  sprite: {fileID: 21300000, guid: 6d977b190b2fb8f48ade4b34db86ffcd, type: 3}
   name: Oak_Tree
   type: 3
   hardness: 5

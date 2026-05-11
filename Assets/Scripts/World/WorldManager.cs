@@ -14,21 +14,19 @@ namespace World
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
-    
 
-        public int worldWidth = 150; // Using World width and height gives error :V
+        public int worldWidth = 150; 
         public int worldHeight = 90;
         public static WorldManager Instance { get; private set; }
     
         private float seedOffset;
-        public float tallMountains = 0.05f; // To be changed
+        public float tallMountains = 0.05f; 
         public float mediumMountains = 0.1f;
         public float smallMountains = 0.02f;
 
         public Chunk[,] chunks;
         private readonly int renderDistance = 1;
         private Vector3 cameraPosition;
-    
 
         private void Awake()
         {
@@ -48,19 +46,21 @@ namespace World
         private void Start()
         {
             WorldData.World = new Data.World(worldWidth, worldHeight);
-            chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize]; // Plus 15 to round up
+            chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize]; 
             cameraPosition = mainCamera.transform.position;
-            seedOffset =  ComputeSeedOffset(worldSeed);
+            seedOffset = ComputeSeedOffset(worldSeed);
+            
             GenerateWorld();
             GenerateProps();
+            CalculateLighting();
             PopulateChunks();
-            UpdateChunks(); // Call it once at start cause in update we call it only when the camera moves
+            UpdateChunks(); 
         }
 
         private void Update()
         {
             if (CheckCameraMovement())
-                UpdateChunks(); // If the camera moves, perform the logic to render stuff
+                UpdateChunks(); 
         }
 
         private void GenerateWorld()
@@ -165,7 +165,7 @@ namespace World
                     blockChunkChild.AddComponent<TilemapRenderer>();
                     blockChunkChild.AddComponent<TilemapCollider2D>();
                     blockChunkChild.AddComponent<CompositeCollider2D>();
-                
+                    
                     blockChunkChild.GetComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
                     blockChunkChild.GetComponent<Rigidbody2D>().bodyType                 = RigidbodyType2D.Static;
                     blockChunkChild.GetComponent<CompositeCollider2D>().geometryType     = CompositeCollider2D.GeometryType.Outlines;
@@ -190,7 +190,6 @@ namespace World
             int cameraTileY = Mathf.FloorToInt(cameraPosition.y / cellSize);
         
             var cameraChunk = new Vector2Int(cameraTileX / Chunk.ChunkSize, cameraTileY / Chunk.ChunkSize);
-            // Since our chunks are 16 x 16, if we divide by 16, we get the chunk we currently are at.
         
             for (int x = 0; x < chunks.GetLength(0); x++)
             {
@@ -198,9 +197,7 @@ namespace World
                 {
                     int xPosition = Mathf.Abs(x - cameraChunk.x);
                     int yPosition = Mathf.Abs(y - cameraChunk.y);
-                    bool inRange =
-                        xPosition <= renderDistance &&
-                        yPosition <= renderDistance; // If true, load the chunk, if false, unload if it's loaded.
+                    bool inRange = xPosition <= renderDistance && yPosition <= renderDistance; 
 
                     if (inRange && !chunks[x, y].isLoaded) chunks[x, y].LoadChunk();
                     else if (!inRange && chunks[x, y].isLoaded) chunks[x, y].UnLoadChunk();
@@ -208,7 +205,7 @@ namespace World
             }
         }
 
-        private bool CheckCameraMovement() // We check every time the camera moves. A bit much inefficient, but it works just fine.
+        private bool CheckCameraMovement() 
         {
             if (mainCamera.transform.position != cameraPosition)
             {
@@ -245,5 +242,49 @@ namespace World
                    WorldData.World.GetBlockTypes(x + 1, y) == BlockType.Air;
         }
 
+        private void CalculateLighting()
+        {
+            int width = WorldData.World.width;
+            int height = WorldData.World.height;
+    
+            for (int i = 0; i < width; i++)
+            {
+                float currentSunlight = 1.0f;
+    
+                for (int j = height - 1; j >= 0; j--)
+                {
+                    BlockType blockType = WorldData.World.GetBlockTypes(i, j);
+        
+                    if (blockType != BlockType.Air) currentSunlight *= 0.82f;
+                    else currentSunlight *= 1.0f;
+        
+                    WorldData.World.lightValues[i, j] = currentSunlight;
+                }
+            }
+    
+            for (int iteration = 0; iteration < 14; iteration++) 
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    for (int j = 0; j < height; j++)
+                    {
+                        BlockType type = WorldData.World.GetBlockTypes(i, j);
+                        float currentValue = WorldData.World.lightValues[i, j];
+
+                        float neighbourMax = 0f;
+                        if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
+                        if (i < width - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
+                        if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
+                        if (j < height - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+                
+                        float decay = (type == BlockType.Air) ? 0.94f : 0.84f;
+                        float spreadValue = neighbourMax * decay;
+        
+                        if (spreadValue > currentValue) 
+                            WorldData.World.lightValues[i, j] = spreadValue;
+                    }
+                }
+            }
+        }
     }
 }
