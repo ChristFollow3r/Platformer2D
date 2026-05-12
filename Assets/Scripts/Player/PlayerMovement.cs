@@ -45,6 +45,7 @@ namespace Player
         private float coyoteTimeCounter;
         private float jumpBufferCounter;
         private bool wasGrounded;
+        private bool isJumpingPhase;
 
         public event Action<Vector2> OnMinePerformed;
         public event Action<Vector2> OnAttackPerformed;
@@ -71,14 +72,17 @@ namespace Player
             float rayLength = (colSize.x / 2f) + 0.15f;
             Vector2 topRayPos = colCenter + new Vector2(0, colSize.y * 0.3f);
             Vector2 bottomRayPos = colCenter - new Vector2(0, colSize.y * 0.4f);
+            Vector2 highRayPos = colCenter + new Vector2(0, colSize.y * 0.8f);
 
             bool leftWallTop = Physics2D.Raycast(topRayPos, Vector2.left, rayLength, groundLayer);
             bool leftWallBottom = Physics2D.Raycast(bottomRayPos, Vector2.left, rayLength, groundLayer);
-            bool isTouchingLeftWall = leftWallTop && leftWallBottom;
+            bool leftWallHigh = Physics2D.Raycast(highRayPos, Vector2.left, rayLength, groundLayer);
+            bool isTouchingLeftWall = leftWallTop && leftWallBottom && leftWallHigh;
 
             bool rightWallTop = Physics2D.Raycast(topRayPos, Vector2.right, rayLength, groundLayer);
             bool rightWallBottom = Physics2D.Raycast(bottomRayPos, Vector2.right, rayLength, groundLayer);
-            bool isTouchingRightWall = rightWallTop && rightWallBottom;
+            bool rightWallHigh = Physics2D.Raycast(highRayPos, Vector2.right, rayLength, groundLayer);
+            bool isTouchingRightWall = rightWallTop && rightWallBottom && rightWallHigh;
 
             UpdatePolishTimers(isGrounded);
             Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
@@ -112,7 +116,6 @@ namespace Player
             if (wallJumpTime > 0f) wallJumpTime -= Time.deltaTime;
             else rb.linearVelocityX = movement * speed;
 
-
             if (jumpBufferCounter > 0f)
             {
                 if (!isGrounded && (isTouchingLeftWall || isTouchingRightWall))
@@ -123,20 +126,23 @@ namespace Player
                     wallJumpTime = 0.25f;
                     canDoubleJump = true;
                     jumpBufferCounter = 0f;
+                    isJumpingPhase = true;
                 }
                 else if (coyoteTimeCounter > 0f)
                 {
                     rb.linearVelocityY = jumpForce;
-                    animator.SetTrigger(IsJumping);
+                    if (Mathf.Abs(movement) <= 0.1f) animator.SetTrigger(IsJumping);
                     jumpBufferCounter = 0f;
                     coyoteTimeCounter = 0f;
+                    isJumpingPhase = true;
                 }
                 else if (canDoubleJump && !isSliding)
                 {
                     rb.linearVelocityY = jumpForce;
                     canDoubleJump = false;
-                    animator.SetTrigger(IsJumping);
+                    if (Mathf.Abs(movement) <= 0.1f) animator.SetTrigger(IsJumping);
                     jumpBufferCounter = 0f;
+                    isJumpingPhase = true;
                 }
             }
         }
@@ -148,6 +154,7 @@ namespace Player
 
             if (isSliding)
             {
+                isJumpingPhase = false;
                 float direction = isTouchingLeftWall ? 1f : -1f;
                 transform.localScale = new Vector3(direction, 1f, 1f);
             }
@@ -162,12 +169,18 @@ namespace Player
 
             if (!isGrounded)
             {
-                bool isActuallyFalling = rb.linearVelocityY < fallVelocityThreshold && !isSliding;
+                float activeFallThreshold = isJumpingPhase ? 0f : -Mathf.Abs(fallVelocityThreshold);
+                bool isActuallyFalling = rb.linearVelocityY < activeFallThreshold && !isSliding;
                 bool isJumpingUp = rb.linearVelocityY > 0.1f;
 
                 animator.SetBool(IsFalling, isActuallyFalling);
 
-                if (isActuallyFalling || isJumpingUp || isSliding)
+                if (isActuallyFalling)
+                {
+                    animator.ResetTrigger(IsJumping);
+                }
+
+                if (isActuallyFalling || isSliding || (isJumpingUp && !isMoving))
                 {
                     animator.SetBool(IsIdling, false);
                     animator.SetBool(IsRunning, false);
@@ -182,8 +195,10 @@ namespace Player
             {
                 if (!wasGrounded)
                 {
+                    isJumpingPhase = false;
+                    animator.ResetTrigger(IsJumping);
+                    if (animator.GetBool(IsFalling)) animator.SetTrigger(HasLanded);
                     animator.SetBool(IsFalling, false);
-                    animator.SetTrigger(HasLanded);
                 }
                 else animator.SetBool(IsFalling, false);
 
@@ -191,7 +206,6 @@ namespace Player
                 animator.SetBool(IsIdling, !isMoving);
             }
         }
-
 
         private void HandleMouseInput()
         {
