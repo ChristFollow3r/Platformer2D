@@ -718,7 +718,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ed2c406d2e627e45be1f5e7335bc823, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.UIController
-  uiHolder: {fileID: 0}
   overlay: {fileID: 1849100690}
   hud: {fileID: 91914541}
   isOverlayOpen: 0
@@ -907,7 +906,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &859175071
 Transform:
   m_ObjectHideFlags: 0
@@ -1022,16 +1021,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2584d299030f14d42bfa779ca8704647, type: 2}
   - {fileID: 11400000, guid: 22b1aa5d2322b504fadf61692b62b2dd, type: 2}
   props:
-  - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
-  - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}
   - {fileID: 11400000, guid: 348e613dcdb0a494cbdc03f622cecf08, type: 2}
   - {fileID: 11400000, guid: 782b2cc49984eed45b3f33107e206ce7, type: 2}
+  - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
+  - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
   worldSeed: Minecraft
   tilemapMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
   worldWidth: 3000
   worldHeight: 400
+  globalSpawnChance: 60
+  dirtLayerThickness: 4
   tallMountains: 0.004
   mediumMountains: 0.016
   smallMountains: 0.048

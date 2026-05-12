@@ -18,9 +18,14 @@ namespace Scriptable_Objects_Scripts
   {
     public List<Drop> drops = new List<Drop>();
     public Sprite sprite;
+
     public new string name;
     public PropType type;
+
     public int hardness;
-    public int spawnRate;
+    [Range(0f, 100f)] public float spawnChance;
+    public bool isFromSurface;
+    public int requiredSideSpace;
+
   }
 }

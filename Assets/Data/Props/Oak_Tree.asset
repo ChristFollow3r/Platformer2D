@@ -20,4 +20,6 @@ MonoBehaviour:
   name: Oak_Tree
   type: 3
   hardness: 5
-  spawnRate: 0
+  spawnChance: 50
+  isFromSurface: 1
+  requiredSideSpace: 3

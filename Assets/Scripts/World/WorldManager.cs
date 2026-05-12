@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using Chunks;
 using Data;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 
 namespace World
@@ -10,22 +12,25 @@ namespace World
     {
         [SerializeField] private Block[] blocks;
         [SerializeField] private Prop[] props;
-    
+
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
-        [Header("Shader Setup")]
-        [SerializeField] private Material tilemapMaterial;
+        [Header("Shader Setup")] [SerializeField]
+        private Material tilemapMaterial;
+
         private Texture2D lightmapTexture;
-        
-        [Header("World Settings")]
-        public int worldWidth = 150; 
+
+        [Header("World Settings")] public int worldWidth = 150;
         public int worldHeight = 90;
+        [SerializeField] private float globalSpawnChance;
+        [SerializeField] private int dirtLayerThickness;
+
         public static WorldManager Instance { get; private set; }
-    
+
         private float seedOffset;
-        public float tallMountains = 0.05f; 
+        public float tallMountains = 0.05f;
         public float mediumMountains = 0.1f;
         public float smallMountains = 0.02f;
 
@@ -51,31 +56,30 @@ namespace World
         private void Start()
         {
             WorldData.World = new Data.World(worldWidth, worldHeight);
-            chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize]; 
+            chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize];
             cameraPosition = mainCamera.transform.position;
             seedOffset = ComputeSeedOffset(worldSeed);
-            
+
             lightmapTexture = new Texture2D(worldWidth, worldHeight, TextureFormat.RGBAHalf, false);
             lightmapTexture.filterMode = FilterMode.Bilinear;
             lightmapTexture.wrapMode = TextureWrapMode.Clamp;
-            
+
             tilemapMaterial.SetTexture("_LightMap", lightmapTexture);
             tilemapMaterial.SetVector("_WorldSize", new Vector2(worldWidth, worldHeight));
             tilemapMaterial.SetFloat("_CellSize", gridParent.cellSize.x);
 
-            
             GenerateWorld();
             GenerateProps();
             CalculateLighting();
             ApplyLightingToTexture();
             PopulateChunks();
-            UpdateChunks(); 
+            UpdateChunks();
         }
 
         private void Update()
         {
             if (CheckCameraMovement())
-                UpdateChunks(); 
+                UpdateChunks();
         }
 
         private void GenerateWorld()
@@ -89,20 +93,20 @@ namespace World
                 noiseValue /= 1.2f;
                 noiseValue = Mathf.Lerp(0.4f, 0.6f, noiseValue);
                 var groundLevel = (int)(noiseValue * worldHeight * 0.75f);
-            
+
                 for (int y = 0; y < worldHeight; y++)
                 {
                     BlockType blockType;
-                
+
                     if (y > groundLevel) blockType = BlockType.Air;
                     else if (y == groundLevel) blockType = BlockType.Grass;
-                    else if (y >= groundLevel - 5) blockType = BlockType.Dirt;
-                    else blockType = BlockType.Stone; 
+                    else if (y >= groundLevel - dirtLayerThickness) blockType = BlockType.Dirt;
+                    else blockType = BlockType.Stone;
 
                     WorldData.World.SetBlockType(x, y, blockType);
                 }
             }
-        
+
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
@@ -111,8 +115,8 @@ namespace World
                     if (blockType == BlockType.Air) continue;
 
                     float caveNoise = Mathf.PerlinNoise((x * 0.05f) + seedOffset, (y * 0.05f) + seedOffset);
-                
-                    if (caveNoise < 0.35f) 
+
+                    if (caveNoise < 0.35f)
                         WorldData.World.SetBlockType(x, y, BlockType.Air);
                 }
             }
@@ -120,43 +124,63 @@ namespace World
 
         private void GenerateProps()
         {
+            GeneratePropTypePass(true);
+            GeneratePropTypePass(false);
+        }
+
+        private void GeneratePropTypePass(bool isTreePass)
+        {
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
                 {
                     if (!WorldData.World.SafeCheck(x, y) || !WorldData.World.SafeCheck(x, y + 1)) continue;
-                
-                    if (WorldData.World.GetBlockTypes(x, y) != BlockType.Grass || 
-                        WorldData.World.GetBlockTypes(x, y + 1) != BlockType.Air) continue;
 
-                    int spawnRoll = Random.Range(0, 101);
-                
-                    if (spawnRoll >= 70 && CanSpawnTree(x, y))
+                    BlockType groundBlock = WorldData.World.GetBlockTypes(x, y);
+                    if (WorldData.World.GetBlockTypes(x, y + 1) != BlockType.Air) continue;
+
+                    bool isSurface = groundBlock == BlockType.Grass;
+                    bool isUnderground = groundBlock == BlockType.Stone;
+                    if (!isSurface && !isUnderground) continue;
+
+                    List<Prop> passProps = new List<Prop>();
+                    foreach (var p in props)
                     {
-                        WorldData.World.SetPropType(x, y + 1, PropType.Tree);
+                        if (p.isFromSurface != isSurface) continue;
+
+                        bool isTree = p.type == PropType.Tree;
+                        if (isTreePass && !isTree) continue;
+                        if (!isTreePass && isTree) continue;
+
+                        if (HasRequiredSpace(x, y, p.requiredSideSpace)) passProps.Add(p);
                     }
-                    else if (spawnRoll <= 30 && HasSideSpace(x, y + 1))
+
+                    if (passProps.Count == 0) continue;
+
+                    foreach (var prop in passProps)
                     {
-                        PropType type = (Random.value > 0.5f) ? PropType.Bush : PropType.StoneProp;
-                        WorldData.World.SetPropType(x, y + 1, type);
-                    }
-                    else
-                    {
-                        WorldData.World.SetPropType(x, y + 1, PropType.None);
+                        float currentGlobalChance = isTreePass ? (globalSpawnChance * 0.5f) : globalSpawnChance;
+                        if (Random.Range(0f, 100f) <= currentGlobalChance && Random.Range(0f, 100f) <= prop.spawnChance)
+                        {
+                            WorldData.World.SetPropType(x, y + 1, prop.type);
+
+                            if (prop.requiredSideSpace > 1) x += prop.requiredSideSpace;
+                            break;
+                        }
                     }
                 }
             }
         }
 
-        private float ComputeSeedOffset(string seed) 
-        { 
+        private float ComputeSeedOffset(string seed)
+        {
             if (string.IsNullOrEmpty(seed)) return 0f;
             uint hash = 2166136261;
 
             foreach (char x in seed)
             {
                 hash ^= x;
-                hash *= 16777619; 
+                hash *= 16777619;
             }
 
             return (hash % 1000) / 10000f;
@@ -169,24 +193,26 @@ namespace World
                 for (int y = 0; y < chunks.GetLength(1); y++)
                 {
                     if (chunks[x, y] != null) continue;
-                
+
                     var chunk = new GameObject();
                     chunk.name = $"Chunk_{x}_{y}";
                     chunk.transform.parent = gridParent.transform;
-                
+
                     var blockChunkChild = new GameObject("blocks");
                     blockChunkChild.transform.parent = chunk.transform;
                     blockChunkChild.AddComponent<Tilemap>();
                     var bRenderer = blockChunkChild.AddComponent<TilemapRenderer>();
                     bRenderer.material = tilemapMaterial;
-                    
+
                     blockChunkChild.AddComponent<TilemapCollider2D>();
                     blockChunkChild.AddComponent<CompositeCollider2D>();
-                    
-                    blockChunkChild.GetComponent<TilemapCollider2D>().compositeOperation = Collider2D.CompositeOperation.Merge;
+
+                    blockChunkChild.GetComponent<TilemapCollider2D>().compositeOperation =
+                        Collider2D.CompositeOperation.Merge;
                     blockChunkChild.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-                    blockChunkChild.GetComponent<CompositeCollider2D>().geometryType = CompositeCollider2D.GeometryType.Outlines;
-                
+                    blockChunkChild.GetComponent<CompositeCollider2D>().geometryType =
+                        CompositeCollider2D.GeometryType.Outlines;
+
                     var propChunkChild = new GameObject("props");
                     propChunkChild.transform.parent = chunk.transform;
                     propChunkChild.AddComponent<Tilemap>();
@@ -195,26 +221,27 @@ namespace World
 
                     var propCollider = propChunkChild.AddComponent<TilemapCollider2D>();
                     propCollider.isTrigger = true;
-                
-                    chunks[x, y] = new Chunk(false, new Vector2Int(x, y), blockChunkChild.GetComponent<Tilemap>(), propChunkChild.GetComponent<Tilemap>());
+
+                    chunks[x, y] = new Chunk(false, new Vector2Int(x, y), blockChunkChild.GetComponent<Tilemap>(),
+                        propChunkChild.GetComponent<Tilemap>());
                 }
             }
         }
 
         private void UpdateChunks()
         {
-            float cellSize  = gridParent.cellSize.x;
+            float cellSize = gridParent.cellSize.x;
             int cameraTileX = Mathf.FloorToInt(cameraPosition.x / cellSize);
             int cameraTileY = Mathf.FloorToInt(cameraPosition.y / cellSize);
             var cameraChunk = new Vector2Int(cameraTileX / Chunk.ChunkSize, cameraTileY / Chunk.ChunkSize);
-        
+
             for (int x = 0; x < chunks.GetLength(0); x++)
             {
                 for (int y = 0; y < chunks.GetLength(1); y++)
                 {
                     int xPosition = Mathf.Abs(x - cameraChunk.x);
                     int yPosition = Mathf.Abs(y - cameraChunk.y);
-                    bool inRange = xPosition <= renderDistance && yPosition <= renderDistance; 
+                    bool inRange = xPosition <= renderDistance && yPosition <= renderDistance;
 
                     if (inRange && !chunks[x, y].isLoaded) chunks[x, y].LoadChunk();
                     else if (!inRange && chunks[x, y].isLoaded) chunks[x, y].UnLoadChunk();
@@ -222,43 +249,23 @@ namespace World
             }
         }
 
-        private bool CheckCameraMovement() 
+        private bool CheckCameraMovement()
         {
             if (mainCamera.transform.position != cameraPosition)
             {
                 cameraPosition = mainCamera.transform.position;
                 return true;
             }
+
             return false;
         }
-    
-        private bool CanSpawnTree(int x, int y)
-        {
-            int treeSpacing = 4; 
-            for (int i = -treeSpacing; i <= treeSpacing; i++)
-            {
-                if (i == 0) continue;
-                int checkX = x + i;
-                if (!WorldData.World.SafeCheck(checkX, y + 1)) continue;
-                if (WorldData.World.GetPropType(checkX, y + 1) == PropType.Tree) return false;
-            }
-            return WorldData.World.GetBlockTypes(x - 1, y) == BlockType.Grass && 
-                   WorldData.World.GetBlockTypes(x + 1, y) == BlockType.Grass;
-        }
-    
-        private bool HasSideSpace(int x, int y)
-        {
-            return WorldData.World.SafeCheck(x - 1, y) && 
-                   WorldData.World.SafeCheck(x + 1, y) &&
-                   WorldData.World.GetBlockTypes(x - 1, y) == BlockType.Air &&
-                   WorldData.World.GetBlockTypes(x + 1, y) == BlockType.Air;
-        }
+
 
         private void CalculateLighting()
         {
             int width = WorldData.World.width;
             int height = WorldData.World.height;
-    
+
             for (int i = 0; i < width; i++)
             {
                 float currentSunlight = 1.0f;
@@ -269,8 +276,8 @@ namespace World
                     WorldData.World.lightValues[i, j] = currentSunlight;
                 }
             }
-    
-            for (int iteration = 0; iteration < 14; iteration++) 
+
+            for (int iteration = 0; iteration < 14; iteration++)
             {
                 for (int i = 0; i < width; i++)
                 {
@@ -280,10 +287,12 @@ namespace World
                         float currentValue = WorldData.World.lightValues[i, j];
                         float neighbourMax = 0f;
                         if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
-                        if (i < width - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
+                        if (i < width - 1)
+                            neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
                         if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
-                        if (j < height - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
-                
+                        if (j < height - 1)
+                            neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+
                         float decay = (type == BlockType.Air) ? 0.94f : 0.84f;
                         float spreadValue = neighbourMax * decay;
                         if (spreadValue > currentValue) WorldData.World.lightValues[i, j] = spreadValue;
@@ -303,7 +312,27 @@ namespace World
                     lightmapTexture.SetPixel(x, y, new Color(l, l, l, 1f));
                 }
             }
+
             lightmapTexture.Apply();
+        }
+
+        private bool HasRequiredSpace(int x, int y, int neededSpace)
+        {
+            if (neededSpace <= 0) return true;
+            for (int i = -neededSpace; i <= neededSpace; i++)
+            {
+                int checkX = x + i;
+                if (!WorldData.World.SafeCheck(checkX, y + 1)) return false;
+                if (WorldData.World.GetPropType(checkX, y + 1) != PropType.None) return false;
+                if (WorldData.World.GetBlockTypes(checkX, y + 1) != BlockType.Air) return false;
+                if (Mathf.Abs(i) <= 1)
+                {
+                    if (WorldData.World.GetBlockTypes(checkX, y) == BlockType.Air) return false;
+                }
+            }
+
+            return true;
         }
     }
 }
+
