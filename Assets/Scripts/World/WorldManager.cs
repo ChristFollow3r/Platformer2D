@@ -84,6 +84,7 @@ namespace World
 
         private void GenerateWorld()
         {
+            // Pass 1: Terrain and Ore Generation
             for (int x = 0; x < worldWidth; x++)
             {
                 var noiseValue = 0f;
@@ -101,7 +102,7 @@ namespace World
                     if (y > groundLevel) blockType = BlockType.Air;
                     else if (y == groundLevel) blockType = BlockType.Grass;
                     else if (y >= groundLevel - dirtLayerThickness) blockType = BlockType.Dirt;
-                    else blockType = BlockType.Stone;
+                    else blockType = GetOreOrStone(y);
 
                     WorldData.World.SetBlockType(x, y, blockType);
                 }
@@ -116,10 +117,46 @@ namespace World
 
                     float caveNoise = Mathf.PerlinNoise((x * 0.05f) + seedOffset, (y * 0.05f) + seedOffset);
 
-                    if (caveNoise < 0.35f)
-                        WorldData.World.SetBlockType(x, y, BlockType.Air);
+                    if (caveNoise < 0.35f) WorldData.World.SetBlockType(x, y, BlockType.Air);
                 }
             }
+        }
+
+        private BlockType GetOreOrStone(int y)
+        {
+            float roll = UnityEngine.Random.Range(0f, 100f);
+            float currentProb = 0f;
+
+            currentProb += 0.1f;
+            if (roll < currentProb)
+            {
+                int gemRoll = UnityEngine.Random.Range(0, 5);
+                return gemRoll switch
+                {
+                    0 => BlockType.Sapphire,
+                    1 => BlockType.Emerald,
+                    2 => BlockType.Topaz,
+                    3 => BlockType.Onyx,
+                    _ => BlockType.Ruby
+                };
+            }
+
+            currentProb += 0.5f;
+            if (roll < currentProb)
+            {
+                if (y < worldHeight * 0.3f) return BlockType.Iron;
+            }
+
+            currentProb += 0.5f;
+            if (roll < currentProb) return BlockType.Tin;
+
+            currentProb += 2.0f;
+            if (roll < currentProb) return BlockType.Copper;
+
+            currentProb += 2.5f;
+            if (roll < currentProb) return BlockType.Coal;
+
+            return BlockType.Stone;
         }
 
         private void GenerateProps()
@@ -333,7 +370,7 @@ namespace World
                 if (!WorldData.World.SafeCheck(checkX, y + 1)) return false;
                 if (WorldData.World.GetPropType(checkX, y + 1) != PropType.None) return false;
                 if (WorldData.World.GetBlockTypes(checkX, y + 1) != BlockType.Air) return false;
-                
+
                 if (Mathf.Abs(i) <= 1)
                 {
                     if (!WorldData.World.SafeCheck(checkX, y)) return false;

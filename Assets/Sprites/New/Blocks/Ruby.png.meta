@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e942ef862794d9541919afc1ab35fc20
+guid: 5d0608d2a465ce0448eaf65c4d9992fa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8783898613374323236
-    second: Stone_Block_0
+      213: 7774493202208912350
+    second: Ruby_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,11 +96,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Stone_Block_0
+      name: Ruby_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cd5f6ce00c2591680800000000000000
-      internalID: -8783898613374323236
+      spriteID: ed3f95a506c84eb60800000000000000
+      internalID: 7774493202208912350
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Stone_Block_0: -8783898613374323236
+      Ruby_0: 7774493202208912350
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

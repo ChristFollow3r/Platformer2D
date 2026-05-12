@@ -3,7 +3,7 @@ using Scriptable_Objects_Scripts;
 
 namespace Data
 {
-    public enum BlockType { None, Air, Dirt, Grass, Stone, Sand } // Added none for the items
+    public enum BlockType { None, Air, Dirt, Grass, Stone, Sand, Coal, Copper, Tin, Iron, Sapphire, Topaz, Emerald, Onyx, Ruby} // Added none for the items
 
     public enum PropType { None, Bush, StoneProp, OakTree, BirchTree, Copper, Iron, Coal, Sulphur, ScareCrow }
 

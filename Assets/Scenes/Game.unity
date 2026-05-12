@@ -906,7 +906,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &859175071
 Transform:
   m_ObjectHideFlags: 0
@@ -1020,6 +1020,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f835584a11143664a9a0067a77f5ec74, type: 2}
   - {fileID: 11400000, guid: 2584d299030f14d42bfa779ca8704647, type: 2}
   - {fileID: 11400000, guid: 22b1aa5d2322b504fadf61692b62b2dd, type: 2}
+  - {fileID: 11400000, guid: e006c9831f222c64f921833fe4d6879a, type: 2}
+  - {fileID: 11400000, guid: 13ffa59d160f923448c727665f9586f1, type: 2}
+  - {fileID: 11400000, guid: ed902ac82e6e2ba4190504b3e2a1efa7, type: 2}
+  - {fileID: 11400000, guid: 7105a3021e1b2224bbc8e74d9563237b, type: 2}
+  - {fileID: 11400000, guid: 642bccf38fec2d843b582bf26b0d01be, type: 2}
+  - {fileID: 11400000, guid: 91b96c536e33e7d4a9b01f8eb05fbd45, type: 2}
+  - {fileID: 11400000, guid: ca45c894d87fcb145bf8467aef2ebe77, type: 2}
+  - {fileID: 11400000, guid: 0f33b9d5080ceed428825cad670771d3, type: 2}
+  - {fileID: 11400000, guid: dad1a1a7ada476246a514aad47b7d5cd, type: 2}
   props:
   - {fileID: 11400000, guid: 348e613dcdb0a494cbdc03f622cecf08, type: 2}
   - {fileID: 11400000, guid: 782b2cc49984eed45b3f33107e206ce7, type: 2}

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 639707e2568ebe74a871c3a1f7f8e534
+guid: 6def673fc9cdd6e4fb589d0bb4e1ead6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -7310187216160194262
-    second: Grass_Block_0
+      213: 152935856936865942
+    second: Topaz_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -96,11 +96,24 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Grass_Block_0
+      name: Topaz_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a218b2b357ffc8a90800000000000000
-      internalID: -7310187216160194262
+      spriteID: 69054220a565f1200800000000000000
+      internalID: 152935856936865942
       vertices: []
       indices: 
       edges: []
@@ -135,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Grass_Block_0: -7310187216160194262
+      Topaz_0: 152935856936865942
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

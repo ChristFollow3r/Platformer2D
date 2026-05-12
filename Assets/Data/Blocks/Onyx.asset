@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 374477853f9b0d248aac54e2f4ee0b17, type: 3}
+  m_Name: Onyx
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Block
+  blockPrefab: {fileID: 0}
+  blockName: Onyx
+  sprite: {fileID: 8526142464161278961, guid: 8a2ac09da92fc0d4bac2824d8baa3dfc, type: 3}
+  type: 13
+  hardness: 80

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 88f18940e13e28c448a34e17becb540e
+guid: 373795f6c0dbc6d4284b99088cce3b96
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3452003437791708593
-    second: Rock_0
+      213: -8625374221717104062
+    second: Saphire_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -101,7 +101,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,7 +113,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rock_0
+      name: Saphire_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1b5800156daf7ef20800000000000000
-      internalID: 3452003437791708593
+      spriteID: 24a9db338d38c4880800000000000000
+      internalID: -8625374221717104062
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Rock_0: 3452003437791708593
+      Saphire_0: -8625374221717104062
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
