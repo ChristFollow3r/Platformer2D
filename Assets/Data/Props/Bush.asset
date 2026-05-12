@@ -30,5 +30,6 @@ MonoBehaviour:
   type: 1
   hardness: 1
   spawnChance: 30
+  hasPriority: 0
   isFromSurface: 1
-  requiredSideSpace: 2
+  requiredSpace: 1

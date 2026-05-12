@@ -128,7 +128,7 @@ namespace World
             GeneratePropTypePass(false);
         }
 
-        private void GeneratePropTypePass(bool isTreePass)
+        private void GeneratePropTypePass(bool isPriorityPass)
         {
             for (int x = 0; x < worldWidth; x++)
             {
@@ -143,28 +143,34 @@ namespace World
                     bool isUnderground = groundBlock == BlockType.Stone;
                     if (!isSurface && !isUnderground) continue;
 
-                    List<Prop> passProps = new List<Prop>();
+                    List<Prop> validProps = new List<Prop>();
+                    float totalWeight = 0;
+
                     foreach (var p in props)
                     {
                         if (p.isFromSurface != isSurface) continue;
+                        if (p.hasPriority != isPriorityPass) continue;
 
-                        bool isTree = p.type == PropType.Tree;
-                        if (isTreePass && !isTree) continue;
-                        if (!isTreePass && isTree) continue;
-
-                        if (HasRequiredSpace(x, y, p.requiredSideSpace)) passProps.Add(p);
+                        if (HasRequiredSpace(x, y, p.requiredSpace))
+                        {
+                            validProps.Add(p);
+                            totalWeight += p.spawnChance;
+                        }
                     }
 
-                    if (passProps.Count == 0) continue;
+                    if (validProps.Count == 0) continue;
+                    if (Random.Range(0f, 100f) > globalSpawnChance) continue;
 
-                    foreach (var prop in passProps)
+                    float roll = Random.Range(0f, totalWeight);
+                    float currentWeight = 0;
+
+                    foreach (var prop in validProps)
                     {
-                        float currentGlobalChance = isTreePass ? (globalSpawnChance * 0.5f) : globalSpawnChance;
-                        if (Random.Range(0f, 100f) <= currentGlobalChance && Random.Range(0f, 100f) <= prop.spawnChance)
+                        currentWeight += prop.spawnChance;
+
+                        if (roll <= currentWeight)
                         {
                             WorldData.World.SetPropType(x, y + 1, prop.type);
-
-                            if (prop.requiredSideSpace > 1) x += prop.requiredSideSpace;
                             break;
                         }
                     }
@@ -319,14 +325,18 @@ namespace World
         private bool HasRequiredSpace(int x, int y, int neededSpace)
         {
             if (neededSpace <= 0) return true;
+
             for (int i = -neededSpace; i <= neededSpace; i++)
             {
                 int checkX = x + i;
+
                 if (!WorldData.World.SafeCheck(checkX, y + 1)) return false;
                 if (WorldData.World.GetPropType(checkX, y + 1) != PropType.None) return false;
                 if (WorldData.World.GetBlockTypes(checkX, y + 1) != BlockType.Air) return false;
+                
                 if (Mathf.Abs(i) <= 1)
                 {
+                    if (!WorldData.World.SafeCheck(checkX, y)) return false;
                     if (WorldData.World.GetBlockTypes(checkX, y) == BlockType.Air) return false;
                 }
             }

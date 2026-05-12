@@ -149,7 +149,7 @@
                                 WorldData.World.SetPropType(cellPos.x, cellPos.y, PropType.None); // Need to update the tile
                                 Debug.Log("Dude's a bush");
                             }
-                            else if (hitType == PropType.Tree)
+                            else if (hitType == PropType.OakTree)
                             {
                                 WorldData.World.SetPropType(cellPos.x, cellPos.y, PropType.None);
                                 Debug.Log("Dude's a tree");
