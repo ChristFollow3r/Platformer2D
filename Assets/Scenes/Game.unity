@@ -431,15 +431,15 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.25656128, y: 0.23053741}
-      - {x: -0.40167236, y: 0.09901428}
-      - {x: -0.47592163, y: 0.055900574}
-      - {x: -0.47540283, y: -0.2868576}
-      - {x: 0.24331665, y: -0.29898834}
-      - {x: 0.25283813, y: -0.019165039}
-      - {x: 0.20169067, y: 0.0631485}
-      - {x: 0.14364624, y: 0.12465668}
-      - {x: 0.01864624, y: 0.22367096}
+    - - {x: -0.20785522, y: 0.1785965}
+      - {x: -0.28482056, y: 0.12822723}
+      - {x: -0.38504028, y: 0.05265808}
+      - {x: -0.37475586, y: -0.280365}
+      - {x: 0.14916992, y: -0.2860031}
+      - {x: 0.16195679, y: -0.07434845}
+      - {x: 0.13677979, y: 0.004714966}
+      - {x: 0.0819397, y: 0.08895111}
+      - {x: -0.02029419, y: 0.16523743}
   m_UseDelaunayMesh: 1
 --- !u!50 &180265499
 Rigidbody2D:
@@ -487,7 +487,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
   - {fileID: 11400000, guid: 782b2cc49984eed45b3f33107e206ce7, type: 2}
   playerMovement: {fileID: 180265501}
-  reachDistance: 6
+  reachDistance: 2
   attackRange: 1.5
   attackBoxSize: {x: 1.5, y: 1.5}
 --- !u!114 &180265501
@@ -508,6 +508,10 @@ MonoBehaviour:
   speed: 7
   jumpForce: 12
   wallJumpForce: {x: 5, y: 12}
+  wallSlideSpeed: 2
+  fallVelocityThreshold: -5
+  coyoteTime: 0.15
+  jumpBufferTime: 0.15
 --- !u!114 &180265502
 MonoBehaviour:
   m_ObjectHideFlags: 0
