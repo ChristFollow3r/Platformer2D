@@ -160,7 +160,19 @@ namespace Player
 
                                 // TODO: Audio source shit
                                 // TODO: Particles shit
-                                // TODO: Instantiate drop
+
+                                Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f;
+                                Debug.Log($"Spawning {propHitData.drops.Count} drops");
+                                foreach (Drop drop in propHitData.drops)
+                                {
+                                    for (int i = 0; i < drop.amount; i++)
+                                    {
+                                        GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
+                                        dropGO.GetComponent<DropComponent>().SetItem(drop.item);
+                                        Destroy(dropGO, 300f);
+
+                                    }
+                                }
 
                                 WorldData.World.SetPropType(checkX, checkY, PropType.None);
 

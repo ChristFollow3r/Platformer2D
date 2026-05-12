@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2cc998d570475947960b3089eacbbf4, type: 3}
   m_Name: Apple
   m_EditorClassIdentifier: 
-  itemName: 
-  itemIcon: {fileID: 0}
-  maxStack: 0
+  name: Apple
+  sprite: {fileID: -3713353102802229329, guid: f77b1a1a406f32d4c9838068bdc1f667, type: 3}
+  stack: 16
+  isEquipment: 0
+  equipmentType: 0
   saturation: 0
   healAmount: 0
