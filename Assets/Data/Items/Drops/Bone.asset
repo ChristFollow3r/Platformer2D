@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Bone
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Item
-  drop: {fileID: 1173184710220314676, guid: 72d6062399e1ef14ab98406b24cf8ef9, type: 3}
-  blockType: 0
-  itemName: Bone
-  itemIcon: {fileID: 4056058344551517612, guid: 36edff42924d5f3499ee1d722d1d2eca, type: 3}
-  maxStack: 64
-  tier: 2
+  name: Bone
+  sprite: {fileID: 4056058344551517612, guid: 36edff42924d5f3499ee1d722d1d2eca, type: 3}
+  stack: 64
+  isEquipment: 0
+  equipmentType: 0

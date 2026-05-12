@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c93a5e15f225eb4da5fad2220b9e280, type: 3}
   m_Name: BirchTree
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Prop
-  drops: []
+  drops:
+  - item: {fileID: 11400000, guid: 51eef3b63066fec4dbceee03c2c71cef, type: 2}
+    amount: 4
+    dropChance: 100
   sprite: {fileID: 21300000, guid: f4672648b2f68df4899554f564cfdba2, type: 3}
   name: BirchTree
   type: 4

@@ -2,19 +2,22 @@ using System.Collections.Generic;
 using Chunks;
 using Data;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using Scriptable_Objects_Scripts;
 using World;
+using Items;
 
 namespace Player
 {
     public class BreakAndPlace : MonoBehaviour
     {
-        [SerializeField] private GameObject player;
-        [SerializeField] private ScriptableObject placeHolder; // Shit
-        [SerializeField] private List<Prop> allProps;
+        [Header("Drops")]
+        [SerializeField] private GameObject dropPrefab;
 
+        [Header("Refs")]
+        [SerializeField] private GameObject player;
         [SerializeField] private PlayerMovement playerMovement;
+
+        [Header("Controls")]
         [SerializeField] private int reachDistance;
         [SerializeField] private float attackRange = 1.5f;
         [SerializeField] private Vector2 attackBoxSize = new Vector2(1.5f, 1.5f);
@@ -99,10 +102,10 @@ namespace Player
         {
             float cellSize = 0.5f;
             Vector2 spawnPosition = new Vector2(x * cellSize, y * cellSize);
-
             // SPAWNING BLOCKS IN HERE.
-            var drop = Instantiate(WorldData.BlockDictionary[type].blockPrefab, spawnPosition, Quaternion.identity);
-            Destroy(drop, 300f);
+            GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
+            dropGO.GetComponent<DropComponent>().SetItem(WorldData.BlockDictionary[type].item);
+            Destroy(dropGO, 300f);
 
             WorldData.World.SetBlockType(x, y, BlockType.Air);
             int chunkX = x / Chunk.ChunkSize;
@@ -157,7 +160,19 @@ namespace Player
 
                                 // TODO: Audio source shit
                                 // TODO: Particles shit
-                                // TODO: Instantiate drop
+
+                                Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f;
+                                Debug.Log($"Spawning {propHitData.drops.Count} drops");
+                                foreach (Drop drop in propHitData.drops)
+                                {
+                                    for (int i = 0; i < drop.amount; i++)
+                                    {
+                                        GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
+                                        dropGO.GetComponent<DropComponent>().SetItem(drop.item);
+                                        Destroy(dropGO, 300f);
+
+                                    }
+                                }
 
                                 WorldData.World.SetPropType(checkX, checkY, PropType.None);
 

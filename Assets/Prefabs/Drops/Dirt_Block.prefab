@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2695406165716454046}
   - component: {fileID: 3081049153880040302}
   - component: {fileID: 4974740215313913947}
-  - component: {fileID: 7887388799775997504}
   - component: {fileID: 834936953491630997}
   - component: {fileID: 7225210825737072233}
   - component: {fileID: 7923910868794793207}
@@ -95,7 +94,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!114 &4974740215313913947
 MonoBehaviour:
@@ -109,20 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19507406fb458ae459dbacbeea3dda76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropSound: {fileID: 8300000, guid: a6fbf3a38041c0d489b8fbfb5f20cb69, type: 3}
---- !u!114 &7887388799775997504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5499974657267223093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fb7ff8ddc15aab4492a692638ee3885, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 11400000, guid: 955778cd818d5a548acc7428982534ce, type: 2}
+  itemData: {fileID: 0}
 --- !u!50 &834936953491630997
 Rigidbody2D:
   serializedVersion: 5

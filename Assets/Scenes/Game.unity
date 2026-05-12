@@ -290,7 +290,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 180265503}
-  - component: {fileID: 180265502}
   - component: {fileID: 180265501}
   - component: {fileID: 180265500}
   - component: {fileID: 180265499}
@@ -480,12 +479,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f689b468c70db41883cf452e07253e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dropPrefab: {fileID: 291241734386466156, guid: b284ae926e1964d41abb2e59387e3c8c, type: 3}
   player: {fileID: 180265495}
-  placeHolder: {fileID: 11400000, guid: 2584d299030f14d42bfa779ca8704647, type: 2}
-  allProps:
-  - {fileID: 11400000, guid: 348e613dcdb0a494cbdc03f622cecf08, type: 2}
-  - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
-  - {fileID: 11400000, guid: 782b2cc49984eed45b3f33107e206ce7, type: 2}
   playerMovement: {fileID: 180265501}
   reachDistance: 6
   attackRange: 1.5
@@ -508,18 +503,6 @@ MonoBehaviour:
   speed: 7
   jumpForce: 12
   wallJumpForce: {x: 5, y: 12}
---- !u!114 &180265502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 180265495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa9e4c1693f0803489046584c7b53a11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &180265503
 Transform:
   m_ObjectHideFlags: 0

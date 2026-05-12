@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: Grass_Block_Item
+  m_Name: Grass
   m_EditorClassIdentifier: 
-  drop: {fileID: 6338159172816223235, guid: ba3271a1067f21440a2315b5ef9d40cc, type: 3}
-  blockType: 3
-  itemName: Grass
-  itemIcon: {fileID: -7310187216160194262, guid: 639707e2568ebe74a871c3a1f7f8e534, type: 3}
-  maxStack: 64
-  tier: 2
+  name: Grass
+  sprite: {fileID: -1347532211411968617, guid: f6dccec5d156e2e41b73e6b03c03e9c5, type: 3}
+  stack: 64
+  isEquipment: 0
+  equipmentType: 0

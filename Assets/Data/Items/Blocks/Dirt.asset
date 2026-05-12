@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Dirt_B lock_Item
   m_EditorClassIdentifier: 
-  drop: {fileID: 5499974657267223093, guid: 9d5e7c9b7d433094e9bbf90ec068d530, type: 3}
-  blockType: 2
-  itemName: Dirt
-  itemIcon: {fileID: -275371228395926533, guid: 341468477d20b5b499b7d0b2ba9f0575, type: 3}
-  maxStack: 64
-  tier: 2
+  name: Dirt
+  sprite: {fileID: -8275502208090371910, guid: a5a8dff0fab06184887c331370f7c574, type: 3}
+  stack: 64
+  isEquipment: 0
+  equipmentType: 0
