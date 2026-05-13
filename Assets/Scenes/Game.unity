@@ -1046,8 +1046,8 @@ MonoBehaviour:
   tilemapMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
   worldWidth: 3000
   worldHeight: 400
-  globalSpawnChance: 0
-  dirtLayerThickness: 0
+  globalSpawnChance: 70
+  dirtLayerThickness: 5
   tallMountains: 0.004
   mediumMountains: 0.016
   smallMountains: 0.048
