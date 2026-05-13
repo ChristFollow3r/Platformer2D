@@ -32,7 +32,6 @@ namespace UI.Components
       GetElements();
       CreateElements();
       SubscribeEvents();
-      if (isMain) OnHandChanged(0);
     }
     #endregion
 
@@ -43,6 +42,19 @@ namespace UI.Components
       _isMain = isMain;
       if (isMain) backgroundElm.AddToClassList("hotbar-background-show");
       else backgroundElm.RemoveFromClassList("hotbar-background-show");
+
+      if (isMain)
+      {
+        Items.Inventory.Singleton.OnHandChanged += OnHandChanged;
+        OnHandChanged(0);
+      }
+      else
+      {
+        Items.Inventory.Singleton.OnHandChanged -= OnHandChanged;
+        if (currentHand != null) currentHand.RemoveFromClassList("hand");
+      }
+
+
 
       #endregion
     }
@@ -74,10 +86,6 @@ namespace UI.Components
     private void SubscribeEvents()
     {
       #region SubscribeEvents
-      if (isMain)
-      {
-        Items.Inventory.Singleton.OnHandChanged += OnHandChanged;
-      }
       Items.Inventory.Singleton.OnSlotChanged += OnSlotChange;
       #endregion
     }
