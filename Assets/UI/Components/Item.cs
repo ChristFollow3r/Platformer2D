@@ -20,6 +20,7 @@ namespace UI.Components
     private Vector2 _dragOffset = new Vector2(50, 50);
     private bool isDraggable;
     private IInventory inventory;
+    public bool orphanAfterPickup = false;
     #endregion
 
     #region Backers
@@ -90,17 +91,19 @@ namespace UI.Components
     {
       #region OnPointerDown
       if (isBeingDragged || rootElm.HasPointerCapture(e.pointerId)) return;
+      Slot ghostSlot = orphanAfterPickup ? null : slot;
+      IInventory ghostInventory = orphanAfterPickup ? Items.Inventory.Singleton : inventory;
       if (e.button == 1)
       {
         short stay, leave;
         stay = (short)Mathf.Floor(amount / 2);
         leave = (short)(amount - stay);
 
-        Item ghost = new Item(inventory, true)
+        Item ghost = new Item(ghostInventory, true)
         {
           item = item,
           amount = leave,
-          slot = slot
+          slot = ghostSlot,
         };
 
         ghost.style.position = Position.Absolute;
@@ -113,15 +116,15 @@ namespace UI.Components
         ghost.isBeingDragged = true;
         e.StopPropagation();
 
-        inventory.RemoveAmount(slot.slotId, leave);
+        if (slot != null) inventory.RemoveAmount(slot.slotId, leave);
       }
       else
       {
-        Item ghost = new Item(inventory, true)
+        Item ghost = new Item(ghostInventory, true)
         {
           item = item,
           amount = amount,
-          slot = slot
+          slot = ghostSlot,
         };
 
         ghost.style.position = Position.Absolute;
@@ -134,7 +137,7 @@ namespace UI.Components
         ghost.isBeingDragged = true;
         e.StopPropagation();
 
-        inventory.ClearSlot(slot.slotId);
+        if (slot != null) inventory.ClearSlot(slot.slotId);
       }
 
       #endregion
@@ -173,7 +176,7 @@ namespace UI.Components
         break;
       }
 
-      if (!inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
+      if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
       RemoveFromHierarchy();
       #endregion
     }

@@ -35,7 +35,6 @@ namespace Items
         if (_handIndex == HotbarSlots) _handIndex = 0;
         if (_handIndex < 0) _handIndex = HotbarSlots - 1;
 
-        Debug.Log($"Setting hand index to {_handIndex}");
         OnHandChanged?.Invoke(_handIndex);
       }
     }

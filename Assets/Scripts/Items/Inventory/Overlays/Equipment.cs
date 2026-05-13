@@ -70,9 +70,9 @@ namespace Items.Overlays
     public bool EvaluateCraft()
     {
       #region EvaluateCraft
+      Debug.Log("Evaluating craft!");
       ItemStack result = CraftingUtils.EvaluateCraft(craftingSlots.Select(s => s.item).ToList(), 2);
 
-      Debug.Log($"Craft result is: {result}");
       resultSlot.item = null;
       if (result != null) resultSlot.Add(result);
       OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
@@ -149,11 +149,9 @@ namespace Items.Overlays
     protected override void CloseOverlay()
     {
       #region OnOverlayClose
-      Debug.Log("Closing equipment");
       foreach (Slot slot in craftingSlots)
       {
         if (slot.isEmpty) continue;
-        Debug.Log("Returning element");
         Inventory.Singleton.Add(slot.item);
         slot.item = null;
       }
