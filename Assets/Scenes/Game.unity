@@ -508,7 +508,7 @@ MonoBehaviour:
   fallVelocityThreshold: -20
   coyoteTime: 0.15
   jumpBufferTime: 0.15
-  attackPauseDuration: 0.15
+  attackPauseDuration: 0.2
 --- !u!114 &180265502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1038,6 +1038,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}
   - {fileID: 11400000, guid: 348e613dcdb0a494cbdc03f622cecf08, type: 2}
   - {fileID: 11400000, guid: 782b2cc49984eed45b3f33107e206ce7, type: 2}
+  - {fileID: 11400000, guid: 00601f33af6c1f74a90e357edf52da9b, type: 2}
+  - {fileID: 11400000, guid: 9697fcf0983bcf247a2cfc91aea1561e, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
   worldSeed: Minecraft
