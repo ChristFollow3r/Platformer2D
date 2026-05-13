@@ -168,7 +168,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Sprint"",
                     ""type"": ""Button"",
                     ""id"": ""641cd816-40e6-41b4-8c3d-04687c349290"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -673,6 +673,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MoveHand"",
+                    ""type"": ""Value"",
+                    ""id"": ""5187918d-f4e0-435c-9320-67ac0f7d516c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -1115,6 +1124,17 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""action"": ""CloseOverlay"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""17f891d3-3898-4c28-b36f-2588619badda"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard&Mouse"",
+                    ""action"": ""MoveHand"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1207,6 +1227,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
         m_UI_OpenInventory = m_UI.FindAction("OpenInventory", throwIfNotFound: true);
         m_UI_CloseOverlay = m_UI.FindAction("CloseOverlay", throwIfNotFound: true);
+        m_UI_MoveHand = m_UI.FindAction("MoveHand", throwIfNotFound: true);
     }
 
     ~@InputSystem_Actions()
@@ -1484,6 +1505,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_TrackedDeviceOrientation;
     private readonly InputAction m_UI_OpenInventory;
     private readonly InputAction m_UI_CloseOverlay;
+    private readonly InputAction m_UI_MoveHand;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -1543,6 +1565,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/CloseOverlay".
         /// </summary>
         public InputAction @CloseOverlay => m_Wrapper.m_UI_CloseOverlay;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/MoveHand".
+        /// </summary>
+        public InputAction @MoveHand => m_Wrapper.m_UI_MoveHand;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1605,6 +1631,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @CloseOverlay.started += instance.OnCloseOverlay;
             @CloseOverlay.performed += instance.OnCloseOverlay;
             @CloseOverlay.canceled += instance.OnCloseOverlay;
+            @MoveHand.started += instance.OnMoveHand;
+            @MoveHand.performed += instance.OnMoveHand;
+            @MoveHand.canceled += instance.OnMoveHand;
         }
 
         /// <summary>
@@ -1652,6 +1681,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @CloseOverlay.started -= instance.OnCloseOverlay;
             @CloseOverlay.performed -= instance.OnCloseOverlay;
             @CloseOverlay.canceled -= instance.OnCloseOverlay;
+            @MoveHand.started -= instance.OnMoveHand;
+            @MoveHand.performed -= instance.OnMoveHand;
+            @MoveHand.canceled -= instance.OnMoveHand;
         }
 
         /// <summary>
@@ -1912,5 +1944,12 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCloseOverlay(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MoveHand" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMoveHand(InputAction.CallbackContext context);
     }
 }

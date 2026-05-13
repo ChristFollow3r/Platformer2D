@@ -71,17 +71,15 @@ namespace Player
     {
       #region Update
       CheckOverlay();
+      MoveHand();
       #endregion
     }
     #endregion
 
     #region Methods
-    /// <summary>Method</summary>
     private void CreateUI()
     {
       #region CreateUI
-      // Create Overlay invent+hotbar
-      Debug.Log($"Singleton is valid? {Items.Inventory.Singleton != null}");
       UI.Components.Inventory inventory = new UI.Components.Inventory();
       Hotbar overlayHotbar = new Hotbar { isMain = false };
 
@@ -136,7 +134,6 @@ namespace Player
       #endregion
     }
 
-    /// <summary>Method</summary>
     private (Overlay, VisualElement) GetOverlay(OverlayType overlayType)
     {
       #region GetSourceTree
@@ -155,6 +152,21 @@ namespace Player
         default:
           return (null, null);
       }
+      #endregion
+    }
+
+    private void MoveHand()
+    {
+      #region MoveHand
+      // TODO: Add numer to slot direct
+
+
+      Vector2 move = playerInput.UI.MoveHand.ReadValue<Vector2>();
+      if (move.y == 0) return;
+
+      if (move.y > 0) Items.Inventory.Singleton.handIndex += 1;
+      else Items.Inventory.Singleton.handIndex -= 1;
+
       #endregion
     }
     #endregion

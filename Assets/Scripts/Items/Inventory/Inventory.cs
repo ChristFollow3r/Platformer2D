@@ -27,11 +27,14 @@ namespace Items
     public const short ColSlots = 5;
     public Slot[] slots = new Slot[HotbarSlots + ColSlots * RowSlots];
     public ItemStack hand => slots[handIndex].item;
-    private short handIndex
+    public short handIndex
     {
       get => _handIndex; set
       {
         _handIndex = value;
+        if (_handIndex == HotbarSlots) _handIndex = 0;
+        if (_handIndex < 0) _handIndex = HotbarSlots - 1;
+
         OnHandChanged?.Invoke(_handIndex);
       }
     }

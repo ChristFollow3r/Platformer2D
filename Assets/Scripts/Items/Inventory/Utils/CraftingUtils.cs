@@ -51,8 +51,6 @@ namespace Items.Utils
     public static ItemStack EvaluateCraft(List<ItemStack> items, int gridSize)
     {
       #region EvaluateCraft
-      Debug.Log("Evaluating craft!");
-
       foreach (Recipe recipe in All)
       {
         if (recipe.gridSize > gridSize) continue;
