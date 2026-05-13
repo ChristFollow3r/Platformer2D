@@ -457,7 +457,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9b4babf489cce2e4dbfaeb0481e98654, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -512,6 +512,7 @@ MonoBehaviour:
   fallVelocityThreshold: -20
   coyoteTime: 0.15
   jumpBufferTime: 0.15
+  attackPauseDuration: 0.25
 --- !u!114 &180265502
 MonoBehaviour:
   m_ObjectHideFlags: 0

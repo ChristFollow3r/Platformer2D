@@ -6,14 +6,13 @@ namespace Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        private static readonly int IsRunning = Animator.StringToHash("isRunning");
-        private static readonly int IsJumping = Animator.StringToHash("hasJumped");
-        private static readonly int IsFalling = Animator.StringToHash("isFalling");
-        private static readonly int IsSliding = Animator.StringToHash("isSliding");
-        private static readonly int HasLanded = Animator.StringToHash("hasLanded");
+        // Notice we removed the IsJumping hash! We don't need it anymore.
         private static readonly int HasMined = Animator.StringToHash("hasMined");
         private static readonly int HasAttacked = Animator.StringToHash("hasAttacked");
-        private static readonly int IsIdling = Animator.StringToHash("isIdling");
+        private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
+        private static readonly int IsMoving = Animator.StringToHash("isMoving");
+        private static readonly int IsSliding = Animator.StringToHash("isSliding");
+        private static readonly int YVelocity = Animator.StringToHash("yVelocity");
 
         private Rigidbody2D rb;
         private Animator animator;
@@ -24,26 +23,30 @@ namespace Player
 
         [SerializeField] private LayerMask groundLayer;
 
-        [Header("Movement settings")] [SerializeField]
-        private float speed = 8f;
-
+        [Header("Movement settings")]
+        [SerializeField] private float speed = 8f;
         [SerializeField] private float jumpForce = 12f;
         [SerializeField] private Vector2 wallJumpForce = new Vector2(7f, 12f);
 
-        [Header("Polish Settings")] [Tooltip("Max downward speed when sliding down a wall")] [SerializeField]
-        private float wallSlideSpeed = 2f;
+        [Header("Polish Settings")]
+        [Tooltip("Max downward speed when sliding down a wall")]
+        [SerializeField] private float wallSlideSpeed = 2f;
 
-        [Tooltip("Velocity required before the falling animation triggers")] [SerializeField]
-        private float fallVelocityThreshold = -5f;
+        [Tooltip("Velocity required before the falling animation triggers")]
+        [SerializeField] private float fallVelocityThreshold = -5f;
 
         [SerializeField] private float coyoteTime = 0.15f;
         [SerializeField] private float jumpBufferTime = 0.15f;
+
+        [Tooltip("How long the player hangs in the air when attacking")]
+        [SerializeField] private float attackPauseDuration = 0.25f;
 
         private bool canDoubleJump;
         private float wallJumpTime = 0.25f;
 
         private float coyoteTimeCounter;
         private float jumpBufferCounter;
+        private float attackPauseTimer;
         private bool wasGrounded;
         private bool isJumpingPhase;
 
@@ -66,8 +69,7 @@ namespace Player
             Vector2 colSize = playerCollider.bounds.size;
             Vector2 colCenter = playerCollider.bounds.center;
 
-            bool isGrounded = Physics2D.BoxCast(colCenter, new Vector2(colSize.x * 0.9f, colSize.y), 0f, Vector2.down,
-                0.1f, groundLayer);
+            bool isGrounded = Physics2D.BoxCast(colCenter, new Vector2(colSize.x * 0.9f, colSize.y), 0f, Vector2.down, 0.1f, groundLayer);
 
             float rayLength = (colSize.x / 2f) + 0.15f;
             Vector2 topRayPos = colCenter + new Vector2(0, colSize.y * 0.3f);
@@ -85,8 +87,8 @@ namespace Player
             bool isTouchingRightWall = rightWallTop && rightWallBottom && rightWallHigh;
 
             UpdatePolishTimers(isGrounded);
-            Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             HandleMouseInput();
+            Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);
 
             wasGrounded = isGrounded;
@@ -99,6 +101,8 @@ namespace Player
 
             if (playerInput.Player.Jump.WasPerformedThisFrame()) jumpBufferCounter = jumpBufferTime;
             else jumpBufferCounter -= Time.deltaTime;
+
+            if (attackPauseTimer > 0f) attackPauseTimer -= Time.deltaTime;
         }
 
         private void Movement(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
@@ -106,9 +110,16 @@ namespace Player
             float movement = playerInput.Player.Move.ReadValue<Vector2>().x;
             if (isGrounded) canDoubleJump = true;
 
+            if (attackPauseTimer > 0f && !isGrounded)
+            {
+                rb.gravityScale = 0f;
+                rb.linearVelocity = Vector2.zero;
+                return;
+            }
+
             rb.gravityScale = rb.linearVelocityY < 0 ? 5f : 3f;
 
-            bool isSliding = (isTouchingLeftWall || isTouchingRightWall) && !isGrounded && rb.linearVelocityY < 0;
+            bool isSliding = !isGrounded && rb.linearVelocityY < 0 && ((isTouchingLeftWall && movement < 0) || (isTouchingRightWall && movement > 0));
 
             if (isSliding)
                 rb.linearVelocity = new Vector2(rb.linearVelocityX, Mathf.Max(rb.linearVelocityY, -wallSlideSpeed));
@@ -131,7 +142,6 @@ namespace Player
                 else if (coyoteTimeCounter > 0f)
                 {
                     rb.linearVelocityY = jumpForce;
-                    if (Mathf.Abs(movement) <= 0.1f) animator.SetTrigger(IsJumping);
                     jumpBufferCounter = 0f;
                     coyoteTimeCounter = 0f;
                     isJumpingPhase = true;
@@ -140,7 +150,6 @@ namespace Player
                 {
                     rb.linearVelocityY = jumpForce;
                     canDoubleJump = false;
-                    if (Mathf.Abs(movement) <= 0.1f) animator.SetTrigger(IsJumping);
                     jumpBufferCounter = 0f;
                     isJumpingPhase = true;
                 }
@@ -149,12 +158,13 @@ namespace Player
 
         private void PlayerAnimations(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
         {
-            bool isSliding = (isTouchingLeftWall || isTouchingRightWall) && !isGrounded && rb.linearVelocityY < 0;
-            animator.SetBool(IsSliding, isSliding);
+            float moveInput = playerInput.Player.Move.ReadValue<Vector2>().x;
+            bool isMoving = Mathf.Abs(moveInput) > 0.1f;
+            bool isSliding = !isGrounded && rb.linearVelocityY < 0 && ((isTouchingLeftWall && moveInput < 0) || (isTouchingRightWall && moveInput > 0));
 
+            // 1. Handle flipping the sprite
             if (isSliding)
             {
-                isJumpingPhase = false;
                 float direction = isTouchingLeftWall ? 1f : -1f;
                 transform.localScale = new Vector3(direction, 1f, 1f);
             }
@@ -164,47 +174,11 @@ namespace Player
                 transform.localScale = new Vector3(direction, 1f, 1f);
             }
 
-            float moveInput = playerInput.Player.Move.ReadValue<Vector2>().x;
-            bool isMoving = Mathf.Abs(moveInput) > 0.1f;
-
-            if (!isGrounded)
-            {
-                float activeFallThreshold = isJumpingPhase ? 0f : -Mathf.Abs(fallVelocityThreshold);
-                bool isActuallyFalling = rb.linearVelocityY < activeFallThreshold && !isSliding;
-                bool isJumpingUp = rb.linearVelocityY > 0.1f;
-
-                animator.SetBool(IsFalling, isActuallyFalling);
-
-                if (isActuallyFalling)
-                {
-                    animator.ResetTrigger(IsJumping);
-                }
-
-                if (isActuallyFalling || isSliding || (isJumpingUp && !isMoving))
-                {
-                    animator.SetBool(IsIdling, false);
-                    animator.SetBool(IsRunning, false);
-                }
-                else
-                {
-                    animator.SetBool(IsRunning, isMoving);
-                    animator.SetBool(IsIdling, !isMoving);
-                }
-            }
-            else
-            {
-                if (!wasGrounded)
-                {
-                    isJumpingPhase = false;
-                    animator.ResetTrigger(IsJumping);
-                    if (animator.GetBool(IsFalling)) animator.SetTrigger(HasLanded);
-                    animator.SetBool(IsFalling, false);
-                }
-                else animator.SetBool(IsFalling, false);
-
-                animator.SetBool(IsRunning, isMoving);
-                animator.SetBool(IsIdling, !isMoving);
-            }
+            // 2. Feed pure facts to the Animator
+            animator.SetBool(IsGrounded, isGrounded);
+            animator.SetBool(IsMoving, isMoving);
+            animator.SetBool(IsSliding, isSliding);
+            animator.SetFloat(YVelocity, rb.linearVelocityY);
         }
 
         private void HandleMouseInput()
@@ -215,6 +189,7 @@ namespace Player
                 float facingDirection = mousePosition.x < transform.position.x ? -1f : 1f;
                 transform.localScale = new Vector3(facingDirection, 1f, 1f);
 
+                attackPauseTimer = attackPauseDuration;
                 animator.SetTrigger(HasAttacked);
                 OnAttackPerformed?.Invoke(mousePosition);
             }
@@ -225,6 +200,7 @@ namespace Player
                 float facingDirection = mousePosition.x < transform.position.x ? -1f : 1f;
                 transform.localScale = new Vector3(facingDirection, 1f, 1f);
 
+                attackPauseTimer = attackPauseDuration;
                 animator.SetTrigger(HasMined);
                 OnMinePerformed?.Invoke(mousePosition);
             }
