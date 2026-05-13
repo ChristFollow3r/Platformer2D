@@ -508,7 +508,7 @@ MonoBehaviour:
   fallVelocityThreshold: -20
   coyoteTime: 0.15
   jumpBufferTime: 0.15
-  attackPauseDuration: 0.25
+  attackPauseDuration: 0.15
 --- !u!114 &180265502
 MonoBehaviour:
   m_ObjectHideFlags: 0
