@@ -6,7 +6,6 @@ namespace Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-        // Notice we removed the IsJumping hash! We don't need it anymore.
         private static readonly int HasMined = Animator.StringToHash("hasMined");
         private static readonly int HasAttacked = Animator.StringToHash("hasAttacked");
         private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
@@ -16,6 +15,7 @@ namespace Player
 
         private Rigidbody2D rb;
         private Animator animator;
+        private SpriteRenderer spriteRenderer;
         private Collider2D playerCollider;
         private Camera mainCamera;
 
@@ -29,16 +29,10 @@ namespace Player
         [SerializeField] private Vector2 wallJumpForce = new Vector2(7f, 12f);
 
         [Header("Polish Settings")]
-        [Tooltip("Max downward speed when sliding down a wall")]
         [SerializeField] private float wallSlideSpeed = 2f;
-
-        [Tooltip("Velocity required before the falling animation triggers")]
         [SerializeField] private float fallVelocityThreshold = -5f;
-
         [SerializeField] private float coyoteTime = 0.15f;
         [SerializeField] private float jumpBufferTime = 0.15f;
-
-        [Tooltip("How long the player hangs in the air when attacking")]
         [SerializeField] private float attackPauseDuration = 0.25f;
 
         private bool canDoubleJump;
@@ -57,6 +51,7 @@ namespace Player
         {
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
             playerCollider = GetComponent<Collider2D>();
             mainCamera = Camera.main;
 
@@ -119,7 +114,8 @@ namespace Player
 
             rb.gravityScale = rb.linearVelocityY < 0 ? 5f : 3f;
 
-            bool isSliding = !isGrounded && rb.linearVelocityY < 0 && ((isTouchingLeftWall && movement < 0) || (isTouchingRightWall && movement > 0));
+            bool isSliding = !isGrounded && rb.linearVelocityY < 0 &&
+                             ((isTouchingLeftWall && movement < 0) || (isTouchingRightWall && movement > 0));
 
             if (isSliding)
                 rb.linearVelocity = new Vector2(rb.linearVelocityX, Mathf.Max(rb.linearVelocityY, -wallSlideSpeed));
@@ -129,11 +125,10 @@ namespace Player
 
             if (jumpBufferCounter > 0f)
             {
-                if (!isGrounded && (isTouchingLeftWall || isTouchingRightWall))
+                if (!isGrounded && isSliding)
                 {
                     float direction = isTouchingLeftWall ? 1 : -1;
                     rb.linearVelocity = new Vector2(direction * wallJumpForce.x, wallJumpForce.y);
-
                     wallJumpTime = 0.25f;
                     canDoubleJump = true;
                     jumpBufferCounter = 0f;
@@ -160,21 +155,18 @@ namespace Player
         {
             float moveInput = playerInput.Player.Move.ReadValue<Vector2>().x;
             bool isMoving = Mathf.Abs(moveInput) > 0.1f;
-            bool isSliding = !isGrounded && rb.linearVelocityY < 0 && ((isTouchingLeftWall && moveInput < 0) || (isTouchingRightWall && moveInput > 0));
+            bool isSliding = !isGrounded && rb.linearVelocityY < 0 &&
+                             ((isTouchingLeftWall && moveInput < 0) || (isTouchingRightWall && moveInput > 0));
 
-            // 1. Handle flipping the sprite
             if (isSliding)
             {
-                float direction = isTouchingLeftWall ? 1f : -1f;
-                transform.localScale = new Vector3(direction, 1f, 1f);
+                spriteRenderer.flipX = isTouchingRightWall;
             }
             else if (Mathf.Abs(rb.linearVelocityX) > 0.1f && wallJumpTime <= 0)
             {
-                float direction = Mathf.Sign(rb.linearVelocityX);
-                transform.localScale = new Vector3(direction, 1f, 1f);
+                spriteRenderer.flipX = rb.linearVelocityX < 0;
             }
 
-            // 2. Feed pure facts to the Animator
             animator.SetBool(IsGrounded, isGrounded);
             animator.SetBool(IsMoving, isMoving);
             animator.SetBool(IsSliding, isSliding);
@@ -186,8 +178,7 @@ namespace Player
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                float facingDirection = mousePosition.x < transform.position.x ? -1f : 1f;
-                transform.localScale = new Vector3(facingDirection, 1f, 1f);
+                spriteRenderer.flipX = mousePosition.x < transform.position.x;
 
                 attackPauseTimer = attackPauseDuration;
                 animator.SetTrigger(HasAttacked);
@@ -197,8 +188,7 @@ namespace Player
             if (Mouse.current.rightButton.wasPressedThisFrame)
             {
                 Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                float facingDirection = mousePosition.x < transform.position.x ? -1f : 1f;
-                transform.localScale = new Vector3(facingDirection, 1f, 1f);
+                spriteRenderer.flipX = mousePosition.x < transform.position.x;
 
                 attackPauseTimer = attackPauseDuration;
                 animator.SetTrigger(HasMined);
