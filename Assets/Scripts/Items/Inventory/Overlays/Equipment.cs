@@ -115,7 +115,7 @@ namespace Items.Overlays
       else slot = craftingSlots[slotId - EquipmentSlots];
 
       slot.item.amount -= amount;
-      if (slot.item.amount == 0) ClearSlot(slotId);
+      if (slot.item.amount <= 0) ClearSlot(slotId);
       else OnSlotChanged(slotId, slot.item);
       return true;
       #endregion
@@ -126,8 +126,9 @@ namespace Items.Overlays
       #region ClearSlot
       Slot slot;
       bool isCraftingSlot = false;
+      bool isResultSlot = slotId == resultSlot.id;
 
-      if (slotId == resultSlot.id) slot = resultSlot;
+      if (isResultSlot) slot = resultSlot;
       else
       {
         isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
@@ -142,6 +143,15 @@ namespace Items.Overlays
       OnSlotChanged?.Invoke(slotId, null);
 
       if (isCraftingSlot) EvaluateCraft();
+      if (isResultSlot)
+      {
+        for (int i = 0; i < CraftingSlots; i++)
+        {
+          if (craftingSlots[i].isEmpty) continue;
+          RemoveAmount(craftingSlots[i].id, 1);
+        }
+      }
+
       return itemStack;
       #endregion
     }
