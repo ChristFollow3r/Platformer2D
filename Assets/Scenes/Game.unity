@@ -193,7 +193,7 @@ MonoBehaviour:
     CustomLookAtTarget: 0
   Lens:
     FieldOfView: 60
-    OrthographicSize: 6
+    OrthographicSize: 4.6
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -290,6 +290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 180265503}
+  - component: {fileID: 180265502}
   - component: {fileID: 180265501}
   - component: {fileID: 180265500}
   - component: {fileID: 180265499}
@@ -430,15 +431,15 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -0.25656128, y: 0.23053741}
-      - {x: -0.40167236, y: 0.09901428}
-      - {x: -0.47592163, y: 0.055900574}
-      - {x: -0.47540283, y: -0.2868576}
-      - {x: 0.24331665, y: -0.29898834}
-      - {x: 0.25283813, y: -0.019165039}
-      - {x: 0.20169067, y: 0.0631485}
-      - {x: 0.14364624, y: 0.12465668}
-      - {x: 0.01864624, y: 0.22367096}
+    - - {x: -0.20785522, y: 0.1785965}
+      - {x: -0.28482056, y: 0.12822723}
+      - {x: -0.38504028, y: 0.05265808}
+      - {x: -0.37475586, y: -0.280365}
+      - {x: 0.14916992, y: -0.2860031}
+      - {x: 0.16195679, y: -0.07434845}
+      - {x: 0.13677979, y: 0.004714966}
+      - {x: 0.0819397, y: 0.08895111}
+      - {x: -0.02029419, y: 0.16523743}
   m_UseDelaunayMesh: 1
 --- !u!50 &180265499
 Rigidbody2D:
@@ -456,7 +457,7 @@ Rigidbody2D:
   m_LinearDamping: 0
   m_AngularDamping: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 9b4babf489cce2e4dbfaeb0481e98654, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -479,10 +480,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f689b468c70db41883cf452e07253e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropPrefab: {fileID: 291241734386466156, guid: b284ae926e1964d41abb2e59387e3c8c, type: 3}
+  dropPrefab: {fileID: 0}
   player: {fileID: 180265495}
   playerMovement: {fileID: 180265501}
-  reachDistance: 6
+  reachDistance: 2
   attackRange: 1.5
   attackBoxSize: {x: 1.5, y: 1.5}
 --- !u!114 &180265501
@@ -501,8 +502,25 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   speed: 7
-  jumpForce: 12
-  wallJumpForce: {x: 5, y: 12}
+  jumpForce: 11
+  wallJumpForce: {x: 3, y: 12}
+  wallSlideSpeed: 3
+  fallVelocityThreshold: -20
+  coyoteTime: 0.15
+  jumpBufferTime: 0.15
+  attackPauseDuration: 0.25
+--- !u!114 &180265502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180265495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa9e4c1693f0803489046584c7b53a11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &180265503
 Transform:
   m_ObjectHideFlags: 0
@@ -770,7 +788,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 6
+  orthographic size: 4.6
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1006,30 +1024,28 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f835584a11143664a9a0067a77f5ec74, type: 2}
   - {fileID: 11400000, guid: 2584d299030f14d42bfa779ca8704647, type: 2}
   - {fileID: 11400000, guid: 22b1aa5d2322b504fadf61692b62b2dd, type: 2}
-  - {fileID: 11400000, guid: e006c9831f222c64f921833fe4d6879a, type: 2}
   - {fileID: 11400000, guid: 13ffa59d160f923448c727665f9586f1, type: 2}
   - {fileID: 11400000, guid: ed902ac82e6e2ba4190504b3e2a1efa7, type: 2}
   - {fileID: 11400000, guid: 7105a3021e1b2224bbc8e74d9563237b, type: 2}
   - {fileID: 11400000, guid: 642bccf38fec2d843b582bf26b0d01be, type: 2}
-  - {fileID: 11400000, guid: 91b96c536e33e7d4a9b01f8eb05fbd45, type: 2}
   - {fileID: 11400000, guid: ca45c894d87fcb145bf8467aef2ebe77, type: 2}
   - {fileID: 11400000, guid: 0f33b9d5080ceed428825cad670771d3, type: 2}
+  - {fileID: 11400000, guid: 91b96c536e33e7d4a9b01f8eb05fbd45, type: 2}
   - {fileID: 11400000, guid: dad1a1a7ada476246a514aad47b7d5cd, type: 2}
+  - {fileID: 11400000, guid: e006c9831f222c64f921833fe4d6879a, type: 2}
   props:
-  - {fileID: 11400000, guid: 348e613dcdb0a494cbdc03f622cecf08, type: 2}
-  - {fileID: 11400000, guid: 782b2cc49984eed45b3f33107e206ce7, type: 2}
   - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
   - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}
-  - {fileID: 11400000, guid: 00601f33af6c1f74a90e357edf52da9b, type: 2}
-  - {fileID: 11400000, guid: 9697fcf0983bcf247a2cfc91aea1561e, type: 2}
+  - {fileID: 11400000, guid: 348e613dcdb0a494cbdc03f622cecf08, type: 2}
+  - {fileID: 11400000, guid: 782b2cc49984eed45b3f33107e206ce7, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
   worldSeed: Minecraft
   tilemapMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
   worldWidth: 3000
   worldHeight: 400
-  globalSpawnChance: 60
-  dirtLayerThickness: 4
+  globalSpawnChance: 0
+  dirtLayerThickness: 0
   tallMountains: 0.004
   mediumMountains: 0.016
   smallMountains: 0.048
