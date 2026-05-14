@@ -9,14 +9,15 @@ namespace World
 {
     public class WorldManager : MonoBehaviour
     {
-        [SerializeField] private Block[] blocks;
+        [SerializeField] private ItemData[] blocks;
         [SerializeField] private Prop[] props;
 
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
-        [Header("Shader Setup")] [SerializeField]
+        [Header("Shader Setup")]
+        [SerializeField]
         private Material tilemapMaterial;
 
         private Texture2D lightmapTexture;

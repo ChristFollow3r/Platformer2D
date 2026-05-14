@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: Grass
+  m_Name: Emerald
   m_EditorClassIdentifier: 
   name: Grass
-  sprite: {fileID: -1347532211411968617, guid: f6dccec5d156e2e41b73e6b03c03e9c5, type: 3}
+  sprite: {fileID: 4063884222152227866, guid: 5111ad4af33566248878989b0f0c5d5d, type: 3}
   stack: 64
   isEquipment: 0
   equipmentType: 0
   isPlacable: 0
   isBlock: 1
-  type: 3
-  hardness: 1
+  type: 12
+  hardness: 10

@@ -17,3 +17,7 @@ MonoBehaviour:
   stack: 64
   isEquipment: 0
   equipmentType: 0
+  isPlacable: 0
+  isBlock: 1
+  type: 2
+  hardness: 2
