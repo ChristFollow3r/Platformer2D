@@ -1,0 +1,8 @@
+.inventory-holder {
+    flex-grow: 1;
+    right: 40px;
+    position: absolute;
+    top: 40px;
+    align-items: flex-end;
+    width: 415px;
+}

@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/UI/Components/Hotbar/HotbarStyles.uss?fileID=7433441132597879392&amp;guid=0a49def8b90a39c418541e7f4f549990&amp;type=3#HotbarStyles"/>
+    <ui:VisualElement name="root" class="hotbar-root" style="padding-top: 20px; padding-right: 20px; padding-bottom: 20px; padding-left: 20px;">
+        <ui:VisualElement name="background" class="hotbar-background"/>
+    </ui:VisualElement>
+</ui:UXML>

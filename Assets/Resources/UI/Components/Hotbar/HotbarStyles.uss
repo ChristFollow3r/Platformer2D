@@ -1,0 +1,41 @@
+.hotbar-root {
+    flex-grow: 0;
+    flex-direction: row;
+    flex-shrink: 0;
+    justify-content: center;
+}
+
+.hotbar-background {
+    flex-grow: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background-color: rgb(92, 52, 30);
+    display: none;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.hand {
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    border-left-color: rgb(204, 168, 114);
+    border-right-color: rgb(204, 168, 114);
+    border-top-color: rgb(204, 168, 114);
+    border-bottom-color: rgb(204, 168, 114);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: rgba(204, 168, 114, 0.62);
+}
+
+.hotbar-background-show {
+    display: flex;
+}

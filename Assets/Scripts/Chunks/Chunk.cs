@@ -33,32 +33,26 @@ namespace Chunks
                 for (int j = y; j < y + ChunkSize; j++)
                 {
                     if (i >= WorldData.World.width || j >= WorldData.World.height) continue;
+                    
                     var blockType = WorldData.World.GetBlockTypes(i, j);
                     var propType = WorldData.World.GetPropType(i, j);
-
+                    Vector3Int pos = new Vector3Int(i, j, 0);
+                    
                     if (blockType != BlockType.Air)
                     {
-                        var tile = ScriptableObject
-                            .CreateInstance<Tile>(); 
+                        var tile = ScriptableObject.CreateInstance<Tile>(); 
                         tile.sprite = WorldData.BlockDictionary[blockType].sprite;
-                        blockTileMap.SetTile(new Vector3Int(i, j, 0), tile);
+                        blockTileMap.SetTile(pos, tile);
                         blockTileMap.gameObject.layer = LayerMask.NameToLayer("Block");
-                        
-                        int randomRotation = Random.Range(0, 4);
-                        
-                        if (blockType != BlockType.Grass)
-                        {
-                            blockTileMap.SetTransformMatrix(new Vector3Int(i, j, 0), Matrix4x4.Rotate(Quaternion.Euler(0, 0, randomRotation * 90f)));
-                        }
                     }
 
                     if (propType != PropType.None)
                     {
                         var propTile = ScriptableObject.CreateInstance<Tile>();
                         propTile.sprite = WorldData.PropDictionary[propType].sprite;
-                        propTileMap.SetTile(new Vector3Int(i, j, 0), propTile);
+                        propTile.colliderType = Tile.ColliderType.Sprite;
+                        propTileMap.SetTile(pos, propTile);
                     }
-                    
                 }
             }
 
@@ -67,8 +61,7 @@ namespace Chunks
 
         public void LoadChunk()
         {
-            if (notCreated) 
-                BuildTiles();
+            if (notCreated) BuildTiles();
             blockTileMap.gameObject.SetActive(true);
             propTileMap.gameObject.SetActive(true);
             isLoaded = true;
@@ -88,7 +81,6 @@ namespace Chunks
             PropType propType = WorldData.World.GetPropType(x, y);
             
             if (blockType == BlockType.Air) blockTileMap.SetTile(position, null);
-
             else
             {
                 var tile = ScriptableObject.CreateInstance<Tile>(); 
@@ -96,9 +88,7 @@ namespace Chunks
                 blockTileMap.SetTile(position, tile);
             }
             
-            if (propType == PropType.None)
-                propTileMap.SetTile(position, null);
-
+            if (propType == PropType.None) propTileMap.SetTile(position, null);
             else
             {
                 Tile propTile = propTileMap.GetTile<Tile>(position);
@@ -108,7 +98,6 @@ namespace Chunks
                     propTileMap.RefreshTile(position);
                 }
             }
-            
         }
     }
 }
