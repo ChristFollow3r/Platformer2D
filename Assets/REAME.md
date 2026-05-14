@@ -11,14 +11,16 @@
 
 # Features
 
-- Break block
+- Place block
 - Break/atack depending on hand item
 - Show hand item
 - Modifications (Mods)
 - Create recipes
 - Block entities (Crafing table, furnace...)
 - Add block namess
+- Add better UI controls
 
 # Changes
 
+- Change drops (Animate, random offsets, make smaller) [Pau] - **Done**
 - Unity blocks & Items [Pau] - **Done**

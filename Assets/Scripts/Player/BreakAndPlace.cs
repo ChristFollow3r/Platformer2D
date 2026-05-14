@@ -100,7 +100,7 @@ namespace Player
         private void BreakBlock(int x, int y, BlockType type)
         {
             float cellSize = 0.5f;
-            Vector2 spawnPosition = new Vector2(x * cellSize, y * cellSize);
+            Vector2 spawnPosition = new Vector2(x * cellSize + 0.25f, y * cellSize + 0.25f);
             // SPAWNING BLOCKS IN HERE.
             GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
             dropGO.GetComponent<DropComponent>().SetItem(WorldData.BlockDictionary[type]);
@@ -160,7 +160,7 @@ namespace Player
                                 // TODO: Audio source shit
                                 // TODO: Particles shit
 
-                                Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f;
+                                Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f + new Vector2(0.25f, 0.25f);
                                 Debug.Log($"Spawning {propHitData.drops.Count} drops");
                                 foreach (Drop drop in propHitData.drops)
                                 {
