@@ -8,7 +8,7 @@ namespace Enemies.Skeleton
     {
         [SerializeField] private Enemy skeletonData;
         [SerializeField] private ParticleSystem boneDustParticles;
-        
+
         [Header("Sounds")]
         [SerializeField] private AudioClip skeletonDeathSound;
         [SerializeField] private AudioClip skeletonDeathDropSound;
@@ -16,12 +16,12 @@ namespace Enemies.Skeleton
         [SerializeField] private AudioClip hitSound;
         private AudioSource audioSource;
         private readonly float pitchVariation = 0.1f;
-        
+
         private Animator      skeletonAnimator;
         private Rigidbody2D   skeletonRigidbody;
         private SkeletonAI    aiScript;
         private Shared.Health skeletonHealth;
-        
+
         private static readonly int Walking = Animator.StringToHash("isWalking");
         private static readonly int Attacking = Animator.StringToHash("isAttacking");
         private static readonly int Hit = Animator.StringToHash("isHit");
@@ -73,15 +73,16 @@ namespace Enemies.Skeleton
         {
             isAttacking = true;
             skeletonRigidbody.linearVelocityX = 0f;
-            
+
             skeletonAnimator.SetBool(Walking, false);
             skeletonAnimator.SetBool(Attacking, true);
-            
+
             yield return new WaitForSeconds(0.5f);
-            
-            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(skeletonData.attackOffset.x * transform.localScale.x, skeletonData.attackOffset.y);
+
+            // Replaced transform.localScale.x with direction
+            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(skeletonData.attackOffset.x * direction, skeletonData.attackOffset.y);
             Collider2D hit = Physics2D.OverlapBox(finalAttackPosition, skeletonData.hitBoxSize, 0, skeletonData.playerLayer);
-            
+
             if (hit is not null)
             {
                 PlayRandomizedSound(hitSound);
@@ -90,12 +91,12 @@ namespace Enemies.Skeleton
                     health.TakeDamage(skeletonData.attackDamage, direction, skeletonData.attackKnockback);
                 }
             }
-            
+
             else PlayRandomizedSound(airHitSound);
 
             yield return new WaitForSeconds(0.17f);
             skeletonAnimator.SetBool(Attacking, false);
-            
+
             yield return new WaitForSeconds(skeletonData.attackCooldown);
             isAttacking = false;
         }
@@ -113,17 +114,17 @@ namespace Enemies.Skeleton
             yield return new WaitForSeconds(0.5f);
             skeletonAnimator.SetBool(Hit, false);
         }
-        
+
         private void PlayDeathAnimation()
         {
             StopAllCoroutines();
             aiScript.enabled = false;
-            
+
             AudioSource.PlayClipAtPoint(skeletonDeathSound, transform.position);
-            
+
             skeletonRigidbody.bodyType = RigidbodyType2D.Static;
             if (TryGetComponent(out Collider2D col)) col.enabled = false;
-                
+
             StartCoroutine(SkeletonDeathAnimation());
         }
 
@@ -132,26 +133,26 @@ namespace Enemies.Skeleton
             skeletonAnimator.SetBool(Walking, false);
             skeletonAnimator.SetBool(Attacking, false);
             skeletonAnimator.SetBool(Hit, false);
-    
+
             skeletonAnimator.SetTrigger(Dead);
             yield return new WaitForEndOfFrame();
-            
+
             float animationLength = skeletonAnimator.GetCurrentAnimatorStateInfo(0).length;
             yield return new WaitForSeconds(animationLength);
-            
+
             yield return new WaitForSeconds(2.0f);
             skeletonHealth.SpawnDeathDrops();
             AudioSource.PlayClipAtPoint(skeletonDeathDropSound, transform.position);
-            var boneDust = Instantiate(boneDustParticles, transform.position, Quaternion.identity); 
+            var boneDust = Instantiate(boneDustParticles, transform.position, Quaternion.identity);
             Destroy(boneDust, boneDust.main.duration);
             Destroy(gameObject);
         }
-        
+
         private void PlayRandomizedSound(AudioClip clip)
         {
             if (clip is null) return;
             float randomPitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
-    
+
             audioSource.pitch = randomPitch;
             audioSource.PlayOneShot(clip);
         }
