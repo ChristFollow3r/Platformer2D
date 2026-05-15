@@ -81,6 +81,9 @@ namespace Player
             int y = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
 
 
+            if (distance < 0.75f) return;
+
+
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
             if (clickedBlock != BlockType.Air) return;
