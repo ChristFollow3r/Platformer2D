@@ -9,10 +9,20 @@ namespace Enemies.FlyingDude
     {
         [SerializeField] private Enemy flyingDudeData;
 
+        [Header("Flight Dynamics")]
+        [SerializeField] private float flightAcceleration = 10f; // Tweak this! Lower = wider swoops, Higher = tighter turns
+
+        [Header("Obstacle Avoidance")]
+        [SerializeField] private LayerMask obstacleLayer;
+        [SerializeField] private Vector2   wallCheckSize = new Vector2(0.8f, 0.8f);
+        [SerializeField] private float     wallCheckDistance = 0.5f;
+        [SerializeField] private float     upwardSwoopStrength = 2f;
+
         private Rigidbody2D          dudeRigidBody;
         private Shared.Health        dudeHealth;
         private Transform            target;
         private FlyingDudeAnimations animations;
+        private SpriteRenderer       spriteRenderer;
 
         private int                  direction;
         private bool                 isStunned;
@@ -21,10 +31,11 @@ namespace Enemies.FlyingDude
 
         private void Awake()
         {
-            dudeRigidBody = GetComponent<Rigidbody2D>();
-            dudeHealth    = GetComponent<Shared.Health>();
-            animations    = GetComponent<FlyingDudeAnimations>();
-            target        = GameObject.FindGameObjectWithTag("Player")?.transform;
+            dudeRigidBody  = GetComponent<Rigidbody2D>();
+            dudeHealth     = GetComponent<Shared.Health>();
+            animations     = GetComponent<FlyingDudeAnimations>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            target         = GameObject.FindGameObjectWithTag("Player")?.transform;
         }
 
         private void Start() => isStunned = false;
@@ -42,6 +53,9 @@ namespace Enemies.FlyingDude
                 return;
             }
 
+            direction = target.position.x > transform.position.x ? 1 : -1;
+            spriteRenderer.flipX = direction < 0;
+
             float distanceToPlayer = Vector2.Distance(transform.position, target.position);
 
             if (distanceToPlayer <= flyingDudeData.attackRange)
@@ -56,12 +70,17 @@ namespace Enemies.FlyingDude
 
         private void HandleMovement()
         {
-            direction = target.position.x > transform.position.x ? 1 : -1;
+            Vector2 desiredDirection = (target.position - transform.position).normalized;
 
-            Vector2 moveDirection = (target.position - transform.position).normalized;
-            dudeRigidBody.linearVelocity = moveDirection * flyingDudeData.speed;
+            RaycastHit2D hit = Physics2D.BoxCast(transform.position, wallCheckSize, 0f, Vector2.right * direction, wallCheckDistance, obstacleLayer);
+            if (hit.collider is not null) desiredDirection = new Vector2(desiredDirection.x * 0.5f, upwardSwoopStrength).normalized;
 
-            transform.localScale = new Vector3(direction, 1, 1);
+            Vector2 currentVelocity = dudeRigidBody.linearVelocity;
+            currentVelocity += desiredDirection * (flightAcceleration * Time.deltaTime);
+
+            if (currentVelocity.magnitude > flyingDudeData.speed) currentVelocity = currentVelocity.normalized * flyingDudeData.speed;
+
+            dudeRigidBody.linearVelocity = currentVelocity;
         }
 
         private void HandleHit(int playerDirection, float knockback)
@@ -77,6 +96,15 @@ namespace Enemies.FlyingDude
 
             yield return new WaitForSeconds(0.3f);
             isStunned = false;
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.red;
+            int debugDir = Application.isPlaying ? direction : 1;
+            Vector3 castStart = transform.position;
+            Vector3 castEnd = castStart + (Vector3.right * debugDir * wallCheckDistance);
+            Gizmos.DrawWireCube(castEnd, wallCheckSize);
         }
     }
 }

@@ -19,9 +19,9 @@ namespace Enemies.FlyingDude
         private FlyingDudeAI  aiScript;
         private Shared.Health dudeHealth;
 
-        private static readonly int Attacking = Animator.StringToHash("HasAttacked");
-        private static readonly int Hit = Animator.StringToHash("HasBeenHit");
-        private static readonly int Dead = Animator.StringToHash("HasDied");
+        private static readonly int Attacking = Animator.StringToHash("hasAttacked");
+        private static readonly int Hit = Animator.StringToHash("hasBeenHit");
+        private static readonly int Dead = Animator.StringToHash("hasDied");
 
         [HideInInspector] public bool isAttacking;
 
@@ -66,9 +66,9 @@ namespace Enemies.FlyingDude
 
             dudeAnimator.SetTrigger(Attacking);
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1.2f);
 
-            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(flyingDudeData.attackOffset.x * transform.localScale.x, flyingDudeData.attackOffset.y);
+            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(flyingDudeData.attackOffset.x * direction, flyingDudeData.attackOffset.y);
             Collider2D hitTarget = Physics2D.OverlapBox(finalAttackPosition, flyingDudeData.hitBoxSize, 0, flyingDudeData.playerLayer);
 
             if (hitTarget is not null)
@@ -91,7 +91,7 @@ namespace Enemies.FlyingDude
         private IEnumerator DudeHitAnimation()
         {
             dudeAnimator.SetTrigger(Hit);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.6f);
         }
 
         private void PlayDeathAnimation()
