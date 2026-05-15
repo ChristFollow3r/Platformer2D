@@ -15,9 +15,11 @@ MonoBehaviour:
   name: Grass
   sprite: {fileID: -1347532211411968617, guid: f6dccec5d156e2e41b73e6b03c03e9c5, type: 3}
   stack: 64
+  isConsumable: 0
   isEquipment: 0
   equipmentType: 0
-  isPlacable: 0
-  isBlock: 1
-  type: 3
+  isPlacable: 1
+  blockType: 3
   hardness: 1
+  isFuel: 0
+  fuelDuration: 0

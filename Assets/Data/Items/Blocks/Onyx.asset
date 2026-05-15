@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Onyx
   m_EditorClassIdentifier: 
-  name: Grass
+  name: Onyx
   sprite: {fileID: 8526142464161278961, guid: 8a2ac09da92fc0d4bac2824d8baa3dfc, type: 3}
   stack: 64
-  isEquipment: 0
+  isPlacable: 1
+  isConsumable: 0
+  isFuel: 0
   equipmentType: 0
-  isPlacable: 0
-  isBlock: 1
-  type: 13
+  blockType: 13
   hardness: 10
+  fuelDuration: 0

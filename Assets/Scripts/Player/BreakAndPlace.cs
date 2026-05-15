@@ -36,6 +36,7 @@ namespace Player
                 playerMovement.OnAttackPerformed += HandleAttacking;
                 playerMovement.OnMinePerformed += HandleMining;
             }
+
         }
 
         private void OnDisable()
@@ -59,7 +60,37 @@ namespace Player
 
         private void HandleAttacking(Vector2 mouseWorldPosition)
         {
+            ItemStack item = Inventory.Singleton.hand;
+            if (item != null && item.data.isPlacable)
+            {
+                PlaceBlock(item, mouseWorldPosition);
+                return;
+            }
             StartCoroutine(DelayedAttackRoutine(mouseWorldPosition));
+        }
+
+
+        private void PlaceBlock(ItemStack item, Vector2 mouseWorldPosition)
+        {
+            Vector2 playerCenter = playerCollider.bounds.center;
+            float distance = Vector2.Distance(mouseWorldPosition, playerCenter);
+
+            if (distance > reachDistance) return;
+            float cellSize = 0.5f;
+            int x = Mathf.FloorToInt(mouseWorldPosition.x / cellSize);
+            int y = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
+
+
+            BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
+
+            if (clickedBlock != BlockType.Air) return;
+
+            WorldData.World.SetBlockType(x, y, item.data.blockType);
+            int chunkX = x / Chunk.ChunkSize;
+            int chunkY = y / Chunk.ChunkSize;
+            WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(x, y);
+
+            Inventory.Singleton.RemoveFromHand();
         }
 
         private void HandleMining(Vector2 mouseWorldPosition)
@@ -81,20 +112,20 @@ namespace Player
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(mouseX, mouseY);
 
-            if (clickedBlock != BlockType.Air)
+            if (clickedBlock == BlockType.Air) return;
+
+            float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
+            float miningPower = 1f; // TODO: Base this on the player upgrade
+
+            currentBlockDamage += miningPower;
+
+            if (currentBlockDamage >= targetHardness)
             {
-                float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
-                float miningPower = 1f; // TODO: Base this on the player upgrade
-
-                currentBlockDamage += miningPower;
-
-                if (currentBlockDamage >= targetHardness)
-                {
-                    // TODO: break block, drop shit, add sound, add particles
-                    BreakBlock(mouseX, mouseY, clickedBlock);
-                    currentBlockDamage = 0f;
-                }
+                // TODO: break block, drop shit, add sound, add particles
+                BreakBlock(mouseX, mouseY, clickedBlock);
+                currentBlockDamage = 0f;
             }
+
         }
 
         private void BreakBlock(int x, int y, BlockType type)

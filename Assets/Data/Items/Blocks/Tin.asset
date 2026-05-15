@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Tin
   m_EditorClassIdentifier: 
-  name: Grass
+  name: Tin
   sprite: {fileID: -1462849456419314474, guid: 1fddccb46397e5343a696908cdebe207, type: 3}
   stack: 64
-  isEquipment: 0
+  isPlacable: 1
+  isConsumable: 0
+  isFuel: 0
   equipmentType: 0
-  isPlacable: 0
-  isBlock: 1
-  type: 8
+  blockType: 8
   hardness: 3
+  fuelDuration: 0

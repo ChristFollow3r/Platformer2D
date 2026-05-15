@@ -11,12 +11,13 @@ namespace Data
         public Sprite sprite;
         public bool isStackable => stack < 0;
         public int stack = 64;
-        public bool isEquipment;
-        public EquipmentType equipmentType;
         public bool isPlacable;
-        public bool isBlock;
-        public BlockType type;
+        public bool isConsumable;
+        public bool isFuel;
+        public EquipmentType equipmentType;
+        public BlockType blockType;
         public float hardness;
+        public float fuelDuration;
     }
 
 }

@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Topaz
   m_EditorClassIdentifier: 
-  name: Grass
+  name: Topaz
   sprite: {fileID: 152935856936865942, guid: 6def673fc9cdd6e4fb589d0bb4e1ead6, type: 3}
   stack: 64
-  isEquipment: 0
+  isPlacable: 1
+  isConsumable: 0
+  isFuel: 0
   equipmentType: 0
-  isPlacable: 0
-  isBlock: 1
-  type: 11
+  blockType: 11
   hardness: 10
+  fuelDuration: 0

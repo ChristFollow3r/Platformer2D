@@ -40,7 +40,7 @@ namespace World
 
         private void Awake()
         {
-            foreach (var block in blocks) WorldData.BlockDictionary[block.type] = block;
+            foreach (var block in blocks) WorldData.BlockDictionary[block.blockType] = block;
             foreach (var prop in props) WorldData.PropDictionary[prop.type] = prop;
 
             if (Instance != null)
