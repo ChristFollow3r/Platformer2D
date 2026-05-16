@@ -220,7 +220,7 @@ Transform:
   m_GameObject: {fileID: 91711886}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 293.86002, y: 86.6, z: -10.018238}
+  m_LocalPosition: {x: 293.86002, y: 76.63, z: -10.018238}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -475,7 +475,7 @@ Transform:
   m_GameObject: {fileID: 180265495}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 293.66, y: 86.4, z: -0.018237974}
+  m_LocalPosition: {x: 293.66, y: 76.43, z: -0.018237974}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -818,7 +818,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 293.86002, y: 86.6, z: -10.018238}
+  m_LocalPosition: {x: 293.86002, y: 76.63, z: -10.018238}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -900,6 +900,83 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &759187369
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 759187370}
+  - component: {fileID: 759187371}
+  m_Layer: 0
+  m_Name: ParallaxManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &759187370
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759187369}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 291.5876, y: 75.55428, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &759187371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759187369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec1340b28dcf8264d9561d7e130d0139, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.AutoParallaxManager
+  mainCamera: {fileID: 519420031}
+  surfaceLayers:
+  - layerName: Sky
+    backgroundSprite: {fileID: -855298285791758126, guid: 4e9cd13a3597e444a847bfcb4d812018, type: 3}
+    parallaxEffect: {x: 0.9, y: 0.9}
+    yOffset: 0
+    sortingOrder: -10
+    scale: 4
+  - layerName: Mountains
+    backgroundSprite: {fileID: 6937817954938267909, guid: 91e76be16ed161043b0b5236da7ce47c, type: 3}
+    parallaxEffect: {x: 0.8, y: 0.8}
+    yOffset: 0
+    sortingOrder: -9
+    scale: 4
+  - layerName: Shade
+    backgroundSprite: {fileID: -6470460504253458178, guid: bd04de2aa2f4fcd418f9de9362104338, type: 3}
+    parallaxEffect: {x: 0.5, y: 0.5}
+    yOffset: 0
+    sortingOrder: -8
+    scale: 4
+  - layerName: 
+    backgroundSprite: {fileID: 0}
+    parallaxEffect: {x: 0, y: 0}
+    yOffset: 0
+    sortingOrder: 0
+    scale: 0
+  - layerName: Trees
+    backgroundSprite: {fileID: -4178046375966092550, guid: af3312b4774daf24b915df97eba83bcc, type: 3}
+    parallaxEffect: {x: 0.4, y: 0.4}
+    yOffset: 0
+    sortingOrder: -7
+    scale: 4
+  caveLayers: []
 --- !u!1 &859175070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,3 +1393,4 @@ SceneRoots:
   - {fileID: 434745710}
   - {fileID: 1988944050}
   - {fileID: 859175071}
+  - {fileID: 759187370}
