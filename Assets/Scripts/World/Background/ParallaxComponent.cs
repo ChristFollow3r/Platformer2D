@@ -4,8 +4,8 @@ namespace World.Background
 {
     public class ParallaxComponent : MonoBehaviour
     {
-        [HideInInspector] public Transform cam;
-        [HideInInspector] public Vector2 parallaxEffect;
+        public Transform cam;
+        public Vector2 parallaxEffect;
 
         private float length;
         private float startPosX;
