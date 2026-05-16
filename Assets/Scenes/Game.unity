@@ -910,6 +910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 759187370}
   - component: {fileID: 759187371}
+  - component: {fileID: 759187372}
   m_Layer: 0
   m_Name: ParallaxManager
   m_TagString: Untagged
@@ -948,35 +949,43 @@ MonoBehaviour:
   surfaceLayers:
   - layerName: Sky
     backgroundSprite: {fileID: -855298285791758126, guid: 4e9cd13a3597e444a847bfcb4d812018, type: 3}
-    parallaxEffect: {x: 0.9, y: 0.9}
-    yOffset: 0
+    parallaxEffect: {x: 0.9, y: 1}
+    yOffset: 2.6
     sortingOrder: -10
     scale: 4
   - layerName: Mountains
     backgroundSprite: {fileID: 6937817954938267909, guid: 91e76be16ed161043b0b5236da7ce47c, type: 3}
-    parallaxEffect: {x: 0.8, y: 0.8}
-    yOffset: 0
+    parallaxEffect: {x: 0.8, y: 1}
+    yOffset: 2.6
     sortingOrder: -9
     scale: 4
   - layerName: Shade
     backgroundSprite: {fileID: -6470460504253458178, guid: bd04de2aa2f4fcd418f9de9362104338, type: 3}
-    parallaxEffect: {x: 0.5, y: 0.5}
-    yOffset: 0
+    parallaxEffect: {x: 0.7, y: 1}
+    yOffset: 2.6
     sortingOrder: -8
     scale: 4
-  - layerName: 
-    backgroundSprite: {fileID: 0}
-    parallaxEffect: {x: 0, y: 0}
-    yOffset: 0
-    sortingOrder: 0
-    scale: 0
   - layerName: Trees
     backgroundSprite: {fileID: -4178046375966092550, guid: af3312b4774daf24b915df97eba83bcc, type: 3}
-    parallaxEffect: {x: 0.4, y: 0.4}
+    parallaxEffect: {x: 0.6, y: 1}
     yOffset: 0
     sortingOrder: -7
     scale: 4
   caveLayers: []
+--- !u!114 &759187372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759187369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99b7e4d01070e7b4bb8673cff66fd945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::World.Background.ParallaxComponent
+  cam: {fileID: 0}
+  parallaxEffect: {x: 0, y: 0}
 --- !u!1 &859175070
 GameObject:
   m_ObjectHideFlags: 0
