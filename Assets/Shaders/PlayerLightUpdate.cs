@@ -6,10 +6,15 @@ namespace Shaders
     {
         private static readonly int PlayerPosition = Shader.PropertyToID("_PlayerPosition");
         public Material blockMaterial;
+        private Vector3 lastPosition;
 
         void Update()
         {
-            blockMaterial.SetVector(PlayerPosition, transform.position);
+            if (Vector3.SqrMagnitude(transform.position - lastPosition) > 0.001f)
+            {
+                blockMaterial.SetVector(PlayerPosition, transform.position);
+                lastPosition = transform.position;
+            }
         }
     }
 }
