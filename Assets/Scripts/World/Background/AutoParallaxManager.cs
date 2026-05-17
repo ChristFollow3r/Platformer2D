@@ -27,36 +27,42 @@ namespace World.Background
         [Header("Dependencies")]
         public Camera mainCamera;
 
+        [Header("Biome Blending Setup")]
+        [Tooltip("The Y height where the surface starts to fade out (e.g. 15)")]
+        public float transitionStartY = 15f;
+        [Tooltip("The Y height where it becomes 100% cave (e.g. 5)")]
+        public float transitionEndY = 5f;
+
         [Header("Layer Setup")]
         public List<BackgroundLayer> surfaceLayers = new List<BackgroundLayer>();
         public List<BackgroundLayer> caveLayers = new List<BackgroundLayer>();
+
+        // Lists to keep track of the spawned objects so we can fade them
+        private List<ParallaxComponent> spawnedSurface = new List<ParallaxComponent>();
+        private List<ParallaxComponent> spawnedCaves = new List<ParallaxComponent>();
 
         private void Start()
         {
             if (mainCamera == null) mainCamera = Camera.main;
 
-            // Anchor directly to where the camera starts, completely ignoring world grid coordinates.
             float startX = mainCamera.transform.position.x;
             float startY = mainCamera.transform.position.y;
 
             foreach (var layer in surfaceLayers)
             {
-                GenerateLayerObject(layer, startX, startY + layer.yOffset, "Surface_");
+                spawnedSurface.Add(GenerateLayerObject(layer, startX, startY + layer.yOffset, "Surface_"));
             }
 
             foreach (var layer in caveLayers)
             {
-                GenerateLayerObject(layer, startX, startY + layer.yOffset, "Cave_");
+                spawnedCaves.Add(GenerateLayerObject(layer, startX, startY + layer.yOffset, "Cave_"));
             }
         }
 
-        private void GenerateLayerObject(BackgroundLayer data, float startX, float startY, string prefix)
+        private ParallaxComponent GenerateLayerObject(BackgroundLayer data, float startX, float startY, string prefix)
         {
-            if (data.backgroundSprite == null) return;
-
             GameObject layerObj = new GameObject(prefix + data.layerName);
             layerObj.transform.SetParent(this.transform);
-
             layerObj.transform.localScale = new Vector3(data.scale, data.scale, 1f);
 
             SpriteRenderer sr = layerObj.AddComponent<SpriteRenderer>();
@@ -67,8 +73,24 @@ namespace World.Background
             parallaxScript.cam = mainCamera.transform;
             parallaxScript.parallaxEffect = data.parallaxEffect;
 
-            // Spawn exactly at the camera's X and Y
             layerObj.transform.position = new Vector3(startX, startY, 0);
+
+            return parallaxScript;
+        }
+
+        private void Update()
+        {
+            if (mainCamera == null) return;
+
+            float currentY = mainCamera.transform.position.y;
+
+            // Mathf.InverseLerp calculates a clean 0.0 to 1.0 percentage between two numbers
+            float surfaceAlpha = Mathf.InverseLerp(transitionEndY, transitionStartY, currentY);
+            float caveAlpha = 1f - surfaceAlpha;
+
+            // Apply the fades
+            foreach (var p in spawnedSurface) p.SetAlpha(surfaceAlpha);
+            foreach (var p in spawnedCaves) p.SetAlpha(caveAlpha);
         }
     }
 }

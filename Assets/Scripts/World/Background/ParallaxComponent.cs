@@ -19,32 +19,37 @@ namespace World.Background
             startCamPosY = cam.position.y;
 
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
-
-            // World space length (used for knowing when to teleport)
             length = sr.bounds.size.x;
 
-            // THE FIX: Auto-generate left and right clones to hide the seams!
-            // We use local width here so it respects the Scale multiplier you set in the manager.
             float localWidth = sr.sprite.bounds.size.x;
-
-            CreateSideClone(sr, localWidth);  // Spawn a clone exactly to the right
-            CreateSideClone(sr, -localWidth); // Spawn a clone exactly to the left
+            CreateSideClone(sr, localWidth);
+            CreateSideClone(sr, -localWidth);
         }
 
         private void CreateSideClone(SpriteRenderer original, float xOffset)
         {
-            // Create the dummy object
             GameObject clone = new GameObject("Clone");
-            clone.transform.SetParent(this.transform); // Attach it to the main moving background
-
-            // Offset it horizontally, keep local scale at 1 so it inherits the parent's scale
+            clone.transform.SetParent(this.transform);
             clone.transform.localPosition = new Vector3(xOffset, 0, 0);
             clone.transform.localScale = Vector3.one;
 
-            // Copy the sprite and sorting order so it looks identical
             SpriteRenderer cloneSr = clone.AddComponent<SpriteRenderer>();
             cloneSr.sprite = original.sprite;
             cloneSr.sortingOrder = original.sortingOrder;
+        }
+
+        // THE FIX: Allows the Manager to dynamically fade this layer and its clones
+        public void SetAlpha(float alpha)
+        {
+            // Gets the SpriteRenderer on this object AND the clones we created
+            SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>();
+
+            foreach (var sr in allRenderers)
+            {
+                Color c = sr.color;
+                c.a = alpha;
+                sr.color = c;
+            }
         }
 
         private void LateUpdate()
@@ -53,10 +58,8 @@ namespace World.Background
             float distanceX = (cam.position.x * parallaxEffect.x);
             float distanceY = (cam.position.y - startCamPosY) * parallaxEffect.y;
 
-            // Move the parent (which now drags the left and right clones with it)
             transform.position = new Vector3(startPosX + distanceX, startPosY + distanceY, transform.position.z);
 
-            // Infinite Looping Treadmill
             if (tempX > startPosX + length)
             {
                 startPosX += length;

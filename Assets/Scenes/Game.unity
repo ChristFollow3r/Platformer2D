@@ -945,32 +945,70 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::World.AutoParallaxManager
   mainCamera: {fileID: 519420031}
+  transitionStartY: 60
+  transitionEndY: 55
   surfaceLayers:
   - layerName: Sky
     backgroundSprite: {fileID: -855298285791758126, guid: 4e9cd13a3597e444a847bfcb4d812018, type: 3}
     parallaxEffect: {x: 0.9, y: 1}
     yOffset: 0
-    sortingOrder: -10
+    sortingOrder: -15
     scale: 4
   - layerName: Mountains
     backgroundSprite: {fileID: 6937817954938267909, guid: 91e76be16ed161043b0b5236da7ce47c, type: 3}
     parallaxEffect: {x: 0.8, y: 1}
     yOffset: 0
-    sortingOrder: -9
+    sortingOrder: -14
     scale: 4
   - layerName: Shade
     backgroundSprite: {fileID: -6470460504253458178, guid: bd04de2aa2f4fcd418f9de9362104338, type: 3}
     parallaxEffect: {x: 0.7, y: 1}
     yOffset: -3.2
-    sortingOrder: -8
+    sortingOrder: -13
     scale: 4
   - layerName: Trees
     backgroundSprite: {fileID: -4178046375966092550, guid: af3312b4774daf24b915df97eba83bcc, type: 3}
     parallaxEffect: {x: 0.6, y: 1}
     yOffset: -2.8
-    sortingOrder: -7
+    sortingOrder: -12
     scale: 4
-  caveLayers: []
+  caveLayers:
+  - layerName: Background
+    backgroundSprite: {fileID: -855298285791758126, guid: bf34b46e7fddee147a4cc7ea79fb7d22, type: 3}
+    parallaxEffect: {x: 0.9, y: 1}
+    yOffset: 0
+    sortingOrder: -11
+    scale: 1
+  - layerName: After Background
+    backgroundSprite: {fileID: 6937817954938267909, guid: 5e106959772d7914eb657fbd704badf9, type: 3}
+    parallaxEffect: {x: 0.8, y: 1}
+    yOffset: 0
+    sortingOrder: -10
+    scale: 1
+  - layerName: After fx
+    backgroundSprite: {fileID: -4178046375966092550, guid: ec848b20589fbd74593f19e72e4fb173, type: 3}
+    parallaxEffect: {x: 0.7, y: 1}
+    yOffset: 0
+    sortingOrder: -8
+    scale: 1
+  - layerName: After after fx
+    backgroundSprite: {fileID: 4130640169021434097, guid: c4ba18c60231bd14a8389137001a710f, type: 3}
+    parallaxEffect: {x: 0.6, y: 1}
+    yOffset: 0
+    sortingOrder: -7
+    scale: 1
+  - layerName: After second fx
+    backgroundSprite: {fileID: 7028616704906629411, guid: abc95ed5ea8299e4eab6cc4b05cfb0d9, type: 3}
+    parallaxEffect: {x: 0.5, y: 1}
+    yOffset: 0
+    sortingOrder: -6
+    scale: 1
+  - layerName: Last
+    backgroundSprite: {fileID: 4113829005332862926, guid: 5e3da585431fdb44eafd5184288e5c2c, type: 3}
+    parallaxEffect: {x: 0.4, y: 1}
+    yOffset: 0
+    sortingOrder: -3
+    scale: 1
 --- !u!1 &859175070
 GameObject:
   m_ObjectHideFlags: 0
