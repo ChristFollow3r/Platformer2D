@@ -12,6 +12,9 @@ namespace World.Background
         private float startPosY;
         private float startCamPosY;
 
+        // 1. Create a variable to cache the renderers
+        private SpriteRenderer[] allRenderers;
+
         private void Start()
         {
             startPosX = transform.position.x - (cam.position.x * parallaxEffect.x);
@@ -24,12 +27,17 @@ namespace World.Background
             float localWidth = sr.sprite.bounds.size.x;
             CreateSideClone(sr, localWidth);
             CreateSideClone(sr, -localWidth);
+
+            // 2. Cache the renderers right after the clones are created.
+            // We only do this ONCE.
+            allRenderers = GetComponentsInChildren<SpriteRenderer>();
         }
 
         private void CreateSideClone(SpriteRenderer original, float xOffset)
         {
             GameObject clone = new GameObject("Clone");
             clone.transform.SetParent(this.transform);
+
             clone.transform.localPosition = new Vector3(xOffset, 0, 0);
             clone.transform.localScale = Vector3.one;
 
@@ -38,12 +46,9 @@ namespace World.Background
             cloneSr.sortingOrder = original.sortingOrder;
         }
 
-        // THE FIX: Allows the Manager to dynamically fade this layer and its clones
         public void SetAlpha(float alpha)
         {
-            // Gets the SpriteRenderer on this object AND the clones we created
-            SpriteRenderer[] allRenderers = GetComponentsInChildren<SpriteRenderer>();
-
+            // 3. Now we just loop through the cached array. Zero performance hit!
             foreach (var sr in allRenderers)
             {
                 Color c = sr.color;
