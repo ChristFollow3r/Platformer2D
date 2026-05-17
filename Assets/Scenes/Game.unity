@@ -290,7 +290,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 180265503}
-  - component: {fileID: 180265502}
   - component: {fileID: 180265501}
   - component: {fileID: 180265500}
   - component: {fileID: 180265499}
@@ -298,6 +297,7 @@ GameObject:
   - component: {fileID: 180265496}
   - component: {fileID: 180265504}
   - component: {fileID: 180265505}
+  - component: {fileID: 180265506}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -454,18 +454,6 @@ MonoBehaviour:
   coyoteTime: 0.15
   jumpBufferTime: 0.15
   attackPauseDuration: 0.2
---- !u!114 &180265502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 180265495}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa9e4c1693f0803489046584c7b53a11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &180265503
 Transform:
   m_ObjectHideFlags: 0
@@ -541,6 +529,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 500
   deathDrop: {fileID: 0}
+--- !u!114 &180265506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180265495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d5523cf6ce1613498a6f70254a8e649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shaders.PlayerLightUpdate
+  blockMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
 --- !u!1 &434745709
 GameObject:
   m_ObjectHideFlags: 0
