@@ -1,6 +1,6 @@
 # Bugs
 
-- Atacking mid air cancels gravity - Not a bug
+- Atacking mid air cancels gravity - Not a bug - Add cooldown then
 - Brak colider is still very very bad (Far away)
 - Braking blocks still has no cd (Can insta restart atack and atack still goes through)
 - Wall slide anim is not set to correct x (is inside wall)
@@ -11,13 +11,12 @@
 
 # Features
 
-- Place block
+- Place block [Pau] - **Done**
 - Break/atack depending on hand item
-- Show hand item
 - Modifications (Mods)
 - Create recipes
 - Block entities (Crafing table, furnace...)
-- Add block namess
+- Add block names (UI)
 - Add better UI controls
 
 # Changes
