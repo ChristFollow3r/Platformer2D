@@ -63,7 +63,6 @@ namespace Enemies.Skeleton
 
         private void HandleMovement()
         {
-            // FIX: Prevent the skeleton from overriding its X velocity while airborne from knockback
             if (!isGrounded) return;
 
             direction = target.position.x > transform.position.x ? 1 : -1;

@@ -143,7 +143,7 @@ namespace Enemies.Skeleton
             skeletonHealth.SpawnDeathDrops();
             AudioSource.PlayClipAtPoint(skeletonDeathDropSound, transform.position);
             var boneDust = Instantiate(boneDustParticles, transform.position, Quaternion.identity);
-            Destroy(boneDust, boneDust.main.duration);
+            Destroy(boneDust.gameObject, boneDust.main.duration);
             Destroy(gameObject);
         }
 
