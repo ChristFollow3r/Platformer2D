@@ -79,7 +79,6 @@ namespace Enemies.Skeleton
 
             yield return new WaitForSeconds(0.5f);
 
-            // Replaced transform.localScale.x with direction
             Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(skeletonData.attackOffset.x * direction, skeletonData.attackOffset.y);
             Collider2D hit = Physics2D.OverlapBox(finalAttackPosition, skeletonData.hitBoxSize, 0, skeletonData.playerLayer);
 

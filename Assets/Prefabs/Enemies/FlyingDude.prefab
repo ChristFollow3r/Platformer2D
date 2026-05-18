@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 5047472912349571532}
   - component: {fileID: 5084709742913475023}
   - component: {fileID: 1960848539722432824}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FlyingDude
   m_TagString: Untagged
   m_Icon: {fileID: 0}

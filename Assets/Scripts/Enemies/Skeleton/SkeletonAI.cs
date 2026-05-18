@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Enemies.Skeleton
 {
@@ -64,12 +63,13 @@ namespace Enemies.Skeleton
 
         private void HandleMovement()
         {
+            // FIX: Prevent the skeleton from overriding its X velocity while airborne from knockback
+            if (!isGrounded) return;
+
             direction = target.position.x > transform.position.x ? 1 : -1;
             skeletonRigidBody.linearVelocityX = direction * skeletonData.speed;
 
-            // Flip the sprite instead of the transform
             spriteRenderer.flipX = direction == -1;
-
             skeletonRigidBody.gravityScale = skeletonRigidBody.linearVelocityY < 0 ? 5f : 3f;
         }
 
@@ -94,7 +94,7 @@ namespace Enemies.Skeleton
         {
             isStunned = true;
             skeletonRigidBody.linearVelocity = Vector2.zero;
-            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse); // KnockBack hardcoded
+            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(0.3f);
             isStunned = false;
