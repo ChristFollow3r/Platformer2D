@@ -8,6 +8,12 @@ namespace Shared
     {
         [SerializeField] private int maxHealth;
         [SerializeField] private GameObject deathDrop;
+
+        [Header("Audio")]
+        [SerializeField] private AudioSource hitSound;
+        [SerializeField] private AudioSource deathSound;
+
+
         private int currentHealth;
 
         public event Action<float> OnHealthChanged;

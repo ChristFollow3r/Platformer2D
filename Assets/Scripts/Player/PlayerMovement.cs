@@ -41,8 +41,9 @@ namespace Player
         private float coyoteTimeCounter;
         private float jumpBufferCounter;
         private float attackPauseTimer;
-        private bool wasGrounded;
-        private bool isJumpingPhase;
+
+        public bool isGrounded { get; private set; }
+        //private bool isJumpingPhase;
 
         public event Action<Vector2> OnMinePerformed;
         public event Action<Vector2> OnAttackPerformed;
@@ -64,7 +65,7 @@ namespace Player
             Vector2 colSize = playerCollider.bounds.size;
             Vector2 colCenter = playerCollider.bounds.center;
 
-            bool isGrounded = Physics2D.BoxCast(colCenter, new Vector2(colSize.x * 0.9f, colSize.y), 0f, Vector2.down, 0.1f, groundLayer);
+            isGrounded = Physics2D.BoxCast(colCenter, new Vector2(colSize.x * 0.9f, colSize.y), 0f, Vector2.down, 0.1f, groundLayer);
 
             float rayLength = (colSize.x / 2f) + 0.15f;
             Vector2 topRayPos = colCenter + new Vector2(0, colSize.y * 0.3f);
@@ -86,7 +87,7 @@ namespace Player
             Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);
 
-            wasGrounded = isGrounded;
+            //wasGrounded = isGrounded;
         }
 
         private void UpdatePolishTimers(bool isGrounded)
@@ -132,21 +133,21 @@ namespace Player
                     wallJumpTime = 0.25f;
                     canDoubleJump = true;
                     jumpBufferCounter = 0f;
-                    isJumpingPhase = true;
+                    //isJumpingPhase = true;
                 }
                 else if (coyoteTimeCounter > 0f)
                 {
                     rb.linearVelocityY = jumpForce;
                     jumpBufferCounter = 0f;
                     coyoteTimeCounter = 0f;
-                    isJumpingPhase = true;
+                    //isJumpingPhase = true;
                 }
                 else if (canDoubleJump && !isSliding)
                 {
                     rb.linearVelocityY = jumpForce;
                     canDoubleJump = false;
                     jumpBufferCounter = 0f;
-                    isJumpingPhase = true;
+                    //isJumpingPhase = true;
                 }
             }
         }

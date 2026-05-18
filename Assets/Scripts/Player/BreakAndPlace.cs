@@ -155,7 +155,6 @@ namespace Player
                             {
                                 Prop propHitData = WorldData.PropDictionary[hitType];
 
-                                // TODO: Audio source shit
                                 // TODO: Particles shit
 
                                 Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f;
@@ -177,7 +176,6 @@ namespace Player
                                 int chunkY = checkY / Chunk.ChunkSize;
                                 WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(checkX, checkY);
 
-                                Debug.Log($"{propHitData.name} hit at anchor [{checkX}, {checkY}]"); // TODO: Remove
                                 foundProp = true;
                                 break;
                             }
@@ -187,7 +185,6 @@ namespace Player
                     }
                 }
 
-                // TODO: ATTACK LOGIC FOR ENEMIES
             }
         }
     }

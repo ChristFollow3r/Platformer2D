@@ -10,7 +10,7 @@ namespace Enemies.FlyingDude
         [SerializeField] private Enemy flyingDudeData;
 
         [Header("Flight Dynamics")]
-        [SerializeField] private float flightAcceleration = 10f; // Tweak this! Lower = wider swoops, Higher = tighter turns
+        [SerializeField] private float flightAcceleration = 10f;
 
         [Header("Obstacle Avoidance")]
         [SerializeField] private LayerMask obstacleLayer;

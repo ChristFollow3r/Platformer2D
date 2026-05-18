@@ -11,7 +11,6 @@ namespace Player
         [Header("Attack Settings")]
         [SerializeField] private int attackDamage;
         [SerializeField] private float knockback;
-
         [SerializeField] private Vector2 attackOffset = new Vector2(1f, 0f);
         [SerializeField] private Vector2 hitBoxSize = new Vector2(1.5f, 1.5f);
         [SerializeField] private LayerMask enemyLayer;
@@ -44,7 +43,6 @@ namespace Player
                 if (hit.TryGetComponent(out Shared.Health enemyHealth))
                 {
                     enemyHealth.TakeDamage(attackDamage, direction, knockback);
-                    Debug.Log("Enemy hit");
                 }
             }
         }
