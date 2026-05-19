@@ -26,6 +26,7 @@ namespace Enemies.FlyingDude
 
         private int                  direction;
         private bool                 isStunned;
+        private bool                 isDead; // Add this flag
 
         public event Action<int>     OnRange;
 
@@ -40,12 +41,21 @@ namespace Enemies.FlyingDude
 
         private void Start() => isStunned = false;
 
-        private void OnEnable() => dudeHealth.OnKnockbackRecieved += HandleHit;
-        private void OnDisable() => dudeHealth.OnKnockbackRecieved -= HandleHit;
+        private void OnEnable()
+        {
+            dudeHealth.OnKnockbackRecieved += HandleHit;
+            dudeHealth.OnDeath += HandleDeath; // Subscribe to death
+        }
+
+        private void OnDisable()
+        {
+            dudeHealth.OnKnockbackRecieved -= HandleHit;
+            dudeHealth.OnDeath -= HandleDeath;
+        }
 
         private void Update()
         {
-            if (target is null || isStunned) return;
+            if (target is null || isStunned || isDead) return;
 
             if (animations.isAttacking)
             {
@@ -70,6 +80,7 @@ namespace Enemies.FlyingDude
 
         private void HandleMovement()
         {
+            // (Your existing HandleMovement logic here - unchanged)
             Vector2 desiredDirection = (target.position - transform.position).normalized;
 
             RaycastHit2D hit = Physics2D.BoxCast(transform.position, wallCheckSize, 0f, Vector2.right * direction, wallCheckDistance, obstacleLayer);
@@ -83,8 +94,16 @@ namespace Enemies.FlyingDude
             dudeRigidBody.linearVelocity = currentVelocity;
         }
 
+        private void HandleDeath()
+        {
+            isDead = true;
+            StopAllCoroutines(); // Stops any active knockback coroutines!
+            dudeRigidBody.linearVelocity = Vector2.zero;
+        }
+
         private void HandleHit(int playerDirection, float knockback)
         {
+            if (isDead) return; // Ignore hit forces if dead
             StartCoroutine(DudeHit(playerDirection, knockback));
         }
 

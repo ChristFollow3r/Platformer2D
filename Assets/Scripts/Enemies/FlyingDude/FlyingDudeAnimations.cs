@@ -18,6 +18,7 @@ namespace Enemies.FlyingDude
         private static readonly int Dead = Animator.StringToHash("hasDied");
 
         [HideInInspector] public bool isAttacking;
+        private bool isDead = false;
 
         private void Awake()
         {
@@ -49,7 +50,7 @@ namespace Enemies.FlyingDude
 
         private void HandleAttackTrigger(int direction)
         {
-            if (!isAttacking) StartCoroutine(Attack(direction));
+            if (!isAttacking && !isDead) StartCoroutine(Attack(direction));
         }
 
         private IEnumerator Attack(int direction)
@@ -64,7 +65,7 @@ namespace Enemies.FlyingDude
             Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(flyingDudeData.attackOffset.x * direction, flyingDudeData.attackOffset.y);
             Collider2D hitTarget = Physics2D.OverlapBox(finalAttackPosition, flyingDudeData.hitBoxSize, 0, flyingDudeData.playerLayer);
 
-            if (hitTarget is not null)
+            if (hitTarget is not null && !isDead)
             {
                 if (hitTarget.TryGetComponent(out Shared.Health health))
                 {
@@ -77,6 +78,7 @@ namespace Enemies.FlyingDude
 
         private void PlayHitAnimation(int direction, float knockback)
         {
+            if (isDead) return;
             StartCoroutine(DudeHitAnimation());
         }
 
@@ -88,11 +90,15 @@ namespace Enemies.FlyingDude
 
         private void PlayDeathAnimation()
         {
+            isDead = true;
             StopAllCoroutines();
+
             aiScript.enabled = false;
 
-            dudeRigidbody.bodyType = RigidbodyType2D.Static;
-            if (TryGetComponent(out Collider2D col)) col.enabled = false;
+            dudeRigidbody.linearVelocity = Vector2.zero;
+
+            dudeRigidbody.bodyType = RigidbodyType2D.Dynamic;
+            dudeRigidbody.gravityScale = 3f;
 
             StartCoroutine(DudeDeathAnimation());
         }
@@ -100,7 +106,8 @@ namespace Enemies.FlyingDude
         private IEnumerator DudeDeathAnimation()
         {
             dudeAnimator.SetTrigger(Dead);
-            yield return new WaitForEndOfFrame();
+
+            yield return new WaitForSeconds(0.1f);
 
             float animationLength = dudeAnimator.GetCurrentAnimatorStateInfo(0).length;
             yield return new WaitForSeconds(animationLength);
