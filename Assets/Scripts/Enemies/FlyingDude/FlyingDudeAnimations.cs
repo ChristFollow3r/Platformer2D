@@ -65,7 +65,8 @@ namespace Enemies.FlyingDude
             Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(flyingDudeData.attackOffset.x * direction, flyingDudeData.attackOffset.y);
             Collider2D hitTarget = Physics2D.OverlapBox(finalAttackPosition, flyingDudeData.hitBoxSize, 0, flyingDudeData.playerLayer);
 
-            if (hitTarget is not null && !isDead)
+            // FIXED: Using != null instead of is not null
+            if (hitTarget != null && !isDead)
             {
                 if (hitTarget.TryGetComponent(out Shared.Health health))
                 {
@@ -113,7 +114,15 @@ namespace Enemies.FlyingDude
             yield return new WaitForSeconds(animationLength);
 
             yield return new WaitForSeconds(2.0f);
+
             dudeHealth.SpawnDeathDrops();
+
+            if (flyingDudeData.deathParticles != null)
+            {
+                var deathVFX = Instantiate(flyingDudeData.deathParticles, transform.position, Quaternion.identity);
+                Destroy(deathVFX.gameObject, deathVFX.main.duration);
+            }
+
             Destroy(gameObject);
         }
     }

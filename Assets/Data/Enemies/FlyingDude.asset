@@ -29,3 +29,5 @@ MonoBehaviour:
   hitSound: {fileID: 8300000, guid: 3824ab8bc891094498114af2f98e3a23, type: 3}
   deathSound: {fileID: 8300000, guid: a92f8cd5046bdea4380b51dbd384b437, type: 3}
   gruntSound: {fileID: 0}
+  dropSound: {fileID: 0}
+  deathParticles: {fileID: 7111893719700219089, guid: 291c97839eb46d042be5523a42482a52, type: 3}

@@ -168,7 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 60
-  deathDrop: {fileID: 0}
+  deathDrop: {fileID: 5856354742027562866, guid: 4d9127b2c643c6945b79f73433a7105c, type: 3}
 --- !u!50 &5047472912349571532
 Rigidbody2D:
   serializedVersion: 5

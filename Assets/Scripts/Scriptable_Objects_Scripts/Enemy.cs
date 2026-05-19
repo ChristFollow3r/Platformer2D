@@ -26,5 +26,8 @@ namespace Scriptable_Objects_Scripts
         public AudioClip deathSound;
         public AudioClip gruntSound;
         public AudioClip dropSound;
+
+        [Header("Particles")]
+        public ParticleSystem deathParticles;
     }
 }

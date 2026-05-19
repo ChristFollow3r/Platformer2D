@@ -7,7 +7,6 @@ namespace Enemies.Skeleton
     public class SkeletonAnimations : MonoBehaviour
     {
         [SerializeField] private Enemy skeletonData;
-        [SerializeField] private ParticleSystem boneDustParticles;
 
         private Animator      skeletonAnimator;
         private Rigidbody2D   skeletonRigidbody;
@@ -127,10 +126,14 @@ namespace Enemies.Skeleton
 
             yield return new WaitForSeconds(2.0f);
 
-            skeletonHealth.SpawnDeathDrops();
+            skeletonHealth.SpawnDeathDrops(); // TODO: Move this to the scriptable object
 
-            var boneDust = Instantiate(boneDustParticles, transform.position, Quaternion.identity);
-            Destroy(boneDust.gameObject, boneDust.main.duration);
+            if (skeletonData.deathParticles is not null)
+            {
+                var deathVFX = Instantiate(skeletonData.deathParticles, transform.position, Quaternion.identity);
+                Destroy(deathVFX.gameObject, deathVFX.main.duration);
+            }
+
             Destroy(gameObject);
         }
     }
