@@ -154,8 +154,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlyingDudeAnimations
   flyingDudeData: {fileID: 11400000, guid: f6035b0426843c140ae781160c00708f, type: 2}
-  dudeDeathSound: {fileID: 0}
-  hitSound: {fileID: 0}
   isAttacking: 0
 --- !u!114 &4494382864503811195
 MonoBehaviour:
@@ -171,8 +169,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 60
   deathDrop: {fileID: 0}
-  hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
 --- !u!50 &5047472912349571532
 Rigidbody2D:
   serializedVersion: 5
@@ -234,7 +230,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.044403076, y: 0}
+  m_Offset: {x: 0.044403076, y: 0.013718478}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -244,7 +240,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.26287842, y: 0.2754364}
+  m_Size: {x: 0.26287842, y: 0.24799944}
   m_EdgeRadius: 0
 --- !u!114 &4845199005942314836
 MonoBehaviour:

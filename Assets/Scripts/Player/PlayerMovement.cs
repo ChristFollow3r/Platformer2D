@@ -36,9 +36,9 @@ namespace Player
         [SerializeField] private float attackPauseDuration = 0.25f;
 
         [Header("Cooldown Settings")]
-        [SerializeField] private float jumpCooldown = 0.1f;    // Prevents accidental double-jumps from sensitive keyboards
-        [SerializeField] private float attackCooldown = 0.2f;  // Prevents attack spam
-        [SerializeField] private float mineCooldown = 0.2f;    // Prevents mine spam
+        [SerializeField] private float jumpCooldown = 0.1f;
+        [SerializeField] private float attackCooldown = 0.2f;
+        [SerializeField] private float mineCooldown = 0.2f;
 
         private bool canDoubleJump;
         private float wallJumpTime = 0.25f;
@@ -47,10 +47,13 @@ namespace Player
         private float jumpBufferCounter;
         private float attackPauseTimer;
 
-        // Cooldown timers
         private float jumpCooldownTimer;
         private float attackCooldownTimer;
         private float mineCooldownTimer;
+
+        // --- NEW: Storing mouse positions for the delayed animation events ---
+        private Vector2 lastAttackMousePosition;
+        private Vector2 lastMineMousePosition;
 
         public bool isGrounded { get; private set; }
 
@@ -196,27 +199,35 @@ namespace Player
         {
             if (Mouse.current.leftButton.wasPressedThisFrame && attackCooldownTimer <= 0f)
             {
-                attackCooldownTimer = attackCooldown; // Start attack cooldown
+                attackCooldownTimer = attackCooldown;
 
-                Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                spriteRenderer.flipX = mousePosition.x < transform.position.x;
+                lastAttackMousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                spriteRenderer.flipX = lastAttackMousePosition.x < transform.position.x;
 
                 attackPauseTimer = attackPauseDuration;
                 animator.SetTrigger(HasAttacked);
-                OnAttackPerformed?.Invoke(mousePosition);
             }
 
             if (Mouse.current.rightButton.wasPressedThisFrame && mineCooldownTimer <= 0f)
             {
-                mineCooldownTimer = mineCooldown; // Start mine cooldown
+                mineCooldownTimer = mineCooldown;
 
-                Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                spriteRenderer.flipX = mousePosition.x < transform.position.x;
+                lastMineMousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                spriteRenderer.flipX = lastMineMousePosition.x < transform.position.x;
 
                 attackPauseTimer = attackPauseDuration;
                 animator.SetTrigger(HasMined);
-                OnMinePerformed?.Invoke(mousePosition);
             }
+        }
+
+        public void TriggerAttackEvent()
+        {
+            OnAttackPerformed?.Invoke(lastAttackMousePosition);
+        }
+
+        public void TriggerMineEvent()
+        {
+            OnMinePerformed?.Invoke(lastMineMousePosition);
         }
     }
 }
