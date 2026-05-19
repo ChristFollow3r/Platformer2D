@@ -10,10 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: Dirt_B lock_Item
+  m_Name: Dirt
   m_EditorClassIdentifier: 
   name: Dirt
   sprite: {fileID: -8275502208090371910, guid: a5a8dff0fab06184887c331370f7c574, type: 3}
   stack: 64
-  isEquipment: 0
+  isPlacable: 1
+  isConsumable: 0
+  isFuel: 0
   equipmentType: 0
+  blockType: 2
+  hardness: 2
+  fuelDuration: 0

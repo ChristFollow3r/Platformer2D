@@ -3,7 +3,7 @@ using Scriptable_Objects_Scripts;
 
 namespace Data
 {
-    public enum BlockType { None, Air, Dirt, Grass, Stone, Sand, Coal, Copper, Tin, Iron, Sapphire, Topaz, Emerald, Onyx, Ruby} // Added none for the items
+    public enum BlockType { None, Air, Dirt, Grass, Stone, Sand, Coal, Copper, Tin, Iron, Sapphire, Topaz, Emerald, Onyx, Ruby, Entity } // Added none for the items
 
     public enum PropType { None, Bush, StoneProp, OakTree, BirchTree, Copper, Iron, Coal, Sulphur, ScareCrow }
 
@@ -11,7 +11,7 @@ namespace Data
 
     public static class WorldData
     {
-        public static readonly Dictionary<BlockType, Block> BlockDictionary = new();
+        public static readonly Dictionary<BlockType, ItemData> BlockDictionary = new();
         public static readonly Dictionary<PropType, Prop> PropDictionary = new();
         public static World World;
     }

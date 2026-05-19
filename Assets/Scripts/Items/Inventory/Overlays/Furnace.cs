@@ -1,24 +1,17 @@
 using System;
 using System.Linq;
 using Items.Utils;
+using Player;
 using UnityEngine;
 
 
 namespace Items.Overlays
 {
 
-    public enum EquipmentType
-    {
-        Helmet,
-        Chest,
-        OffHand,
-        Pants,
-        Bots
-    }
 
 
     [Serializable]
-    public class Equipment : Overlay, IInventory
+    public class Furnace : Overlay, IInventory
     {
         #region Data
         public const short EquipmentSlots = 5;
@@ -34,7 +27,7 @@ namespace Items.Overlays
         #endregion
 
         #region Contructor
-        public Equipment() : base(ulong.MinValue, Player.OverlayType.Inventory)
+        public Furnace(ulong blockId) : base(blockId, OverlayType.Furnace)
         {
             Init();
         }

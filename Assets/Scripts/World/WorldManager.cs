@@ -9,14 +9,15 @@ namespace World
 {
     public class WorldManager : MonoBehaviour
     {
-        [SerializeField] private Block[] blocks;
+        [SerializeField] private ItemData[] blocks;
         [SerializeField] private Prop[] props;
 
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
-        [Header("Shader Setup")] [SerializeField]
+        [Header("Shader Setup")]
+        [SerializeField]
         private Material tilemapMaterial;
 
         private Texture2D lightmapTexture;
@@ -39,7 +40,7 @@ namespace World
 
         private void Awake()
         {
-            foreach (var block in blocks) WorldData.BlockDictionary[block.type] = block;
+            foreach (var block in blocks) WorldData.BlockDictionary[block.blockType] = block;
             foreach (var prop in props) WorldData.PropDictionary[prop.type] = prop;
 
             if (Instance != null)

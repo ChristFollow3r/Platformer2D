@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: Grass
+  m_Name: Iron
   m_EditorClassIdentifier: 
-  name: Grass
-  sprite: {fileID: -1347532211411968617, guid: f6dccec5d156e2e41b73e6b03c03e9c5, type: 3}
+  name: Iron
+  sprite: {fileID: 5103231540499187363, guid: 2ebcf8c6b19b8794da3362891d1640f6, type: 3}
   stack: 64
-  isConsumable: 0
-  isEquipment: 0
-  equipmentType: 0
   isPlacable: 1
-  blockType: 3
-  hardness: 1
+  isConsumable: 0
   isFuel: 0
+  equipmentType: 0
+  blockType: 9
+  hardness: 10
   fuelDuration: 0

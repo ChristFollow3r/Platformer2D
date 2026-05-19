@@ -10,17 +10,22 @@ namespace Player
 {
     public class BreakAndPlace : MonoBehaviour
     {
-        [Header("Drops")] [SerializeField] private GameObject dropPrefab;
+        [Header("Drops")]
+        [SerializeField] private GameObject dropPrefab;
 
-        [Header("Refs")] [SerializeField] private GameObject player;
+        [Header("Refs")]
+        [SerializeField] private GameObject player;
         [SerializeField] private PlayerMovement playerMovement;
 
-        [Header("Controls")] [SerializeField] private int reachDistance;
+        [Header("Controls")]
+        [SerializeField] private int reachDistance;
         [SerializeField] private float attackRange = 1.5f;
         [SerializeField] private Vector2 attackBoxSize = new Vector2(1.5f, 1.5f);
 
-        [Header("Mining Data")] private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
-        private float currentBlockDamage = 0f;
+        [Header("Mining Data")]
+        private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
+        private float currentBlockDamage = 0f; // This should be per block, not global (Dmg resets)
+
 
         private Camera mainCamera;
         private Collider2D playerCollider;
@@ -30,8 +35,9 @@ namespace Player
             if (playerMovement is not null)
             {
                 playerMovement.OnAttackPerformed += HandleAttacking;
-                playerMovement.OnMinePerformed += HandleMining;
+                playerMovement.OnMinePerformed += OnRightClick;
             }
+
         }
 
         private void OnDisable()
@@ -39,7 +45,7 @@ namespace Player
             if (playerMovement != null)
             {
                 playerMovement.OnAttackPerformed -= HandleAttacking;
-                playerMovement.OnMinePerformed -= HandleMining;
+                playerMovement.OnMinePerformed -= OnRightClick;
             }
         }
 
@@ -55,7 +61,70 @@ namespace Player
 
         private void HandleAttacking(Vector2 mouseWorldPosition)
         {
+            BlockType clickedBlock = GetClickedBlock(mouseWorldPosition, out ulong blockId);
+
+            if (clickedBlock == BlockType.Entity)
+            {
+                UIController.Singleton.OpenOverlay(blockId);
+                return;
+            }
             StartCoroutine(DelayedAttackRoutine(mouseWorldPosition));
+        }
+
+
+        private void OnRightClick(Vector2 mouseWorldPosition)
+        {
+            ItemStack item = Inventory.Singleton.hand;
+            if (item != null && item.data.isPlacable)
+            {
+                bool shouldMine = PlaceBlock(item, mouseWorldPosition);
+                if (!shouldMine) return;
+            }
+
+            HandleMining(mouseWorldPosition);
+        }
+
+        private BlockType GetClickedBlock(Vector2 mousePos, out ulong blockId)
+        {
+            #region GetCkicledBlock
+            float cellSize = 0.5f;
+            int x = Mathf.FloorToInt(mousePos.x / cellSize);
+            int y = Mathf.FloorToInt(mousePos.y / cellSize);
+
+            blockId = BlockIdUtils.From(x, y);
+
+            return WorldData.World.GetBlockTypes(x, y);
+            #endregion
+        }
+
+
+        private bool PlaceBlock(ItemStack item, Vector2 mouseWorldPosition)
+        {
+            Vector2 playerCenter = playerCollider.bounds.center;
+            float distance = Vector2.Distance(mouseWorldPosition, playerCenter);
+
+            if (distance > reachDistance) return true;
+            float cellSize = 0.5f;
+            int x = Mathf.FloorToInt(mouseWorldPosition.x / cellSize);
+            int y = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
+
+            BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
+
+            if (clickedBlock != BlockType.Air) return true;
+
+            if (distance < 0.75f) return true;
+
+            WorldData.World.SetBlockType(x, y, item.data.blockType);
+            int chunkX = x / Chunk.ChunkSize;
+            int chunkY = y / Chunk.ChunkSize;
+            WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(x, y);
+            Inventory.Singleton.RemoveFromHand();
+
+            if (item.data.blockType == BlockType.Entity)
+            {
+                UIController.Singleton.CreateOverlay(BlockIdUtils.From(x, y), item.data.overlayType);
+            }
+            return false;
         }
 
         private void HandleMining(Vector2 mouseWorldPosition)
@@ -66,40 +135,44 @@ namespace Player
             if (distance > reachDistance) return;
 
             float cellSize = 0.5f;
-            int mouseX = Mathf.FloorToInt(mouseWorldPosition.x / cellSize);
-            int mouseY = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
+            int x = Mathf.FloorToInt(mouseWorldPosition.x / cellSize);
+            int y = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
 
-            if (currentMineTarget.x != mouseX || currentMineTarget.y != mouseY)
+            if (currentMineTarget.x != x || currentMineTarget.y != y)
             {
-                currentMineTarget = new Vector2Int(mouseX, mouseY);
+                currentMineTarget = new Vector2Int(x, y);
                 currentBlockDamage = 0f;
             }
 
-            BlockType clickedBlock = WorldData.World.GetBlockTypes(mouseX, mouseY);
+            BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
-            if (clickedBlock != BlockType.Air)
+            if (clickedBlock == BlockType.Air) return;
+
+            float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
+            float miningPower = 1f; // TODO: Base this on the player upgrade
+
+            currentBlockDamage += miningPower;
+
+            if (currentBlockDamage >= targetHardness)
             {
-                float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
-                float miningPower = 1f; // TODO: Base this on the player upgrade
-
-                currentBlockDamage += miningPower;
-
-                if (currentBlockDamage >= targetHardness)
+                // TODO: break block, drop shit, add sound, add particles
+                BreakBlock(x, y, clickedBlock);
+                currentBlockDamage = 0f;
+                if (clickedBlock == BlockType.Entity)
                 {
-                    // TODO: break block, drop shit, add sound, add particles
-                    BreakBlock(mouseX, mouseY, clickedBlock);
-                    currentBlockDamage = 0f;
+                    UIController.Singleton.DestroyEntity(BlockIdUtils.From(x, y));
                 }
             }
+
         }
 
         private void BreakBlock(int x, int y, BlockType type)
         {
             float cellSize = 0.5f;
-            Vector2 spawnPosition = new Vector2(x * cellSize, y * cellSize);
+            Vector2 spawnPosition = new Vector2(x * cellSize + 0.25f, y * cellSize + 0.25f);
             // SPAWNING BLOCKS IN HERE.
             GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
-            dropGO.GetComponent<DropComponent>().SetItem(WorldData.BlockDictionary[type].item);
+            dropGO.GetComponent<DropComponent>().SetItem(WorldData.BlockDictionary[type]);
             Destroy(dropGO, 300f);
 
             WorldData.World.SetBlockType(x, y, BlockType.Air);
@@ -119,7 +192,6 @@ namespace Player
             Collider2D[] hitObjects = Physics2D.OverlapBoxAll(attackCenter, attackBoxSize, 0f);
 
             #region HitBoxDebug
-
             Vector2 min = attackCenter - (attackBoxSize / 2f);
             Vector2 max = attackCenter + (attackBoxSize / 2f);
             Vector2 topLeft = new Vector2(min.x, max.y);
@@ -130,7 +202,6 @@ namespace Player
             Debug.DrawLine(topLeft, max, Color.magenta, 1f); // Top side
             Debug.DrawLine(max, bottomRight, Color.magenta, 1f); // Right side
             Debug.DrawLine(bottomRight, min, Color.magenta, 1f); // Bottom side
-
             #endregion
 
             foreach (Collider2D hitObject in hitObjects)
@@ -158,7 +229,8 @@ namespace Player
                                 // TODO: Audio source shit
                                 // TODO: Particles shit
 
-                                Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f;
+                                Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f + new Vector2(0.25f, 0.25f);
+
                                 Debug.Log($"Spawning {propHitData.drops.Count} drops");
                                 foreach (Drop drop in propHitData.drops)
                                 {
@@ -167,7 +239,6 @@ namespace Player
                                         GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
                                         dropGO.GetComponent<DropComponent>().SetItem(drop.item);
                                         Destroy(dropGO, 300f);
-
                                     }
                                 }
 
