@@ -26,6 +26,7 @@ namespace Player
         private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
         private float currentBlockDamage = 0f; // This should be per block, not global (Dmg resets)
 
+
         private Camera mainCamera;
         private Collider2D playerCollider;
 
@@ -229,6 +230,7 @@ namespace Player
                                 // TODO: Particles shit
 
                                 Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f + new Vector2(0.25f, 0.25f);
+
                                 Debug.Log($"Spawning {propHitData.drops.Count} drops");
                                 foreach (Drop drop in propHitData.drops)
                                 {

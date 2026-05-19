@@ -10,19 +10,20 @@ namespace Enemies.Skeleton
     {
         [SerializeField] private Enemy skeletonData;
         [SerializeField] private LayerMask groundLayer;
-        [SerializeField] private ParticleSystem dustParticles;  
-        
+        [SerializeField] private ParticleSystem dustParticles;
+
         private Rigidbody2D        skeletonRigidBody;
         private CapsuleCollider2D  skeletonCollider;
         private Shared.Health      skeletonHealth;
         private Transform          target;
         private SkeletonAnimations animations;
-        
+        private SpriteRenderer     spriteRenderer;
+
         private int                direction;
         private bool               isGrounded;
         private bool               theresBlockInFront;
         private bool               isStunned;
-        public event Action<bool, int> OnRange; 
+        public event Action<bool, int> OnRange;
 
         private void Awake()
         {
@@ -30,9 +31,10 @@ namespace Enemies.Skeleton
             skeletonCollider  = GetComponent<CapsuleCollider2D>();
             skeletonHealth    = GetComponent<Shared.Health>();
             animations        = GetComponent<SkeletonAnimations>();
+            spriteRenderer    = GetComponent<SpriteRenderer>();
             target = GameObject.FindGameObjectWithTag("Player")?.transform;
         }
-        
+
         private void Start() => isStunned = false;
         private void OnEnable() => skeletonHealth.OnKnockbackRecieved += HandleHit;
         private void OnDisable() => skeletonHealth.OnKnockbackRecieved -= HandleHit;
@@ -46,11 +48,11 @@ namespace Enemies.Skeleton
                 skeletonRigidBody.linearVelocityX = 0;
                 return;
             }
-            
+
             float distanceToPlayer = Vector3.Distance(transform.position, target.position);
             CheckForObstacles();
 
-            if (distanceToPlayer <= skeletonData.attackRange) 
+            if (distanceToPlayer <= skeletonData.attackRange)
             {
                 OnRange?.Invoke(isGrounded, direction);
             }
@@ -64,16 +66,19 @@ namespace Enemies.Skeleton
         {
             direction = target.position.x > transform.position.x ? 1 : -1;
             skeletonRigidBody.linearVelocityX = direction * skeletonData.speed;
-            transform.localScale = new Vector3(direction, 1, 1);
+
+            // Flip the sprite instead of the transform
+            spriteRenderer.flipX = direction == -1;
+
             skeletonRigidBody.gravityScale = skeletonRigidBody.linearVelocityY < 0 ? 5f : 3f;
         }
 
         private void CheckForObstacles()
         {
             isGrounded         = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
-            theresBlockInFront = Physics2D.Raycast(new Vector2(transform.position.x, skeletonCollider.bounds.min.y + 0.1f), 
-                         Vector2.right * direction, 0.4f, groundLayer).collider is not null;
-            
+            theresBlockInFront = Physics2D.Raycast(new Vector2(transform.position.x, skeletonCollider.bounds.min.y + 0.1f),
+                         Vector2.right * direction, 0.6f, groundLayer).collider is not null;
+
             if (isGrounded && theresBlockInFront)
             {
                 skeletonRigidBody.linearVelocityY = skeletonData.jumpForce;
@@ -89,11 +94,10 @@ namespace Enemies.Skeleton
         {
             isStunned = true;
             skeletonRigidBody.linearVelocity = Vector2.zero;
-            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse);
-    
+            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse); // KnockBack hardcoded
+
             yield return new WaitForSeconds(0.3f);
             isStunned = false;
-
         }
     }
 }

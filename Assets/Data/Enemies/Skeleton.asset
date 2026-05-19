@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 310211534d2e55e448d99c95011c38b6, type: 3}
   m_Name: Skeleton
   m_EditorClassIdentifier: 
-  speed: 4
-  jumpForce: 6
+  speed: 2.5
+  jumpForce: 5
   attackDamage: 13
   attackRange: 1
   attackKnockback: 7
