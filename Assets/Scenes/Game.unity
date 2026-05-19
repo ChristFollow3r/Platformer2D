@@ -295,11 +295,11 @@ GameObject:
   - component: {fileID: 180265505}
   - component: {fileID: 180265506}
   - component: {fileID: 180265507}
+  - component: {fileID: 180265509}
   - component: {fileID: 180265499}
   - component: {fileID: 180265504}
   - component: {fileID: 180265497}
   - component: {fileID: 180265496}
-  - component: {fileID: 180265509}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -456,6 +456,9 @@ MonoBehaviour:
   coyoteTime: 0.15
   jumpBufferTime: 0.15
   attackPauseDuration: 0.2
+  jumpCooldown: 0.1
+  attackCooldown: 0.2
+  mineCooldown: 0.2
 --- !u!4 &180265503
 Transform:
   m_ObjectHideFlags: 0
@@ -585,9 +588,12 @@ MonoBehaviour:
   attackWhoosh: {fileID: 8300000, guid: 2879b7c3c43b19345849e7907f093a2a, type: 3}
   tinyDropSound: {fileID: 8300000, guid: 33cc41cbb6bfb904bbd8f6345a333543, type: 3}
   dropSound: {fileID: 8300000, guid: c46c8f42ba018624ca4a6ee04e899d34, type: 3}
+  jumpSound: {fileID: 0}
+  slideSound: {fileID: 0}
+  hitSound: {fileID: 0}
   pitchVariation: 0.1
-  footstepMinPitch: 2.2
-  footstepMaxPitch: 2.5
+  footstepMinPitch: 2.7
+  footstepMaxPitch: 3
 --- !u!1 &434745709
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,7 +1509,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.34
+  m_Volume: 0.28
   m_Pitch: 1
   Loop: 0
   Mute: 0

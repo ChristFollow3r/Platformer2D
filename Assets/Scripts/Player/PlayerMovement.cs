@@ -35,6 +35,11 @@ namespace Player
         [SerializeField] private float jumpBufferTime = 0.15f;
         [SerializeField] private float attackPauseDuration = 0.25f;
 
+        [Header("Cooldown Settings")]
+        [SerializeField] private float jumpCooldown = 0.1f;    // Prevents accidental double-jumps from sensitive keyboards
+        [SerializeField] private float attackCooldown = 0.2f;  // Prevents attack spam
+        [SerializeField] private float mineCooldown = 0.2f;    // Prevents mine spam
+
         private bool canDoubleJump;
         private float wallJumpTime = 0.25f;
 
@@ -42,12 +47,15 @@ namespace Player
         private float jumpBufferCounter;
         private float attackPauseTimer;
 
+        // Cooldown timers
+        private float jumpCooldownTimer;
+        private float attackCooldownTimer;
+        private float mineCooldownTimer;
+
         public bool isGrounded { get; private set; }
-        //private bool isJumpingPhase;
 
         public event Action<Vector2> OnMinePerformed;
         public event Action<Vector2> OnAttackPerformed;
-
         public event Action OnJumpPerformed;
 
         private void Awake()
@@ -88,8 +96,6 @@ namespace Player
             HandleMouseInput();
             Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);
-
-            //wasGrounded = isGrounded;
         }
 
         private void UpdatePolishTimers(bool isGrounded)
@@ -101,6 +107,10 @@ namespace Player
             else jumpBufferCounter -= Time.deltaTime;
 
             if (attackPauseTimer > 0f) attackPauseTimer -= Time.deltaTime;
+
+            if (jumpCooldownTimer > 0f) jumpCooldownTimer -= Time.deltaTime;
+            if (attackCooldownTimer > 0f) attackCooldownTimer -= Time.deltaTime;
+            if (mineCooldownTimer > 0f) mineCooldownTimer -= Time.deltaTime;
         }
 
         private void Movement(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
@@ -126,7 +136,7 @@ namespace Player
             if (wallJumpTime > 0f) wallJumpTime -= Time.deltaTime;
             else rb.linearVelocityX = movement * speed;
 
-            if (jumpBufferCounter > 0f)
+            if (jumpBufferCounter > 0f && jumpCooldownTimer <= 0f)
             {
                 if (!isGrounded && isSliding)
                 {
@@ -134,24 +144,27 @@ namespace Player
                     rb.linearVelocity = new Vector2(direction * wallJumpForce.x, wallJumpForce.y);
                     wallJumpTime = 0.25f;
                     canDoubleJump = true;
-                    jumpBufferCounter = 0f;
 
+                    jumpBufferCounter = 0f;
+                    jumpCooldownTimer = jumpCooldown;
                     OnJumpPerformed?.Invoke();
                 }
                 else if (coyoteTimeCounter > 0f)
                 {
                     rb.linearVelocityY = jumpForce;
+
                     jumpBufferCounter = 0f;
                     coyoteTimeCounter = 0f;
-
+                    jumpCooldownTimer = jumpCooldown;
                     OnJumpPerformed?.Invoke();
                 }
                 else if (canDoubleJump && !isSliding)
                 {
                     rb.linearVelocityY = jumpForce;
                     canDoubleJump = false;
-                    jumpBufferCounter = 0f;
 
+                    jumpBufferCounter = 0f;
+                    jumpCooldownTimer = jumpCooldown;
                     OnJumpPerformed?.Invoke();
                 }
             }
@@ -181,8 +194,10 @@ namespace Player
 
         private void HandleMouseInput()
         {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasPressedThisFrame && attackCooldownTimer <= 0f)
             {
+                attackCooldownTimer = attackCooldown; // Start attack cooldown
+
                 Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
                 spriteRenderer.flipX = mousePosition.x < transform.position.x;
 
@@ -191,8 +206,10 @@ namespace Player
                 OnAttackPerformed?.Invoke(mousePosition);
             }
 
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Mouse.current.rightButton.wasPressedThisFrame && mineCooldownTimer <= 0f)
             {
+                mineCooldownTimer = mineCooldown; // Start mine cooldown
+
                 Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
                 spriteRenderer.flipX = mousePosition.x < transform.position.x;
 
