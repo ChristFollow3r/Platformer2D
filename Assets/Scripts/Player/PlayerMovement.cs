@@ -48,6 +48,8 @@ namespace Player
         public event Action<Vector2> OnMinePerformed;
         public event Action<Vector2> OnAttackPerformed;
 
+        public event Action OnJumpPerformed;
+
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
@@ -133,21 +135,24 @@ namespace Player
                     wallJumpTime = 0.25f;
                     canDoubleJump = true;
                     jumpBufferCounter = 0f;
-                    //isJumpingPhase = true;
+
+                    OnJumpPerformed?.Invoke();
                 }
                 else if (coyoteTimeCounter > 0f)
                 {
                     rb.linearVelocityY = jumpForce;
                     jumpBufferCounter = 0f;
                     coyoteTimeCounter = 0f;
-                    //isJumpingPhase = true;
+
+                    OnJumpPerformed?.Invoke();
                 }
                 else if (canDoubleJump && !isSliding)
                 {
                     rb.linearVelocityY = jumpForce;
                     canDoubleJump = false;
                     jumpBufferCounter = 0f;
-                    //isJumpingPhase = true;
+
+                    OnJumpPerformed?.Invoke();
                 }
             }
         }

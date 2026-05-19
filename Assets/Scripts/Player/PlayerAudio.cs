@@ -15,6 +15,9 @@ namespace Player
         [SerializeField] private AudioClip attackWhoosh;
         [SerializeField] private AudioClip tinyDropSound;
         [SerializeField] private AudioClip dropSound;
+        [SerializeField] private AudioClip jumpSound;
+        [SerializeField] private AudioClip slideSound;
+        [SerializeField] private AudioClip hitSound;
 
         [Header("Combat Audio Settings")]
         [SerializeField] private float pitchVariation = 0.1f;
@@ -22,6 +25,16 @@ namespace Player
         [Header("Movement Audio Settings")]
         [SerializeField] private float footstepMinPitch = 1.05f;
         [SerializeField] private float footstepMaxPitch = 1.3f;
+
+        private void OnEnable()
+        {
+            playerMovement.OnJumpPerformed += PlayJumpSound;
+        }
+
+        private void OnDisable()
+        {
+            playerMovement.OnJumpPerformed -= PlayJumpSound;
+        }
 
         private void Awake()
         {
@@ -51,11 +64,17 @@ namespace Player
             PlayRandomized(movementAudioSource, dropSound, 1f - pitchVariation, 1f + pitchVariation);
         }
 
+        public void PlayJumpSound()
+        {
+            PlayRandomized(movementAudioSource, jumpSound, 1f - pitchVariation, 1f + pitchVariation);
+        }
+
         private void PlayRandomized(AudioSource source, AudioClip clip, float minPitch, float maxPitch)
         {
             if (clip is null) return;
             source.pitch = Random.Range(minPitch, maxPitch);
             source.PlayOneShot(clip);
         }
+
     }
 }
