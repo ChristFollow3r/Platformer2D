@@ -8,12 +8,6 @@ namespace Enemies.FlyingDude
     {
         [SerializeField] private Enemy flyingDudeData;
 
-        [Header("Sounds")]
-        [SerializeField] private AudioClip dudeDeathSound;
-        [SerializeField] private AudioClip hitSound;
-        private AudioSource audioSource;
-        private readonly float pitchVariation = 0.1f;
-
         private Animator      dudeAnimator;
         private Rigidbody2D   dudeRigidbody;
         private FlyingDudeAI  aiScript;
@@ -31,7 +25,6 @@ namespace Enemies.FlyingDude
             dudeAnimator  = GetComponent<Animator>();
             aiScript      = GetComponent<FlyingDudeAI>();
             dudeHealth    = GetComponent<Shared.Health>();
-            audioSource   = GetComponent<AudioSource>();
         }
 
         private void OnEnable()
@@ -73,7 +66,6 @@ namespace Enemies.FlyingDude
 
             if (hitTarget is not null)
             {
-                PlayRandomizedSound(hitSound);
                 if (hitTarget.TryGetComponent(out Shared.Health health))
                 {
                     health.TakeDamage(flyingDudeData.attackDamage, direction, flyingDudeData.attackKnockback);
@@ -99,8 +91,6 @@ namespace Enemies.FlyingDude
             StopAllCoroutines();
             aiScript.enabled = false;
 
-            if (dudeDeathSound is not null) AudioSource.PlayClipAtPoint(dudeDeathSound, transform.position);
-
             dudeRigidbody.bodyType = RigidbodyType2D.Static;
             if (TryGetComponent(out Collider2D col)) col.enabled = false;
 
@@ -118,15 +108,6 @@ namespace Enemies.FlyingDude
             yield return new WaitForSeconds(2.0f);
             dudeHealth.SpawnDeathDrops();
             Destroy(gameObject);
-        }
-
-        private void PlayRandomizedSound(AudioClip clip)
-        {
-            if (clip is null) return;
-            float randomPitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
-
-            audioSource.pitch = randomPitch;
-            audioSource.PlayOneShot(clip);
         }
     }
 }

@@ -64,9 +64,14 @@ namespace Player
             PlayRandomized(movementAudioSource, dropSound, 1f - pitchVariation, 1f + pitchVariation);
         }
 
+        public void PlaySlideSound()
+        {
+            PlayRandomized(movementAudioSource, slideSound, 1f - pitchVariation, 1f + pitchVariation);
+        }
+
         public void PlayJumpSound()
         {
-            PlayRandomized(movementAudioSource, jumpSound, 1f - pitchVariation, 1f + pitchVariation);
+            PlayRandomized(movementAudioSource, jumpSound, 1.0f, 1.2f);
         }
 
         private void PlayRandomized(AudioSource source, AudioClip clip, float minPitch, float maxPitch)

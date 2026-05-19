@@ -19,7 +19,13 @@ MonoBehaviour:
   attackKnockback: 5
   hitBoxSize: {x: 1, y: 1}
   attackOffset: {x: 0.75, y: 0}
-  attackCooldown: 0.2
+  attackCooldown: 0.4
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  attackSound: {fileID: 8300000, guid: d5c440acf866d94488e417e13acabfed, type: 3}
+  moveSound: {fileID: 8300000, guid: dab986ec3ca92724b892143a2b030a05, type: 3}
+  jumpSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 3824ab8bc891094498114af2f98e3a23, type: 3}
+  deathSound: {fileID: 8300000, guid: a92f8cd5046bdea4380b51dbd384b437, type: 3}
+  gruntSound: {fileID: 0}

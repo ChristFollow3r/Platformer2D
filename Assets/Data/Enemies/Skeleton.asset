@@ -23,3 +23,10 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  attackSound: {fileID: 8300000, guid: 32845c76ea8e1bd4db2ccb245ce6363a, type: 3}
+  moveSound: {fileID: 0}
+  jumpSound: {fileID: 0}
+  hitSound: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: 48c8fb3913974e94f98f5d7d05636bde, type: 3}
+  gruntSound: {fileID: 0}
+  dropSound: {fileID: 0}

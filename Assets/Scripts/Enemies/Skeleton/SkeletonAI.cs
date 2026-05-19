@@ -22,6 +22,7 @@ namespace Enemies.Skeleton
         private bool               isGrounded;
         private bool               theresBlockInFront;
         private bool               isStunned;
+
         public event Action<bool, int> OnRange;
 
         private void Awake()
@@ -81,6 +82,11 @@ namespace Enemies.Skeleton
             if (isGrounded && theresBlockInFront)
             {
                 skeletonRigidBody.linearVelocityY = skeletonData.jumpForce;
+
+                if (TryGetComponent(out EnemyAudio enemyAudio))
+                {
+                    enemyAudio.PlayJumpSound();
+                }
             }
         }
 

@@ -9,22 +9,18 @@ namespace Shared
         [SerializeField] private int maxHealth;
         [SerializeField] private GameObject deathDrop;
 
-        [Header("Audio")]
-        [SerializeField] private AudioSource hitSound;
-        [SerializeField] private AudioSource deathSound;
-
-
         private int currentHealth;
 
         public event Action<float> OnHealthChanged;
         public event Action OnDeath;
         public event Action<int, float> OnKnockbackRecieved;
-        private void Awake() => currentHealth = maxHealth;
+
         private bool isDead = false;
+
+        private void Awake() => currentHealth = maxHealth;
 
         public void TakeDamage(int damage, int direction, float knockback)
         {
-
             if (isDead) return;
 
             currentHealth -= damage;
