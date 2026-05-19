@@ -44,7 +44,7 @@ namespace Player
             if (playerMovement != null)
             {
                 playerMovement.OnAttackPerformed -= HandleAttacking;
-                playerMovement.OnMinePerformed -= HandleMining;
+                playerMovement.OnMinePerformed -= OnRightClick;
             }
         }
 
@@ -60,13 +60,19 @@ namespace Player
 
         private void HandleAttacking(Vector2 mouseWorldPosition)
         {
+            StartCoroutine(DelayedAttackRoutine(mouseWorldPosition));
+        }
+
+
+        private void OnRightClick(Vector2 mouseWorldPosition)
+        {
             ItemStack item = Inventory.Singleton.hand;
             if (item != null && item.data.isPlacable)
             {
                 PlaceBlock(item, mouseWorldPosition);
                 return;
             }
-            StartCoroutine(DelayedAttackRoutine(mouseWorldPosition));
+            HandleMining(mouseWorldPosition);
         }
 
 

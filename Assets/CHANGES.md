@@ -7,7 +7,6 @@
 - On tight spaces the wall slide is allways oin the right wall (Create a 1 width hole and try to wall slide left)
 - No feedback on id mine was correct (On blocks that take more than one hit we should signal block health)
 - Bllock entity collider should not be poly (no prio)
-- Block damage should be per-block not global (Dmg resets when changing blocks). Intended? --- YES
 
 # Features
 
