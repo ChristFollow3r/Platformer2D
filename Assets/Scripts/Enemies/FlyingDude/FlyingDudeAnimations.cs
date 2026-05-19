@@ -15,7 +15,7 @@ namespace Enemies.FlyingDude
 
         private static readonly int Attacking = Animator.StringToHash("hasAttacked");
         private static readonly int Hit = Animator.StringToHash("hasBeenHit");
-        private static readonly int Dead = Animator.StringToHash("hasDied");
+        private static readonly int Dead = Animator.StringToHash("isDead");
 
         [HideInInspector] public bool isAttacking;
         private bool isDead = false;
