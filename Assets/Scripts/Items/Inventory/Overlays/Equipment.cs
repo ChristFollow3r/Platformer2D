@@ -71,7 +71,6 @@ namespace Items.Overlays
         public bool EvaluateCraft()
         {
             #region EvaluateCraft
-            Debug.Log("Evaluating craft!");
             ItemStack result = CraftingUtils.EvaluateCraft(craftingSlots.Select(s => s.item).ToList(), 2);
 
             resultSlot.item = null;

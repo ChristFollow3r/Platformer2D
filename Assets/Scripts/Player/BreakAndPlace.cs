@@ -251,7 +251,6 @@ namespace Player
                                 int chunkY = checkY / Chunk.ChunkSize;
                                 WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(checkX, checkY);
 
-                                Debug.Log($"{propHitData.name} hit at anchor [{checkX}, {checkY}]"); // TODO: Remove
                                 foundProp = true;
                                 break;
                             }
