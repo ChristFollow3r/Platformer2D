@@ -170,7 +170,6 @@ namespace Player
         {
             float cellSize = 0.5f;
             Vector2 spawnPosition = new Vector2(x * cellSize + 0.25f, y * cellSize + 0.25f);
-            // SPAWNING BLOCKS IN HERE.
             GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
             dropGO.GetComponent<DropComponent>().SetItem(WorldData.BlockDictionary[type]);
             Destroy(dropGO, 300f);
@@ -231,10 +230,14 @@ namespace Player
 
                                 Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f + new Vector2(0.25f, 0.25f);
 
-                                Debug.Log($"Spawning {propHitData.drops.Count} drops");
                                 foreach (Drop drop in propHitData.drops)
                                 {
-                                    for (int i = 0; i < drop.amount; i++)
+                                    bool doesDrop = Random.Range(0, 100) <= drop.dropChance;
+                                    if (!doesDrop) continue;
+
+                                    int amount = Random.Range(drop.minAmount, drop.maxAmount);
+
+                                    for (int i = 0; i < amount; i++)
                                     {
                                         GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
                                         dropGO.GetComponent<DropComponent>().SetItem(drop.item);

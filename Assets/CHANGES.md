@@ -14,9 +14,10 @@
 - Break/atack depending on hand item
 - Modifications (Mods)
 - Create recipes
-- Block entities (Crafing table, furnace...)
+- Block entities (Crafing table, furnace...) [Pau] - **Done**
 - Add block names (UI)
 - Add better UI controls
+- Add randomizer to drop amounts [Pau] -
 
 # Changes
 

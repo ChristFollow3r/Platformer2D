@@ -81,24 +81,29 @@ namespace Items
             }
             #endregion
         }
+        public bool Fits(ItemData item) => _Add(new() { data = item, amount = 1 }, true);
 
-        public void Add(ItemStack item)
+
+        public void Add(ItemStack item) => _Add(item);
+
+
+        private bool _Add(ItemStack item, bool dryRun = false)
         {
-            #region Pickup
             Slot slot;
             do
             {
                 slot = GetSlotOfItem(item.data);
                 if (slot is null) break;
-                slot.Add(item);
-
-                OnSlotChanged?.Invoke(slot.id, slot.item);
+                if (!dryRun)
+                {
+                    slot.Add(item);
+                    OnSlotChanged?.Invoke(slot.id, slot.item);
+                }
             } while (item.amount > 0);
 
-            if (slot is not null) return;
-
-            Drop(item);
-            #endregion
+            if (item.amount > 0) Drop(item);
+            if (slot is not null) return true;
+            return false;
         }
 
         public void Drop(ItemStack item)
