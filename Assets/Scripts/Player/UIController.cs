@@ -10,7 +10,8 @@ namespace Player
 {
     public enum OverlayType
     {
-        Inventory
+        Inventory,
+        Furnace
     };
 
     [DefaultExecutionOrder(-50)]
@@ -35,8 +36,7 @@ namespace Player
         private VisualElement overlayRoot;
         private VisualElement hudRoot;
 
-        private Items.Overlays.Equipment equipmentOverlay;
-        private Dictionary<int, Overlay> overlaysByBlockId;
+        private Dictionary<ulong, Overlay> overlaysByBlockId = new();
 
         [Header("Controls")]
         [SerializeField] private bool isOverlayOpen;
@@ -44,7 +44,7 @@ namespace Player
         #endregion
 
         #region Events
-        public event Action<int, OverlayType, object> OnOverlayOpen;
+        public event Action<ulong, OverlayType> OnOverlayOpen;
         public event Action OnOverlayClose;
         #endregion
 
@@ -88,6 +88,7 @@ namespace Player
 
             Hotbar hudHotbar = new Hotbar { isMain = true };
             hud.rootVisualElement.Q("hotbar-holder").Add(hudHotbar);
+            CreateOverlay(ulong.MinValue, OverlayType.Inventory);
             #endregion
         }
 
@@ -98,7 +99,7 @@ namespace Player
             {
                 isOverlayOpen = !isOverlayOpen;
 
-                if (isOverlayOpen) OpenOverlay(-1, OverlayType.Inventory);
+                if (isOverlayOpen) OpenOverlay(ulong.MinValue);
                 else CloseOverlay();
                 return;
             }
@@ -107,20 +108,22 @@ namespace Player
             #endregion
         }
 
-        public void OpenOverlay(int blockId, OverlayType overlayType, object data = null)
+        public void OpenOverlay(ulong blockId)
         {
             #region OpenOverlay
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
             overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             isOverlayOpen = true;
 
-            var (overlayData, overlayElement) = GetOverlay(overlayType);
+            if (!overlaysByBlockId.TryGetValue(blockId, out Overlay foundOverlay)) return;
+
+            VisualElement overlayElement = CreateElement(foundOverlay);
             VisualElement left = overlay.rootVisualElement.Q("left");
             if (left.childCount != 0) left.RemoveAt(0);
             left.Add(overlayElement);
 
-            OnOverlayOpen?.Invoke(blockId, overlayType, data);
-            overlayData.RefreshUI();
+            OnOverlayOpen?.Invoke(blockId, foundOverlay.overlayType);
+            foundOverlay.RefreshUI();
             #endregion
         }
 
@@ -134,23 +137,57 @@ namespace Player
             #endregion
         }
 
-        private (Overlay, VisualElement) GetOverlay(OverlayType overlayType)
+        private VisualElement CreateElement(Overlay foundOverlay)
         {
-            #region GetSourceTree
+            #region CreateElement
+            switch (foundOverlay.overlayType)
+            {
+                case OverlayType.Inventory:
+                    {
+                        Items.Overlays.Equipment data = (Items.Overlays.Equipment)foundOverlay;
+                        VisualElement element = new Equipment(data);
+                        return element;
+                    }
+
+                case OverlayType.Furnace:
+                    {
+                        Items.Overlays.Furnace data = (Items.Overlays.Furnace)foundOverlay;
+                        VisualElement element = new Furnace(data);
+                        return element;
+                    }
+                default:
+                    return null;
+            }
+            #endregion
+        }
+
+        public void DestroyEntity(ulong blockId)
+        {
+            #region DestroyEntity
+            overlaysByBlockId.Remove(blockId);
+            #endregion
+        }
+
+        public Overlay CreateOverlay(ulong blockId, OverlayType overlayType)
+        {
+            #region CreateOverlay
             switch (overlayType)
             {
                 case OverlayType.Inventory:
                     {
-                        Items.Overlays.Equipment data;
-                        if (equipmentOverlay != null) data = equipmentOverlay;
-                        else data = new Items.Overlays.Equipment();
+                        Items.Overlays.Equipment data = new Items.Overlays.Equipment();
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
 
-                        VisualElement element = new Equipment(data);
-                        equipmentOverlay = data;
-                        return (data, element);
+                case OverlayType.Furnace:
+                    {
+                        Items.Overlays.Furnace data = new Items.Overlays.Furnace(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
                     }
                 default:
-                    return (null, null);
+                    return null;
             }
             #endregion
         }

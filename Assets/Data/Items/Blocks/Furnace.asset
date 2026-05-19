@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Furnace
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Furnace
-  sprite: {fileID: -3099154585137993449, guid: bf1e1139835840b42829d053142af262, type: 3}
+  sprite: {fileID: 2433071110994812001, guid: bb9270c7a71f919489e4f0010337b308, type: 3}
   stack: 64
   isPlacable: 1
   isConsumable: 0

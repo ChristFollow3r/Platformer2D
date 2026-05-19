@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
-  m_Name: Recipe
+  m_Name: Furnace
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
   result: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
   amount: 1

@@ -34,7 +34,7 @@ namespace Player
             if (playerMovement is not null)
             {
                 playerMovement.OnAttackPerformed += HandleAttacking;
-                playerMovement.OnMinePerformed += HandleMining;
+                playerMovement.OnMinePerformed += OnRightClick;
             }
 
         }
@@ -60,6 +60,13 @@ namespace Player
 
         private void HandleAttacking(Vector2 mouseWorldPosition)
         {
+            BlockType clickedBlock = GetClickedBlock(mouseWorldPosition, out ulong blockId);
+
+            if (clickedBlock == BlockType.Entity)
+            {
+                UIController.Singleton.OpenOverlay(blockId);
+                return;
+            }
             StartCoroutine(DelayedAttackRoutine(mouseWorldPosition));
         }
 
@@ -69,37 +76,54 @@ namespace Player
             ItemStack item = Inventory.Singleton.hand;
             if (item != null && item.data.isPlacable)
             {
-                PlaceBlock(item, mouseWorldPosition);
-                return;
+                bool shouldMine = PlaceBlock(item, mouseWorldPosition);
+                if (!shouldMine) return;
             }
+
             HandleMining(mouseWorldPosition);
         }
 
+        private BlockType GetClickedBlock(Vector2 mousePos, out ulong blockId)
+        {
+            #region GetCkicledBlock
+            float cellSize = 0.5f;
+            int x = Mathf.FloorToInt(mousePos.x / cellSize);
+            int y = Mathf.FloorToInt(mousePos.y / cellSize);
 
-        private void PlaceBlock(ItemStack item, Vector2 mouseWorldPosition)
+            blockId = BlockIdUtils.From(x, y);
+
+            return WorldData.World.GetBlockTypes(x, y);
+            #endregion
+        }
+
+
+        private bool PlaceBlock(ItemStack item, Vector2 mouseWorldPosition)
         {
             Vector2 playerCenter = playerCollider.bounds.center;
             float distance = Vector2.Distance(mouseWorldPosition, playerCenter);
 
-            if (distance > reachDistance) return;
+            if (distance > reachDistance) return true;
             float cellSize = 0.5f;
             int x = Mathf.FloorToInt(mouseWorldPosition.x / cellSize);
             int y = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
 
-
-            if (distance < 0.75f) return;
-
-
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
-            if (clickedBlock != BlockType.Air) return;
+            if (clickedBlock != BlockType.Air) return true;
+
+            if (distance < 0.75f) return true;
 
             WorldData.World.SetBlockType(x, y, item.data.blockType);
             int chunkX = x / Chunk.ChunkSize;
             int chunkY = y / Chunk.ChunkSize;
             WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(x, y);
-
             Inventory.Singleton.RemoveFromHand();
+
+            if (item.data.blockType == BlockType.Entity)
+            {
+                UIController.Singleton.CreateOverlay(BlockIdUtils.From(x, y), item.data.overlayType);
+            }
+            return false;
         }
 
         private void HandleMining(Vector2 mouseWorldPosition)
@@ -110,16 +134,16 @@ namespace Player
             if (distance > reachDistance) return;
 
             float cellSize = 0.5f;
-            int mouseX = Mathf.FloorToInt(mouseWorldPosition.x / cellSize);
-            int mouseY = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
+            int x = Mathf.FloorToInt(mouseWorldPosition.x / cellSize);
+            int y = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
 
-            if (currentMineTarget.x != mouseX || currentMineTarget.y != mouseY)
+            if (currentMineTarget.x != x || currentMineTarget.y != y)
             {
-                currentMineTarget = new Vector2Int(mouseX, mouseY);
+                currentMineTarget = new Vector2Int(x, y);
                 currentBlockDamage = 0f;
             }
 
-            BlockType clickedBlock = WorldData.World.GetBlockTypes(mouseX, mouseY);
+            BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
             if (clickedBlock == BlockType.Air) return;
 
@@ -131,8 +155,12 @@ namespace Player
             if (currentBlockDamage >= targetHardness)
             {
                 // TODO: break block, drop shit, add sound, add particles
-                BreakBlock(mouseX, mouseY, clickedBlock);
+                BreakBlock(x, y, clickedBlock);
                 currentBlockDamage = 0f;
+                if (clickedBlock == BlockType.Entity)
+                {
+                    UIController.Singleton.DestroyEntity(BlockIdUtils.From(x, y));
+                }
             }
 
         }

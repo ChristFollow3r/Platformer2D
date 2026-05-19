@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections.Generic;
 using Data;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ namespace Items
             }
         }
         private short _handIndex = 0;
+        [SerializeField] private List<ItemStack> startingItems = new();
         #endregion
 
         #region Events
@@ -54,6 +56,17 @@ namespace Items
             #region Awake
             SetupSingleton();
             CreateSlots();
+            #endregion
+        }
+
+        /// <summary>Ran by unity on first enable</summary>
+        private void Start()
+        {
+            #region Start
+            foreach (ItemStack itemStack in startingItems)
+            {
+                Add(itemStack);
+            }
             #endregion
         }
         #endregion

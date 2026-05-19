@@ -1,4 +1,6 @@
+using Items;
 using Items.Overlays;
+using Player;
 using UnityEngine;
 
 
@@ -18,6 +20,8 @@ namespace Data
         public BlockType blockType;
         public float hardness;
         public float fuelDuration;
+
+        public OverlayType overlayType;
     }
 
 }
