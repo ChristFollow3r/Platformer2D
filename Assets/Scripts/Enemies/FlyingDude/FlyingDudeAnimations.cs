@@ -19,6 +19,7 @@ namespace Enemies.FlyingDude
 
         [HideInInspector] public bool isAttacking;
         private bool isDead = false;
+        private int currentAttackDirection;
 
         private void Awake()
         {
@@ -56,25 +57,32 @@ namespace Enemies.FlyingDude
         private IEnumerator Attack(int direction)
         {
             isAttacking = true;
+            currentAttackDirection = direction;
             dudeRigidbody.linearVelocity = Vector2.zero;
 
             dudeAnimator.SetTrigger(Attacking);
 
-            yield return new WaitForSeconds(1.2f);
 
-            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(flyingDudeData.attackOffset.x * direction, flyingDudeData.attackOffset.y);
+            yield return new WaitForSeconds(1.2f + flyingDudeData.attackCooldown);
+
+            isAttacking = false;
+        }
+
+        public void TriggerAttackHitbox()
+        {
+            if (isDead) return;
+
+            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(flyingDudeData.attackOffset.x * currentAttackDirection, flyingDudeData.attackOffset.y);
             Collider2D hitTarget = Physics2D.OverlapBox(finalAttackPosition, flyingDudeData.hitBoxSize, 0, flyingDudeData.playerLayer);
 
-            // FIXED: Using != null instead of is not null
-            if (hitTarget != null && !isDead)
+            if (hitTarget != null)
             {
                 if (hitTarget.TryGetComponent(out Shared.Health health))
                 {
-                    health.TakeDamage(flyingDudeData.attackDamage, direction, flyingDudeData.attackKnockback);
+                    health.TakeDamage(flyingDudeData.attackDamage, currentAttackDirection, flyingDudeData.attackKnockback);
                 }
             }
-            yield return new WaitForSeconds(flyingDudeData.attackCooldown);
-            isAttacking = false;
+
         }
 
         private void PlayHitAnimation(int direction, float knockback)

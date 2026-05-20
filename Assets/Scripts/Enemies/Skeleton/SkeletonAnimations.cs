@@ -19,6 +19,7 @@ namespace Enemies.Skeleton
         private static readonly int Dead = Animator.StringToHash("isDead");
 
         [HideInInspector] public bool isAttacking;
+        private int currentAttackDirection;
 
         private void Awake()
         {
@@ -62,29 +63,32 @@ namespace Enemies.Skeleton
         private IEnumerator Attack(int direction)
         {
             isAttacking = true;
+            currentAttackDirection = direction;
             skeletonRigidbody.linearVelocityX = 0f;
 
             skeletonAnimator.SetBool(Walking, false);
             skeletonAnimator.SetBool(Attacking, true);
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.67f);
 
-            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(skeletonData.attackOffset.x * direction, skeletonData.attackOffset.y);
+            skeletonAnimator.SetBool(Attacking, false);
+
+            yield return new WaitForSeconds(skeletonData.attackCooldown);
+            isAttacking = false;
+        }
+
+        public void TriggerAttackHitbox()
+        {
+            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(skeletonData.attackOffset.x * currentAttackDirection, skeletonData.attackOffset.y);
             Collider2D hit = Physics2D.OverlapBox(finalAttackPosition, skeletonData.hitBoxSize, 0, skeletonData.playerLayer);
 
             if (hit is not null)
             {
                 if (hit.TryGetComponent(out Shared.Health health))
                 {
-                    health.TakeDamage(skeletonData.attackDamage, direction, skeletonData.attackKnockback);
+                    health.TakeDamage(skeletonData.attackDamage, currentAttackDirection, skeletonData.attackKnockback);
                 }
             }
-
-            yield return new WaitForSeconds(0.17f);
-            skeletonAnimator.SetBool(Attacking, false);
-
-            yield return new WaitForSeconds(skeletonData.attackCooldown);
-            isAttacking = false;
         }
 
         private void PlayHitAnimation(int direction, float knockback)
@@ -126,7 +130,7 @@ namespace Enemies.Skeleton
 
             yield return new WaitForSeconds(2.0f);
 
-            skeletonHealth.SpawnDeathDrops(); // TODO: Move this to the scriptable object
+            skeletonHealth.SpawnDeathDrops();
 
             if (skeletonData.deathParticles is not null)
             {

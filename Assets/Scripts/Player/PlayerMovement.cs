@@ -11,6 +11,7 @@ namespace Player
         private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
         private static readonly int IsMoving = Animator.StringToHash("isMoving");
         private static readonly int IsSliding = Animator.StringToHash("isSliding");
+        private static readonly int HasBeenHit = Animator.StringToHash("hasBeenHit");
         private static readonly int YVelocity = Animator.StringToHash("yVelocity");
 
         private Rigidbody2D rb;
@@ -51,7 +52,9 @@ namespace Player
         private float attackCooldownTimer;
         private float mineCooldownTimer;
 
-        // --- NEW: Storing mouse positions for the delayed animation events ---
+        private Shared.Health playerHealth;
+        private float knockbackTimer;
+
         private Vector2 lastAttackMousePosition;
         private Vector2 lastMineMousePosition;
 
@@ -67,10 +70,21 @@ namespace Player
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerCollider = GetComponent<Collider2D>();
+            playerHealth = GetComponent<Shared.Health>();
             mainCamera = Camera.main;
 
             playerInput = new InputSystem_Actions();
             playerInput.Enable();
+        }
+
+        private void OnEnable()
+        {
+            playerHealth.OnKnockbackRecieved += SlimeHitAnimation;
+        }
+
+        private void OnDisable()
+        {
+            playerHealth.OnKnockbackRecieved -= SlimeHitAnimation;
         }
 
         private void Update()
@@ -114,10 +128,13 @@ namespace Player
             if (jumpCooldownTimer > 0f) jumpCooldownTimer -= Time.deltaTime;
             if (attackCooldownTimer > 0f) attackCooldownTimer -= Time.deltaTime;
             if (mineCooldownTimer > 0f) mineCooldownTimer -= Time.deltaTime;
+            if (knockbackTimer > 0f) knockbackTimer -= Time.deltaTime;
         }
 
         private void Movement(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
         {
+            if (knockbackTimer > 0f) return;
+
             float movement = playerInput.Player.Move.ReadValue<Vector2>().x;
             if (isGrounded) canDoubleJump = true;
 
@@ -197,6 +214,8 @@ namespace Player
 
         private void HandleMouseInput()
         {
+            if (knockbackTimer > 0f) return;
+
             if (Mouse.current.leftButton.wasPressedThisFrame && attackCooldownTimer <= 0f)
             {
                 attackCooldownTimer = attackCooldown;
@@ -228,6 +247,27 @@ namespace Player
         public void TriggerMineEvent()
         {
             OnMinePerformed?.Invoke(lastMineMousePosition);
+        }
+
+        private void SlimeHitAnimation(int direction, float knockback)
+        {
+            knockbackTimer = 0.3f;
+            animator.SetTrigger(HasBeenHit);
+
+            spriteRenderer.flipX = direction == 1;
+
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(new Vector2(direction * knockback, 5f), ForceMode2D.Impulse);
+            StartCoroutine(DamageJuice());
+        }
+
+        private System.Collections.IEnumerator DamageJuice()
+        {
+            Time.timeScale = 0f;
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSecondsRealtime(0.1f);
+            Time.timeScale = 1f;
+            spriteRenderer.color = Color.white;
         }
     }
 }

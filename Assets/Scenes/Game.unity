@@ -534,7 +534,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6984fe322394a04e8611dc773d4e5f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
-  maxHealth: 500
+  maxHealth: 250
   deathDrop: {fileID: 0}
 --- !u!114 &180265506
 MonoBehaviour:
@@ -965,7 +965,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7640359420402578560, guid: ddc55147b5d743947bacace1a4c57890, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 299.07538
+      value: 325.09
       objectReference: {fileID: 0}
     - target: {fileID: 7640359420402578560, guid: ddc55147b5d743947bacace1a4c57890, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1224,7 +1224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7426121285832549219, guid: 7e9c50049f9dca64a8e8e597807ff05c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 283.31104
+      value: 291.82
       objectReference: {fileID: 0}
     - target: {fileID: 7426121285832549219, guid: 7e9c50049f9dca64a8e8e597807ff05c, type: 3}
       propertyPath: m_LocalPosition.y
