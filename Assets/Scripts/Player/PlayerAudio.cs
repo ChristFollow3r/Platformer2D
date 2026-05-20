@@ -63,7 +63,7 @@ namespace Player
         {
             while (true)
             {
-                float waitTime = Random.Range(10f, 20f);
+                float waitTime = Random.Range(30f, 120f);
                 yield return new WaitForSeconds(waitTime);
                 PlayGruntSound();
             }
@@ -105,6 +105,11 @@ namespace Player
         public void PlayJumpSound()
         {
             PlayRandomized(movementAudioSource, jumpSound, 1.0f, 1.2f);
+        }
+
+        public void PlayHitSound()
+        {
+            PlayRandomized(movementAudioSource, hitSound, 1f - pitchVariation, 1f + pitchVariation);
         }
 
         private void PlayRandomized(AudioSource source, AudioClip clip, float minPitch, float maxPitch)
