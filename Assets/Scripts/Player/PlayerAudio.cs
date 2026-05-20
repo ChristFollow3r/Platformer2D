@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Player
@@ -18,6 +19,7 @@ namespace Player
         [SerializeField] private AudioClip jumpSound;
         [SerializeField] private AudioClip slideSound;
         [SerializeField] private AudioClip hitSound;
+        [SerializeField] private AudioClip gruntSound;
 
         [Header("Combat Audio Settings")]
         [SerializeField] private float pitchVariation = 0.1f;
@@ -26,19 +28,50 @@ namespace Player
         [SerializeField] private float footstepMinPitch = 1.05f;
         [SerializeField] private float footstepMaxPitch = 1.3f;
 
-        private void OnEnable()
-        {
-            playerMovement.OnJumpPerformed += PlayJumpSound;
-        }
-
-        private void OnDisable()
-        {
-            playerMovement.OnJumpPerformed -= PlayJumpSound;
-        }
+        private Coroutine gruntCoroutine;
 
         private void Awake()
         {
             playerMovement = GetComponent<PlayerMovement>();
+        }
+
+        private void OnEnable()
+        {
+            if (playerMovement != null)
+            {
+                playerMovement.OnJumpPerformed += PlayJumpSound;
+            }
+
+            gruntCoroutine = StartCoroutine(RandomGruntRoutine());
+        }
+
+        private void OnDisable()
+        {
+            if (playerMovement != null)
+            {
+                playerMovement.OnJumpPerformed -= PlayJumpSound;
+            }
+
+            if (gruntCoroutine != null)
+            {
+                StopCoroutine(gruntCoroutine);
+                gruntCoroutine = null;
+            }
+        }
+
+        private IEnumerator RandomGruntRoutine()
+        {
+            while (true)
+            {
+                float waitTime = Random.Range(10f, 20f);
+                yield return new WaitForSeconds(waitTime);
+                PlayGruntSound();
+            }
+        }
+
+        public void PlayGruntSound()
+        {
+            PlayRandomized(combatAudioSource, gruntSound, 1f - pitchVariation, 1f + pitchVariation);
         }
 
         public void PlayFootstepSound()
@@ -80,6 +113,5 @@ namespace Player
             source.pitch = Random.Range(minPitch, maxPitch);
             source.PlayOneShot(clip);
         }
-
     }
 }

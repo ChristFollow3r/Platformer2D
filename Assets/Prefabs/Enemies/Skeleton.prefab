@@ -180,7 +180,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
-  dustParticles: {fileID: 7696928053657088342, guid: 5746c6ce00fe56c4f82c2192359ebc5e, type: 3}
+  dustParticles: {fileID: 7111893719700219089, guid: 291c97839eb46d042be5523a42482a52, type: 3}
 --- !u!95 &4359883279767717311
 Animator:
   serializedVersion: 7
@@ -343,7 +343,7 @@ MonoBehaviour:
   enemyData: {fileID: 11400000, guid: d28b6fbfda4698147a0b3fbc96558e58, type: 2}
   enemyAudioSource: {fileID: 2291569229205793728}
   pitchVariation: 0.1
-  footstepMinPitch: 1.05
+  footstepMinPitch: 1
   footstepMaxPitch: 1.3
 --- !u!1 &4260528678897974096
 GameObject:

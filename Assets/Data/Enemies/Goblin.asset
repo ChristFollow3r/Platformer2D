@@ -23,11 +23,11 @@ MonoBehaviour:
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
-  attackSound: {fileID: 0}
-  moveSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 8f0eab29e35e2574fbf80efca6a3c683, type: 3}
+  moveSound: {fileID: 8300000, guid: 2ecd65b86723d1c498b3d946baa053c1, type: 3}
   jumpSound: {fileID: 0}
-  hitSound: {fileID: 0}
-  deathSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 683d4667307408c4d8d849208b893407, type: 3}
+  deathSound: {fileID: 8300000, guid: 621ff6694ef682b4ba6a85a5f248a9d6, type: 3}
   gruntSound: {fileID: 0}
   dropSound: {fileID: 0}
   deathParticles: {fileID: 7111893719700219089, guid: 291c97839eb46d042be5523a42482a52, type: 3}
