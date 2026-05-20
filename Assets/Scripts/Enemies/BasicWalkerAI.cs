@@ -31,6 +31,9 @@ namespace Enemies
         private bool               isStunned;
         private bool               isKnockedBack;
 
+        private WaitForSeconds     obstacleCheckDelay = new WaitForSeconds(0.1f);
+        private Coroutine          obstacleCheckCoroutine;
+
         public event Action<bool, int> OnRange;
 
         private void Awake()
@@ -49,8 +52,17 @@ namespace Enemies
             isKnockedBack = false;
         }
 
-        private void OnEnable() => health.OnKnockbackRecieved += HandleHit;
-        private void OnDisable() => health.OnKnockbackRecieved -= HandleHit;
+        private void OnEnable()
+        {
+            health.OnKnockbackRecieved += HandleHit;
+            obstacleCheckCoroutine = StartCoroutine(ObstacleCheckRoutine());
+        }
+
+        private void OnDisable()
+        {
+            health.OnKnockbackRecieved -= HandleHit;
+            if (obstacleCheckCoroutine != null) StopCoroutine(obstacleCheckCoroutine);
+        }
 
         private void Update()
         {
@@ -63,7 +75,6 @@ namespace Enemies
             }
 
             float distanceToPlayer = Vector3.Distance(transform.position, target.position);
-            CheckForObstacles();
 
             if (distanceToPlayer <= enemyData.attackRange)
             {
@@ -86,25 +97,32 @@ namespace Enemies
             rb.gravityScale = rb.linearVelocityY < 0 ? fallGravity : defaultGravity;
         }
 
-        private void CheckForObstacles()
+        private IEnumerator ObstacleCheckRoutine()
         {
-            isGrounded = Physics2D.Raycast(col.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
-            theresBlockInFront = Physics2D.Raycast(new Vector2(transform.position.x, col.bounds.min.y + 0.1f),
-                         Vector2.right * direction, 0.6f, groundLayer).collider is not null;
-
-            if (isGrounded)
+            while (true)
             {
-                isKnockedBack = false;
-            }
-
-            if (isGrounded && theresBlockInFront)
-            {
-                rb.linearVelocityY = enemyData.jumpForce;
-
-                if (TryGetComponent(out EnemyAudio enemyAudio))
+                if (target is not null && !isStunned && !animations.isAttacking)
                 {
-                    enemyAudio.PlayJumpSound();
+                    isGrounded = Physics2D.Raycast(col.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
+                    theresBlockInFront = Physics2D.Raycast(new Vector2(transform.position.x, col.bounds.min.y + 0.1f),
+                                 Vector2.right * direction, 0.6f, groundLayer).collider is not null;
+
+                    if (isGrounded)
+                    {
+                        isKnockedBack = false;
+                    }
+
+                    if (isGrounded && theresBlockInFront)
+                    {
+                        rb.linearVelocityY = enemyData.jumpForce;
+
+                        if (TryGetComponent(out EnemyAudio enemyAudio))
+                        {
+                            enemyAudio.PlayJumpSound();
+                        }
+                    }
                 }
+                yield return obstacleCheckDelay;
             }
         }
 
