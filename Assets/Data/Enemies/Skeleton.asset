@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Skeleton
   m_EditorClassIdentifier: 
   speed: 2.5
-  jumpForce: 7
+  jumpForce: 8
   attackDamage: 13
   attackRange: 1
   attackKnockback: 7

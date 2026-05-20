@@ -38,13 +38,28 @@ namespace Player
             Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(attackOffset.x * direction, attackOffset.y);
             Collider2D[] hitEnemies = Physics2D.OverlapBoxAll(finalAttackPosition, hitBoxSize, 0f, enemyLayer);
 
+            bool hitAnyEnemy = false;
+
             foreach (Collider2D hit in hitEnemies)
             {
                 if (hit.TryGetComponent(out Shared.Health enemyHealth))
                 {
                     enemyHealth.TakeDamage(attackDamage, direction, knockback);
+                    hitAnyEnemy = true;
                 }
             }
+
+            if (hitAnyEnemy)
+            {
+                StartCoroutine(HitStop());
+            }
+        }
+
+        private System.Collections.IEnumerator HitStop()
+        {
+            Time.timeScale = 0f;
+            yield return new WaitForSecondsRealtime(0.1f);
+            Time.timeScale = 1f;
         }
 
         private void OnDrawGizmosSelected()

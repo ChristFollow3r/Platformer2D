@@ -22,6 +22,7 @@ namespace Enemies.Skeleton
         private bool               isGrounded;
         private bool               theresBlockInFront;
         private bool               isStunned;
+        private bool               isKnockedBack;
 
         public event Action<bool, int> OnRange;
 
@@ -35,7 +36,12 @@ namespace Enemies.Skeleton
             target = GameObject.FindGameObjectWithTag("Player")?.transform;
         }
 
-        private void Start() => isStunned = false;
+        private void Start()
+        {
+            isStunned = false;
+            isKnockedBack = false;
+        }
+
         private void OnEnable() => skeletonHealth.OnKnockbackRecieved += HandleHit;
         private void OnDisable() => skeletonHealth.OnKnockbackRecieved -= HandleHit;
 
@@ -64,7 +70,7 @@ namespace Enemies.Skeleton
 
         private void HandleMovement()
         {
-            if (!isGrounded) return;
+            if (isKnockedBack) return;
 
             direction = target.position.x > transform.position.x ? 1 : -1;
             skeletonRigidBody.linearVelocityX = direction * skeletonData.speed;
@@ -75,9 +81,14 @@ namespace Enemies.Skeleton
 
         private void CheckForObstacles()
         {
-            isGrounded         = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
+            isGrounded = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
             theresBlockInFront = Physics2D.Raycast(new Vector2(transform.position.x, skeletonCollider.bounds.min.y + 0.1f),
                          Vector2.right * direction, 0.6f, groundLayer).collider is not null;
+
+            if (isGrounded)
+            {
+                isKnockedBack = false;
+            }
 
             if (isGrounded && theresBlockInFront)
             {
@@ -98,6 +109,8 @@ namespace Enemies.Skeleton
         private IEnumerator SkeletonHit(int playerDirection, float knockback)
         {
             isStunned = true;
+            isKnockedBack = true;
+
             skeletonRigidBody.linearVelocity = Vector2.zero;
             skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse);
 
