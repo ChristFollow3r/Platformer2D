@@ -1,28 +1,28 @@
 fileFormatVersion: 2
-guid: 72466c1069ff6334d8782afe2bf337ec
+guid: a0060de1ef6a7ef48992b7dc49900b43
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1849131051366036301
-    second: Slime_Hit_Sheet_0
+      213: -2563382529387297983
+    second: Slime_Hit_Sheet_Flipped_0
   - first:
-      213: 6804680248400110880
-    second: Slime_Hit_Sheet_1
+      213: 6171002538099931320
+    second: Slime_Hit_Sheet_Flipped_1
   - first:
-      213: 7481475825280752940
-    second: Slime_Hit_Sheet_2
+      213: -5211266373877743390
+    second: Slime_Hit_Sheet_Flipped_2
   - first:
-      213: 8153647785890782436
-    second: Slime_Hit_Sheet_3
+      213: -9204135321900405708
+    second: Slime_Hit_Sheet_Flipped_3
   - first:
-      213: -122427798591802124
-    second: Slime_Hit_Sheet_4
+      213: 1092836248089148487
+    second: Slime_Hit_Sheet_Flipped_4
   - first:
-      213: -4406707144405134753
-    second: Slime_Hit_Sheet_5
+      213: 285519815627660137
+    second: Slime_Hit_Sheet_Flipped_5
   - first:
-      213: 6339595435329965383
-    second: Slime_Hit_Sheet_6
+      213: 4468278466654632668
+    second: Slime_Hit_Sheet_Flipped_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -118,7 +118,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Slime_Hit_Sheet_0
+      name: Slime_Hit_Sheet_Flipped_0
       rect:
         serializedVersion: 2
         x: 0
@@ -133,14 +133,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3bcce2c1b119656e0800000000000000
-      internalID: -1849131051366036301
+      spriteID: 1438d60cb290d6cd0800000000000000
+      internalID: -2563382529387297983
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Hit_Sheet_1
+      name: Slime_Hit_Sheet_Flipped_1
       rect:
         serializedVersion: 2
         x: 80
@@ -155,14 +155,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 025610812a41f6e50800000000000000
-      internalID: 6804680248400110880
+      spriteID: 8b8fa7fec1ec3a550800000000000000
+      internalID: 6171002538099931320
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Hit_Sheet_2
+      name: Slime_Hit_Sheet_Flipped_2
       rect:
         serializedVersion: 2
         x: 160
@@ -177,14 +177,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c2d1881ef9a83d760800000000000000
-      internalID: 7481475825280752940
+      spriteID: 2e0441be7dcdda7b0800000000000000
+      internalID: -5211266373877743390
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Hit_Sheet_3
+      name: Slime_Hit_Sheet_Flipped_3
       rect:
         serializedVersion: 2
         x: 240
@@ -199,14 +199,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4ec9bad1673972170800000000000000
-      internalID: 8153647785890782436
+      spriteID: 43c2089b0b7544080800000000000000
+      internalID: -9204135321900405708
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Hit_Sheet_4
+      name: Slime_Hit_Sheet_Flipped_4
       rect:
         serializedVersion: 2
         x: 320
@@ -221,14 +221,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4f47d4ad09c0d4ef0800000000000000
-      internalID: -122427798591802124
+      spriteID: 74c360d07c88a2f00800000000000000
+      internalID: 1092836248089148487
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Hit_Sheet_5
+      name: Slime_Hit_Sheet_Flipped_5
       rect:
         serializedVersion: 2
         x: 400
@@ -243,14 +243,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f525e8c233b38d2c0800000000000000
-      internalID: -4406707144405134753
+      spriteID: 96b52d272ce56f300800000000000000
+      internalID: 285519815627660137
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Hit_Sheet_6
+      name: Slime_Hit_Sheet_Flipped_6
       rect:
         serializedVersion: 2
         x: 480
@@ -265,8 +265,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 74dc786b574caf750800000000000000
-      internalID: 6339595435329965383
+      spriteID: cdaf97a6793820e30800000000000000
+      internalID: 4468278466654632668
       vertices: []
       indices: 
       edges: []
@@ -275,7 +275,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: e8587209c1b221d4cbbfb96b2c5b00c4
+    spriteID: 0cc5443d717534a4fbd05a75d4f1f343
     internalID: 0
     vertices: []
     indices: 
@@ -287,13 +287,13 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":7.0,"y":1.0},"gridSpriteSize":{"x":80.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Slime_Hit_Sheet_0: -1849131051366036301
-      Slime_Hit_Sheet_1: 6804680248400110880
-      Slime_Hit_Sheet_2: 7481475825280752940
-      Slime_Hit_Sheet_3: 8153647785890782436
-      Slime_Hit_Sheet_4: -122427798591802124
-      Slime_Hit_Sheet_5: -4406707144405134753
-      Slime_Hit_Sheet_6: 6339595435329965383
+      Slime_Hit_Sheet_Flipped_0: -2563382529387297983
+      Slime_Hit_Sheet_Flipped_1: 6171002538099931320
+      Slime_Hit_Sheet_Flipped_2: -5211266373877743390
+      Slime_Hit_Sheet_Flipped_3: -9204135321900405708
+      Slime_Hit_Sheet_Flipped_4: 1092836248089148487
+      Slime_Hit_Sheet_Flipped_5: 285519815627660137
+      Slime_Hit_Sheet_Flipped_6: 4468278466654632668
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
