@@ -40,7 +40,7 @@ namespace Items
             }
         }
         private short _handIndex = 0;
-        [SerializeField] private List<ItemStack> startingItems = new();
+        [SerializeField] private List<ItemStackBuilder> startingItems = new();
         #endregion
 
         #region Events
@@ -63,8 +63,12 @@ namespace Items
         private void Start()
         {
             #region Start
-            foreach (ItemStack itemStack in startingItems)
+            foreach (ItemStackBuilder builder in startingItems)
             {
+                Debug.Log($"Adding item {builder.data.name}");
+                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
+                Debug.Log(itemStack.data.name);
+                Debug.Log(itemStack.amount);
                 Add(itemStack);
             }
             #endregion
@@ -81,7 +85,7 @@ namespace Items
             }
             #endregion
         }
-        public bool Fits(ItemData item) => _Add(new() { data = item, amount = 1 }, true);
+        public bool Fits(ItemData item) => _Add(new(item) { amount = 1 }, true);
 
 
         public void Add(ItemStack item) => _Add(item);
@@ -89,10 +93,12 @@ namespace Items
 
         private bool _Add(ItemStack item, bool dryRun = false)
         {
+            if (item.data == null) return false;
             Slot slot;
             do
             {
                 slot = GetSlotOfItem(item.data);
+                Debug.Log($"Found slot for item {item.data.name} {slot.id}");
                 if (slot is null) break;
                 if (!dryRun)
                 {

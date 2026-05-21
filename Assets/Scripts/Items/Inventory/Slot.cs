@@ -8,51 +8,50 @@ using UnityEngine;
 
 namespace Items
 {
-  public record Slot
-  {
-    public int id;
-    public bool isEmpty => item is null;
-    public bool isFull => IsFull();
-    public ItemStack item;
-
-    public int GetCapacity(ItemStack itemToCheck, out int surplus)
+    public record Slot
     {
-      #region GetCapacity
-      surplus = 0;
-      if (item == null) return -1;
+        public int id;
+        public bool isEmpty => item is null;
+        public bool isFull => IsFull();
+        public ItemStack item = null;
 
-
-      int available = item.data.stack - item.amount;
-      surplus = Math.Max(0, itemToCheck.amount - available);
-      int amountToAdd = itemToCheck.amount - surplus;
-
-      return amountToAdd;
-      #endregion
-    }
-
-    private bool IsFull()
-    {
-      #region IsFull
-      if (isEmpty) return false;
-      return item.amount >= item.data.stack;
-      #endregion
-    }
-
-    public void Add(ItemStack itemToAdd)
-    {
-      #region Add
-      if (isEmpty)
-      {
-        item = new ItemStack()
+        public int GetCapacity(ItemStack itemToCheck, out int surplus)
         {
-          data = itemToAdd.data,
-        };
-      }
+            #region GetCapacity
+            surplus = 0;
+            if (item == null) return 0;
 
-      int amountToAdd = GetCapacity(itemToAdd, out int surplus);
-      item.amount += (short)amountToAdd;
-      itemToAdd.amount = (short)surplus;
-      #endregion
+
+            int available = item.data.stack - item.amount;
+            surplus = Math.Max(0, itemToCheck.amount - available);
+            int amountToAdd = itemToCheck.amount - surplus;
+
+            return amountToAdd;
+            #endregion
+        }
+
+        private bool IsFull()
+        {
+            #region IsFull
+            if (isEmpty) return false;
+            return item.amount >= item.data.stack;
+            #endregion
+        }
+
+        public void Add(ItemStack itemToAdd)
+        {
+            #region Add
+            if (isEmpty)
+            {
+                item = new ItemStack(itemToAdd.data) { amount = itemToAdd.amount };
+                itemToAdd.amount = 0;
+                return;
+            }
+
+            int amountToAdd = GetCapacity(itemToAdd, out int surplus);
+            item.amount += (short)amountToAdd;
+            itemToAdd.amount = (short)surplus;
+            #endregion
+        }
     }
-  }
 }

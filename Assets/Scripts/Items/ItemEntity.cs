@@ -4,39 +4,38 @@ using UnityEngine;
 
 namespace Items // Maybe I should add this to items?
 {
-  public class ItemEntity : MonoBehaviour
-  {
-    private PolygonCollider2D collisionCollider;
-    private readonly float pickUpRadius = 0.4f;
-    private readonly float speed = 10f;
-
-    [Header("Data")]
-    public ItemData itemData;
-
-
-    private void Start()
+    public class ItemEntity : MonoBehaviour
     {
-      collisionCollider = GetComponent<PolygonCollider2D>();
-    }
+        private PolygonCollider2D collisionCollider;
+        private readonly float pickUpRadius = 0.4f;
+        private readonly float speed = 10f;
 
-    private void OnTriggerStay2D(Collider2D other)
-    {
-      if (!other.CompareTag("Player")) return;
+        [Header("Data")]
+        public ItemData itemData;
 
-      collisionCollider.enabled = false;
-      transform.position = Vector2.MoveTowards(
-          transform.position, other.transform.position, speed * Time.deltaTime);
 
-      if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
-      {
-        ItemStack itemStack = new()
+        private void Start()
         {
-          amount = 1,
-          data = itemData,
-        };
-        Inventory.Singleton.Add(itemStack);
-        Destroy(gameObject);
-      }
+            collisionCollider = GetComponent<PolygonCollider2D>();
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+            if (!other.CompareTag("Player")) return;
+
+            collisionCollider.enabled = false;
+            transform.position = Vector2.MoveTowards(
+                transform.position, other.transform.position, speed * Time.deltaTime);
+
+            if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
+            {
+                ItemStack itemStack = new(itemData)
+                {
+                    amount = 1,
+                };
+                Inventory.Singleton.Add(itemStack);
+                Destroy(gameObject);
+            }
+        }
     }
-  }
 }

@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: WoodMod
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: WoodMod
-  sprite: {fileID: 0}
+  sprite: {fileID: -5063555655813669412, guid: bf1e1139835840b42829d053142af262, type: 3}
   stack: 0
   isPlacable: 0
-  isConsumable: 0
+  isConsumable: 1
   isFuel: 0
   equipmentType: 0
   blockType: 0

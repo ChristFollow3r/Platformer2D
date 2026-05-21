@@ -728,12 +728,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
   startingItems:
-  - data: {fileID: 11400000, guid: cf1e9033b228f3b4ab6708875b637f27, type: 2}
-    amount: 4
+  - data: {fileID: 11400000, guid: b9b8130009c644c44a909cd5f1dd8bee, type: 2}
+    amount: 1
     durability: 0
-  - data: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
-    amount: 2
-    durability: 0
+    duration: 0
 --- !u!114 &448283168
 MonoBehaviour:
   m_ObjectHideFlags: 0

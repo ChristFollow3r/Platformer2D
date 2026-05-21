@@ -115,6 +115,8 @@ namespace Items.Overlays
             bool isEquipmentSlot = slotId < EquipmentSlots;
             if (isEquipmentSlot)
             {
+
+                if (!itemStack.data.isConsumable) return false;
                 if ((int)itemStack.data.equipmentType != slotId) return false;
                 ItemStack prev = AddEquipment(itemStack.data.equipmentType, itemStack);
                 if (prev != null) Inventory.Singleton.Add(prev);
