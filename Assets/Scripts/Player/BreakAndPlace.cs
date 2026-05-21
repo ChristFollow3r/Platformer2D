@@ -5,6 +5,7 @@ using UnityEngine;
 using Scriptable_Objects_Scripts;
 using World;
 using Items;
+using Items.Overlays;
 
 namespace Player
 {
@@ -25,8 +26,6 @@ namespace Player
         private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
         private float currentBlockDamage = 0f; // This should be per block, not global (Dmg resets)
 
-
-        private Camera mainCamera;
         private Collider2D playerCollider;
 
         private void OnEnable()
@@ -50,7 +49,6 @@ namespace Player
 
         private void Awake()
         {
-            mainCamera = Camera.main;
             playerCollider = GetComponent<BoxCollider2D>();
         }
 
@@ -145,7 +143,7 @@ namespace Player
             if (clickedBlock == BlockType.Air) return;
 
             float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
-            float miningPower = 1f; // TODO: Base this on the player upgrade
+            float miningPower = Equipment.Singleton.GetMiningPower();
 
             currentBlockDamage += miningPower;
 

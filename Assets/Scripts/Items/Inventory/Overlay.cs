@@ -35,6 +35,8 @@ namespace Items
             isOpen = false;
         }
 
+        public virtual void Tick() { }
+
         protected virtual void CloseOverlay() { }
 
         public virtual void RefreshUI() { }

@@ -11,5 +11,6 @@ namespace Items
         public ItemData data;
         public short amount;
         public int durability;
+        public float duration;
     }
 }

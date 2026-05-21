@@ -72,6 +72,10 @@ namespace Player
             #region Update
             CheckOverlay();
             MoveHand();
+            foreach (Overlay overlay in overlaysByBlockId.Values)
+            {
+                overlay.Tick();
+            }
             #endregion
         }
         #endregion
