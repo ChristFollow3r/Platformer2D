@@ -1,6 +1,7 @@
 using Items;
 using Items.Overlays;
 using Player;
+using Scriptable_Objects_Scripts;
 using UnityEngine;
 
 
@@ -20,7 +21,7 @@ namespace Data
         public BlockType blockType;
         public float hardness;
         public float fuelDuration;
-
+        public ModData modData;
         public OverlayType overlayType;
     }
 

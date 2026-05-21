@@ -58,7 +58,7 @@ namespace Items // Maybe I should add this to items?
             {
                 AudioSource.PlayClipAtPoint(pickupSound, transform.position);
                 collider.enabled = false;
-                Inventory.Singleton.Add(new ItemStack { data = itemData, amount = 1 });
+                Inventory.Singleton.Add(new ItemStack(itemData) { amount = 1 });
                 Destroy(gameObject);
             }
             #endregion

@@ -61,6 +61,8 @@ namespace Player
 
         private void Update()
         {
+            if (UIController.Singleton.isOverlayOpen) return;
+
             Vector2 colSize = playerCollider.bounds.size;
             Vector2 colCenter = playerCollider.bounds.center;
 

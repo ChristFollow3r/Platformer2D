@@ -17,7 +17,8 @@
 - Block entities (Crafing table, furnace...) [Pau] - **Done**
 - Add block names (UI)
 - Add better UI controls
-- Add randomizer to drop amounts [Pau] -
+- Add randomizer to drop amounts [Pau] - **Done**
+- Add place feedback [Pau] - **Done**
 
 # Changes
 

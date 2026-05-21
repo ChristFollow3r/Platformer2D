@@ -9,11 +9,13 @@ namespace Items.Overlays
 
     public enum EquipmentType
     {
-        Helmet,
-        Chest,
-        OffHand,
-        Pants,
-        Bots
+        Mod,
+    }
+
+    public enum Mod
+    {
+        Wood,
+        Stone
     }
 
 
@@ -21,16 +23,18 @@ namespace Items.Overlays
     public class Equipment : Overlay, IInventory
     {
         #region Data
-        public const short EquipmentSlots = 5;
+        public const short EquipmentSlots = 1;
         public const short CraftingSlots = 4;
         public const short MaxSlotId = EquipmentSlots + CraftingSlots;
         public Slot[] equipmentSlots = new Slot[EquipmentSlots];
         public Slot[] craftingSlots = new Slot[CraftingSlots];
         public Slot resultSlot;
+        public static Equipment Singleton;
         #endregion
 
         #region Events
         public event Action<int, ItemStack> OnSlotChanged;
+        public event Action<bool, Mod> OnModChange;
         #endregion
 
         #region Contructor
@@ -44,6 +48,7 @@ namespace Items.Overlays
         private void Init()
         {
             #region Init
+            Singleton = this;
             for (int i = 0; i < equipmentSlots.Length; i++)
             {
                 equipmentSlots[i] = new Slot() { id = i };
@@ -56,6 +61,20 @@ namespace Items.Overlays
             #endregion
         }
 
+
+        public override void Tick()
+        {
+            #region Tick
+            ItemStack mod = equipmentSlots[(int)EquipmentType.Mod].item;
+            if (mod == null) return;
+
+            mod.duration -= Time.deltaTime;
+            if (mod.duration >= 0) return;
+            ClearSlot((int)EquipmentType.Mod);
+            OnModChange?.Invoke(false, 0);
+            #endregion
+        }
+
         public ItemStack AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
         {
             #region AddEquipment
@@ -64,6 +83,8 @@ namespace Items.Overlays
 
             slot.item = itemStack;
             OnSlotChanged?.Invoke(slot.id, slot.item);
+
+            if (equipmentType == EquipmentType.Mod) OnModChange?.Invoke(true, itemStack.data.modData.mod);
             return prev;
             #endregion
         }
@@ -77,7 +98,6 @@ namespace Items.Overlays
             if (result != null) resultSlot.Add(result);
             OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
 
-            // Add callback to item pickup?
             return true;
             #endregion
         }
@@ -92,6 +112,17 @@ namespace Items.Overlays
                 Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
                 return false;
             }
+            bool isEquipmentSlot = slotId < EquipmentSlots;
+            if (isEquipmentSlot)
+            {
+
+                if (!itemStack.data.isConsumable) return false;
+                if ((int)itemStack.data.equipmentType != slotId) return false;
+                ItemStack prev = AddEquipment(itemStack.data.equipmentType, itemStack);
+                if (prev != null) Inventory.Singleton.Add(prev);
+                return true;
+            }
+
             bool isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
             Slot slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
 
@@ -127,6 +158,8 @@ namespace Items.Overlays
             Slot slot;
             bool isCraftingSlot = false;
             bool isResultSlot = slotId == resultSlot.id;
+
+
 
             if (isResultSlot) slot = resultSlot;
             else
@@ -177,6 +210,16 @@ namespace Items.Overlays
                 if (slot.isEmpty) continue;
                 OnSlotChanged?.Invoke(slot.id, slot.item);
             }
+            #endregion
+        }
+
+        public float GetMiningPower()
+        {
+            #region GetMiningPower
+            ItemStack modItem = equipmentSlots[(int)EquipmentType.Mod].item;
+            if (modItem == null) return 1f;
+            if (modItem.data.modData == null) return 1f;
+            return modItem.data.modData.minigPower;
             #endregion
         }
         #endregion
