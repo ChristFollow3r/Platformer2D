@@ -12,15 +12,18 @@
 
 - Place block [Pau] - **Done**
 - Break/atack depending on hand item
-- Modifications (Mods)
+- Modifications (Mods) [Pau] - **Done**
 - Create recipes
 - Block entities (Crafing table, furnace...) [Pau] - **Done**
 - Add block names (UI)
 - Add better UI controls
 - Add randomizer to drop amounts [Pau] - **Done**
 - Add place feedback [Pau] - **Done**
+- Add hover UI for items (name, durability/duration)
+- Add visible countdown on item (mod duration for example)
 
 # Changes
 
+- Remove counter on non-stackables
 - Change drops (Animate, random offsets, make smaller) [Pau] - **Done**
 - Unity blocks & Items [Pau] - **Done**
