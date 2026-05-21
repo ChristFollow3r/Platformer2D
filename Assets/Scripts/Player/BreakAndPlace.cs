@@ -19,7 +19,7 @@ namespace Player
 
         [Header("Controls")]
         [SerializeField] private int reachDistance;
-        [SerializeField] private float attackRange = 1.5f;
+        // [SerializeField] private float attackRange = 1.5f;
         [SerializeField] private Vector2 attackBoxSize = new Vector2(1.5f, 1.5f);
 
         [Header("Mining Data")]
@@ -184,15 +184,15 @@ namespace Player
         {
             yield return new WaitForSeconds(0.30f);
 
-            Vector2 playerCenter = playerCollider.bounds.center;
-            Vector2 attackDirection = (mouseWorldPosition - playerCenter).normalized;
-            Vector2 attackCenter = playerCenter + (attackDirection * attackRange);
+            Vector2 playerCenter = playerCollider.transform.position;
+            Vector2 attackDirection = new Vector2(mouseWorldPosition.x - playerCenter.x, 0).normalized;
+            Vector2 attackCenter = playerCenter + attackDirection * (attackBoxSize * 0.5f);
 
             Collider2D[] hitObjects = Physics2D.OverlapBoxAll(attackCenter, attackBoxSize, 0f);
 
             #region HitBoxDebug
-            Vector2 min = attackCenter - (attackBoxSize / 2f);
-            Vector2 max = attackCenter + (attackBoxSize / 2f);
+            Vector2 min = attackCenter - (attackBoxSize * 0.5f);
+            Vector2 max = attackCenter + (attackBoxSize * 0.5f);
             Vector2 topLeft = new Vector2(min.x, max.y);
             Vector2 bottomRight = new Vector2(max.x, min.y);
 
