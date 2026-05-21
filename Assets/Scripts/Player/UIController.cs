@@ -39,7 +39,7 @@ namespace Player
         private Dictionary<ulong, Overlay> overlaysByBlockId = new();
 
         [Header("Controls")]
-        [SerializeField] private bool isOverlayOpen;
+        public bool isOverlayOpen;
         private InputSystem_Actions playerInput;
         #endregion
 
