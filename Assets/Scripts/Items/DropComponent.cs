@@ -1,5 +1,6 @@
 using Data;
 using Player;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Items // Maybe I should add this to items?
@@ -69,7 +70,6 @@ namespace Items // Maybe I should add this to items?
                 float newY = landedY + Mathf.Sin(bobTimer) * bobHeight;
                 transform.position = new Vector3(transform.position.x, newY, transform.position.z);
             }
-
             #endregion
         }
 
@@ -83,10 +83,10 @@ namespace Items // Maybe I should add this to items?
 
         private void OnTriggerStay2D(Collider2D other)
         {
-            if (!other.CompareTag("Player")) return;
-            // TODO: Check if inventory is full
-            transform.position = Vector2.MoveTowards(
-                transform.position, other.transform.position, speed * Time.deltaTime);
+            if (!other.CompareTag("Pickup")) return;
+            if (!Inventory.Singleton.Fits(itemData)) return;
+
+            transform.position = Vector2.MoveTowards(transform.position, other.transform.position, speed * Time.deltaTime);
 
             if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
             {

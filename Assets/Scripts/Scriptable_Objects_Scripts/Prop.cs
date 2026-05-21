@@ -8,7 +8,8 @@ namespace Scriptable_Objects_Scripts
     public class Drop
     {
         public ItemData item;
-        public int amount;
+        public int minAmount;
+        public int maxAmount;
         [Range(0, 101)] public int dropChance = 100;
     }
 
