@@ -51,6 +51,7 @@ namespace Player
         private void Awake()
         {
             mainCamera = Camera.main;
+            playerCollider = GetComponent<BoxCollider2D>();
         }
 
         private void HandleAttacking(Vector2 mouseWorldPosition)
