@@ -22,3 +22,4 @@ MonoBehaviour:
   blockType: 15
   hardness: 4
   fuelDuration: 0
+  overlayType: 1
