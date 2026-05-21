@@ -298,6 +298,7 @@ GameObject:
   - component: {fileID: 180265504}
   - component: {fileID: 180265505}
   - component: {fileID: 180265506}
+  - component: {fileID: 180265507}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -426,10 +427,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropPrefab: {fileID: 291241734386466156, guid: b284ae926e1964d41abb2e59387e3c8c, type: 3}
-  player: {fileID: 180265495}
   playerMovement: {fileID: 180265501}
-  reachDistance: 2
-  attackRange: 1.5
+  reachDistance: 10
   attackBoxSize: {x: 1.5, y: 1.5}
 --- !u!114 &180265501
 MonoBehaviour:
@@ -542,6 +541,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shaders.PlayerLightUpdate
   blockMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
+--- !u!114 &180265507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180265495}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa88ebe00a467244cb36eb4a7dc94d80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlaceFeedback
 --- !u!1 &434745709
 GameObject:
   m_ObjectHideFlags: 0

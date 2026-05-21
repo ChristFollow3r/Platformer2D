@@ -17,7 +17,7 @@ namespace Player
         [SerializeField] private PlayerMovement playerMovement;
 
         [Header("Controls")]
-        [SerializeField] private int reachDistance;
+        public int reachDistance;
         // [SerializeField] private float attackRange = 1.5f;
         [SerializeField] private Vector2 attackBoxSize = new Vector2(1.5f, 1.5f);
 
@@ -95,19 +95,20 @@ namespace Player
 
         private bool PlaceBlock(ItemStack item, Vector2 mouseWorldPosition)
         {
-            Vector2 playerCenter = playerCollider.bounds.center;
-            float distance = Vector2.Distance(mouseWorldPosition, playerCenter);
+            Vector2 playerCenter = transform.position;
 
-            if (distance > reachDistance) return true;
             float cellSize = 0.5f;
             int x = Mathf.FloorToInt(mouseWorldPosition.x / cellSize);
             int y = Mathf.FloorToInt(mouseWorldPosition.y / cellSize);
+            Vector2 cellWorldPos = new Vector2(x, y) * cellSize + Vector2.one * (cellSize / 2f);
+            float distance = Vector2.Distance(cellWorldPos, playerCenter);
 
+            if (distance > reachDistance) return true;
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
             if (clickedBlock != BlockType.Air) return true;
 
-            if (distance < 0.75f) return true;
+            if (distance < 0.5f) return true;
 
             WorldData.World.SetBlockType(x, y, item.data.blockType);
             int chunkX = x / Chunk.ChunkSize;
