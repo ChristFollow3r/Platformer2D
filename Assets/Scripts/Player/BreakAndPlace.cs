@@ -171,7 +171,9 @@ namespace Player
             float cellSize = 0.5f;
             Vector2 spawnPosition = new Vector2(x * cellSize + 0.25f, y * cellSize + 0.25f);
             GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
-            dropGO.GetComponent<DropComponent>().SetItem(WorldData.BlockDictionary[type]);
+            DropComponent dropComp = dropGO.GetComponent<DropComponent>();
+            dropComp.player = playerCollider.transform;
+            dropComp.SetItem(WorldData.BlockDictionary[type]);
             Destroy(dropGO, 300f);
 
             WorldData.World.SetBlockType(x, y, BlockType.Air);
@@ -240,7 +242,9 @@ namespace Player
                                     for (int i = 0; i < amount; i++)
                                     {
                                         GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
-                                        dropGO.GetComponent<DropComponent>().SetItem(drop.item);
+                                        DropComponent dropComp = dropGO.GetComponent<DropComponent>();
+                                        dropComp.player = playerCollider.transform;
+                                        dropComp.SetItem(drop.item);
                                         Destroy(dropGO, 300f);
                                     }
                                 }

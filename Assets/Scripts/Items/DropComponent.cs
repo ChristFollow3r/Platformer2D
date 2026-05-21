@@ -19,7 +19,10 @@ namespace Items // Maybe I should add this to items?
         [SerializeField] private float rotateSpeed;
         [SerializeField] private float gravity = -9.8f;
         [SerializeField] private float initialPopForce;
+
+        public Transform player;
         private float groundY;
+        private bool isBeingPickedUp;
 
         private float verticalVelocity;
         private bool hasLanded = false;
@@ -42,6 +45,31 @@ namespace Items // Maybe I should add this to items?
         private void Update()
         {
             #region Update
+
+            if (!isBeingPickedUp || !Inventory.Singleton.Fits(itemData))
+            {
+                Bop();
+                float distance = Vector2.Distance(player.position, transform.position);
+                if (distance <= 1.5) isBeingPickedUp = true;
+                return;
+            }
+
+            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
+
+            if (Vector2.Distance(transform.position, player.position) <= pickUpRadius)
+            {
+                AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+                Destroy(gameObject);
+                collider.enabled = false;
+                Inventory.Singleton.Add(new ItemStack { data = itemData, amount = 1 });
+            }
+
+            #endregion
+        }
+
+        private void Bop()
+        {
+            #region Bop
             transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
 
             if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
@@ -79,22 +107,6 @@ namespace Items // Maybe I should add this to items?
             this.itemData = itemData;
             spriteRenderer.sprite = itemData.sprite;
             #endregion
-        }
-
-        private void OnTriggerStay2D(Collider2D other)
-        {
-            if (!other.CompareTag("Pickup")) return;
-            if (!Inventory.Singleton.Fits(itemData)) return;
-
-            transform.position = Vector2.MoveTowards(transform.position, other.transform.position, speed * Time.deltaTime);
-
-            if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
-            {
-                AudioSource.PlayClipAtPoint(pickupSound, transform.position);
-                Destroy(gameObject);
-                collider.enabled = false;
-                Inventory.Singleton.Add(new ItemStack { data = itemData, amount = 1 });
-            }
         }
     }
 }
