@@ -17,17 +17,14 @@ namespace Items // Maybe I should add this to items?
         [SerializeField] private float bobHeight;
         [SerializeField] private float bobSpeed;
         [SerializeField] private float rotateSpeed;
-        [SerializeField] private float gravity = -9.8f;
         [SerializeField] private float initialPopForce;
-
-        public Transform player;
+        [SerializeField] private float gravity = -9.8f;
         private float groundY;
-        private bool isBeingPickedUp;
-
         private float verticalVelocity;
         private bool hasLanded = false;
+        public Transform player;
+        private bool isBeingPickedUp;
         private float bobTimer = 0f;
-        private float landedY;
 
         /// <summary>Ran by unity on first enable</summary>
         private void Start()
@@ -45,7 +42,8 @@ namespace Items // Maybe I should add this to items?
         private void Update()
         {
             #region Update
-
+            if (Inventory.Singleton == null) return;
+            if (player == null) return;
             if (!isBeingPickedUp || !Inventory.Singleton.Fits(itemData))
             {
                 Bop();
@@ -59,21 +57,16 @@ namespace Items // Maybe I should add this to items?
             if (Vector2.Distance(transform.position, player.position) <= pickUpRadius)
             {
                 AudioSource.PlayClipAtPoint(pickupSound, transform.position);
-                Destroy(gameObject);
                 collider.enabled = false;
                 Inventory.Singleton.Add(new ItemStack { data = itemData, amount = 1 });
+                Destroy(gameObject);
             }
-
             #endregion
         }
 
         private void Bop()
         {
-            #region Bop
             transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
-
-            if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, Mathf.Infinity))
-                groundY = hit.point.y;
 
             if (!hasLanded)
             {
@@ -85,20 +78,15 @@ namespace Items // Maybe I should add this to items?
                     Vector3 pos = transform.position;
                     pos.y = groundY;
                     transform.position = pos;
-
                     hasLanded = true;
-                    landedY = groundY;
                 }
             }
             else
             {
-                landedY = groundY;
-
                 bobTimer += Time.deltaTime * bobSpeed;
-                float newY = landedY + Mathf.Sin(bobTimer) * bobHeight;
+                float newY = groundY + Mathf.Sin(bobTimer) * bobHeight;
                 transform.position = new Vector3(transform.position.x, newY, transform.position.z);
             }
-            #endregion
         }
 
         public void SetItem(ItemData itemData)

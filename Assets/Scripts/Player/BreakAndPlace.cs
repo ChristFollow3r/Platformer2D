@@ -14,7 +14,6 @@ namespace Player
         [SerializeField] private GameObject dropPrefab;
 
         [Header("Refs")]
-        [SerializeField] private GameObject player;
         [SerializeField] private PlayerMovement playerMovement;
 
         [Header("Controls")]
@@ -52,11 +51,6 @@ namespace Player
         private void Awake()
         {
             mainCamera = Camera.main;
-
-            if (player != null)
-            {
-                playerCollider = player.GetComponent<Collider2D>();
-            }
         }
 
         private void HandleAttacking(Vector2 mouseWorldPosition)
@@ -172,7 +166,7 @@ namespace Player
             Vector2 spawnPosition = new Vector2(x * cellSize + 0.25f, y * cellSize + 0.25f);
             GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
             DropComponent dropComp = dropGO.GetComponent<DropComponent>();
-            dropComp.player = playerCollider.transform;
+            dropComp.player = transform;
             dropComp.SetItem(WorldData.BlockDictionary[type]);
             Destroy(dropGO, 300f);
 
@@ -186,7 +180,7 @@ namespace Player
         {
             yield return new WaitForSeconds(0.30f);
 
-            Vector2 playerCenter = playerCollider.transform.position;
+            Vector2 playerCenter = transform.position;
             Vector2 attackDirection = new Vector2(mouseWorldPosition.x - playerCenter.x, 0).normalized;
             Vector2 attackCenter = playerCenter + attackDirection * (attackBoxSize * 0.5f);
 
@@ -243,7 +237,7 @@ namespace Player
                                     {
                                         GameObject dropGO = Instantiate(dropPrefab, spawnPosition, Quaternion.identity);
                                         DropComponent dropComp = dropGO.GetComponent<DropComponent>();
-                                        dropComp.player = playerCollider.transform;
+                                        dropComp.player = transform;
                                         dropComp.SetItem(drop.item);
                                         Destroy(dropGO, 300f);
                                     }
