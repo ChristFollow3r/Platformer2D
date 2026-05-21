@@ -99,11 +99,11 @@ namespace Items
                     slot.Add(item);
                     OnSlotChanged?.Invoke(slot.id, slot.item);
                 }
+                else break;
             } while (item.amount > 0);
 
-            if (item.amount > 0) Drop(item);
-            if (slot is not null) return true;
-            return false;
+            if (!dryRun && item.amount > 0) Drop(item);
+            return slot is not null;
         }
 
         public void Drop(ItemStack item)
