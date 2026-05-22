@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5084709742913475023}
   - component: {fileID: 4845199005942314836}
   m_Layer: 6
-  m_Name: FlyingDude
+  m_Name: MiniFlyingDude
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 291.54, y: 86.61, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8928103701834468424}
@@ -90,7 +90,7 @@ SpriteRenderer:
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4795363162621231457, guid: 766b8eb2510194844b673e42f92c5bd1, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.7056337, g: 0.9528302, b: 0.948708, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 946c0c355fbbae9429beff36e712266c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlyingDudeAI
-  flyingDudeData: {fileID: 11400000, guid: f6035b0426843c140ae781160c00708f, type: 2}
+  flyingDudeData: {fileID: 11400000, guid: 910a8cb75ad40fd4d9327bdbdaff4c91, type: 2}
   flightAcceleration: 10
   obstacleLayer:
     serializedVersion: 2
@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afee6542100f2a544aa668bb0c448e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlyingDudeAnimations
-  flyingDudeData: {fileID: 11400000, guid: f6035b0426843c140ae781160c00708f, type: 2}
+  flyingDudeData: {fileID: 11400000, guid: 910a8cb75ad40fd4d9327bdbdaff4c91, type: 2}
   isAttacking: 0
 --- !u!114 &4494382864503811195
 MonoBehaviour:
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6984fe322394a04e8611dc773d4e5f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
-  maxHealth: 54
+  maxHealth: 36
   deathDrop: {fileID: 5856354742027562866, guid: 4d9127b2c643c6945b79f73433a7105c, type: 3}
 --- !u!50 &5047472912349571532
 Rigidbody2D:
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c43a2b4612793a945a2ab490d6409a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemies.EnemyAudio
-  enemyData: {fileID: 11400000, guid: f6035b0426843c140ae781160c00708f, type: 2}
+  enemyData: {fileID: 11400000, guid: 910a8cb75ad40fd4d9327bdbdaff4c91, type: 2}
   enemyAudioSource: {fileID: 8739341216174607932}
   pitchVariation: 0.1
   footstepMinPitch: 1.05

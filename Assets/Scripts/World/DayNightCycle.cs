@@ -10,6 +10,8 @@ namespace World
         [SerializeField] private float dayNightDuration;
 
         private float time;
+        public float CurrentTime => time;
+        public bool IsNight => time < 0.2f || time > 0.8f;
 
         void Update()
         {
