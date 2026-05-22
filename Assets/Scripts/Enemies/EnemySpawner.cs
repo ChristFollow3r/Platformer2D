@@ -31,7 +31,6 @@ namespace Enemies
         [Header("Location & Cleanup Settings")]
         public float minSpawnDistance = 10f;
         public float maxSpawnDistance = 25f;
-        [Tooltip("Distance at which enemies are deleted to save memory and prevent falling into the void.")]
         public float despawnDistance = 40f;
         public float caveTransitionY = 15f;
 
@@ -94,7 +93,7 @@ namespace Enemies
 
                 if (selectedEnemy.isFlying)
                 {
-                    if (WorldData.World.GetBlockTypes(gridX, gridY) == BlockType.Air)
+                    if (CheckHasSpace(gridX, gridY))
                     {
                         InstantiateEnemy(selectedEnemy.enemyPrefab, spawnPos);
                         return;
@@ -103,14 +102,15 @@ namespace Enemies
                 else
                 {
                     int foundY = -1;
+
                     if (WorldData.World.GetBlockTypes(gridX, gridY) != BlockType.Air)
                     {
                         for (int yOffset = 0; yOffset < 20; yOffset++)
                         {
                             int checkY = gridY + yOffset;
-                            if (checkY >= WorldData.World.height) break;
+                            if (checkY >= WorldData.World.height - 2) break;
 
-                            if (WorldData.World.GetBlockTypes(gridX, checkY) == BlockType.Air &&
+                            if (CheckHasSpace(gridX, checkY) &&
                                 WorldData.World.GetBlockTypes(gridX, checkY - 1) != BlockType.Air)
                             {
                                 foundY = checkY;
@@ -125,7 +125,7 @@ namespace Enemies
                             int checkY = gridY - yOffset;
                             if (checkY <= 0) break;
 
-                            if (WorldData.World.GetBlockTypes(gridX, checkY) == BlockType.Air &&
+                            if (CheckHasSpace(gridX, checkY) &&
                                 WorldData.World.GetBlockTypes(gridX, checkY - 1) != BlockType.Air)
                             {
                                 foundY = checkY;
@@ -136,12 +136,27 @@ namespace Enemies
 
                     if (foundY != -1)
                     {
-                        Vector2 snappedPos = new Vector2(spawnPos.x, foundY * cellSize);
+                        float snappedX = (gridX * cellSize) + (cellSize / 2f);
+                        float snappedY = (foundY * cellSize) + (cellSize / 2f);
+
+                        Vector2 snappedPos = new Vector2(snappedX, snappedY);
                         InstantiateEnemy(selectedEnemy.enemyPrefab, snappedPos);
                         return;
                     }
                 }
             }
+        }
+
+        private bool CheckHasSpace(int x, int startY)
+        {
+            for (int h = 0; h < 2; h++)
+            {
+                if (WorldData.World.GetBlockTypes(x, startY + h) != BlockType.Air)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         private void InstantiateEnemy(GameObject prefab, Vector2 position)
