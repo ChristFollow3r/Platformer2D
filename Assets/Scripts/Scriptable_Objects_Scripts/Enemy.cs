@@ -17,5 +17,17 @@ namespace Scriptable_Objects_Scripts
         public Vector2 attackOffset;
         public float attackCooldown;
         public LayerMask playerLayer;
+
+        [Header("Audio")]
+        public AudioClip attackSound;
+        public AudioClip moveSound;
+        public AudioClip jumpSound;
+        public AudioClip hitSound;
+        public AudioClip deathSound;
+        public AudioClip gruntSound;
+        public AudioClip dropSound;
+
+        [Header("Particles")]
+        public ParticleSystem deathParticles;
     }
 }

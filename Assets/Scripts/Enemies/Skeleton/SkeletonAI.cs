@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Enemies.Skeleton
 {
@@ -23,6 +22,11 @@ namespace Enemies.Skeleton
         private bool               isGrounded;
         private bool               theresBlockInFront;
         private bool               isStunned;
+        private bool               isKnockedBack;
+
+        private WaitForSeconds     obstacleCheckDelay = new WaitForSeconds(0.1f);
+        private Coroutine          obstacleCheckCoroutine;
+
         public event Action<bool, int> OnRange;
 
         private void Awake()
@@ -35,9 +39,23 @@ namespace Enemies.Skeleton
             target = GameObject.FindGameObjectWithTag("Player")?.transform;
         }
 
-        private void Start() => isStunned = false;
-        private void OnEnable() => skeletonHealth.OnKnockbackRecieved += HandleHit;
-        private void OnDisable() => skeletonHealth.OnKnockbackRecieved -= HandleHit;
+        private void Start()
+        {
+            isStunned = false;
+            isKnockedBack = false;
+        }
+
+        private void OnEnable()
+        {
+            skeletonHealth.OnKnockbackRecieved += HandleHit;
+            obstacleCheckCoroutine = StartCoroutine(ObstacleCheckRoutine());
+        }
+
+        private void OnDisable()
+        {
+            skeletonHealth.OnKnockbackRecieved -= HandleHit;
+            if (obstacleCheckCoroutine != null) StopCoroutine(obstacleCheckCoroutine);
+        }
 
         private void Update()
         {
@@ -50,7 +68,6 @@ namespace Enemies.Skeleton
             }
 
             float distanceToPlayer = Vector3.Distance(transform.position, target.position);
-            CheckForObstacles();
 
             if (distanceToPlayer <= skeletonData.attackRange)
             {
@@ -64,24 +81,41 @@ namespace Enemies.Skeleton
 
         private void HandleMovement()
         {
+            if (isKnockedBack) return;
+
             direction = target.position.x > transform.position.x ? 1 : -1;
             skeletonRigidBody.linearVelocityX = direction * skeletonData.speed;
 
-            // Flip the sprite instead of the transform
             spriteRenderer.flipX = direction == -1;
-
             skeletonRigidBody.gravityScale = skeletonRigidBody.linearVelocityY < 0 ? 5f : 3f;
         }
 
-        private void CheckForObstacles()
+        private IEnumerator ObstacleCheckRoutine()
         {
-            isGrounded         = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
-            theresBlockInFront = Physics2D.Raycast(new Vector2(transform.position.x, skeletonCollider.bounds.min.y + 0.1f),
-                         Vector2.right * direction, 0.6f, groundLayer).collider is not null;
-
-            if (isGrounded && theresBlockInFront)
+            while (true)
             {
-                skeletonRigidBody.linearVelocityY = skeletonData.jumpForce;
+                if (target is not null && !isStunned && !animations.isAttacking)
+                {
+                    isGrounded = Physics2D.Raycast(skeletonCollider.bounds.min, Vector2.down, 0.1f, groundLayer).collider is not null;
+                    theresBlockInFront = Physics2D.Raycast(new Vector2(transform.position.x, skeletonCollider.bounds.min.y + 0.1f),
+                                 Vector2.right * direction, 0.6f, groundLayer).collider is not null;
+
+                    if (isGrounded)
+                    {
+                        isKnockedBack = false;
+                    }
+
+                    if (isGrounded && theresBlockInFront)
+                    {
+                        skeletonRigidBody.linearVelocityY = skeletonData.jumpForce;
+
+                        if (TryGetComponent(out EnemyAudio enemyAudio))
+                        {
+                            enemyAudio.PlayJumpSound();
+                        }
+                    }
+                }
+                yield return obstacleCheckDelay;
             }
         }
 
@@ -93,8 +127,10 @@ namespace Enemies.Skeleton
         private IEnumerator SkeletonHit(int playerDirection, float knockback)
         {
             isStunned = true;
+            isKnockedBack = true;
+
             skeletonRigidBody.linearVelocity = Vector2.zero;
-            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse); // KnockBack hardcoded
+            skeletonRigidBody.AddForce(new Vector2(playerDirection * knockback, 4f), ForceMode2D.Impulse);
 
             yield return new WaitForSeconds(0.3f);
             isStunned = false;

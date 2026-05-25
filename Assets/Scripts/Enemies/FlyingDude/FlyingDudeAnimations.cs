@@ -8,12 +8,6 @@ namespace Enemies.FlyingDude
     {
         [SerializeField] private Enemy flyingDudeData;
 
-        [Header("Sounds")]
-        [SerializeField] private AudioClip dudeDeathSound;
-        [SerializeField] private AudioClip hitSound;
-        private AudioSource audioSource;
-        private readonly float pitchVariation = 0.1f;
-
         private Animator      dudeAnimator;
         private Rigidbody2D   dudeRigidbody;
         private FlyingDudeAI  aiScript;
@@ -21,9 +15,11 @@ namespace Enemies.FlyingDude
 
         private static readonly int Attacking = Animator.StringToHash("hasAttacked");
         private static readonly int Hit = Animator.StringToHash("hasBeenHit");
-        private static readonly int Dead = Animator.StringToHash("hasDied");
+        private static readonly int Dead = Animator.StringToHash("isDead");
 
         [HideInInspector] public bool isAttacking;
+        private bool isDead = false;
+        private int currentAttackDirection;
 
         private void Awake()
         {
@@ -31,7 +27,6 @@ namespace Enemies.FlyingDude
             dudeAnimator  = GetComponent<Animator>();
             aiScript      = GetComponent<FlyingDudeAI>();
             dudeHealth    = GetComponent<Shared.Health>();
-            audioSource   = GetComponent<AudioSource>();
         }
 
         private void OnEnable()
@@ -56,35 +51,43 @@ namespace Enemies.FlyingDude
 
         private void HandleAttackTrigger(int direction)
         {
-            if (!isAttacking) StartCoroutine(Attack(direction));
+            if (!isAttacking && !isDead) StartCoroutine(Attack(direction));
         }
 
         private IEnumerator Attack(int direction)
         {
             isAttacking = true;
+            currentAttackDirection = direction;
             dudeRigidbody.linearVelocity = Vector2.zero;
 
             dudeAnimator.SetTrigger(Attacking);
 
-            yield return new WaitForSeconds(1.2f);
 
-            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(flyingDudeData.attackOffset.x * direction, flyingDudeData.attackOffset.y);
+            yield return new WaitForSeconds(1.2f + flyingDudeData.attackCooldown);
+
+            isAttacking = false;
+        }
+
+        public void TriggerAttackHitbox()
+        {
+            if (isDead) return;
+
+            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(flyingDudeData.attackOffset.x * currentAttackDirection, flyingDudeData.attackOffset.y);
             Collider2D hitTarget = Physics2D.OverlapBox(finalAttackPosition, flyingDudeData.hitBoxSize, 0, flyingDudeData.playerLayer);
 
-            if (hitTarget is not null)
+            if (hitTarget != null)
             {
-                PlayRandomizedSound(hitSound);
                 if (hitTarget.TryGetComponent(out Shared.Health health))
                 {
-                    health.TakeDamage(flyingDudeData.attackDamage, direction, flyingDudeData.attackKnockback);
+                    health.TakeDamage(flyingDudeData.attackDamage, currentAttackDirection, flyingDudeData.attackKnockback);
                 }
             }
-            yield return new WaitForSeconds(flyingDudeData.attackCooldown);
-            isAttacking = false;
+
         }
 
         private void PlayHitAnimation(int direction, float knockback)
         {
+            if (isDead) return;
             StartCoroutine(DudeHitAnimation());
         }
 
@@ -96,13 +99,15 @@ namespace Enemies.FlyingDude
 
         private void PlayDeathAnimation()
         {
+            isDead = true;
             StopAllCoroutines();
+
             aiScript.enabled = false;
 
-            if (dudeDeathSound is not null) AudioSource.PlayClipAtPoint(dudeDeathSound, transform.position);
+            dudeRigidbody.linearVelocity = Vector2.zero;
 
-            dudeRigidbody.bodyType = RigidbodyType2D.Static;
-            if (TryGetComponent(out Collider2D col)) col.enabled = false;
+            dudeRigidbody.bodyType = RigidbodyType2D.Dynamic;
+            dudeRigidbody.gravityScale = 3f;
 
             StartCoroutine(DudeDeathAnimation());
         }
@@ -110,23 +115,23 @@ namespace Enemies.FlyingDude
         private IEnumerator DudeDeathAnimation()
         {
             dudeAnimator.SetTrigger(Dead);
-            yield return new WaitForEndOfFrame();
+
+            yield return new WaitForSeconds(0.1f);
 
             float animationLength = dudeAnimator.GetCurrentAnimatorStateInfo(0).length;
             yield return new WaitForSeconds(animationLength);
 
             yield return new WaitForSeconds(2.0f);
+
             dudeHealth.SpawnDeathDrops();
+
+            if (flyingDudeData.deathParticles != null)
+            {
+                var deathVFX = Instantiate(flyingDudeData.deathParticles, transform.position, Quaternion.identity);
+                Destroy(deathVFX.gameObject, deathVFX.main.duration);
+            }
+
             Destroy(gameObject);
-        }
-
-        private void PlayRandomizedSound(AudioClip clip)
-        {
-            if (clip is null) return;
-            float randomPitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
-
-            audioSource.pitch = randomPitch;
-            audioSource.PlayOneShot(clip);
         }
     }
 }

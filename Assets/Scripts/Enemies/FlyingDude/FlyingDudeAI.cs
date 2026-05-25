@@ -10,7 +10,7 @@ namespace Enemies.FlyingDude
         [SerializeField] private Enemy flyingDudeData;
 
         [Header("Flight Dynamics")]
-        [SerializeField] private float flightAcceleration = 10f; // Tweak this! Lower = wider swoops, Higher = tighter turns
+        [SerializeField] private float flightAcceleration = 10f;
 
         [Header("Obstacle Avoidance")]
         [SerializeField] private LayerMask obstacleLayer;
@@ -26,6 +26,11 @@ namespace Enemies.FlyingDude
 
         private int                  direction;
         private bool                 isStunned;
+        private bool                 isDead;
+        private bool                 isObstacleInFront;
+
+        private WaitForSeconds       obstacleCheckDelay = new WaitForSeconds(0.1f);
+        private Coroutine            obstacleCheckCoroutine;
 
         public event Action<int>     OnRange;
 
@@ -40,12 +45,23 @@ namespace Enemies.FlyingDude
 
         private void Start() => isStunned = false;
 
-        private void OnEnable() => dudeHealth.OnKnockbackRecieved += HandleHit;
-        private void OnDisable() => dudeHealth.OnKnockbackRecieved -= HandleHit;
+        private void OnEnable()
+        {
+            dudeHealth.OnKnockbackRecieved += HandleHit;
+            dudeHealth.OnDeath += HandleDeath;
+            obstacleCheckCoroutine = StartCoroutine(ObstacleCheckRoutine());
+        }
+
+        private void OnDisable()
+        {
+            dudeHealth.OnKnockbackRecieved -= HandleHit;
+            dudeHealth.OnDeath -= HandleDeath;
+            if (obstacleCheckCoroutine != null) StopCoroutine(obstacleCheckCoroutine);
+        }
 
         private void Update()
         {
-            if (target is null || isStunned) return;
+            if (target is null || isStunned || isDead) return;
 
             if (animations.isAttacking)
             {
@@ -72,8 +88,10 @@ namespace Enemies.FlyingDude
         {
             Vector2 desiredDirection = (target.position - transform.position).normalized;
 
-            RaycastHit2D hit = Physics2D.BoxCast(transform.position, wallCheckSize, 0f, Vector2.right * direction, wallCheckDistance, obstacleLayer);
-            if (hit.collider is not null) desiredDirection = new Vector2(desiredDirection.x * 0.5f, upwardSwoopStrength).normalized;
+            if (isObstacleInFront)
+            {
+                desiredDirection = new Vector2(desiredDirection.x * 0.5f, upwardSwoopStrength).normalized;
+            }
 
             Vector2 currentVelocity = dudeRigidBody.linearVelocity;
             currentVelocity += desiredDirection * (flightAcceleration * Time.deltaTime);
@@ -83,8 +101,29 @@ namespace Enemies.FlyingDude
             dudeRigidBody.linearVelocity = currentVelocity;
         }
 
+        private IEnumerator ObstacleCheckRoutine()
+        {
+            while (true)
+            {
+                if (target is not null && !isStunned && !isDead && !animations.isAttacking)
+                {
+                    RaycastHit2D hit = Physics2D.BoxCast(transform.position, wallCheckSize, 0f, Vector2.right * direction, wallCheckDistance, obstacleLayer);
+                    isObstacleInFront = hit.collider is not null;
+                }
+                yield return obstacleCheckDelay;
+            }
+        }
+
+        private void HandleDeath()
+        {
+            isDead = true;
+            StopAllCoroutines();
+            dudeRigidBody.linearVelocity = Vector2.zero;
+        }
+
         private void HandleHit(int playerDirection, float knockback)
         {
+            if (isDead) return;
             StartCoroutine(DudeHit(playerDirection, knockback));
         }
 

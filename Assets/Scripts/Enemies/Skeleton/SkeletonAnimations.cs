@@ -7,15 +7,6 @@ namespace Enemies.Skeleton
     public class SkeletonAnimations : MonoBehaviour
     {
         [SerializeField] private Enemy skeletonData;
-        [SerializeField] private ParticleSystem boneDustParticles;
-
-        [Header("Sounds")]
-        [SerializeField] private AudioClip skeletonDeathSound;
-        [SerializeField] private AudioClip skeletonDeathDropSound;
-        [SerializeField] private AudioClip airHitSound;
-        [SerializeField] private AudioClip hitSound;
-        private AudioSource audioSource;
-        private readonly float pitchVariation = 0.1f;
 
         private Animator      skeletonAnimator;
         private Rigidbody2D   skeletonRigidbody;
@@ -28,6 +19,7 @@ namespace Enemies.Skeleton
         private static readonly int Dead = Animator.StringToHash("isDead");
 
         [HideInInspector] public bool isAttacking;
+        private int currentAttackDirection;
 
         private void Awake()
         {
@@ -35,7 +27,6 @@ namespace Enemies.Skeleton
             skeletonAnimator  = GetComponent<Animator>();
             aiScript          = GetComponent<SkeletonAI>();
             skeletonHealth    = GetComponent<Shared.Health>();
-            audioSource       = GetComponent<AudioSource>();
         }
 
         private void OnEnable()
@@ -72,33 +63,32 @@ namespace Enemies.Skeleton
         private IEnumerator Attack(int direction)
         {
             isAttacking = true;
+            currentAttackDirection = direction;
             skeletonRigidbody.linearVelocityX = 0f;
 
             skeletonAnimator.SetBool(Walking, false);
             skeletonAnimator.SetBool(Attacking, true);
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.67f);
 
-            // Replaced transform.localScale.x with direction
-            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(skeletonData.attackOffset.x * direction, skeletonData.attackOffset.y);
-            Collider2D hit = Physics2D.OverlapBox(finalAttackPosition, skeletonData.hitBoxSize, 0, skeletonData.playerLayer);
-
-            if (hit is not null)
-            {
-                PlayRandomizedSound(hitSound);
-                if (hit.TryGetComponent(out Shared.Health health))
-                {
-                    health.TakeDamage(skeletonData.attackDamage, direction, skeletonData.attackKnockback);
-                }
-            }
-
-            else PlayRandomizedSound(airHitSound);
-
-            yield return new WaitForSeconds(0.17f);
             skeletonAnimator.SetBool(Attacking, false);
 
             yield return new WaitForSeconds(skeletonData.attackCooldown);
             isAttacking = false;
+        }
+
+        public void TriggerAttackHitbox()
+        {
+            Vector2 finalAttackPosition = (Vector2)transform.position + new Vector2(skeletonData.attackOffset.x * currentAttackDirection, skeletonData.attackOffset.y);
+            Collider2D hit = Physics2D.OverlapBox(finalAttackPosition, skeletonData.hitBoxSize, 0, skeletonData.playerLayer);
+
+            if (hit is not null)
+            {
+                if (hit.TryGetComponent(out Shared.Health health))
+                {
+                    health.TakeDamage(skeletonData.attackDamage, currentAttackDirection, skeletonData.attackKnockback);
+                }
+            }
         }
 
         private void PlayHitAnimation(int direction, float knockback)
@@ -120,8 +110,6 @@ namespace Enemies.Skeleton
             StopAllCoroutines();
             aiScript.enabled = false;
 
-            AudioSource.PlayClipAtPoint(skeletonDeathSound, transform.position);
-
             skeletonRigidbody.bodyType = RigidbodyType2D.Static;
             if (TryGetComponent(out Collider2D col)) col.enabled = false;
 
@@ -141,20 +129,16 @@ namespace Enemies.Skeleton
             yield return new WaitForSeconds(animationLength);
 
             yield return new WaitForSeconds(2.0f);
+
             skeletonHealth.SpawnDeathDrops();
-            AudioSource.PlayClipAtPoint(skeletonDeathDropSound, transform.position);
-            var boneDust = Instantiate(boneDustParticles, transform.position, Quaternion.identity);
-            Destroy(boneDust, boneDust.main.duration);
+
+            if (skeletonData.deathParticles is not null)
+            {
+                var deathVFX = Instantiate(skeletonData.deathParticles, transform.position, Quaternion.identity);
+                Destroy(deathVFX.gameObject, deathVFX.main.duration);
+            }
+
             Destroy(gameObject);
-        }
-
-        private void PlayRandomizedSound(AudioClip clip)
-        {
-            if (clip is null) return;
-            float randomPitch = Random.Range(1f - pitchVariation, 1f + pitchVariation);
-
-            audioSource.pitch = randomPitch;
-            audioSource.PlayOneShot(clip);
         }
     }
 }

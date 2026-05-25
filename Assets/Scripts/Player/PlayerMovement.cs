@@ -11,6 +11,7 @@ namespace Player
         private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
         private static readonly int IsMoving = Animator.StringToHash("isMoving");
         private static readonly int IsSliding = Animator.StringToHash("isSliding");
+        private static readonly int HasBeenHit = Animator.StringToHash("hasBeenHit");
         private static readonly int YVelocity = Animator.StringToHash("yVelocity");
 
         private Rigidbody2D rb;
@@ -35,17 +36,33 @@ namespace Player
         [SerializeField] private float jumpBufferTime = 0.15f;
         [SerializeField] private float attackPauseDuration = 0.25f;
 
+        [Header("Cooldown Settings")]
+        [SerializeField] private float jumpCooldown = 0.1f;
+        [SerializeField] private float attackCooldown = 0.2f;
+        [SerializeField] private float mineCooldown = 0.2f;
+
         private bool canDoubleJump;
         private float wallJumpTime = 0.25f;
 
         private float coyoteTimeCounter;
         private float jumpBufferCounter;
         private float attackPauseTimer;
-        private bool wasGrounded;
-        private bool isJumpingPhase;
+
+        private float jumpCooldownTimer;
+        private float attackCooldownTimer;
+        private float mineCooldownTimer;
+
+        private Shared.Health playerHealth;
+        private float knockbackTimer;
+
+        private Vector2 lastAttackMousePosition;
+        private Vector2 lastMineMousePosition;
+
+        public bool isGrounded { get; private set; }
 
         public event Action<Vector2> OnMinePerformed;
         public event Action<Vector2> OnAttackPerformed;
+        public event Action OnJumpPerformed;
 
         private void Awake()
         {
@@ -53,10 +70,21 @@ namespace Player
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerCollider = GetComponent<Collider2D>();
+            playerHealth = GetComponent<Shared.Health>();
             mainCamera = Camera.main;
 
             playerInput = new InputSystem_Actions();
             playerInput.Enable();
+        }
+
+        private void OnEnable()
+        {
+            playerHealth.OnKnockbackRecieved += SlimeHitAnimation;
+        }
+
+        private void OnDisable()
+        {
+            playerHealth.OnKnockbackRecieved -= SlimeHitAnimation;
         }
 
         private void Update()
@@ -66,7 +94,7 @@ namespace Player
             Vector2 colSize = playerCollider.bounds.size;
             Vector2 colCenter = playerCollider.bounds.center;
 
-            bool isGrounded = Physics2D.BoxCast(colCenter, new Vector2(colSize.x * 0.9f, colSize.y), 0f, Vector2.down, 0.1f, groundLayer);
+            isGrounded = Physics2D.BoxCast(colCenter, new Vector2(colSize.x * 0.9f, colSize.y), 0f, Vector2.down, 0.1f, groundLayer);
 
             float rayLength = (colSize.x / 2f) + 0.15f;
             Vector2 topRayPos = colCenter + new Vector2(0, colSize.y * 0.3f);
@@ -87,8 +115,6 @@ namespace Player
             HandleMouseInput();
             Movement(isGrounded, isTouchingLeftWall, isTouchingRightWall);
             PlayerAnimations(isGrounded, isTouchingLeftWall, isTouchingRightWall);
-
-            wasGrounded = isGrounded;
         }
 
         private void UpdatePolishTimers(bool isGrounded)
@@ -100,10 +126,17 @@ namespace Player
             else jumpBufferCounter -= Time.deltaTime;
 
             if (attackPauseTimer > 0f) attackPauseTimer -= Time.deltaTime;
+
+            if (jumpCooldownTimer > 0f) jumpCooldownTimer -= Time.deltaTime;
+            if (attackCooldownTimer > 0f) attackCooldownTimer -= Time.deltaTime;
+            if (mineCooldownTimer > 0f) mineCooldownTimer -= Time.deltaTime;
+            if (knockbackTimer > 0f) knockbackTimer -= Time.deltaTime;
         }
 
         private void Movement(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
         {
+            if (knockbackTimer > 0f) return;
+
             float movement = playerInput.Player.Move.ReadValue<Vector2>().x;
             if (isGrounded) canDoubleJump = true;
 
@@ -125,7 +158,7 @@ namespace Player
             if (wallJumpTime > 0f) wallJumpTime -= Time.deltaTime;
             else rb.linearVelocityX = movement * speed;
 
-            if (jumpBufferCounter > 0f)
+            if (jumpBufferCounter > 0f && jumpCooldownTimer <= 0f)
             {
                 if (!isGrounded && isSliding)
                 {
@@ -133,22 +166,28 @@ namespace Player
                     rb.linearVelocity = new Vector2(direction * wallJumpForce.x, wallJumpForce.y);
                     wallJumpTime = 0.25f;
                     canDoubleJump = true;
+
                     jumpBufferCounter = 0f;
-                    isJumpingPhase = true;
+                    jumpCooldownTimer = jumpCooldown;
+                    OnJumpPerformed?.Invoke();
                 }
                 else if (coyoteTimeCounter > 0f)
                 {
                     rb.linearVelocityY = jumpForce;
+
                     jumpBufferCounter = 0f;
                     coyoteTimeCounter = 0f;
-                    isJumpingPhase = true;
+                    jumpCooldownTimer = jumpCooldown;
+                    OnJumpPerformed?.Invoke();
                 }
                 else if (canDoubleJump && !isSliding)
                 {
                     rb.linearVelocityY = jumpForce;
                     canDoubleJump = false;
+
                     jumpBufferCounter = 0f;
-                    isJumpingPhase = true;
+                    jumpCooldownTimer = jumpCooldown;
+                    OnJumpPerformed?.Invoke();
                 }
             }
         }
@@ -177,25 +216,60 @@ namespace Player
 
         private void HandleMouseInput()
         {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
+            if (knockbackTimer > 0f) return;
+
+            if (Mouse.current.leftButton.wasPressedThisFrame && attackCooldownTimer <= 0f)
             {
-                Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                spriteRenderer.flipX = mousePosition.x < transform.position.x;
+                attackCooldownTimer = attackCooldown;
+
+                lastAttackMousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                spriteRenderer.flipX = lastAttackMousePosition.x < transform.position.x;
 
                 attackPauseTimer = attackPauseDuration;
                 animator.SetTrigger(HasAttacked);
-                OnAttackPerformed?.Invoke(mousePosition);
             }
 
-            if (Mouse.current.rightButton.wasPressedThisFrame)
+            if (Mouse.current.rightButton.wasPressedThisFrame && mineCooldownTimer <= 0f)
             {
-                Vector2 mousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                spriteRenderer.flipX = mousePosition.x < transform.position.x;
+                mineCooldownTimer = mineCooldown;
+
+                lastMineMousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                spriteRenderer.flipX = lastMineMousePosition.x < transform.position.x;
 
                 attackPauseTimer = attackPauseDuration;
                 animator.SetTrigger(HasMined);
-                OnMinePerformed?.Invoke(mousePosition);
             }
+        }
+
+        public void TriggerAttackEvent()
+        {
+            OnAttackPerformed?.Invoke(lastAttackMousePosition);
+        }
+
+        public void TriggerMineEvent()
+        {
+            OnMinePerformed?.Invoke(lastMineMousePosition);
+        }
+
+        private void SlimeHitAnimation(int direction, float knockback)
+        {
+            knockbackTimer = 0.3f;
+            animator.SetTrigger(HasBeenHit);
+
+            spriteRenderer.flipX = direction == 1;
+
+            rb.linearVelocity = Vector2.zero;
+            rb.AddForce(new Vector2(direction * knockback, 5f), ForceMode2D.Impulse);
+            StartCoroutine(DamageJuice());
+        }
+
+        private System.Collections.IEnumerator DamageJuice()
+        {
+            Time.timeScale = 0f;
+            spriteRenderer.color = Color.red;
+            yield return new WaitForSecondsRealtime(0.1f);
+            Time.timeScale = 1f;
+            spriteRenderer.color = Color.white;
         }
     }
 }

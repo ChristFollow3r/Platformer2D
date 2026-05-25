@@ -13,13 +13,21 @@ MonoBehaviour:
   m_Name: Skeleton
   m_EditorClassIdentifier: 
   speed: 2.5
-  jumpForce: 5
+  jumpForce: 8
   attackDamage: 13
   attackRange: 1
   attackKnockback: 7
-  hitBoxSize: {x: 1, y: 1}
-  attackOffset: {x: 1, y: 1}
+  hitBoxSize: {x: 1.3, y: 1}
+  attackOffset: {x: 0.2, y: 0}
   attackCooldown: 0.5
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
+  attackSound: {fileID: 8300000, guid: 32845c76ea8e1bd4db2ccb245ce6363a, type: 3}
+  moveSound: {fileID: 8300000, guid: 9c7b57d168f9284408b4edd02f1ba32d, type: 3}
+  jumpSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: cb86c0ec453c0904fbaa3eb26a16c2d0, type: 3}
+  deathSound: {fileID: 8300000, guid: 48c8fb3913974e94f98f5d7d05636bde, type: 3}
+  gruntSound: {fileID: 8300000, guid: 18713673d0cb4b645a50cc3c83f2fabb, type: 3}
+  dropSound: {fileID: 0}
+  deathParticles: {fileID: 7111893719700219089, guid: 291c97839eb46d042be5523a42482a52, type: 3}

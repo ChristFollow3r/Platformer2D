@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 310211534d2e55e448d99c95011c38b6, type: 3}
+  m_Name: GoldenGoblin
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Enemy
+  speed: 3.6
+  jumpForce: 9
+  attackDamage: 42
+  attackRange: 0.8
+  attackKnockback: 7
+  hitBoxSize: {x: 1.2, y: 1.2}
+  attackOffset: {x: 0.2, y: 0}
+  attackCooldown: 1.3
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  attackSound: {fileID: 8300000, guid: 8f0eab29e35e2574fbf80efca6a3c683, type: 3}
+  moveSound: {fileID: 8300000, guid: 2ecd65b86723d1c498b3d946baa053c1, type: 3}
+  jumpSound: {fileID: 0}
+  hitSound: {fileID: 8300000, guid: 683d4667307408c4d8d849208b893407, type: 3}
+  deathSound: {fileID: 8300000, guid: 621ff6694ef682b4ba6a85a5f248a9d6, type: 3}
+  gruntSound: {fileID: 0}
+  dropSound: {fileID: 0}
+  deathParticles: {fileID: 7111893719700219089, guid: 291c97839eb46d042be5523a42482a52, type: 3}

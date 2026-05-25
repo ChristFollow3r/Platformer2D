@@ -221,7 +221,6 @@ namespace Player
                             {
                                 Prop propHitData = WorldData.PropDictionary[hitType];
 
-                                // TODO: Audio source shit
                                 // TODO: Particles shit
 
                                 Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f + new Vector2(0.25f, 0.25f);
@@ -258,7 +257,6 @@ namespace Player
                     }
                 }
 
-                // TODO: ATTACK LOGIC FOR ENEMIES
             }
         }
     }
