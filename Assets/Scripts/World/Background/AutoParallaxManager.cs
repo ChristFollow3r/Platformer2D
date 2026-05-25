@@ -24,6 +24,8 @@ namespace World.Background
 
     public class AutoParallaxManager : MonoBehaviour
     {
+        public float CurrentSurfaceAlpha { get; private set; }
+
         [Header("Dependencies")]
         public Camera mainCamera;
 

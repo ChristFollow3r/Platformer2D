@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cf5ce9a85c3bc544883dada49136675, type: 3}
+  m_Name: SurfacePlaylist
+  m_EditorClassIdentifier: Assembly-CSharp::Sounds.Ambience.BiomeAudioPlaylist
+  tracks:
+  - {fileID: 8300000, guid: c60c223c241b5f84dbed495620f7e86c, type: 3}
+  - {fileID: 8300000, guid: 22fd59c70834c9b47a2783dc564f8cd9, type: 3}
+  - {fileID: 8300000, guid: 40ec8abf139cf5f45bbee0598eee54ea, type: 3}
+  - {fileID: 8300000, guid: 06aeceaf61defb945b1a6b53768ac5aa, type: 3}
+  - {fileID: 8300000, guid: 5d454ca7d4aacf54c986ae94d1df8c88, type: 3}
+  - {fileID: 8300000, guid: 26af987b9cf21594294bc456135807fb, type: 3}
+  - {fileID: 8300000, guid: e2c24ddc45b5f6b469a8730be6908abe, type: 3}
+  - {fileID: 8300000, guid: 0e6f87fe32863884d8df9fffc507edca, type: 3}

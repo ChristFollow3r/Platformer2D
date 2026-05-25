@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cf5ce9a85c3bc544883dada49136675, type: 3}
+  m_Name: CavePlaylist
+  m_EditorClassIdentifier: Assembly-CSharp::Sounds.Ambience.BiomeAudioPlaylist
+  tracks:
+  - {fileID: 8300000, guid: b70df31baacc0264d85d6b0e1d9b0ccd, type: 3}
+  - {fileID: 8300000, guid: ddd4402fb945e7b4494cb812eb71fa4f, type: 3}
+  - {fileID: 8300000, guid: 7ecd58a35d6eb1a41a5075be6de0ba8d, type: 3}
+  - {fileID: 8300000, guid: f267e5b86b399994b8b856ab10665808, type: 3}
+  - {fileID: 8300000, guid: ae25955ae5aac5a44a7931423810c50e, type: 3}
