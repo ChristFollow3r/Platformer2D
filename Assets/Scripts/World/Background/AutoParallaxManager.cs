@@ -86,12 +86,11 @@ namespace World.Background
 
             float currentY = mainCamera.transform.position.y;
 
-            // Mathf.InverseLerp calculates a clean 0.0 to 1.0 percentage between two numbers
-            float surfaceAlpha = Mathf.InverseLerp(transitionEndY, transitionStartY, currentY);
-            float caveAlpha = 1f - surfaceAlpha;
+            CurrentSurfaceAlpha = Mathf.InverseLerp(transitionEndY, transitionStartY, currentY);
 
-            // Apply the fades
-            foreach (var p in spawnedSurface) p.SetAlpha(surfaceAlpha);
+            float caveAlpha = 1f - CurrentSurfaceAlpha;
+
+            foreach (var p in spawnedSurface) p.SetAlpha(CurrentSurfaceAlpha);
             foreach (var p in spawnedCaves) p.SetAlpha(caveAlpha);
         }
     }
