@@ -879,7 +879,7 @@ MonoBehaviour:
   minDelayBetweenSongs: 25
   maxDelayBetweenSongs: 45
   trackEndFadeDuration: 4
-  biomeTransitionDuration: 2
+  biomeTransitionDuration: 6
   dayVolumeCurve:
     serializedVersion: 2
     m_Curve:
