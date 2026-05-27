@@ -29,5 +29,7 @@ namespace Scriptable_Objects_Scripts
 
         [Tooltip("How many blocks of empty air this prop needs to the left and right.")]
         public int requiredSpace;
+
+        public BlockType[] allowedGroundBlocks;
     }
 }

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Chunks;
-using Data;
-using Scriptable_Objects_Scripts;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Cinemachine;
+using Chunks;
+using Data;
+using Scriptable_Objects_Scripts;
 
 namespace World
 {
@@ -17,18 +17,17 @@ namespace World
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
-        [Header("Player Settings")] [Header("Player Settings")] [SerializeField]
-        private GameObject playerPrefab;
-
+        [Header("Player Settings")]
+        [SerializeField] private GameObject playerPrefab;
         [SerializeField] private CinemachineCamera virtualCamera;
         public Vector3 currentSpawnPoint;
 
-        [Header("Shader Setup")] [SerializeField]
-        private Material tilemapMaterial;
-
+        [Header("Shader Setup")]
+        [SerializeField] private Material tilemapMaterial;
         private Texture2D lightmapTexture;
 
-        [Header("World Settings")] public int worldWidth = 150;
+        [Header("World Settings")]
+        public int worldWidth = 150;
         public int worldHeight = 90;
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
@@ -80,7 +79,7 @@ namespace World
             ApplyLightingToTexture();
             PopulateChunks();
             UpdateChunks();
-            SpawnPlayer(); // Called after world generation is completely finished
+            SpawnPlayer();
         }
 
         private void Update()
@@ -89,12 +88,27 @@ namespace World
                 UpdateChunks();
         }
 
+        public float GetSurfaceY(float worldX)
+        {
+            float cellSize = gridParent.cellSize.x;
+            int gridX = Mathf.FloorToInt(worldX / cellSize);
+
+            if (!WorldData.World.SafeCheck(gridX, 0)) return 0f;
+
+            for (int y = worldHeight - 1; y >= 0; y--)
+            {
+                if (WorldData.World.GetBlockTypes(gridX, y) != BlockType.Air)
+                {
+                    return y * cellSize;
+                }
+            }
+            return 0f;
+        }
+
         private void GenerateWorld()
         {
-            // We create an array to remember exactly where the grass/surface is for every X column
             int[] surfaceHeights = new int[worldWidth];
 
-            // --- PART 1: SURFACE & UNDERGROUND PLACEMENT ---
             for (int x = 0; x < worldWidth; x++)
             {
                 var noiseValue = 0f;
@@ -102,55 +116,47 @@ namespace World
                 noiseValue += Mathf.PerlinNoise((x * mediumMountains) + seedOffset, 0) * 0.15f;
                 noiseValue += Mathf.PerlinNoise((x * smallMountains) + seedOffset, 0) * 0.05f;
                 noiseValue /= 1.2f;
-                noiseValue = Mathf.Lerp(0.4f, 0.6f, noiseValue);
+                noiseValue = Mathf.Lerp(0.3f, 0.8f, noiseValue);
 
                 var groundLevel = (int)(noiseValue * worldHeight * 0.75f);
-                surfaceHeights[x] = groundLevel; // Save this height for Step C!
+                surfaceHeights[x] = groundLevel;
 
                 for (int y = 0; y < worldHeight; y++)
                 {
-                    BlockType blockType;
-
                     if (y > groundLevel)
-                        blockType = BlockType.Air;
-                    else if (y == groundLevel)
-                        blockType = BlockType.Grass;
-                    else if (y >= groundLevel - dirtLayerThickness)
-                        blockType = BlockType.Dirt; // This is the Surface Dirt
+                    {
+                        WorldData.World.SetBlockType(x, y, BlockType.Air);
+                    }
                     else
                     {
-                        // This replaces your old GetOreOrStone
-                        // We pass x and y so we can use Perlin noise for big underground dirt/gravel patches!
                         int depth = groundLevel - y;
-                        blockType = GetUndergroundBlock(x, y, depth);
+                        BlockType blockType = GetUndergroundBlock(x, y, depth);
+                        WorldData.World.SetBlockType(x, y, blockType);
                     }
-
-                    WorldData.World.SetBlockType(x, y, blockType);
                 }
             }
 
-            // --- PART 2: CELLULAR AUTOMATA CAVES ---
             int[,] caveMap = new int[worldWidth, worldHeight];
-            float randomFillPercent = 0.54f;
 
-            // Step A: Static Fill
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
                 {
-                    // Protect the crust by looking at our saved surface heights
-                    if (y > surfaceHeights[x] - 15)
+                    if (y > surfaceHeights[x]) continue;
+
+                    float depthFromSurface = surfaceHeights[x] - y;
+                    float fillProb = 0.54f;
+
+                    if (depthFromSurface < 15)
                     {
-                        caveMap[x, y] = 1;
+                        float t = depthFromSurface / 15f;
+                        fillProb = Mathf.Lerp(0.90f, 0.54f, t);
                     }
-                    else
-                    {
-                        caveMap[x, y] = (UnityEngine.Random.value < randomFillPercent) ? 1 : 0;
-                    }
+
+                    caveMap[x, y] = (UnityEngine.Random.value < fillProb) ? 1 : 0;
                 }
             }
 
-            // Step B: Smooth the caves out
             int smoothingIterations = 4;
             for (int i = 0; i < smoothingIterations; i++)
             {
@@ -166,26 +172,59 @@ namespace World
                         else newCaveMap[x, y] = caveMap[x, y];
                     }
                 }
-
                 caveMap = newCaveMap;
             }
 
-            // Step C: Apply the finished cave map to your actual WorldData
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
                 {
                     if (caveMap[x, y] == 0)
                     {
-                        var currentBlock = WorldData.World.GetBlockTypes(x, y);
-
-                        // Define what the "Surface Crust" is so we don't carve it
-                        bool isSurfaceCrust = y >= surfaceHeights[x] - dirtLayerThickness;
-
-                        // Carve everything (Stone, Ores, Underground Dirt) EXCEPT the crust and Bedrock
-                        if (!isSurfaceCrust && currentBlock != BlockType.Bedrock)
+                        if (WorldData.World.GetBlockTypes(x, y) != BlockType.Bedrock)
                         {
                             WorldData.World.SetBlockType(x, y, BlockType.Air);
+                        }
+                    }
+                }
+            }
+
+            for (int x = 0; x < worldWidth; x++)
+            {
+                bool foundSurface = false;
+                int localDirtDepth = Mathf.FloorToInt(Mathf.PerlinNoise(x * 0.1f + seedOffset, seedOffset) * 5f) + dirtLayerThickness;
+                float surfaceBiomeNoise = Mathf.PerlinNoise(x * 0.02f + seedOffset, seedOffset * 1.5f);
+
+                for (int y = worldHeight - 1; y >= 0; y--)
+                {
+                    BlockType currentBlock = WorldData.World.GetBlockTypes(x, y);
+
+                    if (currentBlock != BlockType.Air && !foundSurface)
+                    {
+                        foundSurface = true;
+
+                        BlockType topBlock = BlockType.Grass;
+                        BlockType subBlock = BlockType.Dirt;
+
+                        if (surfaceBiomeNoise < 0.3f)
+                        {
+                            topBlock = BlockType.Gravel;
+                            subBlock = BlockType.Stone;
+                        }
+                        else if (surfaceBiomeNoise > 0.7f)
+                        {
+                            topBlock = BlockType.Clay;
+                            subBlock = BlockType.Clay;
+                        }
+
+                        WorldData.World.SetBlockType(x, y, topBlock);
+
+                        for (int d = 1; d <= localDirtDepth; d++)
+                        {
+                            if (y - d >= 0 && WorldData.World.GetBlockTypes(x, y - d) != BlockType.Air)
+                            {
+                                WorldData.World.SetBlockType(x, y - d, subBlock);
+                            }
                         }
                     }
                 }
@@ -209,42 +248,32 @@ namespace World
                     }
                 }
             }
-
             return wallCount;
         }
 
         private BlockType GetUndergroundBlock(int x, int y, int depth)
         {
-            // 1. BEDROCK LAYER: The absolute bottom of the world
             if (y <= 3)
             {
-                // Make the bedrock slightly jagged instead of a perfectly flat line
                 if (y == 0 || UnityEngine.Random.value > 0.4f) return BlockType.Bedrock;
             }
 
-            // 2. BIOME PATCHES (Dirt, Gravel, Slate, Clay)
-            // We use Perlin noise to create large blobs of these materials underground
             float patchScale = 0.08f;
             float patchNoise = Mathf.PerlinNoise((x * patchScale) + seedOffset, (y * patchScale) + seedOffset);
 
-            BlockType baseBlock = BlockType.Stone; // Default to stone
+            BlockType baseBlock = BlockType.Stone;
 
-            if (patchNoise > 0.85f) baseBlock = BlockType.Dirt; // 15% chance for massive dirt patches
-            else if (patchNoise < 0.15f) baseBlock = BlockType.Gravel; // 15% chance for gravel patches
+            if (patchNoise > 0.85f) baseBlock = BlockType.Dirt;
+            else if (patchNoise < 0.15f) baseBlock = BlockType.Gravel;
             else if (patchNoise > 0.70f && patchNoise <= 0.80f) baseBlock = BlockType.Slate;
             else if (patchNoise >= 0.20f && patchNoise < 0.30f) baseBlock = BlockType.Clay;
 
-            // 3. ORES & GEMS
-            // We only want to spawn ores inside Stone (so you don't find iron floating inside an underground dirt patch)
             if (baseBlock == BlockType.Stone)
             {
-                // Random value from 0 to 1 to determine if an ore spawns here
                 float oreChance = UnityEngine.Random.value;
 
-                // Tweak these numbers to make ores more or less rare
-                if (oreChance > 0.96f) // 4% chance for any block to be an ore
+                if (oreChance > 0.96f)
                 {
-                    // The deeper you go, the better the ores
                     if (depth > 200)
                     {
                         float gemChance = UnityEngine.Random.value;
@@ -265,12 +294,10 @@ namespace World
                         return (UnityEngine.Random.value > 0.5f) ? BlockType.Copper : BlockType.Tin;
                     }
 
-                    // Shallow ores
                     return BlockType.Coal;
                 }
             }
 
-            // If it didn't become an ore, return whatever the base block was (Stone, Dirt, Gravel, etc.)
             return baseBlock;
         }
 
@@ -291,7 +318,7 @@ namespace World
                     BlockType groundBlock = WorldData.World.GetBlockTypes(x, y);
                     if (WorldData.World.GetBlockTypes(x, y + 1) != BlockType.Air) continue;
 
-                    bool isSurface = groundBlock == BlockType.Grass;
+                    bool isSurface = groundBlock == BlockType.Grass || groundBlock == BlockType.Gravel || groundBlock == BlockType.Clay;
                     bool isUnderground = groundBlock == BlockType.Stone;
                     if (!isSurface && !isUnderground) continue;
 
@@ -302,6 +329,25 @@ namespace World
                     {
                         if (p.isFromSurface != isSurface) continue;
                         if (p.hasPriority != isPriorityPass) continue;
+
+                        bool hasValidBlock = false;
+                        if (p.allowedGroundBlocks == null || p.allowedGroundBlocks.Length == 0)
+                        {
+                            hasValidBlock = true;
+                        }
+                        else
+                        {
+                            foreach (var allowed in p.allowedGroundBlocks)
+                            {
+                                if (groundBlock == allowed)
+                                {
+                                    hasValidBlock = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!hasValidBlock) continue;
 
                         if (HasRequiredSpace(x, y, p.requiredSpace))
                         {
@@ -333,9 +379,7 @@ namespace World
         private float ComputeSeedOffset(string seed)
         {
             if (string.IsNullOrEmpty(seed)) return Random.Range(-100000f, 100000f);
-
             System.Random prng = new System.Random(seed.GetHashCode());
-
             return prng.Next(-100000, 100000);
         }
 
@@ -409,7 +453,6 @@ namespace World
                 cameraPosition = mainCamera.transform.position;
                 return true;
             }
-
             return false;
         }
 
@@ -464,7 +507,6 @@ namespace World
                     lightmapTexture.SetPixel(x, y, new Color(l, l, l, 1f));
                 }
             }
-
             lightmapTexture.Apply();
         }
 
@@ -486,7 +528,6 @@ namespace World
                     if (WorldData.World.GetBlockTypes(checkX, y) == BlockType.Air) return false;
                 }
             }
-
             return true;
         }
 
@@ -512,26 +553,18 @@ namespace World
             }
         }
 
-        public void SetSpawnPoint(Vector3 newSpawnPoint) // For the bed spawn point
+        public void SetSpawnPoint(Vector3 newSpawnPoint)
         {
             currentSpawnPoint = newSpawnPoint;
-            Debug.Log("Spawn point updated to: " + currentSpawnPoint);
         }
-
 
         public void RespawnPlayer()
         {
             GameObject spawnedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
-            Debug.Log($"Player spawned at {currentSpawnPoint}");
 
-            // Re-hook the camera to the new instantiated player
             if (virtualCamera != null)
             {
                 virtualCamera.Follow = spawnedPlayer.transform;
-            }
-            else
-            {
-                Debug.LogWarning("Cinemachine Virtual Camera is missing in WorldManager!");
             }
         }
     }
