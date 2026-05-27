@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4314cbce99e747541a66074d9138c03c
+guid: d0e77400b207e9543b59fd94791d5f88
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3125931293861704754
-    second: SurfaceSand_0
+      213: -3578582641699816866
+    second: Gravel_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SurfaceSand_0
+      name: Gravel_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 23477ea23f9816b20800000000000000
-      internalID: 3125931293861704754
+      spriteID: e5a7a1a2c02565ec0800000000000000
+      internalID: -3578582641699816866
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SurfaceSand_0: 3125931293861704754
+      Gravel_0: -3578582641699816866
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

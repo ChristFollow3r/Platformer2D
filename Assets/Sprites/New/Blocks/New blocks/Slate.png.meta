@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 4314cbce99e747541a66074d9138c03c
+guid: 5bccb4eddbec3284fa06aaadcec65fba
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3125931293861704754
-    second: SurfaceSand_0
+      213: -2676561685629443725
+    second: Slate_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,7 +100,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SurfaceSand_0
+      name: Slate_0
       rect:
         serializedVersion: 2
         x: 0
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 23477ea23f9816b20800000000000000
-      internalID: 3125931293861704754
+      spriteID: 371e2a4f351fadad0800000000000000
+      internalID: -2676561685629443725
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      SurfaceSand_0: 3125931293861704754
+      Slate_0: -2676561685629443725
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
