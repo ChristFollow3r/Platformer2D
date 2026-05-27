@@ -201,7 +201,7 @@ namespace World
                 bool foundSurface = false;
                 int localDirtDepth = Mathf.FloorToInt(Mathf.PerlinNoise(x * 0.1f + seedOffset, seedOffset) * 5f) +
                                      dirtLayerThickness;
-                float surfaceBiomeNoise = Mathf.PerlinNoise(x * 0.02f + seedOffset, seedOffset * 1.5f);
+                float baseBiomeNoise = Mathf.PerlinNoise(x * 0.02f + seedOffset, seedOffset * 1.5f);
 
                 for (int y = worldHeight - 1; y >= 0; y--)
                 {
@@ -211,30 +211,29 @@ namespace World
                     {
                         foundSurface = true;
 
-                        // Default to Grass/Dirt biome
-                        BlockType topBlock = BlockType.Grass;
-                        BlockType subBlock = BlockType.Dirt;
+                        // 2D noise applied here to wobble the biome boundaries
+                        float surfaceWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, y * 0.2f + seedOffset) - 0.5f) * 0.15f;
+                        float surfaceBiome = baseBiomeNoise + surfaceWobble;
 
-                        // Sand Biome
-                        if (surfaceBiomeNoise < 0.33f)
-                        {
-                            topBlock = BlockType.SurfaceSand;
-                            subBlock = BlockType.Sand;
-                        }
-                        // Clay Biome
-                        else if (surfaceBiomeNoise > 0.66f)
-                        {
-                            topBlock = BlockType.SurfaceClay;
-                            subBlock = BlockType.Clay;
-                        }
+                        BlockType topBlock = BlockType.Grass;
+                        if (surfaceBiome < 0.33f) topBlock = BlockType.SurfaceSand;
+                        else if (surfaceBiome > 0.66f) topBlock = BlockType.SurfaceClay;
 
                         WorldData.World.SetBlockType(x, y, topBlock);
 
                         for (int d = 1; d <= localDirtDepth; d++)
                         {
-                            if (y - d >= 0 && WorldData.World.GetBlockTypes(x, y - d) != BlockType.Air)
+                            int currentY = y - d;
+                            if (currentY >= 0 && WorldData.World.GetBlockTypes(x, currentY) != BlockType.Air)
                             {
-                                WorldData.World.SetBlockType(x, y - d, subBlock);
+                                float subWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, currentY * 0.2f + seedOffset) - 0.5f) * 0.15f;
+                                float subBiome = baseBiomeNoise + subWobble;
+
+                                BlockType subBlock = BlockType.Dirt;
+                                if (subBiome < 0.33f) subBlock = BlockType.Sand;
+                                else if (subBiome > 0.66f) subBlock = BlockType.Clay;
+
+                                WorldData.World.SetBlockType(x, currentY, subBlock);
                             }
                         }
                     }
@@ -270,24 +269,20 @@ namespace World
                 if (y == 0 || UnityEngine.Random.value > 0.4f) return BlockType.Bedrock;
             }
 
-            // Depth-based Deepslate (Slate) Transition. Starts replacing stone in the bottom 30 blocks.
             int deepslateHeight = 30;
             BlockType baseBlock = BlockType.Stone;
 
             if (y <= deepslateHeight)
             {
-                // Smooth blend between Stone and Slate
                 if (y < deepslateHeight - 5 || UnityEngine.Random.value > 0.5f)
                 {
                     baseBlock = BlockType.Slate;
                 }
             }
 
-            // Underground Patches (Dirt, Gravel, Sand, Clay)
             float patchScale = 0.08f;
             float patchNoise = Mathf.PerlinNoise((x * patchScale) + seedOffset, (y * patchScale) + seedOffset);
 
-            // Don't overwrite bedrock layer with patches
             if (y > 3)
             {
                 if (patchNoise > 0.85f) return BlockType.Dirt;
@@ -296,14 +291,12 @@ namespace World
                 if (patchNoise >= 0.15f && patchNoise < 0.25f) return BlockType.Clay;
             }
 
-            // Ore Generation
             if (baseBlock == BlockType.Stone || baseBlock == BlockType.Slate)
             {
                 float oreChance = Random.value;
 
                 if (oreChance > 0.96f)
                 {
-                    // Fixed Depths: Scaled for a 90-height world
                     if (depth > 60)
                     {
                         float gemChance = Random.value;
@@ -354,7 +347,6 @@ namespace World
 
                     if (!isSurface && !isUnderground) continue;
 
-                    // Group constraints
                     bool isBarrenBlock = groundBlock == BlockType.SurfaceSand || groundBlock == BlockType.Sand ||
                                          groundBlock == BlockType.Stone || groundBlock == BlockType.Slate;
 
@@ -376,9 +368,8 @@ namespace World
                         if (p.isFromSurface != isSurface) continue;
                         if (p.hasPriority != isPriorityPass) continue;
                         if (p.isFromSurface && !hasSkyAccess) continue;
-                        if (p.type.ToString() == "Sulphur") continue; // Hard ignore Sulphur
+                        if (p.type.ToString() == "Sulphur") continue;
 
-                        // Enforce: Nothing grows on sand/rocks EXCEPT StoneProps
                         if (isBarrenBlock && p.type != PropType.StoneProp) continue;
 
                         bool hasValidBlock = false;
