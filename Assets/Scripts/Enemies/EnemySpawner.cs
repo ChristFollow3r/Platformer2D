@@ -44,7 +44,8 @@ namespace Enemies
             if (player == null)
             {
                 GameObject playerObj = GameObject.FindWithTag("Player");
-                if (playerObj != null) player = playerObj.transform;
+                if (playerObj != null)  player = playerObj.transform;
+                else return;
             }
 
             if (activeEnemies.Count >= maxActiveEnemies) return;

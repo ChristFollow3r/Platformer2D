@@ -1369,8 +1369,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9c38059eda0f631408648143c0bc1c72, type: 2}
   - {fileID: 11400000, guid: 2eec725772d81894db7f1283c4c96c6c, type: 2}
   - {fileID: 11400000, guid: 257aedb864303ab42a77a6dbf118f085, type: 2}
-  - {fileID: 11400000, guid: dad1a1a7ada476246a514aad47b7d5cd, type: 2}
-  - {fileID: 11400000, guid: e006c9831f222c64f921833fe4d6879a, type: 2}
   props:
   - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
   - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}
