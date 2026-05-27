@@ -19,7 +19,8 @@ MonoBehaviour:
   isConsumable: 0
   isFuel: 0
   equipmentType: 0
-  blockType: 15
+  blockType: 21
   hardness: 4
   fuelDuration: 0
+  modData: {fileID: 0}
   overlayType: 1

@@ -287,7 +287,7 @@ namespace Player
 
         private IEnumerator WaitForDeathParticles()
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.15f);
             Destroy(this.gameObject);
         }
     }

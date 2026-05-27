@@ -1,10 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Tilemaps;
-using Unity.Cinemachine;
 using Chunks;
 using Data;
 using Scriptable_Objects_Scripts;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+using Unity.Cinemachine;
 
 namespace World
 {
@@ -17,17 +18,18 @@ namespace World
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
-        [Header("Player Settings")]
-        [SerializeField] private GameObject playerPrefab;
+        [Header("Player Settings")] [SerializeField]
+        private GameObject playerPrefab;
+
         [SerializeField] private CinemachineCamera virtualCamera;
         public Vector3 currentSpawnPoint;
 
-        [Header("Shader Setup")]
-        [SerializeField] private Material tilemapMaterial;
+        [Header("Shader Setup")] [SerializeField]
+        private Material tilemapMaterial;
+
         private Texture2D lightmapTexture;
 
-        [Header("World Settings")]
-        public int worldWidth = 150;
+        [Header("World Settings")] public int worldWidth = 150;
         public int worldHeight = 90;
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
@@ -102,6 +104,7 @@ namespace World
                     return y * cellSize;
                 }
             }
+
             return 0f;
         }
 
@@ -140,6 +143,9 @@ namespace World
 
             for (int x = 0; x < worldWidth; x++)
             {
+                float caveEntranceNoise = Mathf.PerlinNoise(x * 0.04f + seedOffset, seedOffset);
+                bool isCaveEntranceZone = caveEntranceNoise > 0.75f;
+
                 for (int y = 0; y < worldHeight; y++)
                 {
                     if (y > surfaceHeights[x]) continue;
@@ -147,7 +153,7 @@ namespace World
                     float depthFromSurface = surfaceHeights[x] - y;
                     float fillProb = 0.54f;
 
-                    if (depthFromSurface < 15)
+                    if (depthFromSurface < 15 && !isCaveEntranceZone)
                     {
                         float t = depthFromSurface / 15f;
                         fillProb = Mathf.Lerp(0.90f, 0.54f, t);
@@ -172,6 +178,7 @@ namespace World
                         else newCaveMap[x, y] = caveMap[x, y];
                     }
                 }
+
                 caveMap = newCaveMap;
             }
 
@@ -192,7 +199,8 @@ namespace World
             for (int x = 0; x < worldWidth; x++)
             {
                 bool foundSurface = false;
-                int localDirtDepth = Mathf.FloorToInt(Mathf.PerlinNoise(x * 0.1f + seedOffset, seedOffset) * 5f) + dirtLayerThickness;
+                int localDirtDepth = Mathf.FloorToInt(Mathf.PerlinNoise(x * 0.1f + seedOffset, seedOffset) * 5f) +
+                                     dirtLayerThickness;
                 float surfaceBiomeNoise = Mathf.PerlinNoise(x * 0.02f + seedOffset, seedOffset * 1.5f);
 
                 for (int y = worldHeight - 1; y >= 0; y--)
@@ -203,17 +211,20 @@ namespace World
                     {
                         foundSurface = true;
 
+                        // Default to Grass/Dirt biome
                         BlockType topBlock = BlockType.Grass;
                         BlockType subBlock = BlockType.Dirt;
 
-                        if (surfaceBiomeNoise < 0.3f)
+                        // Sand Biome
+                        if (surfaceBiomeNoise < 0.33f)
                         {
-                            topBlock = BlockType.Gravel;
-                            subBlock = BlockType.Stone;
+                            topBlock = BlockType.SurfaceSand;
+                            subBlock = BlockType.Sand;
                         }
-                        else if (surfaceBiomeNoise > 0.7f)
+                        // Clay Biome
+                        else if (surfaceBiomeNoise > 0.66f)
                         {
-                            topBlock = BlockType.Clay;
+                            topBlock = BlockType.SurfaceClay;
                             subBlock = BlockType.Clay;
                         }
 
@@ -248,6 +259,7 @@ namespace World
                     }
                 }
             }
+
             return wallCount;
         }
 
@@ -258,25 +270,43 @@ namespace World
                 if (y == 0 || UnityEngine.Random.value > 0.4f) return BlockType.Bedrock;
             }
 
+            // Depth-based Deepslate (Slate) Transition. Starts replacing stone in the bottom 30 blocks.
+            int deepslateHeight = 30;
+            BlockType baseBlock = BlockType.Stone;
+
+            if (y <= deepslateHeight)
+            {
+                // Smooth blend between Stone and Slate
+                if (y < deepslateHeight - 5 || UnityEngine.Random.value > 0.5f)
+                {
+                    baseBlock = BlockType.Slate;
+                }
+            }
+
+            // Underground Patches (Dirt, Gravel, Sand, Clay)
             float patchScale = 0.08f;
             float patchNoise = Mathf.PerlinNoise((x * patchScale) + seedOffset, (y * patchScale) + seedOffset);
 
-            BlockType baseBlock = BlockType.Stone;
-
-            if (patchNoise > 0.85f) baseBlock = BlockType.Dirt;
-            else if (patchNoise < 0.15f) baseBlock = BlockType.Gravel;
-            else if (patchNoise > 0.70f && patchNoise <= 0.80f) baseBlock = BlockType.Slate;
-            else if (patchNoise >= 0.20f && patchNoise < 0.30f) baseBlock = BlockType.Clay;
-
-            if (baseBlock == BlockType.Stone)
+            // Don't overwrite bedrock layer with patches
+            if (y > 3)
             {
-                float oreChance = UnityEngine.Random.value;
+                if (patchNoise > 0.85f) return BlockType.Dirt;
+                if (patchNoise < 0.15f) return BlockType.Gravel;
+                if (patchNoise > 0.75f && patchNoise <= 0.85f) return BlockType.Sand;
+                if (patchNoise >= 0.15f && patchNoise < 0.25f) return BlockType.Clay;
+            }
+
+            // Ore Generation
+            if (baseBlock == BlockType.Stone || baseBlock == BlockType.Slate)
+            {
+                float oreChance = Random.value;
 
                 if (oreChance > 0.96f)
                 {
-                    if (depth > 200)
+                    // Fixed Depths: Scaled for a 90-height world
+                    if (depth > 60)
                     {
-                        float gemChance = UnityEngine.Random.value;
+                        float gemChance = Random.value;
                         if (gemChance > 0.8f) return BlockType.Ruby;
                         if (gemChance > 0.6f) return BlockType.Sapphire;
                         if (gemChance > 0.4f) return BlockType.Emerald;
@@ -284,14 +314,14 @@ namespace World
                         return BlockType.Topaz;
                     }
 
-                    if (depth > 120)
+                    if (depth > 40)
                     {
-                        return (UnityEngine.Random.value > 0.5f) ? BlockType.Iron : BlockType.Coal;
+                        return (Random.value > 0.5f) ? BlockType.Iron : BlockType.Coal;
                     }
 
-                    if (depth > 50)
+                    if (depth > 15)
                     {
-                        return (UnityEngine.Random.value > 0.5f) ? BlockType.Copper : BlockType.Tin;
+                        return (Random.value > 0.5f) ? BlockType.Copper : BlockType.Tin;
                     }
 
                     return BlockType.Coal;
@@ -318,9 +348,25 @@ namespace World
                     BlockType groundBlock = WorldData.World.GetBlockTypes(x, y);
                     if (WorldData.World.GetBlockTypes(x, y + 1) != BlockType.Air) continue;
 
-                    bool isSurface = groundBlock == BlockType.Grass || groundBlock == BlockType.Gravel || groundBlock == BlockType.Clay;
-                    bool isUnderground = groundBlock == BlockType.Stone;
+                    bool isSurface = groundBlock == BlockType.Grass || groundBlock == BlockType.SurfaceSand ||
+                                     groundBlock == BlockType.SurfaceClay;
+                    bool isUnderground = groundBlock == BlockType.Stone || groundBlock == BlockType.Slate;
+
                     if (!isSurface && !isUnderground) continue;
+
+                    // Group constraints
+                    bool isBarrenBlock = groundBlock == BlockType.SurfaceSand || groundBlock == BlockType.Sand ||
+                                         groundBlock == BlockType.Stone || groundBlock == BlockType.Slate;
+
+                    bool hasSkyAccess = true;
+                    for (int checkY = y + 1; checkY < worldHeight; checkY++)
+                    {
+                        if (WorldData.World.GetBlockTypes(x, checkY) != BlockType.Air)
+                        {
+                            hasSkyAccess = false;
+                            break;
+                        }
+                    }
 
                     List<Prop> validProps = new List<Prop>();
                     float totalWeight = 0;
@@ -329,6 +375,11 @@ namespace World
                     {
                         if (p.isFromSurface != isSurface) continue;
                         if (p.hasPriority != isPriorityPass) continue;
+                        if (p.isFromSurface && !hasSkyAccess) continue;
+                        if (p.type.ToString() == "Sulphur") continue; // Hard ignore Sulphur
+
+                        // Enforce: Nothing grows on sand/rocks EXCEPT StoneProps
+                        if (isBarrenBlock && p.type != PropType.StoneProp) continue;
 
                         bool hasValidBlock = false;
                         if (p.allowedGroundBlocks == null || p.allowedGroundBlocks.Length == 0)
@@ -453,6 +504,7 @@ namespace World
                 cameraPosition = mainCamera.transform.position;
                 return true;
             }
+
             return false;
         }
 
@@ -507,6 +559,7 @@ namespace World
                     lightmapTexture.SetPixel(x, y, new Color(l, l, l, 1f));
                 }
             }
+
             lightmapTexture.Apply();
         }
 
@@ -528,6 +581,7 @@ namespace World
                     if (WorldData.World.GetBlockTypes(checkX, y) == BlockType.Air) return false;
                 }
             }
+
             return true;
         }
 
@@ -567,5 +621,6 @@ namespace World
                 virtualCamera.Follow = spawnedPlayer.transform;
             }
         }
+
     }
 }
