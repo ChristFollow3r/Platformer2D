@@ -911,8 +911,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::World.AutoParallaxManager
   mainCamera: {fileID: 519420031}
-  transitionStartY: 60
-  transitionEndY: 55
+  transitionStartY: 70
+  transitionEndY: 65
   surfaceLayers:
   - layerName: Sky
     backgroundSprite: {fileID: -855298285791758126, guid: 4e9cd13a3597e444a847bfcb4d812018, type: 3}
@@ -1378,9 +1378,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9697fcf0983bcf247a2cfc91aea1561e, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
-  worldSeed: Jumanji
+  worldSeed: Minecraft
   playerPrefab: {fileID: 6493406502564964188, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
   virtualCamera: {fileID: 91711888}
+  currentSpawnPoint: {x: 0, y: 0, z: 0}
   tilemapMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
   worldWidth: 3000
   worldHeight: 400

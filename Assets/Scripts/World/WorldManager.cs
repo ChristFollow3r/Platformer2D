@@ -17,20 +17,18 @@ namespace World
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
-        [Header("Player Settings")]
-        [Header("Player Settings")]
-        [SerializeField] private GameObject playerPrefab;
+        [Header("Player Settings")] [Header("Player Settings")] [SerializeField]
+        private GameObject playerPrefab;
+
         [SerializeField] private CinemachineCamera virtualCamera;
         public Vector3 currentSpawnPoint;
 
-        [Header("Shader Setup")]
-        [SerializeField]
+        [Header("Shader Setup")] [SerializeField]
         private Material tilemapMaterial;
 
         private Texture2D lightmapTexture;
 
-        [Header("World Settings")]
-        public int worldWidth = 150;
+        [Header("World Settings")] public int worldWidth = 150;
         public int worldHeight = 90;
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
@@ -93,6 +91,10 @@ namespace World
 
         private void GenerateWorld()
         {
+            // We create an array to remember exactly where the grass/surface is for every X column
+            int[] surfaceHeights = new int[worldWidth];
+
+            // --- PART 1: SURFACE & UNDERGROUND PLACEMENT ---
             for (int x = 0; x < worldWidth; x++)
             {
                 var noiseValue = 0f;
@@ -101,76 +103,175 @@ namespace World
                 noiseValue += Mathf.PerlinNoise((x * smallMountains) + seedOffset, 0) * 0.05f;
                 noiseValue /= 1.2f;
                 noiseValue = Mathf.Lerp(0.4f, 0.6f, noiseValue);
+
                 var groundLevel = (int)(noiseValue * worldHeight * 0.75f);
+                surfaceHeights[x] = groundLevel; // Save this height for Step C!
 
                 for (int y = 0; y < worldHeight; y++)
                 {
                     BlockType blockType;
 
-                    if (y > groundLevel) blockType = BlockType.Air;
-                    else if (y == groundLevel) blockType = BlockType.Grass;
-                    else if (y >= groundLevel - dirtLayerThickness) blockType = BlockType.Dirt;
+                    if (y > groundLevel)
+                        blockType = BlockType.Air;
+                    else if (y == groundLevel)
+                        blockType = BlockType.Grass;
+                    else if (y >= groundLevel - dirtLayerThickness)
+                        blockType = BlockType.Dirt; // This is the Surface Dirt
                     else
                     {
+                        // This replaces your old GetOreOrStone
+                        // We pass x and y so we can use Perlin noise for big underground dirt/gravel patches!
                         int depth = groundLevel - y;
-                        blockType = GetOreOrStone(depth);
+                        blockType = GetUndergroundBlock(x, y, depth);
                     }
 
                     WorldData.World.SetBlockType(x, y, blockType);
                 }
             }
 
+            // --- PART 2: CELLULAR AUTOMATA CAVES ---
+            int[,] caveMap = new int[worldWidth, worldHeight];
+            float randomFillPercent = 0.54f;
+
+            // Step A: Static Fill
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
                 {
-                    var blockType = WorldData.World.GetBlockTypes(x, y);
-                    if (blockType == BlockType.Air) continue;
-
-                    float caveNoise = Mathf.PerlinNoise((x * 0.04f) + seedOffset, (y * 0.04f) + seedOffset);
-
-                    if (Mathf.Abs(caveNoise - 0.5f) < 0.055f) // Tweak 0.06 to control cave width
+                    // Protect the crust by looking at our saved surface heights
+                    if (y > surfaceHeights[x] - 15)
                     {
-                        WorldData.World.SetBlockType(x, y, BlockType.Air);
+                        caveMap[x, y] = 1;
+                    }
+                    else
+                    {
+                        caveMap[x, y] = (UnityEngine.Random.value < randomFillPercent) ? 1 : 0;
+                    }
+                }
+            }
+
+            // Step B: Smooth the caves out
+            int smoothingIterations = 4;
+            for (int i = 0; i < smoothingIterations; i++)
+            {
+                int[,] newCaveMap = new int[worldWidth, worldHeight];
+                for (int x = 0; x < worldWidth; x++)
+                {
+                    for (int y = 0; y < worldHeight; y++)
+                    {
+                        int neighborWallCount = GetSurroundingWallCount(x, y, caveMap);
+
+                        if (neighborWallCount > 4) newCaveMap[x, y] = 1;
+                        else if (neighborWallCount < 4) newCaveMap[x, y] = 0;
+                        else newCaveMap[x, y] = caveMap[x, y];
+                    }
+                }
+
+                caveMap = newCaveMap;
+            }
+
+            // Step C: Apply the finished cave map to your actual WorldData
+            for (int x = 0; x < worldWidth; x++)
+            {
+                for (int y = 0; y < worldHeight; y++)
+                {
+                    if (caveMap[x, y] == 0)
+                    {
+                        var currentBlock = WorldData.World.GetBlockTypes(x, y);
+
+                        // Define what the "Surface Crust" is so we don't carve it
+                        bool isSurfaceCrust = y >= surfaceHeights[x] - dirtLayerThickness;
+
+                        // Carve everything (Stone, Ores, Underground Dirt) EXCEPT the crust and Bedrock
+                        if (!isSurfaceCrust && currentBlock != BlockType.Bedrock)
+                        {
+                            WorldData.World.SetBlockType(x, y, BlockType.Air);
+                        }
                     }
                 }
             }
         }
 
-        private BlockType GetOreOrStone(int depth)
+        private int GetSurroundingWallCount(int gridX, int gridY, int[,] map)
         {
-            float roll = Random.Range(0f, 100f);
-
-            if (depth > 30)
+            int wallCount = 0;
+            for (int neighborX = gridX - 1; neighborX <= gridX + 1; neighborX++)
             {
-                if (roll < 0.2f)
+                for (int neighborY = gridY - 1; neighborY <= gridY + 1; neighborY++)
                 {
-                    int gemRoll = Random.Range(0, 5);
-                    return gemRoll switch
+                    if (neighborX < 0 || neighborX >= worldWidth || neighborY < 0 || neighborY >= worldHeight)
                     {
-                        0 => BlockType.Sapphire,
-                        1 => BlockType.Emerald,
-                        2 => BlockType.Topaz,
-                        3 => BlockType.Onyx,
-                        _ => BlockType.Ruby
-                    };
+                        wallCount++;
+                    }
+                    else if (neighborX != gridX || neighborY != gridY)
+                    {
+                        wallCount += map[neighborX, neighborY];
+                    }
                 }
             }
 
-            if (depth > 15)
+            return wallCount;
+        }
+
+        private BlockType GetUndergroundBlock(int x, int y, int depth)
+        {
+            // 1. BEDROCK LAYER: The absolute bottom of the world
+            if (y <= 3)
             {
-                if (roll < 2.0f) return BlockType.Iron;
+                // Make the bedrock slightly jagged instead of a perfectly flat line
+                if (y == 0 || UnityEngine.Random.value > 0.4f) return BlockType.Bedrock;
             }
 
-            if (depth > 5)
+            // 2. BIOME PATCHES (Dirt, Gravel, Slate, Clay)
+            // We use Perlin noise to create large blobs of these materials underground
+            float patchScale = 0.08f;
+            float patchNoise = Mathf.PerlinNoise((x * patchScale) + seedOffset, (y * patchScale) + seedOffset);
+
+            BlockType baseBlock = BlockType.Stone; // Default to stone
+
+            if (patchNoise > 0.85f) baseBlock = BlockType.Dirt; // 15% chance for massive dirt patches
+            else if (patchNoise < 0.15f) baseBlock = BlockType.Gravel; // 15% chance for gravel patches
+            else if (patchNoise > 0.70f && patchNoise <= 0.80f) baseBlock = BlockType.Slate;
+            else if (patchNoise >= 0.20f && patchNoise < 0.30f) baseBlock = BlockType.Clay;
+
+            // 3. ORES & GEMS
+            // We only want to spawn ores inside Stone (so you don't find iron floating inside an underground dirt patch)
+            if (baseBlock == BlockType.Stone)
             {
-                if (roll < 4.0f) return BlockType.Tin;
-                if (roll < 6.0f) return BlockType.Copper;
+                // Random value from 0 to 1 to determine if an ore spawns here
+                float oreChance = UnityEngine.Random.value;
+
+                // Tweak these numbers to make ores more or less rare
+                if (oreChance > 0.96f) // 4% chance for any block to be an ore
+                {
+                    // The deeper you go, the better the ores
+                    if (depth > 200)
+                    {
+                        float gemChance = UnityEngine.Random.value;
+                        if (gemChance > 0.8f) return BlockType.Ruby;
+                        if (gemChance > 0.6f) return BlockType.Sapphire;
+                        if (gemChance > 0.4f) return BlockType.Emerald;
+                        if (gemChance > 0.2f) return BlockType.Onyx;
+                        return BlockType.Topaz;
+                    }
+
+                    if (depth > 120)
+                    {
+                        return (UnityEngine.Random.value > 0.5f) ? BlockType.Iron : BlockType.Coal;
+                    }
+
+                    if (depth > 50)
+                    {
+                        return (UnityEngine.Random.value > 0.5f) ? BlockType.Copper : BlockType.Tin;
+                    }
+
+                    // Shallow ores
+                    return BlockType.Coal;
+                }
             }
 
-            if (roll < 8.0f) return BlockType.Coal;
-
-            return BlockType.Stone;
+            // If it didn't become an ore, return whatever the base block was (Stone, Dirt, Gravel, etc.)
+            return baseBlock;
         }
 
         private void GenerateProps()
