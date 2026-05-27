@@ -18,9 +18,9 @@ namespace Enemies
         }
 
         [Header("Dependencies")]
-        [SerializeField] private Transform player;
         [SerializeField] private DayNightCycle dayNightCycle;
-        [SerializeField] private float cellSize = 1f;
+        [SerializeField] private float cellSize = 0.5f;
+        private Transform player;
 
         [Header("Spawn Settings")]
         public List<EnemySpawnData> enemies;
@@ -40,6 +40,12 @@ namespace Enemies
         private void Update()
         {
             HandleEnemyDespawning();
+
+            if (player == null)
+            {
+                GameObject playerObj = GameObject.FindWithTag("Player");
+                if (playerObj != null) player = playerObj.transform;
+            }
 
             if (activeEnemies.Count >= maxActiveEnemies) return;
 

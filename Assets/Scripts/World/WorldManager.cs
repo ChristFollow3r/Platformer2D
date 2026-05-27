@@ -4,6 +4,7 @@ using Data;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Unity.Cinemachine;
 
 namespace World
 {
@@ -16,13 +17,18 @@ namespace World
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
+        [Header("Player Settings")]
+        [SerializeField] private GameObject playerPrefab;
+        [SerializeField] private CinemachineCamera virtualCamera;
+
         [Header("Shader Setup")]
         [SerializeField]
         private Material tilemapMaterial;
 
         private Texture2D lightmapTexture;
 
-        [Header("World Settings")] public int worldWidth = 150;
+        [Header("World Settings")]
+        public int worldWidth = 150;
         public int worldHeight = 90;
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
@@ -74,6 +80,7 @@ namespace World
             ApplyLightingToTexture();
             PopulateChunks();
             UpdateChunks();
+            SpawnPlayer(); // Called after world generation is completely finished
         }
 
         private void Update()
@@ -108,6 +115,7 @@ namespace World
                 }
             }
 
+            // Pass 2: Cave Generation
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
@@ -303,7 +311,6 @@ namespace World
             return false;
         }
 
-
         private void CalculateLighting()
         {
             int width = WorldData.World.width;
@@ -380,6 +387,34 @@ namespace World
 
             return true;
         }
+
+        private void SpawnPlayer()
+        {
+            int spawnX = worldWidth / 2;
+            float cellSize = gridParent.cellSize.x;
+
+            // Scan downwards to find the highest non-air block, avoiding cave gaps
+            for (int y = worldHeight - 1; y >= 0; y--)
+            {
+                BlockType currentBlock = WorldData.World.GetBlockTypes(spawnX, y);
+
+                // As soon as we hit anything solid, we spawn above it
+                if (currentBlock != BlockType.Air)
+                {
+                    float worldX = (spawnX * cellSize) + (cellSize / 2f);
+                    float worldY = ((y + 2) * cellSize);
+
+                    Vector3 spawnPosition = new Vector3(worldX, worldY, 0);
+
+                    GameObject spawnedPlayer = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+                    Debug.Log($"Player successfully spawned at {spawnPosition} above a {currentBlock} block!");
+
+                    if (virtualCamera != null) virtualCamera.Follow = spawnedPlayer.transform;
+                    else Debug.LogWarning("Cinemachine Virtual Camera is missing in WorldManager!");
+
+                    break;
+                }
+            }
+        }
     }
 }
-
