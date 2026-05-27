@@ -911,8 +911,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::World.AutoParallaxManager
   mainCamera: {fileID: 519420031}
-  transitionStartY: 70
-  transitionEndY: 65
+  transitionOffsetStart: 2
+  transitionOffsetEnd: 15
   surfaceLayers:
   - layerName: Sky
     backgroundSprite: {fileID: -855298285791758126, guid: 4e9cd13a3597e444a847bfcb4d812018, type: 3}
