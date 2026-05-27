@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -41,6 +42,9 @@ namespace Player
         [SerializeField] private float attackCooldown = 0.2f;
         [SerializeField] private float mineCooldown = 0.2f;
 
+        [Header("Death VFX")]
+        [SerializeField] private ParticleSystem deathVFX;
+
         private bool canDoubleJump;
         private float wallJumpTime = 0.25f;
 
@@ -80,11 +84,13 @@ namespace Player
         private void OnEnable()
         {
             playerHealth.OnKnockbackRecieved += SlimeHitAnimation;
+            playerHealth.OnDeath += PLayerDeath;
         }
 
         private void OnDisable()
         {
             playerHealth.OnKnockbackRecieved -= SlimeHitAnimation;
+            playerHealth.OnDeath -= PLayerDeath;
         }
 
         private void Update()
@@ -271,5 +277,18 @@ namespace Player
             Time.timeScale = 1f;
             spriteRenderer.color = Color.white;
         }
+
+        private void PLayerDeath() // Dirty solution but works like a charm
+        {
+            var deathParticles = Instantiate(deathVFX, transform.position, Quaternion.identity);
+            StartCoroutine(WaitForDeathParticles());
+        }
+
+        private IEnumerator WaitForDeathParticles()
+        {
+            yield return new WaitForSeconds(0.3f);
+            Destroy(this.gameObject);
+        }
     }
+
 }

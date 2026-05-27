@@ -457,6 +457,7 @@ MonoBehaviour:
   jumpCooldown: 0.1
   attackCooldown: 0.2
   mineCooldown: 0.2
+  deathVFX: {fileID: 0}
 --- !u!4 &180265503
 Transform:
   m_ObjectHideFlags: 0
