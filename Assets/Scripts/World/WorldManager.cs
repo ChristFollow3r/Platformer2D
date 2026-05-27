@@ -18,8 +18,10 @@ namespace World
         [SerializeField] private string worldSeed;
 
         [Header("Player Settings")]
+        [Header("Player Settings")]
         [SerializeField] private GameObject playerPrefab;
         [SerializeField] private CinemachineCamera virtualCamera;
+        public Vector3 currentSpawnPoint;
 
         [Header("Shader Setup")]
         [SerializeField]
@@ -91,7 +93,6 @@ namespace World
 
         private void GenerateWorld()
         {
-            // Pass 1: Terrain and Ore Generation
             for (int x = 0; x < worldWidth; x++)
             {
                 var noiseValue = 0f;
@@ -109,13 +110,16 @@ namespace World
                     if (y > groundLevel) blockType = BlockType.Air;
                     else if (y == groundLevel) blockType = BlockType.Grass;
                     else if (y >= groundLevel - dirtLayerThickness) blockType = BlockType.Dirt;
-                    else blockType = GetOreOrStone(y);
+                    else
+                    {
+                        int depth = groundLevel - y;
+                        blockType = GetOreOrStone(depth);
+                    }
 
                     WorldData.World.SetBlockType(x, y, blockType);
                 }
             }
 
-            // Pass 2: Cave Generation
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
@@ -123,46 +127,48 @@ namespace World
                     var blockType = WorldData.World.GetBlockTypes(x, y);
                     if (blockType == BlockType.Air) continue;
 
-                    float caveNoise = Mathf.PerlinNoise((x * 0.05f) + seedOffset, (y * 0.05f) + seedOffset);
+                    float caveNoise = Mathf.PerlinNoise((x * 0.04f) + seedOffset, (y * 0.04f) + seedOffset);
 
-                    if (caveNoise < 0.35f) WorldData.World.SetBlockType(x, y, BlockType.Air);
+                    if (Mathf.Abs(caveNoise - 0.5f) < 0.055f) // Tweak 0.06 to control cave width
+                    {
+                        WorldData.World.SetBlockType(x, y, BlockType.Air);
+                    }
                 }
             }
         }
 
-        private BlockType GetOreOrStone(int y)
+        private BlockType GetOreOrStone(int depth)
         {
-            float roll = UnityEngine.Random.Range(0f, 100f);
-            float currentProb = 0f;
+            float roll = Random.Range(0f, 100f);
 
-            currentProb += 0.1f;
-            if (roll < currentProb)
+            if (depth > 30)
             {
-                int gemRoll = UnityEngine.Random.Range(0, 5);
-                return gemRoll switch
+                if (roll < 0.2f)
                 {
-                    0 => BlockType.Sapphire,
-                    1 => BlockType.Emerald,
-                    2 => BlockType.Topaz,
-                    3 => BlockType.Onyx,
-                    _ => BlockType.Ruby
-                };
+                    int gemRoll = Random.Range(0, 5);
+                    return gemRoll switch
+                    {
+                        0 => BlockType.Sapphire,
+                        1 => BlockType.Emerald,
+                        2 => BlockType.Topaz,
+                        3 => BlockType.Onyx,
+                        _ => BlockType.Ruby
+                    };
+                }
             }
 
-            currentProb += 0.5f;
-            if (roll < currentProb)
+            if (depth > 15)
             {
-                if (y < worldHeight * 0.3f) return BlockType.Iron;
+                if (roll < 2.0f) return BlockType.Iron;
             }
 
-            currentProb += 0.5f;
-            if (roll < currentProb) return BlockType.Tin;
+            if (depth > 5)
+            {
+                if (roll < 4.0f) return BlockType.Tin;
+                if (roll < 6.0f) return BlockType.Copper;
+            }
 
-            currentProb += 2.0f;
-            if (roll < currentProb) return BlockType.Copper;
-
-            currentProb += 2.5f;
-            if (roll < currentProb) return BlockType.Coal;
+            if (roll < 8.0f) return BlockType.Coal;
 
             return BlockType.Stone;
         }
@@ -225,16 +231,11 @@ namespace World
 
         private float ComputeSeedOffset(string seed)
         {
-            if (string.IsNullOrEmpty(seed)) return 0f;
-            uint hash = 2166136261;
+            if (string.IsNullOrEmpty(seed)) return Random.Range(-100000f, 100000f);
 
-            foreach (char x in seed)
-            {
-                hash ^= x;
-                hash *= 16777619;
-            }
+            System.Random prng = new System.Random(seed.GetHashCode());
 
-            return (hash % 1000) / 10000f;
+            return prng.Next(-100000, 100000);
         }
 
         private void PopulateChunks()
@@ -393,27 +394,43 @@ namespace World
             int spawnX = worldWidth / 2;
             float cellSize = gridParent.cellSize.x;
 
-            // Scan downwards to find the highest non-air block, avoiding cave gaps
             for (int y = worldHeight - 1; y >= 0; y--)
             {
                 BlockType currentBlock = WorldData.World.GetBlockTypes(spawnX, y);
 
-                // As soon as we hit anything solid, we spawn above it
                 if (currentBlock != BlockType.Air)
                 {
                     float worldX = (spawnX * cellSize) + (cellSize / 2f);
                     float worldY = ((y + 2) * cellSize);
 
-                    Vector3 spawnPosition = new Vector3(worldX, worldY, 0);
+                    currentSpawnPoint = new Vector3(worldX, worldY, 0);
 
-                    GameObject spawnedPlayer = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
-                    Debug.Log($"Player successfully spawned at {spawnPosition} above a {currentBlock} block!");
-
-                    if (virtualCamera != null) virtualCamera.Follow = spawnedPlayer.transform;
-                    else Debug.LogWarning("Cinemachine Virtual Camera is missing in WorldManager!");
-
+                    RespawnPlayer();
                     break;
                 }
+            }
+        }
+
+        public void SetSpawnPoint(Vector3 newSpawnPoint) // For the bed spawn point
+        {
+            currentSpawnPoint = newSpawnPoint;
+            Debug.Log("Spawn point updated to: " + currentSpawnPoint);
+        }
+
+
+        public void RespawnPlayer()
+        {
+            GameObject spawnedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
+            Debug.Log($"Player spawned at {currentSpawnPoint}");
+
+            // Re-hook the camera to the new instantiated player
+            if (virtualCamera != null)
+            {
+                virtualCamera.Follow = spawnedPlayer.transform;
+            }
+            else
+            {
+                Debug.LogWarning("Cinemachine Virtual Camera is missing in WorldManager!");
             }
         }
     }

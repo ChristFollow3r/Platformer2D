@@ -44,7 +44,7 @@ namespace Enemies
             if (player == null)
             {
                 GameObject playerObj = GameObject.FindWithTag("Player");
-                if (playerObj != null)  player = playerObj.transform;
+                if (playerObj != null) player = playerObj.transform;
                 else return;
             }
 
@@ -98,11 +98,14 @@ namespace Enemies
                 if (gridX < 0 || gridX >= WorldData.World.width || gridY <= 0 || gridY >= WorldData.World.height)
                     continue;
 
+                float snappedX = (gridX * cellSize) + (cellSize / 2f);
+
                 if (selectedEnemy.isFlying)
                 {
                     if (CheckHasSpace(gridX, gridY))
                     {
-                        InstantiateEnemy(selectedEnemy.enemyPrefab, spawnPos);
+                        float snappedY = (gridY * cellSize) + (cellSize / 2f);
+                        InstantiateEnemy(selectedEnemy.enemyPrefab, new Vector2(snappedX, snappedY));
                         return;
                     }
                 }
@@ -143,9 +146,7 @@ namespace Enemies
 
                     if (foundY != -1)
                     {
-                        float snappedX = (gridX * cellSize) + (cellSize / 2f);
-                        float snappedY = (foundY * cellSize) + (cellSize / 2f);
-
+                        float snappedY = (foundY * cellSize) + cellSize;
                         Vector2 snappedPos = new Vector2(snappedX, snappedY);
                         InstantiateEnemy(selectedEnemy.enemyPrefab, snappedPos);
                         return;
