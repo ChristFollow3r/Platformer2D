@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Slime_Demon
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Enemy
   speed: 4
-  jumpForce: 7
+  jumpForce: 8
   attackDamage: 50
-  attackRange: 3
-  attackKnockback: 12
+  attackRange: 2
+  attackKnockback: 8
   hitBoxSize: {x: 1, y: 1}
   attackOffset: {x: 0.2, y: 0}
   attackCooldown: 1.2
