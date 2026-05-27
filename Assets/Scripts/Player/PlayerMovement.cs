@@ -282,11 +282,12 @@ namespace Player
         {
             var deathParticles = Instantiate(deathVFX, transform.position, Quaternion.identity);
             StartCoroutine(WaitForDeathParticles());
+            // S'haurien de borrar tots els enemigos del mapa ?
         }
 
         private IEnumerator WaitForDeathParticles()
         {
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
             Destroy(this.gameObject);
         }
     }
