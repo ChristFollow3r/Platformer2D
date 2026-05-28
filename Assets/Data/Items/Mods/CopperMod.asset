@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CopperMod
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: CopperMod
-  sprite: {fileID: -1513400475487111133, guid: 18db8109b366238448f2dc12d5e3c7d9, type: 3}
+  sprite: {fileID: 5942707261081859092, guid: a5dda35206050734ba4d26d2c3282048, type: 3}
   stack: 1
   isPlacable: 0
   isConsumable: 1

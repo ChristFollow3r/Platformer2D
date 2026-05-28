@@ -18,7 +18,8 @@ namespace Items.Overlays
         Copper,
         Bronze,
         Iron,
-        Primordial
+        Primordial,
+        NONE
     }
 
 
