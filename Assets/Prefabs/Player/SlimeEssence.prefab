@@ -13,6 +13,8 @@ GameObject:
   - component: {fileID: 6424570704822434071}
   - component: {fileID: 221647487546915588}
   - component: {fileID: 7243765266166736406}
+  - component: {fileID: -2086652092619033471}
+  - component: {fileID: -554427675811013097}
   m_Layer: 0
   m_Name: SlimeEssence
   m_TagString: Untagged
@@ -84,7 +86,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -6937560696139347793, guid: 54da1084a75b41f41a763f5126b2f5f8, type: 3}
+  m_Sprite: {fileID: -1156587458614563205, guid: 4271e86f82134174daf5ed6d315f25d1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -124,12 +126,12 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 2
 --- !u!114 &221647487546915588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,9 +160,91 @@ MonoBehaviour:
   pickupSound: {fileID: 0}
   collider: {fileID: 6424570704822434071}
   spriteRenderer: {fileID: 4732772619590479897}
+  itemData: {fileID: 0}
   bobHeight: 0.2
   bobSpeed: 0.2
   rotateSpeed: 0
   initialPopForce: 0
   gravity: -9.8
   player: {fileID: 0}
+--- !u!50 &-2086652092619033471
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930996324388520816}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!60 &-554427675811013097
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930996324388520816}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.875, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: -0.125, y: 0.5}
+      - {x: -0.4375, y: 0.1875}
+      - {x: -0.4375, y: -0.5}
+      - {x: 0.25, y: -0.5}
+      - {x: 0.4375, y: -0.375}
+      - {x: 0.4375, y: 0.375}
+      - {x: 0.3125, y: 0.5}
+  m_UseDelaunayMesh: 1

@@ -217,10 +217,12 @@ MonoBehaviour:
   maxHealth: 60
   deathDrops:
   - prefab: {fileID: 930996324388520816, guid: b5beea3b8a542f3489a727dc63b1cfe5, type: 3}
+    itemData: {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
     minAmount: 1
     maxAmount: 2
     dropChance: 40
   - prefab: {fileID: 930996324388520816, guid: 1c17e09124b55fb499dc9077866dd7d1, type: 3}
+    itemData: {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
     minAmount: 0
     maxAmount: 2
     dropChance: 30
