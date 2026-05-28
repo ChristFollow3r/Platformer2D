@@ -158,6 +158,7 @@ MonoBehaviour:
   pickupSound: {fileID: 0}
   collider: {fileID: 6424570704822434071}
   spriteRenderer: {fileID: 4732772619590479897}
+  itemData: {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
   bobHeight: 0.2
   bobSpeed: 0.2
   rotateSpeed: 0
