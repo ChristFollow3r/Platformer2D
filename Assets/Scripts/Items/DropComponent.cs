@@ -10,37 +10,41 @@ namespace Items
         [SerializeField] private AudioClip pickupSound;
         [SerializeField] private new CircleCollider2D collider;
         [SerializeField] private SpriteRenderer spriteRenderer;
+
+        [SerializeField] private ItemData itemData;
+
         private readonly float pickUpRadius = 0.4f;
         private readonly float speed = 10f;
-        private ItemData itemData;
 
         [SerializeField] private float bobHeight;
         [SerializeField] private float bobSpeed;
         [SerializeField] private float rotateSpeed;
         [SerializeField] private float initialPopForce;
         [SerializeField] private float gravity = -9.8f;
+
         private float groundY;
         private float verticalVelocity;
         private bool hasLanded = false;
 
-        // Changed to private so it doesn't clutter the inspector
         public Transform player;
         private bool isBeingPickedUp;
         private float bobTimer = 0f;
 
-        /// <summary>Ran by unity on first enable</summary>
         private void Start()
         {
             #region Start
-            // Automatically find the player by tag
-            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-            if (playerObj != null)
+            if (player == null)
             {
-                player = playerObj.transform;
+                GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+                if (playerObj != null)
+                {
+                    player = playerObj.transform;
+                }
             }
-            else
+
+            if (itemData == null)
             {
-                Debug.LogWarning("DropComponent couldn't find an object with the tag 'Player'!");
+                SendMessage("GetItemData", SendMessageOptions.DontRequireReceiver);
             }
 
             transform.Rotate(Vector3.up, Random.Range(0, 20), Space.World);
@@ -51,12 +55,18 @@ namespace Items
             #endregion
         }
 
-        /// <summary>Ran by unity each frame</summary>
         private void Update()
         {
             #region Update
             if (Inventory.Singleton == null) return;
             if (player == null) return;
+
+            if (itemData == null)
+            {
+                Bop();
+                return;
+            }
+
             if (!isBeingPickedUp || !Inventory.Singleton.Fits(itemData))
             {
                 Bop();
@@ -106,7 +116,10 @@ namespace Items
         {
             #region SetItem
             this.itemData = itemData;
-            spriteRenderer.sprite = itemData.sprite;
+            if (spriteRenderer != null && itemData != null)
+            {
+                spriteRenderer.sprite = itemData.sprite;
+            }
             #endregion
         }
     }

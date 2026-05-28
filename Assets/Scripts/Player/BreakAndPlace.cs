@@ -19,12 +19,11 @@ namespace Player
 
         [Header("Controls")]
         public int reachDistance;
-        // [SerializeField] private float attackRange = 1.5f;
         [SerializeField] private Vector2 attackBoxSize = new Vector2(1.5f, 1.5f);
 
         [Header("Mining Data")]
         private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
-        private float currentBlockDamage = 0f; // This should be per block, not global (Dmg resets)
+        private float currentBlockDamage = 0f;
 
         private Collider2D playerCollider;
 
@@ -35,7 +34,6 @@ namespace Player
                 playerMovement.OnAttackPerformed += HandleAttacking;
                 playerMovement.OnMinePerformed += OnRightClick;
             }
-
         }
 
         private void OnDisable()
@@ -64,7 +62,6 @@ namespace Player
             StartCoroutine(DelayedAttackRoutine(mouseWorldPosition));
         }
 
-
         private void OnRightClick(Vector2 mouseWorldPosition)
         {
             ItemStack item = Inventory.Singleton.hand;
@@ -89,7 +86,6 @@ namespace Player
             return WorldData.World.GetBlockTypes(x, y);
             #endregion
         }
-
 
         private bool PlaceBlock(ItemStack item, Vector2 mouseWorldPosition)
         {
@@ -149,7 +145,6 @@ namespace Player
 
             if (currentBlockDamage >= targetHardness)
             {
-                // TODO: break block, drop shit, add sound, add particles
                 BreakBlock(x, y, clickedBlock);
                 currentBlockDamage = 0f;
                 if (clickedBlock == BlockType.Entity)
@@ -157,7 +152,6 @@ namespace Player
                     UIController.Singleton.DestroyEntity(BlockIdUtils.From(x, y));
                 }
             }
-
         }
 
         private void BreakBlock(int x, int y, BlockType type)
@@ -192,11 +186,10 @@ namespace Player
             Vector2 topLeft = new Vector2(min.x, max.y);
             Vector2 bottomRight = new Vector2(max.x, min.y);
 
-            // Draw the 4 sides of the box
-            Debug.DrawLine(min, topLeft, Color.magenta, 1f); // Left side
-            Debug.DrawLine(topLeft, max, Color.magenta, 1f); // Top side
-            Debug.DrawLine(max, bottomRight, Color.magenta, 1f); // Right side
-            Debug.DrawLine(bottomRight, min, Color.magenta, 1f); // Bottom side
+            Debug.DrawLine(min, topLeft, Color.magenta, 1f);
+            Debug.DrawLine(topLeft, max, Color.magenta, 1f);
+            Debug.DrawLine(max, bottomRight, Color.magenta, 1f);
+            Debug.DrawLine(bottomRight, min, Color.magenta, 1f);
             #endregion
 
             foreach (Collider2D hitObject in hitObjects)
@@ -220,8 +213,6 @@ namespace Player
                             if (hitType != PropType.None)
                             {
                                 Prop propHitData = WorldData.PropDictionary[hitType];
-
-                                // TODO: Particles shit
 
                                 Vector2 spawnPosition = new Vector2(checkX, checkY) * 0.5f + new Vector2(0.25f, 0.25f);
 
@@ -256,7 +247,6 @@ namespace Player
                         if (foundProp) break;
                     }
                 }
-
             }
         }
     }

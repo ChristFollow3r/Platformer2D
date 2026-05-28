@@ -162,5 +162,5 @@ MonoBehaviour:
   bobSpeed: 0.2
   rotateSpeed: 0
   initialPopForce: 0
-  gravity: -30
-  player: {fileID: 0}
+  gravity: -9.8
+  player: {fileID: 846664854750277049, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
