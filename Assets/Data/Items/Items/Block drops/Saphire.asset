@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: Wood
-  m_EditorClassIdentifier: 
-  name: Wood
-  sprite: {fileID: -3723118755774083741, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
-  stack: 64
+  m_Name: Saphire
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
+  name: Saphire
+  sprite: {fileID: -8643532442299616557, guid: 98aa34ef896ed2645b6e05013809d2e6, type: 3}
+  stack: 16
   isPlacable: 0
   isConsumable: 0
-  isFuel: 1
+  isFuel: 0
   equipmentType: 0
   blockType: 0
   hardness: 0

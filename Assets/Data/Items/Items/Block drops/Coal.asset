@@ -17,7 +17,7 @@ MonoBehaviour:
   stack: 32
   isPlacable: 0
   isConsumable: 0
-  isFuel: 0
+  isFuel: 1
   equipmentType: 0
   blockType: 0
   hardness: 0
