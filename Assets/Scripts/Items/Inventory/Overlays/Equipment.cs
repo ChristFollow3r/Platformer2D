@@ -14,8 +14,11 @@ namespace Items.Overlays
 
     public enum Mod
     {
-        Wood,
-        Stone
+        Stone,
+        Copper,
+        Bronze,
+        Iron,
+        Primordial
     }
 
 
