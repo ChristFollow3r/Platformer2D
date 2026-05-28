@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Resin
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Resin
-  sprite: {fileID: -8294377232951689005, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
+  sprite: {fileID: -4785464482232938212, guid: f3ff20a6ce011914cbfeac476c660c87, type: 3}
   stack: 32
   isPlacable: 0
   isConsumable: 0

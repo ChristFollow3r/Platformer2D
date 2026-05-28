@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tin_Ore
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Tin Ore
-  sprite: {fileID: -3726943873346676097, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
+  sprite: {fileID: -7919131962593983632, guid: 8144906226884e54a85a9c2c8b18ef0f, type: 3}
   stack: 32
   isPlacable: 0
   isConsumable: 0

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Fiber
   m_EditorClassIdentifier: 
   name: Fiber
-  sprite: {fileID: -3028526314191487495, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
+  sprite: {fileID: 1991974951848173822, guid: e0faf6f2bb651394c85d5b394d29eaa9, type: 3}
   stack: 64
   isPlacable: 0
   isConsumable: 0

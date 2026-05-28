@@ -3,7 +3,7 @@ using Player;
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace Items // Maybe I should add this to items?
+namespace Items
 {
     public class DropComponent : MonoBehaviour
     {
@@ -22,6 +22,8 @@ namespace Items // Maybe I should add this to items?
         private float groundY;
         private float verticalVelocity;
         private bool hasLanded = false;
+
+        // Changed to private so it doesn't clutter the inspector
         public Transform player;
         private bool isBeingPickedUp;
         private float bobTimer = 0f;
@@ -30,6 +32,17 @@ namespace Items // Maybe I should add this to items?
         private void Start()
         {
             #region Start
+            // Automatically find the player by tag
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                player = playerObj.transform;
+            }
+            else
+            {
+                Debug.LogWarning("DropComponent couldn't find an object with the tag 'Player'!");
+            }
+
             transform.Rotate(Vector3.up, Random.Range(0, 20), Space.World);
             transform.position += Vector3.up * Random.Range(0, 0.3f);
             transform.position += Vector3.right * Random.Range(-0.3f, 0.3f);
@@ -71,7 +84,7 @@ namespace Items // Maybe I should add this to items?
             if (!hasLanded)
             {
                 verticalVelocity += gravity * Time.deltaTime;
-                transform.position += Vector3.up * verticalVelocity * Time.deltaTime;
+                transform.position += Vector3.up * (verticalVelocity * Time.deltaTime);
 
                 if (transform.position.y <= groundY)
                 {

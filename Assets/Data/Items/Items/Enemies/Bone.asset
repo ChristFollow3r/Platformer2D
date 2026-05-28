@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Bone
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Item
   name: Bone
-  sprite: {fileID: 8787373397984024183, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
+  sprite: {fileID: -5677393564151744987, guid: 8a66707bd280e604a93e93c9c28593fa, type: 3}
   stack: 32
   isPlacable: 0
   isConsumable: 0

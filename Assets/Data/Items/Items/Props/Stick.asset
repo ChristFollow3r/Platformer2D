@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Stick
   m_EditorClassIdentifier: 
   name: Stick
-  sprite: {fileID: -7653653505164971319, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
+  sprite: {fileID: 3323392270143186949, guid: 27be2008d815a644eb127d3b7cb7ab79, type: 3}
   stack: 64
   isPlacable: 0
   isConsumable: 0

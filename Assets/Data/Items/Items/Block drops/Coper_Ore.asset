@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Coper_Ore
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Coper ore
-  sprite: {fileID: -3738743797596375036, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
+  sprite: {fileID: -7358370921102099989, guid: ac1d174f88d52db4aaae557b0738ac44, type: 3}
   stack: 32
   isPlacable: 0
   isConsumable: 0

@@ -54,10 +54,8 @@ namespace Sounds.Ambience
             surfaceMusicSource.loop = false;
             caveMusicSource.loop = false;
 
-            // Determine starting state
             isPlayerInCave = parallaxManager != null && parallaxManager.CurrentSurfaceAlpha < 0.5f;
 
-            // Snap the mixer to the correct starting state immediately (0 seconds transition)
             if (isPlayerInCave) caveActiveSnapshot.TransitionTo(0f);
             else surfaceActiveSnapshot.TransitionTo(0f);
 
@@ -73,7 +71,6 @@ namespace Sounds.Ambience
                 surfaceAlpha = parallaxManager.CurrentSurfaceAlpha;
                 Debug.Log($"Surface Alpha: {surfaceAlpha}");
 
-                // Detect biome threshold crossing
                 bool currentlyInCave = surfaceAlpha < 0.5f;
                 if (currentlyInCave != isPlayerInCave)
                 {
@@ -82,7 +79,6 @@ namespace Sounds.Ambience
                 }
             }
 
-            // Ambient volumes are still tied to the script/parallax
             if (dayNightCycle != null)
             {
                 float time = dayNightCycle.CurrentTime;
@@ -100,7 +96,6 @@ namespace Sounds.Ambience
         {
             if (activeMusicRoutine != null) StopCoroutine(activeMusicRoutine);
 
-            // Let the Audio Mixer handle the beautiful crossfade natively
             if (isPlayerInCave)
             {
                 caveActiveSnapshot.TransitionTo(biomeTransitionDuration);
@@ -143,16 +138,14 @@ namespace Sounds.Ambience
                 else lastCaveClip = nextClip;
 
                 source.clip = nextClip;
-                source.volume = 1f; // Always play at max local volume, the Mixer limits the real output
+                source.volume = 1f;
                 source.Play();
 
-                // Wait until the track nears its end
                 while (source.isPlaying && (source.clip.length - source.time) > trackEndFadeDuration)
                 {
                     yield return null;
                 }
 
-                // Smoothly fade out the individual track before it cuts off
                 if (source.isPlaying)
                 {
                     yield return StartCoroutine(FadeTrackEnd(source, trackEndFadeDuration));

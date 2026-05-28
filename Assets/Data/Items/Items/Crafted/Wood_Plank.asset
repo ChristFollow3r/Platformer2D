@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wood_Plank
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Wood Plank
-  sprite: {fileID: -5926356717960850326, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
+  sprite: {fileID: -192899844829211264, guid: 1c6d44a6473ed8748a7630ce8bf04d22, type: 3}
   stack: 64
   isPlacable: 0
   isConsumable: 0

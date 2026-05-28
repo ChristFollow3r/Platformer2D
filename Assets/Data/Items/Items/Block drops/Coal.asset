@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Coal
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Coal
-  sprite: {fileID: 5948929597003177520, guid: 36a4b62afefc52246b48a12b48d55fa2, type: 3}
+  sprite: {fileID: 7730272341617240227, guid: 47b821e2a586ea041a483559b8f81c20, type: 3}
   stack: 32
   isPlacable: 0
   isConsumable: 0
