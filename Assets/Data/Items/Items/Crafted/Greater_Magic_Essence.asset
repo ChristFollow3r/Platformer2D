@@ -10,10 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: Bone
-  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Item
-  name: Bone
-  sprite: {fileID: 4056058344551517612, guid: 36edff42924d5f3499ee1d722d1d2eca, type: 3}
-  stack: 64
-  isEquipment: 0
+  m_Name: Greater_Magic_Essence
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
+  name: Greater Magic Essence
+  sprite: {fileID: -7807029881295659954, guid: fd341fbd23ae1eb4f85e573b1d4b4d29, type: 3}
+  stack: 16
+  isPlacable: 0
+  isConsumable: 0
+  isFuel: 0
   equipmentType: 0
+  blockType: 0
+  hardness: 0
+  fuelDuration: 0
+  modData: {fileID: 0}
+  overlayType: 0

@@ -10,8 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: String
-  m_EditorClassIdentifier: 
-  name: String
-  sprite: {fileID: -839063520895100450, guid: 6f2110cff3d308f4eb5c4804774e5672, type: 3}
-  stack: 64
+  m_Name: Feather
+  m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
+  name: Feather
+  sprite: {fileID: -7926877646362325173, guid: 1beb982342caeba4aaf290d93f84e64e, type: 3}
+  stack: 32
+  isPlacable: 0
+  isConsumable: 0
+  isFuel: 0
+  equipmentType: 0
+  blockType: 0
+  hardness: 0
+  fuelDuration: 0
+  modData: {fileID: 0}
+  overlayType: 0
