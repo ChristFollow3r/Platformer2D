@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
+  m_Name: DarkStone
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
+  result: {fileID: 11400000, guid: c6e592467daa76543b9290c9f99126f2, type: 2}
+  amount: 1
+  gridSize: 3
+  ingredients:
+  - {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
+  - {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
+  - {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
+  - {fileID: 11400000, guid: 338742da0c613ac4d8c4b4ff4412118f, type: 2}
+  - {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
+  - {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
+  - {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}

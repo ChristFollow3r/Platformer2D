@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
-  m_Name: String
-  m_EditorClassIdentifier: 
-  result: {fileID: 11400000, guid: cb50e3636ad34cf439709535d7b1abe5, type: 2}
-  amount: 4
-  gridSize: 2
+  m_Name: Bottle
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
+  result: {fileID: 11400000, guid: 3de6e70d6b9dc91469b783468ca400be, type: 2}
+  amount: 1
+  gridSize: 3
   ingredients:
   - {fileID: 0}
-  - {fileID: 11400000, guid: 23c6e5442a86e584397b0e5e913a4fb7, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 11400000, guid: 23c6e5442a86e584397b0e5e913a4fb7, type: 2}
-  - {fileID: 11400000, guid: 23c6e5442a86e584397b0e5e913a4fb7, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 11400000, guid: 053457a2ebb336a44acb907ab111475c, type: 2}
   - {fileID: 0}
+  - {fileID: 11400000, guid: 053457a2ebb336a44acb907ab111475c, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 053457a2ebb336a44acb907ab111475c, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

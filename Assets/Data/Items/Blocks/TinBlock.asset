@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: StoneMod
-  m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: StoneMod
-  sprite: {fileID: -5158033904099997891, guid: e640e2ea9edd0f44396516e420e0fea0, type: 3}
-  stack: 1
-  isPlacable: 0
-  isConsumable: 1
+  m_Name: TinBlock
+  m_EditorClassIdentifier: 
+  name: Tin
+  sprite: {fileID: -1462849456419314474, guid: 1fddccb46397e5343a696908cdebe207, type: 3}
+  stack: 64
+  isPlacable: 1
+  isConsumable: 0
   isFuel: 0
   equipmentType: 0
-  blockType: 0
-  hardness: 0
+  blockType: 13
+  hardness: 3
   fuelDuration: 0
-  modData: {fileID: 11400000, guid: 8239e5084adfa2146a37e220ef56c1bf, type: 2}
+  modData: {fileID: 0}
   overlayType: 0

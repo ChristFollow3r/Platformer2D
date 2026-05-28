@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
-  m_Name: String
-  m_EditorClassIdentifier: 
-  result: {fileID: 11400000, guid: cb50e3636ad34cf439709535d7b1abe5, type: 2}
-  amount: 4
+  m_Name: StoneUpgrade
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
+  result: {fileID: 11400000, guid: 2c0f86eac83f72d44b61f9f1fab33aec, type: 2}
+  amount: 1
   gridSize: 2
   ingredients:
+  - {fileID: 11400000, guid: 5c0dfc1fd9a80074cb4c7857b10efef5, type: 2}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}
   - {fileID: 0}
-  - {fileID: 11400000, guid: 23c6e5442a86e584397b0e5e913a4fb7, type: 2}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 11400000, guid: 23c6e5442a86e584397b0e5e913a4fb7, type: 2}
-  - {fileID: 11400000, guid: 23c6e5442a86e584397b0e5e913a4fb7, type: 2}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

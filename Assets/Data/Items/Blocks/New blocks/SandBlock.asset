@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: StoneMod
+  m_Name: SandBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: StoneMod
-  sprite: {fileID: -5158033904099997891, guid: e640e2ea9edd0f44396516e420e0fea0, type: 3}
-  stack: 1
-  isPlacable: 0
-  isConsumable: 1
+  name: Sand
+  sprite: {fileID: 8610565575992400378, guid: 3b0bd063dd78cd645abc12917cf1c5f8, type: 3}
+  stack: 64
+  isPlacable: 1
+  isConsumable: 0
   isFuel: 0
   equipmentType: 0
-  blockType: 0
-  hardness: 0
+  blockType: 6
+  hardness: 3
   fuelDuration: 0
-  modData: {fileID: 11400000, guid: 8239e5084adfa2146a37e220ef56c1bf, type: 2}
+  modData: {fileID: 0}
   overlayType: 0

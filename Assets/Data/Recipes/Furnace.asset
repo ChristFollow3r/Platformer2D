@@ -14,21 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
   result: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
   amount: 1
-  gridSize: 2
+  gridSize: 4
   ingredients:
-  - {fileID: 11400000, guid: cf1e9033b228f3b4ab6708875b637f27, type: 2}
-  - {fileID: 11400000, guid: cf1e9033b228f3b4ab6708875b637f27, type: 2}
+  - {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}
+  - {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}
+  - {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+  - {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}
+  - {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 11400000, guid: cf1e9033b228f3b4ab6708875b637f27, type: 2}
-  - {fileID: 11400000, guid: cf1e9033b228f3b4ab6708875b637f27, type: 2}
+  - {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 19903c1e1d80b034f8efc35fb24fa788, type: 2}

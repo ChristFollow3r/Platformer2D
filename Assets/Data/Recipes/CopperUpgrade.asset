@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
+  m_Name: CopperUpgrade
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
+  result: {fileID: 11400000, guid: e69f76e0476ce3e4d8d3c2d9def6be10, type: 2}
+  amount: 1
+  gridSize: 4
+  ingredients:
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+  - {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+  - {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
+  - {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
+  - {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+  - {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+  - {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
+  - {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
+  - {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+  - {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+  - {fileID: 0}

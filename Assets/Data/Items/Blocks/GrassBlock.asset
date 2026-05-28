@@ -10,17 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
-  m_Name: StoneMod
-  m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: StoneMod
-  sprite: {fileID: -5158033904099997891, guid: e640e2ea9edd0f44396516e420e0fea0, type: 3}
-  stack: 1
-  isPlacable: 0
-  isConsumable: 1
-  isFuel: 0
+  m_Name: GrassBlock
+  m_EditorClassIdentifier: 
+  name: Grass
+  sprite: {fileID: -1347532211411968617, guid: f6dccec5d156e2e41b73e6b03c03e9c5, type: 3}
+  stack: 64
+  isConsumable: 0
+  isEquipment: 0
   equipmentType: 0
-  blockType: 0
-  hardness: 0
+  isPlacable: 1
+  blockType: 3
+  hardness: 1
+  isFuel: 0
   fuelDuration: 0
-  modData: {fileID: 11400000, guid: 8239e5084adfa2146a37e220ef56c1bf, type: 2}
-  overlayType: 0

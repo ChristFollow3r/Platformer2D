@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
+  m_Name: UpgradeDuration
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
+  result: {fileID: 11400000, guid: cd9d4dadef1d0f143893d6d9a97429b3, type: 2}
+  amount: 1
+  gridSize: 3
+  ingredients:
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 11400000, guid: e3e4633ccdb9c5744a35bec228687bfa, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: e3e4633ccdb9c5744a35bec228687bfa, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 11400000, guid: e3e4633ccdb9c5744a35bec228687bfa, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 3de6e70d6b9dc91469b783468ca400be, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
