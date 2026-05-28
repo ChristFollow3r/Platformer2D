@@ -327,7 +327,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 800
-  deathDrop: {fileID: 0}
+  deathDrops:
+  - prefab: {fileID: 0}
+    minAmount: 0
+    maxAmount: 0
+    dropChance: 0
+  - prefab: {fileID: 930996324388520816, guid: 1c17e09124b55fb499dc9077866dd7d1, type: 3}
+    minAmount: 0
+    maxAmount: 0
+    dropChance: 0
 --- !u!114 &3937034909001159407
 MonoBehaviour:
   m_ObjectHideFlags: 0

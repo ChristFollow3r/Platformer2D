@@ -4,10 +4,22 @@ using Random = UnityEngine.Random;
 
 namespace Shared
 {
+    // Struct to hold all data related to a specific drop
+    [Serializable]
+    public struct DropItem
+    {
+        public GameObject prefab;
+        public int minAmount;
+        public int maxAmount;
+        [Range(0f, 100f)] public float dropChance; // Percentage chance to drop
+    }
+
     public class Health : MonoBehaviour
     {
         [SerializeField] private int maxHealth;
-        [SerializeField] private GameObject deathDrop;
+
+        // Replaced the single GameObject with an array of our new struct
+        [SerializeField] private DropItem[] deathDrops;
 
         private int currentHealth;
 
@@ -43,16 +55,28 @@ namespace Shared
 
         public void SpawnDeathDrops()
         {
-            int randomAmount = Random.Range(2, 6);
-            for (int i = 0 ; i < randomAmount; i++)
+            // Iterate through every possible item in your drop table
+            foreach (var dropItem in deathDrops)
             {
-                var drop = Instantiate(deathDrop, transform.position, transform.rotation);
-                if (drop.TryGetComponent(out Rigidbody2D rb))
+                // Roll the dice to see if this specific item should drop
+                if (Random.Range(0f, 100f) <= dropItem.dropChance)
                 {
-                    rb.AddForce(new Vector2(Random.Range(-5f, 5f), Random.Range(2f, 7f)), ForceMode2D.Impulse);
-                }
+                    // Calculate how many to spawn. (+1 because int Random.Range is exclusive at the max bound)
+                    int randomAmount = Random.Range(dropItem.minAmount, dropItem.maxAmount + 1);
 
-                Destroy(drop, 180f);
+                    for (int i = 0; i < randomAmount; i++)
+                    {
+                        var drop = Instantiate(dropItem.prefab, transform.position, transform.rotation);
+
+                        if (drop.TryGetComponent(out Rigidbody2D rb))
+                        {
+                            // Retained your physics-based movement so the drops scatter nicely
+                            rb.AddForce(new Vector2(Random.Range(-5f, 5f), Random.Range(2f, 7f)), ForceMode2D.Impulse);
+                        }
+
+                        Destroy(drop, 180f);
+                    }
+                }
             }
         }
 

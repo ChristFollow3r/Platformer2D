@@ -318,7 +318,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 120
-  deathDrop: {fileID: 5856354742027562866, guid: 4d9127b2c643c6945b79f73433a7105c, type: 3}
+  deathDrops:
+  - prefab: {fileID: 930996324388520816, guid: 10ce9acefc5676845a4cf76ab142521a, type: 3}
+    minAmount: 0
+    maxAmount: 1
+    dropChance: 0
+  - prefab: {fileID: 930996324388520816, guid: 1c17e09124b55fb499dc9077866dd7d1, type: 3}
+    minAmount: 1
+    maxAmount: 2
+    dropChance: 40
 --- !u!50 &4443844945724580181
 Rigidbody2D:
   serializedVersion: 5

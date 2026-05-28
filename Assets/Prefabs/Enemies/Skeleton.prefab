@@ -230,7 +230,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 40
-  deathDrop: {fileID: 1173184710220314676, guid: 72d6062399e1ef14ab98406b24cf8ef9, type: 3}
+  deathDrops:
+  - prefab: {fileID: 930996324388520816, guid: d7d05ee82a16436438901b9c342913b0, type: 3}
+    minAmount: 1
+    maxAmount: 3
+    dropChance: 60
+  - prefab: {fileID: 930996324388520816, guid: 1c17e09124b55fb499dc9077866dd7d1, type: 3}
+    minAmount: 0
+    maxAmount: 1
+    dropChance: 16
 --- !u!82 &1530604031615371806
 AudioSource:
   m_ObjectHideFlags: 0
