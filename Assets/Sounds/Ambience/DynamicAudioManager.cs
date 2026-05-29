@@ -69,7 +69,6 @@ namespace Sounds.Ambience
             if (parallaxManager != null)
             {
                 surfaceAlpha = parallaxManager.CurrentSurfaceAlpha;
-                Debug.Log($"Surface Alpha: {surfaceAlpha}");
 
                 bool currentlyInCave = surfaceAlpha < 0.5f;
                 if (currentlyInCave != isPlayerInCave)

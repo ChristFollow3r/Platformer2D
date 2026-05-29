@@ -51,15 +51,32 @@ namespace Items.Utils
         public static ItemStack EvaluateCraft(List<ItemStack> items, int gridSize)
         {
             #region EvaluateCraft
+
+            if (items == null) return null;
+
             foreach (Recipe recipe in All)
             {
+                if (recipe == null) continue;
                 if (recipe.gridSize > gridSize) continue;
+
                 int maxOffset = gridSize - recipe.gridSize;
 
                 for (int rowOffset = 0; rowOffset <= maxOffset; rowOffset++)
+                {
                     for (int colOffset = 0; colOffset <= maxOffset; colOffset++)
+                    {
                         if (MatchesAtOffset(items, gridSize, recipe, rowOffset, colOffset))
+                        {
+                            if (recipe.result == null)
+                            {
+                                Debug.LogWarning($"[CraftingUtils] Recipe found, but its 'result' is missing!");
+                                return null;
+                            }
+
                             return new ItemStack(recipe.result) { amount = (short)recipe.amount };
+                        }
+                    }
+                }
             }
 
             return null;

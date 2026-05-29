@@ -1,10 +1,10 @@
 using Data;
 using Player;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Items
 {
+    [RequireComponent(typeof(Rigidbody2D))]
     public class DropComponent : MonoBehaviour
     {
         [SerializeField] private AudioClip pickupSound;
@@ -14,32 +14,24 @@ namespace Items
         [SerializeField] private ItemData itemData;
 
         private readonly float pickUpRadius = 0.4f;
-        private readonly float speed = 10f;
+        private readonly float magnetSpeed = 15f;
 
-        [SerializeField] private float bobHeight;
-        [SerializeField] private float bobSpeed;
-        [SerializeField] private float rotateSpeed;
-        [SerializeField] private float initialPopForce;
-        [SerializeField] private float gravity = -9.8f;
+        [SerializeField] private float rotateSpeed = 100f;
+        [SerializeField] private float popForceUp = 5f;
+        [SerializeField] private float popForceSide = 2f;
 
-        private float groundY;
-        private float verticalVelocity;
-        private bool hasLanded = false;
-
+        private Rigidbody2D rb;
         public Transform player;
         private bool isBeingPickedUp;
-        private float bobTimer = 0f;
 
         private void Start()
         {
-            #region Start
+            rb = GetComponent<Rigidbody2D>();
+
             if (player == null)
             {
                 GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-                if (playerObj != null)
-                {
-                    player = playerObj.transform;
-                }
+                if (playerObj != null) player = playerObj.transform;
             }
 
             if (itemData == null)
@@ -47,80 +39,59 @@ namespace Items
                 SendMessage("GetItemData", SendMessageOptions.DontRequireReceiver);
             }
 
-            transform.Rotate(Vector3.up, Random.Range(0, 20), Space.World);
-            transform.position += Vector3.up * Random.Range(0, 0.3f);
-            transform.position += Vector3.right * Random.Range(-0.3f, 0.3f);
-            verticalVelocity = initialPopForce;
-            groundY = transform.position.y;
-            #endregion
+            // Apply a real physics impulse to make the item "pop" out
+            float randomX = Random.Range(-popForceSide, popForceSide);
+            rb.AddForce(new Vector2(randomX, popForceUp), ForceMode2D.Impulse);
         }
 
         private void Update()
         {
-            #region Update
-            if (Inventory.Singleton == null) return;
-            if (player == null) return;
+            if (Inventory.Singleton == null || player == null) return;
 
-            if (itemData == null)
+            // Visual spinning effect
+            if (!isBeingPickedUp)
             {
-                Bop();
-                return;
+                transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
             }
 
-            if (!isBeingPickedUp || !Inventory.Singleton.Fits(itemData))
+            if (itemData == null) return;
+
+            // Check if player is close enough to suck the item in
+            if (!isBeingPickedUp && Inventory.Singleton.Fits(itemData))
             {
-                Bop();
                 float distance = Vector2.Distance(player.position, transform.position);
-                if (distance <= 1.5) isBeingPickedUp = true;
-                return;
-            }
-
-            transform.position = Vector2.MoveTowards(transform.position, player.position, speed * Time.deltaTime);
-
-            if (Vector2.Distance(transform.position, player.position) <= pickUpRadius)
-            {
-                AudioSource.PlayClipAtPoint(pickupSound, transform.position);
-                collider.enabled = false;
-                Inventory.Singleton.Add(new ItemStack(itemData) { amount = 1 });
-                Destroy(gameObject);
-            }
-            #endregion
-        }
-
-        private void Bop()
-        {
-            transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
-
-            if (!hasLanded)
-            {
-                verticalVelocity += gravity * Time.deltaTime;
-                transform.position += Vector3.up * (verticalVelocity * Time.deltaTime);
-
-                if (transform.position.y <= groundY)
+                if (distance <= 1.5f)
                 {
-                    Vector3 pos = transform.position;
-                    pos.y = groundY;
-                    transform.position = pos;
-                    hasLanded = true;
+                    isBeingPickedUp = true;
+
+                    // Turn off physics so the item can fly through walls/blocks directly to the player
+                    rb.isKinematic = true;
+                    rb.linearVelocity = Vector2.zero;
+                    collider.enabled = false;
                 }
             }
-            else
+
+            // Magnet logic: Fly to player
+            if (isBeingPickedUp)
             {
-                bobTimer += Time.deltaTime * bobSpeed;
-                float newY = groundY + Mathf.Sin(bobTimer) * bobHeight;
-                transform.position = new Vector3(transform.position.x, newY, transform.position.z);
+                transform.position = Vector2.MoveTowards(transform.position, player.position, magnetSpeed * Time.deltaTime);
+
+                if (Vector2.Distance(transform.position, player.position) <= pickUpRadius)
+                {
+                    AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+                    Inventory.Singleton.Add(new ItemStack(itemData) { amount = 1 });
+                    Destroy(gameObject);
+                }
             }
         }
 
         public void SetItem(ItemData itemData)
         {
-            #region SetItem
             this.itemData = itemData;
             if (spriteRenderer != null && itemData != null)
             {
                 spriteRenderer.sprite = itemData.sprite;
             }
-            #endregion
         }
     }
 }
