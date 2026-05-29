@@ -1,8 +1,8 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/UI/Pages/HUD/HUDStyles.uss?fileID=7433441132597879392&amp;guid=5d4cdc3c9a1de4e49a37d908dda39e61&amp;type=3#HUDStyles"/>
-    <Style src="project://database/Assets/UI/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
+    <Style src="project://database/Assets/Resources/UI/Components/HUD/HUDStyles.uss?fileID=7433441132597879392&amp;guid=5d4cdc3c9a1de4e49a37d908dda39e61&amp;type=3#HUDStyles"/>
+    <Style src="project://database/Assets/Resources/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
     <ui:VisualElement name="root" style="flex-grow: 1;">
-        <ui:VisualElement name="hotbar-holder" class="hotbar-holder">
-        </ui:VisualElement>
+        <ui:VisualElement name="hotbar-holder" class="hotbar-holder"/>
+        <ui:Button text="Menu" name="OpenMenu" parse-escape-sequences="false" style="position: absolute; top: 10px; right: 10px; border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-color: rgb(135, 209, 207); background-image: url(&quot;project://database/Assets/Sprites/Old/Other_Sprites/UI/UI_Flat_Frame03a.png?fileID=2800000&amp;guid=6995b460bed5fb0489dffe83c0c35df7&amp;type=3#UI_Flat_Frame03a&quot;); -unity-font-definition: url(&quot;project://database/Assets/Fonts/Minecraft.ttf?fileID=12800000&amp;guid=21cd05c10dd12594d9e414389cc18e6d&amp;type=3#Minecraft&quot;); font-size: 30px;"/>
     </ui:VisualElement>
 </ui:UXML>

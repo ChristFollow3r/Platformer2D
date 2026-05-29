@@ -30,9 +30,15 @@ namespace Player
 
 
         #region Data
+        [Header("Menu Elements")]
+        [SerializeField] private UIDocument pauseMenu;
+        public bool isMenuOpen = false;
+
         [Header("Elements")]
         [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
+
+
         private VisualElement overlayRoot;
         private VisualElement hudRoot;
 
@@ -93,7 +99,37 @@ namespace Player
             Hotbar hudHotbar = new Hotbar { isMain = true };
             hud.rootVisualElement.Q("hotbar-holder").Add(hudHotbar);
             CreateOverlay(ulong.MinValue, OverlayType.Inventory);
+
+            // MENU
+
+            pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
+
+            Button openMenuBtn = hud.rootVisualElement.Q<Button>("OpenMenu");
+            if (openMenuBtn != null) openMenuBtn.clicked += ToggleMenu;
+
+            var menuRoot = pauseMenu.rootVisualElement;
+
+            menuRoot.Q<Button>("Settings").clicked += () => Debug.Log("Settings");
+            menuRoot.Q<Button>("Recipes").clicked += () => Debug.Log("Recipes");
+            menuRoot.Q<Button>("Save").clicked += () => Debug.Log("Save");
+            menuRoot.Q<Button>("Exit").clicked += () => Application.Quit();
             #endregion
+        }
+
+        public void ToggleMenu()
+        {
+            isMenuOpen = !isMenuOpen;
+
+            if (isMenuOpen)
+            {
+                pauseMenu.rootVisualElement.style.display = DisplayStyle.Flex;
+                hud.rootVisualElement.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
+                hud.rootVisualElement.style.display = DisplayStyle.Flex;
+            }
         }
 
         private void CheckOverlay()
