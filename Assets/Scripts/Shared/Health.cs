@@ -71,7 +71,7 @@ namespace Shared
 
                         if (drop.TryGetComponent(out Rigidbody2D rb))
                         {
-                            rb.AddForce(new Vector2(Random.Range(-5f, 5f), Random.Range(2f, 7f)), ForceMode2D.Impulse);
+                            rb.AddForce(new Vector2(Random.Range(-3f, 3f), Random.Range(2f, 4f)), ForceMode2D.Impulse);
                         }
 
                         Destroy(drop, 180f);
