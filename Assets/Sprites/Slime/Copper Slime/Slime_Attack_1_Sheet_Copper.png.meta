@@ -1,0 +1,403 @@
+fileFormatVersion: 2
+guid: 3da5b63b0cae95842ad49a23a88d617c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4174625296902920525
+    second: Slime_Attack_1_Sheet_Copper_0
+  - first:
+      213: 553888964545071847
+    second: Slime_Attack_1_Sheet_Copper_1
+  - first:
+      213: 1322751997856918929
+    second: Slime_Attack_1_Sheet_Copper_2
+  - first:
+      213: 547318236708428230
+    second: Slime_Attack_1_Sheet_Copper_3
+  - first:
+      213: -738838057977053281
+    second: Slime_Attack_1_Sheet_Copper_4
+  - first:
+      213: -7231170615378040943
+    second: Slime_Attack_1_Sheet_Copper_5
+  - first:
+      213: 4267580478229891438
+    second: Slime_Attack_1_Sheet_Copper_6
+  - first:
+      213: 9097287543676770788
+    second: Slime_Attack_1_Sheet_Copper_7
+  - first:
+      213: 7903868505892304640
+    second: Slime_Attack_1_Sheet_Copper_8
+  - first:
+      213: 3209257087376783340
+    second: Slime_Attack_1_Sheet_Copper_9
+  - first:
+      213: -7992927497202896667
+    second: Slime_Attack_1_Sheet_Copper_10
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_0
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b6edbb1960c016c0800000000000000
+      internalID: -4174625296902920525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_1
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 0
+        width: 31
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7eac7b0241fcfa700800000000000000
+      internalID: 553888964545071847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_2
+      rect:
+        serializedVersion: 2
+        x: 176
+        y: 0
+        width: 36
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19d233e0feb5b5210800000000000000
+      internalID: 1322751997856918929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_3
+      rect:
+        serializedVersion: 2
+        x: 254
+        y: 0
+        width: 59
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6c959165907789700800000000000000
+      internalID: 547318236708428230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_4
+      rect:
+        serializedVersion: 2
+        x: 286
+        y: 13
+        width: 22
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f9ffcb763be1fb5f0800000000000000
+      internalID: -738838057977053281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_5
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 0
+        width: 27
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 197262043a8b5ab90800000000000000
+      internalID: -7231170615378040943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_6
+      rect:
+        serializedVersion: 2
+        x: 377
+        y: 0
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e69c84795dd793b30800000000000000
+      internalID: 4267580478229891438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_7
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 0
+        width: 48
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e9907c42de004e70800000000000000
+      internalID: 9097287543676770788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_8
+      rect:
+        serializedVersion: 2
+        x: 506
+        y: 0
+        width: 27
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 007bb15978e20bd60800000000000000
+      internalID: 7903868505892304640
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_9
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 0
+        width: 28
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce77ffd4152998c20800000000000000
+      internalID: 3209257087376783340
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Attack_1_Sheet_Copper_10
+      rect:
+        serializedVersion: 2
+        x: 669
+        y: 0
+        width: 23
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e0f4c52aca631190800000000000000
+      internalID: -7992927497202896667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Slime_Attack_1_Sheet_Copper_0: -4174625296902920525
+      Slime_Attack_1_Sheet_Copper_1: 553888964545071847
+      Slime_Attack_1_Sheet_Copper_10: -7992927497202896667
+      Slime_Attack_1_Sheet_Copper_2: 1322751997856918929
+      Slime_Attack_1_Sheet_Copper_3: 547318236708428230
+      Slime_Attack_1_Sheet_Copper_4: -738838057977053281
+      Slime_Attack_1_Sheet_Copper_5: -7231170615378040943
+      Slime_Attack_1_Sheet_Copper_6: 4267580478229891438
+      Slime_Attack_1_Sheet_Copper_7: 9097287543676770788
+      Slime_Attack_1_Sheet_Copper_8: 7903868505892304640
+      Slime_Attack_1_Sheet_Copper_9: 3209257087376783340
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

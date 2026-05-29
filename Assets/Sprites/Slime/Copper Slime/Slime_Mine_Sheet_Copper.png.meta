@@ -1,0 +1,481 @@
+fileFormatVersion: 2
+guid: be181004ad590d041bc87ef0408f91e1
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7496863274871538125
+    second: Slime_Mine_Sheet_Copper_0
+  - first:
+      213: -2435602630113708908
+    second: Slime_Mine_Sheet_Copper_1
+  - first:
+      213: -8683456221766476629
+    second: Slime_Mine_Sheet_Copper_2
+  - first:
+      213: -5936177292039950715
+    second: Slime_Mine_Sheet_Copper_3
+  - first:
+      213: 4765841686348551893
+    second: Slime_Mine_Sheet_Copper_4
+  - first:
+      213: 686384029335395884
+    second: Slime_Mine_Sheet_Copper_5
+  - first:
+      213: -7094936814533548510
+    second: Slime_Mine_Sheet_Copper_6
+  - first:
+      213: -3394023923503738504
+    second: Slime_Mine_Sheet_Copper_7
+  - first:
+      213: -990076979484878307
+    second: Slime_Mine_Sheet_Copper_8
+  - first:
+      213: 1842287297683767822
+    second: Slime_Mine_Sheet_Copper_9
+  - first:
+      213: -3108110061848508130
+    second: Slime_Mine_Sheet_Copper_10
+  - first:
+      213: -9209734826554709456
+    second: Slime_Mine_Sheet_Copper_11
+  - first:
+      213: -5895545103937236260
+    second: Slime_Mine_Sheet_Copper_12
+  - first:
+      213: -3688184460278478433
+    second: Slime_Mine_Sheet_Copper_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_0
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 0
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33e3c93529ac5f790800000000000000
+      internalID: -7496863274871538125
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_1
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 0
+        width: 25
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 494b012ff40033ed0800000000000000
+      internalID: -2435602630113708908
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_2
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 0
+        width: 31
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bac14feb29a2e7780800000000000000
+      internalID: -8683456221766476629
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_3
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 0
+        width: 37
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58ee73044367e9da0800000000000000
+      internalID: -5936177292039950715
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_4
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 17
+        width: 14
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d6dd8263cba32240800000000000000
+      internalID: 4765841686348551893
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_5
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 0
+        width: 24
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2e990853a6868900800000000000000
+      internalID: 686384029335395884
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_6
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 0
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 226e2e9ce88b98d90800000000000000
+      internalID: -7094936814533548510
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_7
+      rect:
+        serializedVersion: 2
+        x: 505
+        y: 0
+        width: 29
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 871d160593106e0d0800000000000000
+      internalID: -3394023923503738504
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_8
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 0
+        width: 29
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1a13899b3a8242f0800000000000000
+      internalID: -990076979484878307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_9
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e02c7a0598e119910800000000000000
+      internalID: 1842287297683767822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_10
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 0
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e19c3b0cd56cdd4d0800000000000000
+      internalID: -3108110061848508130
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_11
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 5
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03aa9a378f2703080800000000000000
+      internalID: -9209734826554709456
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_12
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 0
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd21782c6f0de2ea0800000000000000
+      internalID: -5895545103937236260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Copper_13
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 1
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f994cf236cfe0dcc0800000000000000
+      internalID: -3688184460278478433
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Slime_Mine_Sheet_Copper_0: -7496863274871538125
+      Slime_Mine_Sheet_Copper_1: -2435602630113708908
+      Slime_Mine_Sheet_Copper_10: -3108110061848508130
+      Slime_Mine_Sheet_Copper_11: -9209734826554709456
+      Slime_Mine_Sheet_Copper_12: -5895545103937236260
+      Slime_Mine_Sheet_Copper_13: -3688184460278478433
+      Slime_Mine_Sheet_Copper_2: -8683456221766476629
+      Slime_Mine_Sheet_Copper_3: -5936177292039950715
+      Slime_Mine_Sheet_Copper_4: 4765841686348551893
+      Slime_Mine_Sheet_Copper_5: 686384029335395884
+      Slime_Mine_Sheet_Copper_6: -7094936814533548510
+      Slime_Mine_Sheet_Copper_7: -3394023923503738504
+      Slime_Mine_Sheet_Copper_8: -990076979484878307
+      Slime_Mine_Sheet_Copper_9: 1842287297683767822
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

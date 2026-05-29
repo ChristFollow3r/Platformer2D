@@ -1,0 +1,585 @@
+fileFormatVersion: 2
+guid: c28cf6866bb43394e8e600770321aeab
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2990403041308479569
+    second: Slime_Jump_Cycle_Sheet_Bronze_0
+  - first:
+      213: 4242525901166877672
+    second: Slime_Jump_Cycle_Sheet_Bronze_1
+  - first:
+      213: 7859326133713619557
+    second: Slime_Jump_Cycle_Sheet_Bronze_2
+  - first:
+      213: 8940754940247064737
+    second: Slime_Jump_Cycle_Sheet_Bronze_3
+  - first:
+      213: 2855699134956553412
+    second: Slime_Jump_Cycle_Sheet_Bronze_4
+  - first:
+      213: 2422599941764454790
+    second: Slime_Jump_Cycle_Sheet_Bronze_5
+  - first:
+      213: -794821851629903791
+    second: Slime_Jump_Cycle_Sheet_Bronze_6
+  - first:
+      213: 4468124530956299043
+    second: Slime_Jump_Cycle_Sheet_Bronze_7
+  - first:
+      213: -4384415172464103611
+    second: Slime_Jump_Cycle_Sheet_Bronze_8
+  - first:
+      213: -4800035841341941822
+    second: Slime_Jump_Cycle_Sheet_Bronze_9
+  - first:
+      213: 5701317402285924804
+    second: Slime_Jump_Cycle_Sheet_Bronze_10
+  - first:
+      213: 8485810355871060440
+    second: Slime_Jump_Cycle_Sheet_Bronze_11
+  - first:
+      213: 8132124454277551240
+    second: Slime_Jump_Cycle_Sheet_Bronze_12
+  - first:
+      213: 7984700181652360465
+    second: Slime_Jump_Cycle_Sheet_Bronze_13
+  - first:
+      213: -6779186378512543827
+    second: Slime_Jump_Cycle_Sheet_Bronze_14
+  - first:
+      213: -313071838550259957
+    second: Slime_Jump_Cycle_Sheet_Bronze_15
+  - first:
+      213: -4469306519875531129
+    second: Slime_Jump_Cycle_Sheet_Bronze_16
+  - first:
+      213: -109786487240565529
+    second: Slime_Jump_Cycle_Sheet_Bronze_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_0
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: faf6f8b1744ff76d0800000000000000
+      internalID: -2990403041308479569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_1
+      rect:
+        serializedVersion: 2
+        x: 77
+        y: 0
+        width: 29
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8eb127944da70ea30800000000000000
+      internalID: 4242525901166877672
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_2
+      rect:
+        serializedVersion: 2
+        x: 139
+        y: 0
+        width: 33
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56ac1f56a7fe11d60800000000000000
+      internalID: 7859326133713619557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_3
+      rect:
+        serializedVersion: 2
+        x: 206
+        y: 0
+        width: 27
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a0ce3d7f31f31c70800000000000000
+      internalID: 8940754940247064737
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_4
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 0
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c4c97cab3b71a720800000000000000
+      internalID: 2855699134956553412
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_5
+      rect:
+        serializedVersion: 2
+        x: 342
+        y: 0
+        width: 12
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68990c1cfcdce9120800000000000000
+      internalID: 2422599941764454790
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_6
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 0
+        width: 17
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 150a1e1bcb938f4f0800000000000000
+      internalID: -794821851629903791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_7
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 0
+        width: 20
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 32bebd77697f10e30800000000000000
+      internalID: 4468124530956299043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_8
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 0
+        width: 14
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54fa17951ad6723c0800000000000000
+      internalID: -4384415172464103611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_9
+      rect:
+        serializedVersion: 2
+        x: 595
+        y: 0
+        width: 19
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c79baf75d8d26db0800000000000000
+      internalID: -4800035841341941822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_10
+      rect:
+        serializedVersion: 2
+        x: 657
+        y: 0
+        width: 21
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4c1610378f52f1f40800000000000000
+      internalID: 5701317402285924804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_11
+      rect:
+        serializedVersion: 2
+        x: 721
+        y: 0
+        width: 21
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8d196051f87a3c570800000000000000
+      internalID: 8485810355871060440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_12
+      rect:
+        serializedVersion: 2
+        x: 786
+        y: 0
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8841b76fa1c1bd070800000000000000
+      internalID: 8132124454277551240
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_13
+      rect:
+        serializedVersion: 2
+        x: 848
+        y: 0
+        width: 25
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11dc26da28a5fce60800000000000000
+      internalID: 7984700181652360465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_14
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 0
+        width: 35
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dafc79a08ed7be1a0800000000000000
+      internalID: -6779186378512543827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_15
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 0
+        width: 40
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b07880252deb7abf0800000000000000
+      internalID: -313071838550259957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_16
+      rect:
+        serializedVersion: 2
+        x: 1035
+        y: 0
+        width: 31
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78e4b7a4665d9f1c0800000000000000
+      internalID: -4469306519875531129
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Jump_Cycle_Sheet_Bronze_17
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 0
+        width: 29
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ec53e285c5f97ef0800000000000000
+      internalID: -109786487240565529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Slime_Jump_Cycle_Sheet_Bronze_0: -2990403041308479569
+      Slime_Jump_Cycle_Sheet_Bronze_1: 4242525901166877672
+      Slime_Jump_Cycle_Sheet_Bronze_10: 5701317402285924804
+      Slime_Jump_Cycle_Sheet_Bronze_11: 8485810355871060440
+      Slime_Jump_Cycle_Sheet_Bronze_12: 8132124454277551240
+      Slime_Jump_Cycle_Sheet_Bronze_13: 7984700181652360465
+      Slime_Jump_Cycle_Sheet_Bronze_14: -6779186378512543827
+      Slime_Jump_Cycle_Sheet_Bronze_15: -313071838550259957
+      Slime_Jump_Cycle_Sheet_Bronze_16: -4469306519875531129
+      Slime_Jump_Cycle_Sheet_Bronze_17: -109786487240565529
+      Slime_Jump_Cycle_Sheet_Bronze_2: 7859326133713619557
+      Slime_Jump_Cycle_Sheet_Bronze_3: 8940754940247064737
+      Slime_Jump_Cycle_Sheet_Bronze_4: 2855699134956553412
+      Slime_Jump_Cycle_Sheet_Bronze_5: 2422599941764454790
+      Slime_Jump_Cycle_Sheet_Bronze_6: -794821851629903791
+      Slime_Jump_Cycle_Sheet_Bronze_7: 4468124530956299043
+      Slime_Jump_Cycle_Sheet_Bronze_8: -4384415172464103611
+      Slime_Jump_Cycle_Sheet_Bronze_9: -4800035841341941822
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

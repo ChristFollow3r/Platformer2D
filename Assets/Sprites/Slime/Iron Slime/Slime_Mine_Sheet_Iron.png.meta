@@ -1,0 +1,481 @@
+fileFormatVersion: 2
+guid: 7388a1ea6d200dd4b9ab70e5785a1faf
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4184400979550574386
+    second: Slime_Mine_Sheet_Iron_0
+  - first:
+      213: 8353653366866073509
+    second: Slime_Mine_Sheet_Iron_1
+  - first:
+      213: 1652051810477997517
+    second: Slime_Mine_Sheet_Iron_2
+  - first:
+      213: -5832118127341720327
+    second: Slime_Mine_Sheet_Iron_3
+  - first:
+      213: -4826614194303642752
+    second: Slime_Mine_Sheet_Iron_4
+  - first:
+      213: -7960497174384877139
+    second: Slime_Mine_Sheet_Iron_5
+  - first:
+      213: -6978582537298756579
+    second: Slime_Mine_Sheet_Iron_6
+  - first:
+      213: 6590724926394397120
+    second: Slime_Mine_Sheet_Iron_7
+  - first:
+      213: 1213971772067514335
+    second: Slime_Mine_Sheet_Iron_8
+  - first:
+      213: -8352190984445634466
+    second: Slime_Mine_Sheet_Iron_9
+  - first:
+      213: -7966716274472102605
+    second: Slime_Mine_Sheet_Iron_10
+  - first:
+      213: 5999162432436577779
+    second: Slime_Mine_Sheet_Iron_11
+  - first:
+      213: -2624541803628439076
+    second: Slime_Mine_Sheet_Iron_12
+  - first:
+      213: 6011768926491910184
+    second: Slime_Mine_Sheet_Iron_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_0
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 0
+        width: 28
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec86710aa750ee5c0800000000000000
+      internalID: -4184400979550574386
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_1
+      rect:
+        serializedVersion: 2
+        x: 188
+        y: 0
+        width: 25
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a75cc44a732ee370800000000000000
+      internalID: 8353653366866073509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_2
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 0
+        width: 31
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcdf4126e544de610800000000000000
+      internalID: 1652051810477997517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_3
+      rect:
+        serializedVersion: 2
+        x: 344
+        y: 0
+        width: 37
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9fc2eab8677201fa0800000000000000
+      internalID: -5832118127341720327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_4
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 17
+        width: 14
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0835ca876fb640db0800000000000000
+      internalID: -4826614194303642752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_5
+      rect:
+        serializedVersion: 2
+        x: 362
+        y: 0
+        width: 24
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da1e9451ff1a68190800000000000000
+      internalID: -7960497174384877139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_6
+      rect:
+        serializedVersion: 2
+        x: 429
+        y: 0
+        width: 24
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d1c309c0828172f90800000000000000
+      internalID: -6978582537298756579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_7
+      rect:
+        serializedVersion: 2
+        x: 505
+        y: 0
+        width: 29
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c1fc02c665f67b50800000000000000
+      internalID: 6590724926394397120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_8
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 0
+        width: 29
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd78f6115e4e8d010800000000000000
+      internalID: 1213971772067514335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_9
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e58d5eb2d8e071c80800000000000000
+      internalID: -8352190984445634466
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_10
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 0
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33554c102c9807190800000000000000
+      internalID: -7966716274472102605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_11
+      rect:
+        serializedVersion: 2
+        x: 466
+        y: 5
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f52047827e414350800000000000000
+      internalID: 5999162432436577779
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_12
+      rect:
+        serializedVersion: 2
+        x: 535
+        y: 0
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cd950909221c39bd0800000000000000
+      internalID: -2624541803628439076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Slime_Mine_Sheet_Iron_13
+      rect:
+        serializedVersion: 2
+        x: 543
+        y: 1
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8202847acf71e6350800000000000000
+      internalID: 6011768926491910184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Slime_Mine_Sheet_Iron_0: -4184400979550574386
+      Slime_Mine_Sheet_Iron_1: 8353653366866073509
+      Slime_Mine_Sheet_Iron_10: -7966716274472102605
+      Slime_Mine_Sheet_Iron_11: 5999162432436577779
+      Slime_Mine_Sheet_Iron_12: -2624541803628439076
+      Slime_Mine_Sheet_Iron_13: 6011768926491910184
+      Slime_Mine_Sheet_Iron_2: 1652051810477997517
+      Slime_Mine_Sheet_Iron_3: -5832118127341720327
+      Slime_Mine_Sheet_Iron_4: -4826614194303642752
+      Slime_Mine_Sheet_Iron_5: -7960497174384877139
+      Slime_Mine_Sheet_Iron_6: -6978582537298756579
+      Slime_Mine_Sheet_Iron_7: 6590724926394397120
+      Slime_Mine_Sheet_Iron_8: 1213971772067514335
+      Slime_Mine_Sheet_Iron_9: -8352190984445634466
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
