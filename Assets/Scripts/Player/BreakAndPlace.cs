@@ -15,7 +15,7 @@ namespace Player
         [SerializeField] private PlayerMovement playerMovement;
 
         [Header("Controls")]
-        public int reachDistance = 5; // You can change this back to 5 now!
+        public int reachDistance = 5;
 
         [Header("Prop Attack Hitbox (Matched to PlayerAttack)")]
         [SerializeField] private Vector2 attackOffset = new Vector2(1f, 0f);
@@ -57,11 +57,29 @@ namespace Player
             }
         }
 
+        private void Update()
+        {
+            // Input.GetMouseButtonDown(2) is the Middle Mouse Button (Mouse Wheel Click).
+            // (If you ever want to change this to Right-Click, just change the 2 to a 1!)
+            if (Input.GetMouseButtonDown(2))
+            {
+                Vector3 realScreenPos = Input.mousePosition;
+                float camZ = Mathf.Abs(Camera.main.transform.position.z);
+                Vector2 worldMousePos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
+
+                ItemStack item = Inventory.Singleton.hand;
+
+                if (item != null && item.data.isPlacable)
+                {
+                    TryPlaceBlock(item, worldMousePos);
+                }
+            }
+        }
+
         #region Input Listeners (Trigger Animations Here)
 
         private void OnAttackInputReceived(Vector2 ignoredMousePosition)
         {
-            // FIX: Ignore the broken parameter. Grab the real mouse position directly.
             Vector3 realScreenPos = Input.mousePosition;
             float camZ = Mathf.Abs(Camera.main.transform.position.z);
             Vector2 worldMousePos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
@@ -79,21 +97,11 @@ namespace Player
 
         private void OnMineInputReceived(Vector2 ignoredMousePosition)
         {
-            // 1. Let's find out what numbers Unity is actually seeing!
-            Debug.Log($"[Coordinates] Event passed: {ignoredMousePosition} | Raw Mouse: {Input.mousePosition} | Player: {transform.position} | Camera: {Camera.main.transform.position}");
-
-            // We will temporarily use the original code here until we see the log results
+            // Now this ONLY caches the target for the mining animation event.
+            // No placing logic happens here anymore.
             Vector3 realScreenPos = Input.mousePosition;
             float camZ = Mathf.Abs(Camera.main.transform.position.z);
             Vector2 worldMousePos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
-
-            ItemStack item = Inventory.Singleton.hand;
-
-            if (item != null && item.data.isPlacable)
-            {
-                bool shouldMine = TryPlaceBlock(item, worldMousePos);
-                if (!shouldMine) return;
-            }
 
             cachedTargetPosition = worldMousePos;
         }
@@ -139,14 +147,13 @@ namespace Player
                 }
             }
         }
+
         public void ExecuteMining()
         {
-            // 1. Grab the REAL mouse position right now, ignoring the broken events
             Vector3 realScreenPos = Input.mousePosition;
             float camZ = Mathf.Abs(Camera.main.transform.position.z);
             Vector2 actualMouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
 
-            // 2. Use our new guaranteed-accurate mouse position
             Vector2 playerCenter = playerCollider != null ? (Vector2)playerCollider.bounds.center : (Vector2)transform.position;
             float distance = Vector2.Distance(actualMouseWorldPos, playerCenter);
 
@@ -207,7 +214,7 @@ namespace Player
 
         private bool TryPlaceBlock(ItemStack item, Vector2 mouseWorldPosition)
         {
-            Vector2 playerCenter = transform.position;
+            Vector2 playerCenter = playerCollider != null ? (Vector2)playerCollider.bounds.center : (Vector2)transform.position;
 
             int x = Mathf.FloorToInt(mouseWorldPosition.x / CellSize);
             int y = Mathf.FloorToInt(mouseWorldPosition.y / CellSize);
@@ -219,6 +226,7 @@ namespace Player
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
             if (clickedBlock != BlockType.Air) return true;
+
             if (distance < 0.5f) return true;
 
             WorldData.World.SetBlockType(x, y, item.data.blockType);
