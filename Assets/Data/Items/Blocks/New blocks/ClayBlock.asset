@@ -24,3 +24,8 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
+  drops:
+  - item: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+    minAmount: 3
+    maxAmount: 5
+    dropChance: 101

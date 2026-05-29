@@ -245,8 +245,29 @@ namespace Player
         {
             Vector2 spawnPosition = new Vector2(x * CellSize + 0.25f, y * CellSize + 0.25f);
 
-            ItemData itemToDrop = WorldData.BlockDictionary[type];
-            SpawnLoot(itemToDrop, spawnPosition);
+            ItemData blockData = WorldData.BlockDictionary[type];
+
+            // Check if we have specific drops set up for this block
+            if (blockData.drops != null && blockData.drops.Count > 0)
+            {
+                foreach (Drop drop in blockData.drops)
+                {
+                    bool doesDrop = Random.Range(0, 100) <= drop.dropChance;
+                    if (!doesDrop) continue;
+
+                    int amount = Random.Range(drop.minAmount, drop.maxAmount + 1);
+
+                    for (int i = 0; i < amount; i++)
+                    {
+                        SpawnLoot(drop.item, spawnPosition);
+                    }
+                }
+            }
+            else
+            {
+                // Fallback: If no drops are defined in the inspector, just drop the block itself
+                SpawnLoot(blockData, spawnPosition);
+            }
 
             WorldData.World.SetBlockType(x, y, BlockType.Air);
             UpdateChunkVisuals(x, y);

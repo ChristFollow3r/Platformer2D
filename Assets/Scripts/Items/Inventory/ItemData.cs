@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Items;
 using Items.Overlays;
 using Player;
@@ -23,6 +24,9 @@ namespace Data
         public float fuelDuration;
         public ModData modData;
         public OverlayType overlayType;
+
+        [Header("Block Drops")]
+        public List<Drop> drops = new List<Drop>();
     }
 
 }
