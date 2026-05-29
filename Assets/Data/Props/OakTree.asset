@@ -14,13 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drops:
   - item: {fileID: 11400000, guid: 8bccc04a6493cad44924dda7a77d8b01, type: 2}
-    amount: 5
+    minAmount: 5
+    maxAmount: 12
+    dropChance: 101
+  - item: {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
+    minAmount: 2
+    maxAmount: 4
     dropChance: 101
   sprite: {fileID: 21300000, guid: 6d977b190b2fb8f48ade4b34db86ffcd, type: 3}
   name: Oak_Tree
   type: 3
   hardness: 5
-  spawnChance: 50
+  spawnChance: 100
   hasPriority: 1
   isFromSurface: 1
   requiredSpace: 5
+  allowedGroundBlocks: 

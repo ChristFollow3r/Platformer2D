@@ -13,19 +13,20 @@ MonoBehaviour:
   m_Name: BirchTree
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Prop
   drops:
-  - item: {fileID: 11400000, guid: 51eef3b63066fec4dbceee03c2c71cef, type: 2}
+  - item: {fileID: 11400000, guid: 8bccc04a6493cad44924dda7a77d8b01, type: 2}
+    minAmount: 3
+    maxAmount: 7
+    dropChance: 101
+  - item: {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
     minAmount: 0
-    maxAmount: 3
-    dropChance: 50
-  - item: {fileID: 11400000, guid: 51eef3b63066fec4dbceee03c2c71cef, type: 2}
-    minAmount: 1
     maxAmount: 1
-    dropChance: 100
+    dropChance: 60
   sprite: {fileID: 21300000, guid: f4672648b2f68df4899554f564cfdba2, type: 3}
   name: BirchTree
   type: 4
   hardness: 4
-  spawnChance: 30
+  spawnChance: 100
   hasPriority: 1
   isFromSurface: 1
   requiredSpace: 4
+  allowedGroundBlocks: 
