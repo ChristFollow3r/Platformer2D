@@ -25,7 +25,21 @@ namespace Data
         Onyx,
         Ruby,
         Bedrock,
-        Entity } // Added none for the items
+        Entity,
+        WoodPlank,
+        StoneBrick,
+        SlateBrick,
+        SandBrick,
+        CraftingTable,
+        SaphireBlock,
+        TopazBlock,
+        EmeraldBlock,
+        OnyxBlock,
+        RubyBlock,
+        CopperBlock,
+        BronzeBlock,
+        IronBlock
+    } // Added none for the items
 
     public enum PropType { None, Bush, StoneProp, OakTree, BirchTree, Copper, Iron, Coal, Sulphur, ScareCrow }
 
