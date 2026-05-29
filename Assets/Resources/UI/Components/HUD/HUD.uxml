@@ -1,0 +1,8 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Pages/HUD/HUDStyles.uss?fileID=7433441132597879392&amp;guid=5d4cdc3c9a1de4e49a37d908dda39e61&amp;type=3#HUDStyles"/>
+    <Style src="project://database/Assets/UI/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
+    <ui:VisualElement name="root" style="flex-grow: 1;">
+        <ui:VisualElement name="hotbar-holder" class="hotbar-holder">
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

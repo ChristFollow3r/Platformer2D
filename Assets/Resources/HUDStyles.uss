@@ -1,0 +1,9 @@
+
+
+.hotbar-holder {
+    flex-grow: 0;
+    bottom: 40px;
+    flex-shrink: 0;
+    position: absolute;
+    align-self: center;
+}
