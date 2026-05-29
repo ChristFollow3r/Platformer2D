@@ -342,7 +342,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dropPrefab: {fileID: 0}
   playerMovement: {fileID: 2605977652237089600}
-  reachDistance: 2
+  reachDistance: 10
   attackBoxSize: {x: 1.5, y: 1.5}
 --- !u!114 &2163750078930779904
 MonoBehaviour:
@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 250
-  deathDrop: {fileID: 0}
+  deathDrops: []
 --- !u!114 &8774736623719842949
 MonoBehaviour:
   m_ObjectHideFlags: 0
