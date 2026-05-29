@@ -22,5 +22,5 @@ MonoBehaviour:
   blockType: 11
   hardness: 5
   fuelDuration: 0
-  modData: {fileID: 0}
+  modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0

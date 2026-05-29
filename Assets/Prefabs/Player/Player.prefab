@@ -293,7 +293,7 @@ Transform:
   m_GameObject: {fileID: 6493406502564964188}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 293.66, y: 75.06, z: -0.018237974}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -341,7 +341,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMovement: {fileID: 2605977652237089600}
-  reachDistance: 2
+  reachDistance: 100
   attackOffset: {x: 1, y: 0}
   attackBoxSize: {x: 1.5, y: 1.5}
   itemEntityPrefab: {fileID: 930996324388520816, guid: 9b10d5916f6136f458b805b4050ae45b, type: 3}

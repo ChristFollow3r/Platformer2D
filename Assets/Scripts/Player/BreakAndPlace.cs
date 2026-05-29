@@ -15,7 +15,7 @@ namespace Player
         [SerializeField] private PlayerMovement playerMovement;
 
         [Header("Controls")]
-        public int reachDistance = 5;
+        public int reachDistance = 5; // You can change this back to 5 now!
 
         [Header("Prop Attack Hitbox (Matched to PlayerAttack)")]
         [SerializeField] private Vector2 attackOffset = new Vector2(1f, 0f);
@@ -31,7 +31,6 @@ namespace Player
         [Header("Prefabs")]
         [SerializeField] private GameObject itemEntityPrefab;
 
-        // Caches the mouse position from the event so the animation event knows where to strike
         private Vector2 cachedTargetPosition;
         private readonly Collider2D[] hitResults = new Collider2D[10];
 
@@ -60,9 +59,14 @@ namespace Player
 
         #region Input Listeners (Trigger Animations Here)
 
-        private void OnAttackInputReceived(Vector2 mousePosition)
+        private void OnAttackInputReceived(Vector2 ignoredMousePosition)
         {
-            BlockType clickedBlock = GetClickedBlock(mousePosition, out ulong blockId);
+            // FIX: Ignore the broken parameter. Grab the real mouse position directly.
+            Vector3 realScreenPos = Input.mousePosition;
+            float camZ = Mathf.Abs(Camera.main.transform.position.z);
+            Vector2 worldMousePos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
+
+            BlockType clickedBlock = GetClickedBlock(worldMousePos, out ulong blockId);
 
             if (clickedBlock == BlockType.Entity)
             {
@@ -70,33 +74,36 @@ namespace Player
                 return;
             }
 
-            cachedTargetPosition = mousePosition;
-
+            cachedTargetPosition = worldMousePos;
         }
 
-        private void OnMineInputReceived(Vector2 mousePosition)
+        private void OnMineInputReceived(Vector2 ignoredMousePosition)
         {
+            // 1. Let's find out what numbers Unity is actually seeing!
+            Debug.Log($"[Coordinates] Event passed: {ignoredMousePosition} | Raw Mouse: {Input.mousePosition} | Player: {transform.position} | Camera: {Camera.main.transform.position}");
+
+            // We will temporarily use the original code here until we see the log results
+            Vector3 realScreenPos = Input.mousePosition;
+            float camZ = Mathf.Abs(Camera.main.transform.position.z);
+            Vector2 worldMousePos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
+
             ItemStack item = Inventory.Singleton.hand;
 
             if (item != null && item.data.isPlacable)
             {
-                bool shouldMine = TryPlaceBlock(item, mousePosition);
+                bool shouldMine = TryPlaceBlock(item, worldMousePos);
                 if (!shouldMine) return;
             }
-            cachedTargetPosition = mousePosition;
 
+            cachedTargetPosition = worldMousePos;
         }
 
         #endregion
 
         #region Animation Events (Public Methods)
 
-        /// <summary>
-        /// ANIMATION EVENT: Call this exactly when the tool visually hits during the Attack animation.
-        /// </summary>
         public void ExecuteAttack()
         {
-            // Matched to how PlayerAttack calculates its hitbox
             int direction = cachedTargetPosition.x < transform.position.x ? -1 : 1;
             Vector2 attackCenter = (Vector2)transform.position + new Vector2(attackOffset.x * direction, attackOffset.y);
 
@@ -132,19 +139,25 @@ namespace Player
                 }
             }
         }
-
-        /// <summary>
-        /// ANIMATION EVENT: Call this exactly when the pickaxe visually hits during the Mine animation.
-        /// </summary>
         public void ExecuteMining()
         {
+            // 1. Grab the REAL mouse position right now, ignoring the broken events
+            Vector3 realScreenPos = Input.mousePosition;
+            float camZ = Mathf.Abs(Camera.main.transform.position.z);
+            Vector2 actualMouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
+
+            // 2. Use our new guaranteed-accurate mouse position
             Vector2 playerCenter = playerCollider != null ? (Vector2)playerCollider.bounds.center : (Vector2)transform.position;
-            float distance = Vector2.Distance(cachedTargetPosition, playerCenter);
+            float distance = Vector2.Distance(actualMouseWorldPos, playerCenter);
 
-            if (distance > reachDistance) return;
+            if (distance > reachDistance)
+            {
+                Debug.Log($"[Mining] Failed: Distance {distance} | Target: {actualMouseWorldPos} | Player: {playerCenter}");
+                return;
+            }
 
-            int x = Mathf.FloorToInt(cachedTargetPosition.x / CellSize);
-            int y = Mathf.FloorToInt(cachedTargetPosition.y / CellSize);
+            int x = Mathf.FloorToInt(actualMouseWorldPos.x / CellSize);
+            int y = Mathf.FloorToInt(actualMouseWorldPos.y / CellSize);
 
             if (currentMineTarget.x != x || currentMineTarget.y != y)
             {
@@ -154,15 +167,22 @@ namespace Player
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
-            if (clickedBlock == BlockType.Air) return;
+            if (clickedBlock == BlockType.Air)
+            {
+                Debug.Log($"[Mining] Failed: Clicked on Air at Grid ({x}, {y})");
+                return;
+            }
 
             float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
             float miningPower = Equipment.Singleton.GetMiningPower();
+
+            Debug.Log($"[Mining] Hitting {clickedBlock} at ({x}, {y}) | Power: {miningPower} | Dmg: {currentBlockDamage}/{targetHardness}");
 
             currentBlockDamage += miningPower;
 
             if (currentBlockDamage >= targetHardness)
             {
+                Debug.Log($"[Mining] SUCCESS! Broke {clickedBlock}.");
                 BreakBlock(x, y, clickedBlock);
                 currentBlockDamage = 0f;
 
@@ -172,7 +192,6 @@ namespace Player
                 }
             }
         }
-
         #endregion
 
         #region Core Logic
@@ -218,7 +237,6 @@ namespace Player
         {
             Vector2 spawnPosition = new Vector2(x * CellSize + 0.25f, y * CellSize + 0.25f);
 
-            // Using your static WorldData dictionaries which are populated by WorldManager
             ItemData itemToDrop = WorldData.BlockDictionary[type];
             SpawnLoot(itemToDrop, spawnPosition);
 
