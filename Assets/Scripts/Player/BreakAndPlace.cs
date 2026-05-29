@@ -25,8 +25,11 @@ namespace Player
 
         [Header("Mining Data")]
         private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
-        private float currentBlockDamage = 0f;
+        private float currentBlockDamage = 3f;
         private Collider2D playerCollider;
+
+        [Header("Prefabs")]
+        [SerializeField] private GameObject itemEntityPrefab;
 
         // Caches the mouse position from the event so the animation event knows where to strike
         private Vector2 cachedTargetPosition;
@@ -247,8 +250,16 @@ namespace Player
 
         private void SpawnLoot(ItemData itemData, Vector2 position)
         {
-            // TODO: Instantiate your actual drop prefab using the itemData here
-            Debug.Log($"Spawning {itemData.name} at {position}.");
+            if (itemData == null || itemEntityPrefab == null) return;
+
+            GameObject droppedItem = Instantiate(itemEntityPrefab, position, Quaternion.identity);
+            Vector2 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
+            droppedItem.transform.position += (Vector3)randomOffset;
+
+            if (droppedItem.TryGetComponent(out ItemEntity entity))
+            {
+                entity.Initialize(itemData);
+            }
         }
 
         private void UpdateChunkVisuals(int x, int y)

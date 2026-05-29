@@ -340,10 +340,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04f689b468c70db41883cf452e07253e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dropPrefab: {fileID: 0}
   playerMovement: {fileID: 2605977652237089600}
-  reachDistance: 10
+  reachDistance: 2
+  attackOffset: {x: 1, y: 0}
   attackBoxSize: {x: 1.5, y: 1.5}
+  itemEntityPrefab: {fileID: 930996324388520816, guid: 9b10d5916f6136f458b805b4050ae45b, type: 3}
 --- !u!114 &2163750078930779904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,7 +358,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shared.Health
   maxHealth: 250
-  deathDrops: []
+  deathDrops:
+  - prefab: {fileID: 930996324388520816, guid: 755d2f80aaca8ab4aa521e3f92f862a2, type: 3}
+    itemData: {fileID: 11400000, guid: e3e4633ccdb9c5744a35bec228687bfa, type: 2}
+    minAmount: 2
+    maxAmount: 5
+    dropChance: 100
 --- !u!114 &8774736623719842949
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -2,8 +2,10 @@ using Data;
 using Player;
 using UnityEngine;
 
-namespace Items // Maybe I should add this to items?
+namespace Items
 {
+    // Make sure the prefab actually has a SpriteRenderer!
+    [RequireComponent(typeof(SpriteRenderer))]
     public class ItemEntity : MonoBehaviour
     {
         private PolygonCollider2D collisionCollider;
@@ -13,10 +15,27 @@ namespace Items // Maybe I should add this to items?
         [Header("Data")]
         public ItemData itemData;
 
+        // Cache the SpriteRenderer
+        private SpriteRenderer spriteRenderer;
+
+        private void Awake()
+        {
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
 
         private void Start()
         {
             collisionCollider = GetComponent<PolygonCollider2D>();
+        }
+
+        // ADD THIS: BreakAndPlace will call this right after instantiating it
+        public void Initialize(ItemData data)
+        {
+            itemData = data;
+            if (itemData != null && spriteRenderer != null)
+            {
+                spriteRenderer.sprite = itemData.sprite;
+            }
         }
 
         private void OnTriggerStay2D(Collider2D other)
