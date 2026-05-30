@@ -8,7 +8,7 @@ namespace Chunks
     {
         public bool isLoaded;
         public const int ChunkSize = 32;
-        
+
         private readonly Vector2Int chunkPosition;
         private readonly Tilemap blockTileMap;
         private readonly Tilemap propTileMap;
@@ -27,20 +27,20 @@ namespace Chunks
         {
             int x = chunkPosition.x * ChunkSize;
             int y = chunkPosition.y * ChunkSize;
-            
+
             for (int i = x; i < x + ChunkSize; i++)
             {
                 for (int j = y; j < y + ChunkSize; j++)
                 {
                     if (i >= WorldData.World.width || j >= WorldData.World.height) continue;
-                    
+
                     var blockType = WorldData.World.GetBlockTypes(i, j);
                     var propType = WorldData.World.GetPropType(i, j);
                     Vector3Int pos = new Vector3Int(i, j, 0);
-                    
+
                     if (blockType != BlockType.Air)
                     {
-                        var tile = ScriptableObject.CreateInstance<Tile>(); 
+                        var tile = ScriptableObject.CreateInstance<Tile>();
                         tile.sprite = WorldData.BlockDictionary[blockType].sprite;
                         blockTileMap.SetTile(pos, tile);
                         blockTileMap.gameObject.layer = LayerMask.NameToLayer("Block");
@@ -74,20 +74,29 @@ namespace Chunks
             isLoaded = false;
         }
 
-        public void UpdateTile(int x, int y) 
+        public void UpdateTile(int x, int y, Sprite sprite = null)
         {
             var position = new Vector3Int(x, y, 0);
             BlockType blockType = WorldData.World.GetBlockTypes(x, y);
             PropType propType = WorldData.World.GetPropType(x, y);
-            
+
+
+            if (sprite != null)
+            {
+                var tile = ScriptableObject.CreateInstance<Tile>();
+                tile.sprite = sprite;
+                blockTileMap.SetTile(position, tile);
+                return;
+            }
+
             if (blockType == BlockType.Air) blockTileMap.SetTile(position, null);
             else
             {
-                var tile = ScriptableObject.CreateInstance<Tile>(); 
+                var tile = ScriptableObject.CreateInstance<Tile>();
                 tile.sprite = WorldData.BlockDictionary[blockType].sprite;
                 blockTileMap.SetTile(position, tile);
             }
-            
+
             if (propType == PropType.None) propTileMap.SetTile(position, null);
             else
             {

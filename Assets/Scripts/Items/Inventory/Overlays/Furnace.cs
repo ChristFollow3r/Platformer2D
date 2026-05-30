@@ -1,16 +1,16 @@
 using System;
 using System.Linq;
+using Chunks;
+using Data;
 using Items.Utils;
 using Player;
 using Scriptable_Objects_Scripts;
 using UnityEngine;
+using World;
 
 
 namespace Items.Overlays
 {
-
-
-
     [Serializable]
     public class Furnace : Overlay, IInventory
     {
@@ -18,6 +18,18 @@ namespace Items.Overlays
         public const short CookingSlots = 4;
         public const short MaxSlotId = CookingSlots + 1;
         public Slot[] cookingSlots = new Slot[CookingSlots];
+        public bool isOn
+        {
+            get => _isOn;
+            private set
+            {
+                if (_isOn == value) return;
+                _isOn = value;
+                ChangeSprite(_isOn);
+            }
+        }
+        private bool _isOn = false;
+
         public Slot resultSlot;
         public Slot fuelSlot;
         private bool hasFuel;
@@ -49,6 +61,8 @@ namespace Items.Overlays
         private ItemStack currentResult = null;
         private float currentCookDuration = 0;
         private float currentCookTimer = 0;
+
+        private Sprite furnaceOnSprite;
         #endregion
 
 
@@ -76,6 +90,8 @@ namespace Items.Overlays
             }
             resultSlot = new Slot() { id = CookingSlots };
             fuelSlot = new Slot() { id = CookingSlots + 1 };
+
+            furnaceOnSprite = Resources.Load<Sprite>("sprites/furnace_on");
             #endregion
         }
 
@@ -197,6 +213,12 @@ namespace Items.Overlays
                 currentFuelDuration = 0;
                 return false;
             }
+            if (currentResult == null)
+            {
+                currentFuelDuration = 0;
+                return false;
+            }
+
             currentFuelDuration = fuelSlot.item.data.fuelDuration;
             currentFuelTimer = currentFuelDuration;
             RemoveAmount(fuelSlot.id, 1);
@@ -207,8 +229,9 @@ namespace Items.Overlays
         public override void Tick()
         {
             #region Tick
-            bool isBurning = currentFuelTimer > 0;
-            if (currentResult == null && !isBurning && !EvaluateCook())
+            isOn = currentFuelTimer > 0;
+
+            if (currentResult == null && !isOn && !EvaluateCook())
             {
                 fuelFillPercent = currentFuelDuration > 0
                     ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
@@ -278,6 +301,18 @@ namespace Items.Overlays
             #endregion
         }
 
+        private void ChangeSprite(bool isOn)
+        {
+            Debug.Log("changing sprite");
+            var (x, y) = BlockIdUtils.ToCell(blockId);
+
+            int chunkX = Mathf.FloorToInt((float)x / Chunk.ChunkSize);
+            int chunkY = Mathf.FloorToInt((float)y / Chunk.ChunkSize);
+
+            Sprite sprite = isOn ? furnaceOnSprite : null;
+            WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(x, y, sprite);
+        }
+
         /// <summary>Method</summary>
         public override void RefreshUI()
         {
@@ -287,9 +322,12 @@ namespace Items.Overlays
                 if (slot.isEmpty) continue;
                 OnSlotChanged?.Invoke(slot.id, slot.item);
             }
-            if (resultSlot.isEmpty) return;
+
             OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
+            OnSlotChanged?.Invoke(fuelSlot.id, fuelSlot.item);
+
             OnFillChanged?.Invoke(_fillPercent);
+            OnFuelFillChanged?.Invoke(_fillPercent);
 
             #endregion
         }
