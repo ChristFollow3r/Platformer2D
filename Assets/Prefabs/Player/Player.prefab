@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 7979799319354176742}
   - component: {fileID: 1957503140287811286}
   - component: {fileID: 1919748396387906056}
+  - component: {fileID: 1509471125570610616}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -575,3 +576,15 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1509471125570610616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6493406502564964188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa88ebe00a467244cb36eb4a7dc94d80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player.PlaceFeedback
