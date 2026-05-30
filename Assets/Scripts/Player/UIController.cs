@@ -196,6 +196,12 @@ namespace Player
                         VisualElement element = new Furnace(data);
                         return element;
                     }
+                case OverlayType.Chest:
+                    {
+                        Items.Overlays.Chest data = (Items.Overlays.Chest)foundOverlay;
+                        VisualElement element = new Chest(data);
+                        return element;
+                    }
                 default:
                     return null;
             }
@@ -224,6 +230,13 @@ namespace Player
                 case OverlayType.Furnace:
                     {
                         Items.Overlays.Furnace data = new Items.Overlays.Furnace(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
+
+                case OverlayType.Chest:
+                    {
+                        Items.Overlays.Chest data = new Items.Overlays.Chest(blockId);
                         overlaysByBlockId[blockId] = data;
                         return data;
                     }

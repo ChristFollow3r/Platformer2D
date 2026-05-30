@@ -1,5 +1,6 @@
 using Player;
 using Unity.IO.LowLevel.Unsafe;
+using UnityEngine;
 
 namespace Items
 {
@@ -26,6 +27,7 @@ namespace Items
         {
             if (blockId != this.blockId) return;
             isOpen = true;
+            Debug.Log($"Opening {overlayType}");
             UIController.Singleton.OnOverlayClose += OnOverlayClose;
         }
         private void OnOverlayClose()
