@@ -83,15 +83,12 @@ namespace UI.Components
             if (!isDraggable) return;
             rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
             rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-            rootElm.RegisterCallback<PointerUpEvent>(OnPointerUp);
+            // rootElm.RegisterCallback<PointerUpEvent>(OnPointerUp);
             #endregion
         }
 
-
-        private void OnPointerDown(PointerDownEvent e)
+        private void GrabItem(PointerDownEvent e)
         {
-            #region OnPointerDown
-            if (isBeingDragged || rootElm.HasPointerCapture(e.pointerId)) return;
             Slot ghostSlot = orphanAfterPickup ? null : slot;
             IInventory ghostInventory = orphanAfterPickup ? Items.Inventory.Singleton : inventory;
             if (e.button == 1)
@@ -144,34 +141,10 @@ namespace UI.Components
 
                 if (slot != null) inventory.ClearSlot(slot.slotId);
             }
-
-            #endregion
         }
 
-        private void OnPointerMove(PointerMoveEvent e)
+        private void DropItem(PointerDownEvent e)
         {
-            #region OnPointerMove
-            if (!isBeingDragged) return;
-
-            Vector2 pos = e.position;
-            style.left = pos.x - _dragOffset.x;
-            style.top = pos.y - _dragOffset.y;
-            #endregion
-        }
-
-        private void OnGlobalPointerMove(PointerMoveEvent e)
-        {
-            if (!isBeingDragged) return;
-            Vector2 pos = e.position;
-            style.left = pos.x - _dragOffset.x;
-            style.top = pos.y - _dragOffset.y;
-        }
-
-        private void OnPointerUp(PointerUpEvent e)
-        {
-            #region OnPointerUp
-            if (e.button == 1) return; // TODO: leave 1
-            if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
             rootElm.ReleasePointer(e.pointerId);
             rootElm.RemoveFromClassList("item-dragged");
 
@@ -198,9 +171,47 @@ namespace UI.Components
             if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
             if (stack.amount == 0) { RemoveFromHierarchy(); return; }
             amount = stack.amount;
-            // keep ghost with remaining amount
+        }
+
+
+        private void OnPointerDown(PointerDownEvent e)
+        {
+            #region OnPointerDown
+            if (isBeingDragged || rootElm.HasPointerCapture(e.pointerId)) DropItem(e);
+            else GrabItem(e);
+
+
             #endregion
         }
+
+        private void OnPointerMove(PointerMoveEvent e)
+        {
+            #region OnPointerMove
+            if (!isBeingDragged) return;
+
+            Vector2 pos = e.position;
+            style.left = pos.x - _dragOffset.x;
+            style.top = pos.y - _dragOffset.y;
+            #endregion
+        }
+
+        private void OnGlobalPointerMove(PointerMoveEvent e)
+        {
+            if (!isBeingDragged) return;
+            Vector2 pos = e.position;
+            style.left = pos.x - _dragOffset.x;
+            style.top = pos.y - _dragOffset.y;
+        }
+
+        // private void OnPointerUp(PointerUpEvent e)
+        // {
+        //     #region OnPointerUp
+        //     if (e.button == 1) return; // TODO: leave 1
+        //     if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
+
+        //     // keep ghost with remaining amount
+        //     #endregion
+        // }
         #endregion
     }
 }
