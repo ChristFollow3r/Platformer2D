@@ -145,10 +145,8 @@ namespace UI.Components
 
         private void DropItem(PointerDownEvent e)
         {
-            rootElm.ReleasePointer(e.pointerId);
-            rootElm.RemoveFromClassList("item-dragged");
 
-            Items.ItemStack stack = new(item) { amount = (short)amount, };
+            ItemStack stack = new(item) { amount = (short)amount, };
             int originalAmount = amount;
             List<VisualElement> foundElements = new();
             panel.PickAll(e.position, foundElements);
@@ -169,7 +167,13 @@ namespace UI.Components
             }
 
             if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
-            if (stack.amount == 0) { RemoveFromHierarchy(); return; }
+            if (stack.amount == 0)
+            {
+                RemoveFromHierarchy();
+                rootElm.ReleasePointer(e.pointerId);
+                rootElm.RemoveFromClassList("item-dragged");
+                return;
+            }
             amount = stack.amount;
         }
 
