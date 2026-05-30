@@ -55,7 +55,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -69,7 +69,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -93,7 +93,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -121,12 +121,12 @@ TextureImporter:
       name: Slime_Walk_Sheet_Bronze_0
       rect:
         serializedVersion: 2
-        x: 20
+        x: 0
         y: 0
-        width: 24
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -143,12 +143,12 @@ TextureImporter:
       name: Slime_Walk_Sheet_Bronze_1
       rect:
         serializedVersion: 2
-        x: 84
+        x: 64
         y: 0
-        width: 24
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -165,12 +165,12 @@ TextureImporter:
       name: Slime_Walk_Sheet_Bronze_2
       rect:
         serializedVersion: 2
-        x: 148
+        x: 128
         y: 0
-        width: 21
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -187,12 +187,12 @@ TextureImporter:
       name: Slime_Walk_Sheet_Bronze_3
       rect:
         serializedVersion: 2
-        x: 210
+        x: 192
         y: 0
-        width: 25
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -209,12 +209,12 @@ TextureImporter:
       name: Slime_Walk_Sheet_Bronze_4
       rect:
         serializedVersion: 2
-        x: 275
+        x: 256
         y: 0
-        width: 25
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -231,12 +231,12 @@ TextureImporter:
       name: Slime_Walk_Sheet_Bronze_5
       rect:
         serializedVersion: 2
-        x: 340
+        x: 320
         y: 0
-        width: 25
-        height: 20
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -253,19 +253,19 @@ TextureImporter:
       name: Slime_Walk_Sheet_Bronze_6
       rect:
         serializedVersion: 2
-        x: 403
+        x: 384
         y: 0
-        width: 24
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4e9c9dc853fc6f300800000000000000
+      spriteID: fcd83d2427527c7409ec4832cbb230c3
       internalID: 285643455287904740
       vertices: []
       indices: 
@@ -275,7 +275,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f18851c8f05f6074db3d7538852108b2
     internalID: 0
     vertices: []
     indices: 
@@ -283,7 +283,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":7.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Slime_Walk_Sheet_Bronze_0: -5938909902909766451
       Slime_Walk_Sheet_Bronze_1: -6559387879907515731

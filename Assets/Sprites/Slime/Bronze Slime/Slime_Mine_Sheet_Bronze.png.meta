@@ -76,7 +76,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -90,7 +90,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -114,7 +114,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -142,12 +142,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Bronze_0
       rect:
         serializedVersion: 2
-        x: 106
+        x: 0
         y: 0
-        width: 28
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -164,12 +164,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Bronze_1
       rect:
         serializedVersion: 2
-        x: 188
+        x: 80
         y: 0
-        width: 25
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -186,12 +186,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Bronze_2
       rect:
         serializedVersion: 2
-        x: 261
+        x: 160
         y: 0
-        width: 31
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -208,12 +208,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Bronze_3
       rect:
         serializedVersion: 2
-        x: 344
+        x: 240
         y: 0
-        width: 37
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -230,12 +230,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Bronze_4
       rect:
         serializedVersion: 2
-        x: 355
-        y: 17
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 320
+        y: 0
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -252,12 +252,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Bronze_5
       rect:
         serializedVersion: 2
-        x: 362
+        x: 400
         y: 0
-        width: 24
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -274,12 +274,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Bronze_6
       rect:
         serializedVersion: 2
-        x: 429
+        x: 480
         y: 0
-        width: 24
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -296,12 +296,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Bronze_7
       rect:
         serializedVersion: 2
-        x: 505
+        x: 560
         y: 0
-        width: 29
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -314,143 +314,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Bronze_8
-      rect:
-        serializedVersion: 2
-        x: 585
-        y: 0
-        width: 29
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f889fc7e6758217b0800000000000000
-      internalID: -5254991069446170481
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Bronze_9
-      rect:
-        serializedVersion: 2
-        x: 28
-        y: 0
-        width: 24
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4d063ec40ca6d0760800000000000000
-      internalID: 7425708734760050900
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Bronze_10
-      rect:
-        serializedVersion: 2
-        x: 456
-        y: 0
-        width: 11
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 2dda89bf9ebedd150800000000000000
-      internalID: 5899130477106212306
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Bronze_11
-      rect:
-        serializedVersion: 2
-        x: 466
-        y: 5
-        width: 6
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0d5e3ca5eb84df390800000000000000
-      internalID: -7782984598622575152
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Bronze_12
-      rect:
-        serializedVersion: 2
-        x: 535
-        y: 0
-        width: 9
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 425a8fa4725772ce0800000000000000
-      internalID: -1430045545044859612
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Bronze_13
-      rect:
-        serializedVersion: 2
-        x: 543
-        y: 1
-        width: 9
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7d06b3e37ff27f860800000000000000
-      internalID: 7563566838139543767
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 4d445879f7aeda9429c88308e505d111
     internalID: 0
     vertices: []
     indices: 
@@ -458,22 +326,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":8.0,"y":1.0},"gridSpriteSize":{"x":80.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Slime_Mine_Sheet_Bronze_0: 7061430769440625134
       Slime_Mine_Sheet_Bronze_1: 6217363966264340880
-      Slime_Mine_Sheet_Bronze_10: 5899130477106212306
-      Slime_Mine_Sheet_Bronze_11: -7782984598622575152
-      Slime_Mine_Sheet_Bronze_12: -1430045545044859612
-      Slime_Mine_Sheet_Bronze_13: 7563566838139543767
       Slime_Mine_Sheet_Bronze_2: 3657156772763498017
       Slime_Mine_Sheet_Bronze_3: -175712905610797778
       Slime_Mine_Sheet_Bronze_4: 7126200192459220545
       Slime_Mine_Sheet_Bronze_5: 4727742991523126159
       Slime_Mine_Sheet_Bronze_6: -725614894288122315
       Slime_Mine_Sheet_Bronze_7: 4692801762468639503
-      Slime_Mine_Sheet_Bronze_8: -5254991069446170481
-      Slime_Mine_Sheet_Bronze_9: 7425708734760050900
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

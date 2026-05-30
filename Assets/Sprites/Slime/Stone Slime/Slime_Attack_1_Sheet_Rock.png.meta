@@ -67,7 +67,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -81,7 +81,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -105,7 +105,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -133,12 +133,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_0
       rect:
         serializedVersion: 2
-        x: 28
+        x: 0
         y: 0
-        width: 24
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -155,12 +155,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_1
       rect:
         serializedVersion: 2
-        x: 101
+        x: 80
         y: 0
-        width: 31
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -177,12 +177,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_2
       rect:
         serializedVersion: 2
-        x: 176
+        x: 160
         y: 0
-        width: 36
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -199,12 +199,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_3
       rect:
         serializedVersion: 2
-        x: 254
+        x: 240
         y: 0
-        width: 59
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -221,12 +221,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_4
       rect:
         serializedVersion: 2
-        x: 286
-        y: 13
-        width: 22
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 320
+        y: 0
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -243,12 +243,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_5
       rect:
         serializedVersion: 2
-        x: 343
+        x: 400
         y: 0
-        width: 27
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -265,12 +265,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_6
       rect:
         serializedVersion: 2
-        x: 377
+        x: 480
         y: 0
-        width: 13
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -287,12 +287,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_7
       rect:
         serializedVersion: 2
-        x: 426
+        x: 560
         y: 0
-        width: 48
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -309,12 +309,12 @@ TextureImporter:
       name: Slime_Attack_1_Sheet_Rock_8
       rect:
         serializedVersion: 2
-        x: 506
+        x: 640
         y: 0
-        width: 27
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -327,55 +327,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Slime_Attack_1_Sheet_Rock_9
-      rect:
-        serializedVersion: 2
-        x: 585
-        y: 0
-        width: 28
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e0d1bada37da5f790800000000000000
-      internalID: -7496895292341805810
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Attack_1_Sheet_Rock_10
-      rect:
-        serializedVersion: 2
-        x: 669
-        y: 0
-        width: 23
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0139f129955f37f20800000000000000
-      internalID: 3419346307156775696
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 4bcfb1f7f129f7c49af2327a4163699c
     internalID: 0
     vertices: []
     indices: 
@@ -383,11 +339,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":9.0,"y":1.0},"gridSpriteSize":{"x":80.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Slime_Attack_1_Sheet_Rock_0: -2538874532305742544
       Slime_Attack_1_Sheet_Rock_1: 9162485981748829373
-      Slime_Attack_1_Sheet_Rock_10: 3419346307156775696
       Slime_Attack_1_Sheet_Rock_2: -2497758324946637677
       Slime_Attack_1_Sheet_Rock_3: -3467206713322756373
       Slime_Attack_1_Sheet_Rock_4: 3647138053130347219
@@ -395,7 +352,6 @@ TextureImporter:
       Slime_Attack_1_Sheet_Rock_6: -7448885298938844467
       Slime_Attack_1_Sheet_Rock_7: -4980266597128566471
       Slime_Attack_1_Sheet_Rock_8: 3215704817457961049
-      Slime_Attack_1_Sheet_Rock_9: -7496895292341805810
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

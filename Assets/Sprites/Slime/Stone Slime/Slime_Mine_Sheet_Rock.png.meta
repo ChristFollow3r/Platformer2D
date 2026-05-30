@@ -76,7 +76,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -90,7 +90,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -114,7 +114,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -142,12 +142,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Rock_0
       rect:
         serializedVersion: 2
-        x: 106
+        x: 0
         y: 0
-        width: 28
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -164,12 +164,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Rock_1
       rect:
         serializedVersion: 2
-        x: 188
+        x: 80
         y: 0
-        width: 25
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -186,12 +186,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Rock_2
       rect:
         serializedVersion: 2
-        x: 261
+        x: 160
         y: 0
-        width: 31
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -208,12 +208,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Rock_3
       rect:
         serializedVersion: 2
-        x: 344
+        x: 240
         y: 0
-        width: 37
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -230,12 +230,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Rock_4
       rect:
         serializedVersion: 2
-        x: 355
-        y: 17
-        width: 14
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 320
+        y: 0
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -252,12 +252,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Rock_5
       rect:
         serializedVersion: 2
-        x: 362
+        x: 400
         y: 0
-        width: 24
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -274,12 +274,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Rock_6
       rect:
         serializedVersion: 2
-        x: 429
+        x: 480
         y: 0
-        width: 24
-        height: 23
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -296,12 +296,12 @@ TextureImporter:
       name: Slime_Mine_Sheet_Rock_7
       rect:
         serializedVersion: 2
-        x: 505
+        x: 560
         y: 0
-        width: 29
-        height: 19
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 80
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -314,143 +314,11 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Rock_8
-      rect:
-        serializedVersion: 2
-        x: 585
-        y: 0
-        width: 29
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 9f2c245c2ceeeb350800000000000000
-      internalID: 6034523071023596281
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Rock_9
-      rect:
-        serializedVersion: 2
-        x: 28
-        y: 0
-        width: 24
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: f9c418fde1a0fc490800000000000000
-      internalID: -7723943708202021729
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Rock_10
-      rect:
-        serializedVersion: 2
-        x: 456
-        y: 0
-        width: 11
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 28d66212d6a824f60800000000000000
-      internalID: 8017122487985139074
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Rock_11
-      rect:
-        serializedVersion: 2
-        x: 466
-        y: 5
-        width: 6
-        height: 8
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: bd5fe4ce98b3b1770800000000000000
-      internalID: 8582518978445768155
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Rock_12
-      rect:
-        serializedVersion: 2
-        x: 535
-        y: 0
-        width: 9
-        height: 7
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 50725ec9f98affe30800000000000000
-      internalID: 4539532352898279173
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Slime_Mine_Sheet_Rock_13
-      rect:
-        serializedVersion: 2
-        x: 543
-        y: 1
-        width: 9
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: dfb0f50cf94927160800000000000000
-      internalID: 7021838182872189949
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 00a806ff6aae7184aa155f7bec0d523a
     internalID: 0
     vertices: []
     indices: 
@@ -458,22 +326,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":8.0,"y":1.0},"gridSpriteSize":{"x":80.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Slime_Mine_Sheet_Rock_0: 1449552661054828190
       Slime_Mine_Sheet_Rock_1: 1190753233293072929
-      Slime_Mine_Sheet_Rock_10: 8017122487985139074
-      Slime_Mine_Sheet_Rock_11: 8582518978445768155
-      Slime_Mine_Sheet_Rock_12: 4539532352898279173
-      Slime_Mine_Sheet_Rock_13: 7021838182872189949
       Slime_Mine_Sheet_Rock_2: 4439495784979431972
       Slime_Mine_Sheet_Rock_3: -1212109385644622836
       Slime_Mine_Sheet_Rock_4: -3550225822139991094
       Slime_Mine_Sheet_Rock_5: 3816159796832951581
       Slime_Mine_Sheet_Rock_6: -5060925530944052483
       Slime_Mine_Sheet_Rock_7: -2140243140639345130
-      Slime_Mine_Sheet_Rock_8: 6034523071023596281
-      Slime_Mine_Sheet_Rock_9: -7723943708202021729
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -88,7 +88,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -102,7 +102,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,7 +126,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -154,12 +154,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_0
       rect:
         serializedVersion: 2
-        x: 16
+        x: 0
         y: 0
-        width: 24
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -176,12 +176,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_1
       rect:
         serializedVersion: 2
-        x: 77
+        x: 64
         y: 0
-        width: 29
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -198,12 +198,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_2
       rect:
         serializedVersion: 2
-        x: 139
+        x: 128
         y: 0
-        width: 33
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -220,12 +220,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_3
       rect:
         serializedVersion: 2
-        x: 206
+        x: 192
         y: 0
-        width: 27
-        height: 14
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -242,12 +242,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_4
       rect:
         serializedVersion: 2
-        x: 276
+        x: 256
         y: 0
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -264,12 +264,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_5
       rect:
         serializedVersion: 2
-        x: 342
+        x: 320
         y: 0
-        width: 12
-        height: 30
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -286,12 +286,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_6
       rect:
         serializedVersion: 2
-        x: 403
+        x: 384
         y: 0
-        width: 17
-        height: 21
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -308,12 +308,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_7
       rect:
         serializedVersion: 2
-        x: 466
+        x: 448
         y: 0
-        width: 20
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -330,12 +330,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_8
       rect:
         serializedVersion: 2
-        x: 533
+        x: 512
         y: 0
-        width: 14
-        height: 29
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -352,12 +352,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_9
       rect:
         serializedVersion: 2
-        x: 595
+        x: 576
         y: 0
-        width: 19
-        height: 28
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -374,12 +374,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_10
       rect:
         serializedVersion: 2
-        x: 657
+        x: 640
         y: 0
-        width: 21
-        height: 29
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -396,12 +396,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_11
       rect:
         serializedVersion: 2
-        x: 721
+        x: 704
         y: 0
-        width: 21
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -418,12 +418,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_12
       rect:
         serializedVersion: 2
-        x: 786
+        x: 768
         y: 0
-        width: 20
-        height: 31
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -440,12 +440,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_13
       rect:
         serializedVersion: 2
-        x: 848
+        x: 832
         y: 0
-        width: 25
-        height: 17
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -462,12 +462,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_14
       rect:
         serializedVersion: 2
-        x: 906
+        x: 896
         y: 0
-        width: 35
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -484,12 +484,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_15
       rect:
         serializedVersion: 2
-        x: 966
+        x: 960
         y: 0
-        width: 40
-        height: 12
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -506,12 +506,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_16
       rect:
         serializedVersion: 2
-        x: 1035
+        x: 1024
         y: 0
-        width: 31
-        height: 15
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -528,12 +528,12 @@ TextureImporter:
       name: Slime_Jump_Cycle_Sheet_Rock_17
       rect:
         serializedVersion: 2
-        x: 1100
+        x: 1088
         y: 0
-        width: 29
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 64
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -550,7 +550,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 26388819215c7ad4f835747ca65874f5
     internalID: 0
     vertices: []
     indices: 
@@ -558,7 +558,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":18.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
       Slime_Jump_Cycle_Sheet_Rock_0: -5430049587039688256
       Slime_Jump_Cycle_Sheet_Rock_1: 8261203314294833982
