@@ -21,6 +21,7 @@ namespace UI.Components
         private bool isDraggable;
         private IInventory inventory;
         public bool orphanAfterPickup = false;
+        public static Item currentDraggedItem = null;
         #endregion
 
         #region Backers
@@ -82,15 +83,12 @@ namespace UI.Components
             if (!isDraggable) return;
             rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
             rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-            rootElm.RegisterCallback<PointerUpEvent>(OnPointerUp);
+            // rootElm.RegisterCallback<PointerUpEvent>(OnPointerUp);
             #endregion
         }
 
-
-        private void OnPointerDown(PointerDownEvent e)
+        private void GrabItem(PointerDownEvent e)
         {
-            #region OnPointerDown
-            if (isBeingDragged || rootElm.HasPointerCapture(e.pointerId)) return;
             Slot ghostSlot = orphanAfterPickup ? null : slot;
             IInventory ghostInventory = orphanAfterPickup ? Items.Inventory.Singleton : inventory;
             if (e.button == 1)
@@ -111,10 +109,12 @@ namespace UI.Components
                 ghost.style.top = e.position.y - _dragOffset.y;
                 panel.visualTree.Add(ghost);
 
-                ghost.rootElm.CapturePointer(e.pointerId);
                 ghost.rootElm.AddToClassList("item-dragged");
                 ghost.isBeingDragged = true;
                 e.StopPropagation();
+                // register as the currently dragged ghost and enable global pointer move
+                currentDraggedItem = ghost;
+                if (ghost.panel != null) ghost.panel.visualTree.RegisterCallback<PointerMoveEvent>(ghost.OnGlobalPointerMove);
 
                 if (slot != null) inventory.RemoveAmount(slot.slotId, leave);
             }
@@ -132,13 +132,84 @@ namespace UI.Components
                 ghost.style.top = e.position.y - _dragOffset.y;
                 panel.visualTree.Add(ghost);
 
-                ghost.rootElm.CapturePointer(e.pointerId);
                 ghost.rootElm.AddToClassList("item-dragged");
                 ghost.isBeingDragged = true;
                 e.StopPropagation();
+                // register as the currently dragged ghost and enable global pointer move
+                currentDraggedItem = ghost;
+                if (ghost.panel != null) ghost.panel.visualTree.RegisterCallback<PointerMoveEvent>(ghost.OnGlobalPointerMove);
 
                 if (slot != null) inventory.ClearSlot(slot.slotId);
             }
+        }
+
+        private void DropItem(PointerDownEvent e)
+        {
+            short dropAmount = e.button == 1 ? (short)1 : (short)amount;
+            ItemStack stack = new(item) { amount = dropAmount };
+            int originalAmount = amount;
+            List<VisualElement> foundElements = new();
+            panel.PickAll(e.position, foundElements);
+
+            foreach (VisualElement element in foundElements)
+            {
+                if (element is not Slot targetSlot) continue;
+                if (!targetSlot.isDroppable) break;
+                if (e.button == 1 && targetSlot.item != null && targetSlot.item.item != item) return;
+
+                // Try normal add first
+                targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
+                if (stack.amount == 0)
+                {
+                    amount -= dropAmount;
+                    if (amount <= 0) RemoveFromHierarchy();
+                    return;
+                }
+                if (stack.amount < dropAmount)
+                {
+                    amount -= dropAmount - stack.amount;
+                    return;
+                }
+
+                // Failed — attempt swap (only on full left-click drop, not right-click single)
+                if (e.button != 1 && targetSlot.inventory != null && targetSlot.item != null)
+                {
+                    ItemStack swapped = targetSlot.inventory.ClearSlot(targetSlot.slotId);
+                    if (swapped != null)
+                    {
+                        targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
+                        if (stack.amount == 0)
+                        {
+                            // Become the swapped item
+                            item = swapped.data;
+                            amount = swapped.amount;
+                            return;
+                        }
+                        // AddToSlot still failed somehow — put it back
+                        targetSlot.inventory.AddToSlot(swapped, targetSlot.slotId);
+                    }
+                }
+
+                break;
+            }
+
+            if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
+            if (stack.amount == 0)
+            {
+                amount -= dropAmount;
+                if (amount <= 0) RemoveFromHierarchy();
+                return;
+            }
+            amount = stack.amount;
+        }
+
+
+        private void OnPointerDown(PointerDownEvent e)
+        {
+            #region OnPointerDown
+            if (isBeingDragged || rootElm.HasPointerCapture(e.pointerId)) DropItem(e);
+            else GrabItem(e);
+
 
             #endregion
         }
@@ -146,7 +217,7 @@ namespace UI.Components
         private void OnPointerMove(PointerMoveEvent e)
         {
             #region OnPointerMove
-            if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
+            if (!isBeingDragged) return;
 
             Vector2 pos = e.position;
             style.left = pos.x - _dragOffset.x;
@@ -154,32 +225,23 @@ namespace UI.Components
             #endregion
         }
 
-        private void OnPointerUp(PointerUpEvent e)
+        private void OnGlobalPointerMove(PointerMoveEvent e)
         {
-            #region OnPointerUp
-            if (e.button == 1) return; // TODO: leave 1
-            if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
-            rootElm.ReleasePointer(e.pointerId);
-            rootElm.RemoveFromClassList("item-dragged");
-
-            Items.ItemStack stack = new(item) { amount = (short)amount, };
-            List<VisualElement> foundElements = new();
-            panel.PickAll(e.position, foundElements);
-
-            foreach (VisualElement element in foundElements)
-            {
-                // TODO: Add drag to outside
-                if (element is not Slot targetSlot) continue;
-                if (!targetSlot.isDroppable) break;
-                bool sucess = targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
-                if (sucess) { RemoveFromHierarchy(); return; }
-                break;
-            }
-
-            if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
-            RemoveFromHierarchy();
-            #endregion
+            if (!isBeingDragged) return;
+            Vector2 pos = e.position;
+            style.left = pos.x - _dragOffset.x;
+            style.top = pos.y - _dragOffset.y;
         }
+
+        // private void OnPointerUp(PointerUpEvent e)
+        // {
+        //     #region OnPointerUp
+        //     if (e.button == 1) return; // TODO: leave 1
+        //     if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
+
+        //     // keep ghost with remaining amount
+        //     #endregion
+        // }
         #endregion
     }
 }

@@ -305,7 +305,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260356698}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dac5078ef7ffdde4eb09614a7af90a80, type: 3}
   m_Name: 
@@ -680,7 +680,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990a799ba3cb33c42a968d4ab5b4637d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
-  startingItems: []
+  startingItems:
+  - data: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
+    amount: 1
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
 --- !u!114 &448283168
 MonoBehaviour:
   m_ObjectHideFlags: 0

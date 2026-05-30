@@ -41,6 +41,7 @@ namespace Items
         public void Add(ItemStack itemToAdd)
         {
             #region Add
+            if (itemToAdd == null) return;
             if (isEmpty)
             {
                 item = new ItemStack(itemToAdd.data) { amount = itemToAdd.amount };

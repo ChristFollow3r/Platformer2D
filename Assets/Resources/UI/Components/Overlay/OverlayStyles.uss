@@ -6,3 +6,10 @@
     align-items: flex-end;
     width: 415px;
 }
+
+.left {
+    flex-grow: 1;
+    right: auto;
+    width: 60%;
+    justify-content: center;
+}

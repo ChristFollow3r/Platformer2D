@@ -8,6 +8,9 @@ namespace Scriptable_Objects_Scripts
     {
         public Mod mod;
         public float minigPower;
+        public float attackPower;
+        public float defence;
+        public float placingRange;
         public float duration;
     }
 }
