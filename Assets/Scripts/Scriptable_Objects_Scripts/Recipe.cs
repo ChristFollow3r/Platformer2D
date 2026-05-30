@@ -3,13 +3,13 @@ using UnityEngine;
 
 namespace Scriptable_Objects_Scripts
 {
-  [CreateAssetMenu(fileName = "Recipe", menuName = "Scriptable Objects/Recipe")]
-  public class Recipe : ScriptableObject
-  {
-    public ItemData result;
-    public int amount;
-    [Header("Recipe")]
-    public int gridSize = 3;
-    public ItemData[] ingredients = new ItemData[16];
-  }
+    [CreateAssetMenu(fileName = "Recipe", menuName = "Scriptable Objects/Recipe")]
+    public class Recipe : ScriptableObject
+    {
+        public ItemData result;
+        public int amount;
+        [Header("Recipe")]
+        public int gridSize = 4;
+        public ItemData[] ingredients = new ItemData[16];
+    }
 }
