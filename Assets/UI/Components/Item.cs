@@ -193,6 +193,8 @@ namespace UI.Components
                 break;
             }
 
+            if (e.button == 1) return;
+
             if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
             if (stack.amount == 0)
             {
