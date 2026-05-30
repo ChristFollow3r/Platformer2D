@@ -179,7 +179,7 @@ namespace Items.Overlays
 
             OnSlotChanged?.Invoke(slotId, null);
 
-            if (isCraftingSlot) EvaluateCraft();
+            if (isCraftingSlot || isResultSlot) EvaluateCraft();
             if (isResultSlot)
             {
                 for (int i = 0; i < CraftingSlots; i++)

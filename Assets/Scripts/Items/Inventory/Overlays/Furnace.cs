@@ -124,11 +124,9 @@ namespace Items.Overlays
                 return true;
             }
 
-            Debug.Log($"Same recipe!, resetting stuff");
             currentCookTimer = 0;
             fillPercent = 0;
             currentResult = result;
-            Debug.Log($"Current result {currentResult.amount}");
             return true;
             #endregion
         }

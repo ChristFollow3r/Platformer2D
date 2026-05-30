@@ -27,7 +27,6 @@ namespace Items
         {
             if (blockId != this.blockId) return;
             isOpen = true;
-            Debug.Log($"Opening {overlayType}");
             UIController.Singleton.OnOverlayClose += OnOverlayClose;
         }
         private void OnOverlayClose()

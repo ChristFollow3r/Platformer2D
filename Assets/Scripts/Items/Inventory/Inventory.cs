@@ -65,10 +65,7 @@ namespace Items
             #region Start
             foreach (ItemStackBuilder builder in startingItems)
             {
-                Debug.Log($"Adding item {builder.data.name}");
                 ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
-                Debug.Log(itemStack.data.name);
-                Debug.Log(itemStack.amount);
                 Add(itemStack);
             }
             #endregion
@@ -98,7 +95,6 @@ namespace Items
             do
             {
                 slot = GetSlotOfItem(item.data);
-                Debug.Log($"Found slot for item {item.data.name} {slot.id}");
                 if (slot is null) break;
                 if (!dryRun)
                 {

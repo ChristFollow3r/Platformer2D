@@ -165,11 +165,6 @@ namespace Player
             Vector2 playerCenter = playerCollider != null ? (Vector2)playerCollider.bounds.center : (Vector2)transform.position;
             float distance = Vector2.Distance(actualMouseWorldPos, playerCenter);
 
-            if (distance > reachDistance)
-            {
-                Debug.Log($"[Mining] Failed: Distance {distance} | Target: {actualMouseWorldPos} | Player: {playerCenter}");
-                return;
-            }
 
             int x = Mathf.FloorToInt(actualMouseWorldPos.x / CellSize);
             int y = Mathf.FloorToInt(actualMouseWorldPos.y / CellSize);
@@ -182,22 +177,15 @@ namespace Player
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
-            if (clickedBlock == BlockType.Air)
-            {
-                Debug.Log($"[Mining] Failed: Clicked on Air at Grid ({x}, {y})");
-                return;
-            }
 
             float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
             float miningPower = Equipment.Singleton.GetMiningPower();
 
-            Debug.Log($"[Mining] Hitting {clickedBlock} at ({x}, {y}) | Power: {miningPower} | Dmg: {currentBlockDamage}/{targetHardness}");
 
             currentBlockDamage += miningPower;
 
             if (currentBlockDamage >= targetHardness)
             {
-                Debug.Log($"[Mining] SUCCESS! Broke {clickedBlock}.");
                 BreakBlock(x, y, clickedBlock);
                 currentBlockDamage = 0f;
 
@@ -237,7 +225,6 @@ namespace Player
 
             if (distance < 0.5f) return true;
 
-            Debug.Log($"Setting block type {item.data.blockType}");
             WorldData.World.SetBlockType(x, y, item.data.blockType);
             UpdateChunkVisuals(x, y);
 

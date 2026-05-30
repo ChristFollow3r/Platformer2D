@@ -47,7 +47,7 @@ namespace Items.Overlays
         {
             #region EvaluateCraft
             ItemStack result = CraftingUtils.EvaluateCraft(craftingSlots.Select(s => s.item).ToList(), 4);
-
+            Debug.Log($"EvaluateCraft result: {result?.data?.name ?? "null"}");
             resultSlot.item = null;
             if (result != null) resultSlot.Add(result);
             OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
@@ -108,8 +108,7 @@ namespace Items.Overlays
 
             OnSlotChanged?.Invoke(slotId, null);
 
-            if (!isResultSlot) EvaluateCraft();
-            else
+            if (isResultSlot)
             {
                 for (int i = 0; i < CraftingSlots; i++)
                 {
@@ -118,6 +117,7 @@ namespace Items.Overlays
                 }
             }
 
+            EvaluateCraft();
             return itemStack;
             #endregion
         }
