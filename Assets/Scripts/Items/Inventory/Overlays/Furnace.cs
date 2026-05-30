@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Items.Utils;
 using Player;
+using Scriptable_Objects_Scripts;
 using UnityEngine;
 
 
@@ -18,10 +19,26 @@ namespace Items.Overlays
         public const short MaxSlotId = CookingSlots;
         public Slot[] cookingSlots = new Slot[CookingSlots];
         public Slot resultSlot;
+        public float fillPercent
+        {
+            get => _fillPercent;
+            private set
+            {
+                _fillPercent = value;
+                OnFillChanged?.Invoke(_fillPercent);
+            }
+        }
+        private float _fillPercent = 0;
+
+        private ItemStack currentResult = null;
+        private float currentCookDuration = 0;
+        private float currentCookTimer = 0;
         #endregion
+
 
         #region Events
         public event Action<int, ItemStack> OnSlotChanged;
+        public event Action<float> OnFillChanged;
         #endregion
 
         #region Contructor
@@ -48,13 +65,34 @@ namespace Items.Overlays
         public bool EvaluateCook()
         {
             #region EvaluateCook
-            ItemStack result = CookingUtils.EvaluateCook(cookingSlots.Select(s => s.item).ToList());
+            ItemStack result = CookingUtils.EvaluateCook(cookingSlots.Select(s => s.item).ToList(), out CookingRecipe cookingRecipe);
+            if (result == null)
+            {
+                currentCookDuration = 0;
+                currentCookTimer = 0;
+                fillPercent = 0;
+                currentResult = null;
+                return false;
+            }
 
-            resultSlot.item = null;
-            if (result != null) resultSlot.Add(result);
-            OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
+            if (!resultSlot.isEmpty && result.data != resultSlot.item.data) return false;
+            if (!resultSlot.isEmpty && resultSlot.item.amount >= resultSlot.item.data.stack)
+                return false;
 
-            // Add callback to item pickup?
+            if (currentResult == null || result.data != currentResult.data)
+            {
+                currentCookDuration = cookingRecipe.cookTime;
+                currentCookTimer = 0;
+                fillPercent = 0;
+                currentResult = result;
+                return true;
+            }
+
+            Debug.Log($"Same recipe!, resetting stuff");
+            currentCookTimer = 0;
+            fillPercent = 0;
+            currentResult = result;
+            Debug.Log($"Current result {currentResult.amount}");
             return true;
             #endregion
         }
@@ -75,7 +113,7 @@ namespace Items.Overlays
             if (!slot.isEmpty && slot.item.data != itemStack.data) return false;
             slot.Add(itemStack);
             OnSlotChanged?.Invoke(slotId, slot.item);
-            EvaluateCook();
+            if (slot.id != resultSlot.id) EvaluateCook();
             return true;
             #endregion
         }
@@ -113,10 +151,29 @@ namespace Items.Overlays
 
             OnSlotChanged?.Invoke(slotId, null);
 
-            if (!isResultSlot) EvaluateCook();
+            EvaluateCook();
 
             return itemStack;
             #endregion
+        }
+
+        public override void Tick()
+        {
+            if (currentResult == null) return;
+            currentCookTimer += Time.deltaTime;
+            fillPercent = Mathf.Clamp01(currentCookTimer / currentCookDuration);
+            if (currentCookTimer >= currentCookDuration)
+            {
+                Debug.Log($"adding {currentResult.amount}");
+                resultSlot.Add(currentResult);
+                OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
+                EvaluateCook();
+                for (int i = 0; i < CookingSlots; i++)
+                {
+                    if (cookingSlots[i].isEmpty) continue;
+                    RemoveAmount(cookingSlots[i].id, 1);
+                }
+            }
         }
 
         protected override void CloseOverlay()
@@ -136,6 +193,8 @@ namespace Items.Overlays
             }
             if (resultSlot.isEmpty) return;
             OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
+
+
             #endregion
         }
         #endregion

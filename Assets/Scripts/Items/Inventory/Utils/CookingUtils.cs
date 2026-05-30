@@ -48,10 +48,11 @@ namespace Items.Utils
         }
 
 
-        public static ItemStack EvaluateCook(List<ItemStack> items)
+        public static ItemStack EvaluateCook(List<ItemStack> items, out CookingRecipe cookingRecipe)
         {
             #region EvaluateCook
             int gridSize = 2;
+            cookingRecipe = null;
             if (items == null) return null;
 
             foreach (CookingRecipe CookingRecipe in All)
@@ -72,7 +73,7 @@ namespace Items.Utils
                                 Debug.LogWarning($"[CraftingUtils] CookingRecipe found, but its 'result' is missing!");
                                 return null;
                             }
-
+                            cookingRecipe = CookingRecipe;
                             return new ItemStack(CookingRecipe.result) { amount = (short)CookingRecipe.amount };
                         }
                     }

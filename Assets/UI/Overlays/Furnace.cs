@@ -25,6 +25,7 @@ namespace UI.Components
         private VisualElement cookingHolder;
         private VisualElement cookingSlotsElm;
         private VisualElement cookingGrid;
+        private VisualElement fill;
         #endregion
 
         #region Constructor
@@ -56,6 +57,7 @@ namespace UI.Components
             cookingHolder = this.Q<VisualElement>("cooking-holder");
             cookingSlotsElm = this.Q<VisualElement>("cooking-slots");
             cookingGrid = this.Q<VisualElement>("cooking-grid");
+            fill = this.Q<VisualElement>("progress-fill");
             #endregion
         }
 
@@ -88,6 +90,7 @@ namespace UI.Components
             #region SubscribeEvents
             if (furnace == null) return;
             furnace.OnSlotChanged += OnSlotChanged;
+            furnace.OnFillChanged += OnFillChanged;
             #endregion
         }
 
@@ -110,6 +113,11 @@ namespace UI.Components
             allSlots[slotId].item = itemElm;
 
             #endregion
+        }
+
+        private void OnFillChanged(float fillPercent)
+        {
+            fill.style.width = Length.Percent(fillPercent * 100);
         }
         #endregion
     }
