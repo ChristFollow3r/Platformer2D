@@ -12,7 +12,8 @@ namespace Player
     {
         Inventory,
         Furnace,
-        Chest
+        Chest,
+        CraftingTable
     };
 
     [DefaultExecutionOrder(-50)]
@@ -202,6 +203,12 @@ namespace Player
                         VisualElement element = new Chest(data);
                         return element;
                     }
+                case OverlayType.CraftingTable:
+                    {
+                        Items.Overlays.CraftingTable data = (Items.Overlays.CraftingTable)foundOverlay;
+                        VisualElement element = new CraftingTable(data);
+                        return element;
+                    }
                 default:
                     return null;
             }
@@ -237,6 +244,13 @@ namespace Player
                 case OverlayType.Chest:
                     {
                         Items.Overlays.Chest data = new Items.Overlays.Chest(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
+
+                case OverlayType.CraftingTable:
+                    {
+                        Items.Overlays.CraftingTable data = new Items.Overlays.CraftingTable(blockId);
                         overlaysByBlockId[blockId] = data;
                         return data;
                     }

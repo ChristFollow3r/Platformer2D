@@ -3,7 +3,8 @@ using Scriptable_Objects_Scripts;
 
 namespace Data
 {
-    public enum BlockType {
+    public enum BlockType
+    {
         None,
         Air,
         Dirt,
@@ -30,7 +31,6 @@ namespace Data
         StoneBrick,
         SlateBrick,
         SandBrick,
-        CraftingTable,
         SaphireBlock,
         TopazBlock,
         EmeraldBlock,
