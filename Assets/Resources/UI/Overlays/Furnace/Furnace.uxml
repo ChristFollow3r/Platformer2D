@@ -1,0 +1,18 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
+    <Style src="project://database/Assets/Resources/UI/Overlays/Furnace/FurnaceStyles.uss?fileID=7433441132597879392&amp;guid=7d01e9eafb420074a9e2474437a9d157&amp;type=3#FurnaceStyles"/>
+    <ui:VisualElement name="root" class="furnace-root">
+        <ui:VisualElement name="cooking" class="fornace-cooking">
+            <ui:VisualElement name="cooking-holder" class="cooking-holder">
+                <ui:VisualElement name="cooking-slots" class="cooking-slots">
+                    <ui:VisualElement name="cooking-grid" class="spaced-right cooking-grid"/>
+                    <ui:VisualElement name="spacer" class="space"/>
+                </ui:VisualElement>
+                <ui:VisualElement name="spacer" class="spacer-col"/>
+                <ui:VisualElement name="progress-holder" class="cooking-progress">
+                    <ui:VisualElement name="progress-fill" class="cooking-fill" style="width: 0%;"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

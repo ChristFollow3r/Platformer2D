@@ -14,11 +14,9 @@ namespace Items.Overlays
     public class Furnace : Overlay, IInventory
     {
         #region Data
-        public const short EquipmentSlots = 5;
-        public const short CraftingSlots = 4;
-        public const short MaxSlotId = EquipmentSlots + CraftingSlots;
-        public Slot[] equipmentSlots = new Slot[EquipmentSlots];
-        public Slot[] craftingSlots = new Slot[CraftingSlots];
+        public const short CookingSlots = 4;
+        public const short MaxSlotId = CookingSlots;
+        public Slot[] cookingSlots = new Slot[CookingSlots];
         public Slot resultSlot;
         #endregion
 
@@ -37,35 +35,20 @@ namespace Items.Overlays
         private void Init()
         {
             #region Init
-            for (int i = 0; i < equipmentSlots.Length; i++)
+
+            for (int i = 0; i < cookingSlots.Length; i++)
             {
-                equipmentSlots[i] = new Slot() { id = i };
+                cookingSlots[i] = new Slot() { id = i };
             }
-            for (int i = 0; i < craftingSlots.Length; i++)
-            {
-                craftingSlots[i] = new Slot() { id = EquipmentSlots + i };
-            }
-            resultSlot = new Slot() { id = EquipmentSlots + CraftingSlots };
+            resultSlot = new Slot() { id = CookingSlots };
             #endregion
         }
 
-        public ItemStack AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
-        {
-            #region AddEquipment
-            Slot slot = equipmentSlots[(int)equipmentType];
-            ItemStack prev = slot.item;
 
-            slot.item = itemStack;
-            OnSlotChanged?.Invoke(slot.id, slot.item);
-            return prev;
-            #endregion
-        }
-
-        public bool EvaluateCraft()
+        public bool EvaluateCook()
         {
-            #region EvaluateCraft
-            Debug.Log("Evaluating craft!");
-            ItemStack result = CraftingUtils.EvaluateCraft(craftingSlots.Select(s => s.item).ToList(), 2);
+            #region EvaluateCook
+            ItemStack result = CookingUtils.EvaluateCook(cookingSlots.Select(s => s.item).ToList());
 
             resultSlot.item = null;
             if (result != null) resultSlot.Add(result);
@@ -86,13 +69,13 @@ namespace Items.Overlays
                 Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
                 return false;
             }
-            bool isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
-            Slot slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
+
+            Slot slot = cookingSlots[slotId];
 
             if (!slot.isEmpty && slot.item.data != itemStack.data) return false;
             slot.Add(itemStack);
             OnSlotChanged?.Invoke(slotId, slot.item);
-            if (isCraftingSlot) EvaluateCraft();
+            EvaluateCook();
             return true;
             #endregion
         }
@@ -104,9 +87,7 @@ namespace Items.Overlays
                 Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
                 return false;
             }
-            Slot slot;
-            if (slotId < EquipmentSlots) slot = equipmentSlots[slotId];
-            else slot = craftingSlots[slotId - EquipmentSlots];
+            Slot slot = cookingSlots[slotId];
 
             slot.item.amount -= amount;
             if (slot.item.amount <= 0) ClearSlot(slotId);
@@ -119,15 +100,11 @@ namespace Items.Overlays
         {
             #region ClearSlot
             Slot slot;
-            bool isCraftingSlot = false;
             bool isResultSlot = slotId == resultSlot.id;
 
             if (isResultSlot) slot = resultSlot;
-            else
-            {
-                isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
-                slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
-            }
+            else slot = cookingSlots[slotId];
+
 
             if (slot.isEmpty) return null;
 
@@ -136,15 +113,7 @@ namespace Items.Overlays
 
             OnSlotChanged?.Invoke(slotId, null);
 
-            if (isCraftingSlot) EvaluateCraft();
-            if (isResultSlot)
-            {
-                for (int i = 0; i < CraftingSlots; i++)
-                {
-                    if (craftingSlots[i].isEmpty) continue;
-                    RemoveAmount(craftingSlots[i].id, 1);
-                }
-            }
+            if (!isResultSlot) EvaluateCook();
 
             return itemStack;
             #endregion
@@ -153,12 +122,6 @@ namespace Items.Overlays
         protected override void CloseOverlay()
         {
             #region OnOverlayClose
-            foreach (Slot slot in craftingSlots)
-            {
-                if (slot.isEmpty) continue;
-                Inventory.Singleton.Add(slot.item);
-                slot.item = null;
-            }
             #endregion
         }
 
@@ -166,11 +129,13 @@ namespace Items.Overlays
         public override void RefreshUI()
         {
             #region RefreshUI
-            foreach (Slot slot in equipmentSlots)
+            foreach (Slot slot in cookingSlots)
             {
                 if (slot.isEmpty) continue;
                 OnSlotChanged?.Invoke(slot.id, slot.item);
             }
+            if (resultSlot.isEmpty) return;
+            OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
             #endregion
         }
         #endregion

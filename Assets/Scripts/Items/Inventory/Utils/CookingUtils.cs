@@ -48,10 +48,10 @@ namespace Items.Utils
         }
 
 
-        public static ItemStack EvaluateCraft(List<ItemStack> items, int gridSize)
+        public static ItemStack EvaluateCook(List<ItemStack> items)
         {
-            #region EvaluateCraft
-
+            #region EvaluateCook
+            int gridSize = 2;
             if (items == null) return null;
 
             foreach (CookingRecipe CookingRecipe in All)
@@ -101,7 +101,7 @@ namespace Items.Utils
 
                     if (inBounds)
                     {
-                        ItemData expected = CookingRecipe.ingredients[recipeRow * 4 + recipeCol];
+                        ItemData expected = CookingRecipe.ingredients[recipeRow * 2 + recipeCol];
                         if (expected != provided) return false;
                     }
                     else

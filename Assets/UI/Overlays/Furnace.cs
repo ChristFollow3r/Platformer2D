@@ -10,12 +10,11 @@ namespace UI.Components
     {
 
         #region Data
-        private Slot[] equipmentSlots = new Slot[Items.Overlays.Equipment.EquipmentSlots];
-        private Slot[] craftingSlots = new Slot[4];
+        private Slot[] cookingSlots = new Slot[4];
         private Slot resultSlot;
 
-        private Slot[] allSlots = new Slot[Items.Overlays.Equipment.EquipmentSlots + Items.Overlays.Equipment.CraftingSlots + 1];
-        public Items.Overlays.Furnace equipment;
+        private Slot[] allSlots = new Slot[Items.Overlays.Furnace.CookingSlots + 1];
+        public Items.Overlays.Furnace furnace;
         #endregion
 
         #region Backers
@@ -23,16 +22,16 @@ namespace UI.Components
 
         #region Elements
         private VisualElement rootElm;
-        private VisualElement equipmentList;
-        private VisualElement craftingHolder;
-        private VisualElement craftingGrid;
+        private VisualElement cookingHolder;
+        private VisualElement cookingSlotsElm;
+        private VisualElement cookingGrid;
         #endregion
 
         #region Constructor
         public Furnace() { Init(); }
-        public Furnace(Items.Overlays.Furnace equipment)
+        public Furnace(Items.Overlays.Furnace furnace)
         {
-            this.equipment = equipment;
+            this.furnace = furnace;
             Init();
         }
         #endregion
@@ -41,7 +40,7 @@ namespace UI.Components
         private void Init()
         {
             #region Init
-            VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Overlays/Equipment/Equipment");
+            VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Overlays/Furnace/Furnace");
             tree.CloneTree(this);
 
             GetElements();
@@ -54,50 +53,41 @@ namespace UI.Components
         {
             #region GetElements
             rootElm = this.Q<VisualElement>("root");
-            equipmentList = this.Q<VisualElement>("equipment");
-            craftingHolder = this.Q<VisualElement>("crafting-holder");
-            craftingGrid = this.Q<VisualElement>("crafting-grid");
+            cookingHolder = this.Q<VisualElement>("cooking-holder");
+            cookingSlotsElm = this.Q<VisualElement>("cooking-slots");
+            cookingGrid = this.Q<VisualElement>("cooking-grid");
             #endregion
         }
 
         private void CreateSlots()
         {
             #region CreateSlots
-            for (short i = 0; i < equipmentSlots.Length; i++)
-            {
-                Slot slot = new Slot(equipment, true);
 
-                equipmentList.Add(slot);
-                equipmentSlots[i] = slot;
-                slot.slotId = i;
-                allSlots[slot.slotId] = slot;
-            }
-
-            for (short i = 0; i < craftingSlots.Length; i++)
+            for (short i = 0; i < cookingSlots.Length; i++)
             {
-                Slot slot = new Slot(equipment, true); // TODO, run validation before drop
+                Slot slot = new Slot(furnace, true); // TODO, run validation before drop
 
                 int col = i % 2;
                 int row = i / 2;
                 if (col < 1) slot.AddToClassList("spaced-right");
                 if (row < 1) slot.AddToClassList("spaced-bottom");
 
-                craftingGrid.Add(slot);
-                craftingSlots[i] = slot;
-                slot.slotId = (short)(equipmentSlots.Length + i);
+                cookingGrid.Add(slot);
+                cookingSlots[i] = slot;
+                slot.slotId = i;
                 allSlots[slot.slotId] = slot;
             }
 
-            resultSlot = new Slot(equipment, false) { slotId = (short)(equipmentSlots.Length + craftingSlots.Length) };
-            craftingHolder.Add(resultSlot);
+            resultSlot = new Slot(furnace, false) { slotId = (short)cookingSlots.Length };
+            cookingSlotsElm.Add(resultSlot);
             allSlots[resultSlot.slotId] = resultSlot;
             #endregion
         }
         private void SubscribeEvents()
         {
             #region SubscribeEvents
-            if (equipment == null) return;
-            equipment.OnSlotChanged += OnSlotChanged;
+            if (furnace == null) return;
+            furnace.OnSlotChanged += OnSlotChanged;
             #endregion
         }
 
@@ -109,7 +99,7 @@ namespace UI.Components
             {
                 bool isResultSlot = slotId == resultSlot.slotId;
 
-                itemElm = new Item(equipment, true)
+                itemElm = new Item(furnace, true)
                 {
                     item = item.data,
                     amount = item.amount,

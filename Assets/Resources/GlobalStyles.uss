@@ -35,3 +35,12 @@
 .space {
     width: 50px;
 }
+
+.spacer-col {
+    flex-grow: 1;
+    height: 40px;
+}
+
+
+
+
