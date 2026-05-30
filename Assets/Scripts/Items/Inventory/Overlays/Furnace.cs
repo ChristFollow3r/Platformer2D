@@ -16,9 +16,13 @@ namespace Items.Overlays
     {
         #region Data
         public const short CookingSlots = 4;
-        public const short MaxSlotId = CookingSlots;
+        public const short MaxSlotId = CookingSlots + 1;
         public Slot[] cookingSlots = new Slot[CookingSlots];
         public Slot resultSlot;
+        public Slot fuelSlot;
+        private bool hasFuel;
+        private float currentFuelDuration;
+        private float currentFuelTimer;
         public float fillPercent
         {
             get => _fillPercent;
@@ -58,6 +62,7 @@ namespace Items.Overlays
                 cookingSlots[i] = new Slot() { id = i };
             }
             resultSlot = new Slot() { id = CookingSlots };
+            fuelSlot = new Slot() { id = CookingSlots + 1 };
             #endregion
         }
 
@@ -107,10 +112,15 @@ namespace Items.Overlays
                 Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
                 return false;
             }
-
-            Slot slot = cookingSlots[slotId];
+            Slot slot;
+            bool isfuelSlot = slotId == fuelSlot.id;
+            if (isfuelSlot) slot = fuelSlot;
+            else slot = cookingSlots[slotId];
 
             if (!slot.isEmpty && slot.item.data != itemStack.data) return false;
+            if (isfuelSlot && !itemStack.data.isFuel) return false;
+
+
             slot.Add(itemStack);
             OnSlotChanged?.Invoke(slotId, slot.item);
             if (slot.id != resultSlot.id) EvaluateCook();
@@ -125,7 +135,12 @@ namespace Items.Overlays
                 Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
                 return false;
             }
-            Slot slot = cookingSlots[slotId];
+            Slot slot;
+            if (slotId == fuelSlot.id) slot = fuelSlot;
+            else if (slotId == resultSlot.id) slot = resultSlot;
+            else slot = cookingSlots[slotId];
+
+
 
             slot.item.amount -= amount;
             if (slot.item.amount <= 0) ClearSlot(slotId);
@@ -139,8 +154,10 @@ namespace Items.Overlays
             #region ClearSlot
             Slot slot;
             bool isResultSlot = slotId == resultSlot.id;
+            bool isfueldSlot = slotId == fuelSlot.id;
 
             if (isResultSlot) slot = resultSlot;
+            else if (isfueldSlot) slot = fuelSlot;
             else slot = cookingSlots[slotId];
 
 
@@ -151,15 +168,39 @@ namespace Items.Overlays
 
             OnSlotChanged?.Invoke(slotId, null);
 
-            EvaluateCook();
+            if (!isResultSlot && !isfueldSlot) EvaluateCook();
 
             return itemStack;
+            #endregion
+        }
+
+        private bool ConsumeFuel()
+        {
+            #region ConsumeFuel
+            if (fuelSlot.isEmpty) return false;
+            currentFuelTimer = fuelSlot.item.data.fuelDuration;
+            RemoveAmount(fuelSlot.id, 1);
+            return true;
             #endregion
         }
 
         public override void Tick()
         {
             if (currentResult == null) return;
+            currentFuelTimer -= Time.deltaTime;
+            if (currentFuelTimer <= 0)
+            {
+                if (!ConsumeFuel()) hasFuel = false;
+                else hasFuel = true;
+            }
+
+            if (!hasFuel)
+            {
+                currentCookTimer = 0;
+                return;
+            }
+
+
             currentCookTimer += Time.deltaTime;
             fillPercent = Mathf.Clamp01(currentCookTimer / currentCookDuration);
             if (currentCookTimer >= currentCookDuration)
