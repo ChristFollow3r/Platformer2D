@@ -202,12 +202,16 @@ namespace Player
         {
             float moveInput = playerInput.Player.Move.ReadValue<Vector2>().x;
             bool isMoving = Mathf.Abs(moveInput) > 0.1f;
+
+            // This logic is still fine because it requires the movement input to match the wall!
             bool isSliding = !isGrounded && rb.linearVelocityY < 0 &&
                              ((isTouchingLeftWall && moveInput < 0) || (isTouchingRightWall && moveInput > 0));
 
             if (isSliding)
             {
-                spriteRenderer.flipX = isTouchingRightWall;
+                // Fix: Use the moveInput to determine the flip, completely avoiding the 1x1 hole overlap issue.
+                // If moving right (> 0), flipX becomes true. If moving left (< 0), flipX becomes false.
+                spriteRenderer.flipX = moveInput > 0;
             }
             else if (Mathf.Abs(rb.linearVelocityX) > 0.1f && wallJumpTime <= 0)
             {
