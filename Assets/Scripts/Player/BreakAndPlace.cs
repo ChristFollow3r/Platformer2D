@@ -6,6 +6,7 @@ using Scriptable_Objects_Scripts;
 using World;
 using Items;
 using Items.Overlays;
+using System.Linq;
 
 namespace Player
 {
@@ -33,6 +34,13 @@ namespace Player
 
         private Vector2 cachedTargetPosition;
         private readonly Collider2D[] hitResults = new Collider2D[10];
+
+        private BlockType[] entities = new BlockType[]
+        {
+            BlockType.Chest,
+            BlockType.CraftingTable,
+            BlockType.Furnace
+        };
 
         private void Awake()
         {
@@ -86,7 +94,7 @@ namespace Player
 
             BlockType clickedBlock = GetClickedBlock(worldMousePos, out ulong blockId);
 
-            if (clickedBlock == BlockType.Entity)
+            if (IsBlockEntity(clickedBlock))
             {
                 UIController.Singleton.OpenOverlay(blockId);
                 return;
@@ -193,7 +201,7 @@ namespace Player
                 BreakBlock(x, y, clickedBlock);
                 currentBlockDamage = 0f;
 
-                if (clickedBlock == BlockType.Entity)
+                if (IsBlockEntity(clickedBlock))
                 {
                     UIController.Singleton.DestroyEntity(BlockIdUtils.From(x, y));
                 }
@@ -229,12 +237,13 @@ namespace Player
 
             if (distance < 0.5f) return true;
 
+            Debug.Log($"Setting block type {item.data.blockType}");
             WorldData.World.SetBlockType(x, y, item.data.blockType);
             UpdateChunkVisuals(x, y);
 
             Inventory.Singleton.RemoveFromHand();
 
-            if (item.data.blockType == BlockType.Entity)
+            if (IsBlockEntity(item.data.blockType))
             {
                 UIController.Singleton.CreateOverlay(BlockIdUtils.From(x, y), item.data.overlayType);
             }
@@ -316,6 +325,8 @@ namespace Player
 
             WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(x, y);
         }
+
+        private bool IsBlockEntity(BlockType blockType) => entities.Contains(blockType);
 
         #endregion
     }
