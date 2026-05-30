@@ -21,6 +21,7 @@ namespace UI.Components
         private bool isDraggable;
         private IInventory inventory;
         public bool orphanAfterPickup = false;
+        public static Item currentDraggedItem = null;
         #endregion
 
         #region Backers
@@ -111,10 +112,12 @@ namespace UI.Components
                 ghost.style.top = e.position.y - _dragOffset.y;
                 panel.visualTree.Add(ghost);
 
-                ghost.rootElm.CapturePointer(e.pointerId);
                 ghost.rootElm.AddToClassList("item-dragged");
                 ghost.isBeingDragged = true;
                 e.StopPropagation();
+                // register as the currently dragged ghost and enable global pointer move
+                currentDraggedItem = ghost;
+                if (ghost.panel != null) ghost.panel.visualTree.RegisterCallback<PointerMoveEvent>(ghost.OnGlobalPointerMove);
 
                 if (slot != null) inventory.RemoveAmount(slot.slotId, leave);
             }
@@ -132,10 +135,12 @@ namespace UI.Components
                 ghost.style.top = e.position.y - _dragOffset.y;
                 panel.visualTree.Add(ghost);
 
-                ghost.rootElm.CapturePointer(e.pointerId);
                 ghost.rootElm.AddToClassList("item-dragged");
                 ghost.isBeingDragged = true;
                 e.StopPropagation();
+                // register as the currently dragged ghost and enable global pointer move
+                currentDraggedItem = ghost;
+                if (ghost.panel != null) ghost.panel.visualTree.RegisterCallback<PointerMoveEvent>(ghost.OnGlobalPointerMove);
 
                 if (slot != null) inventory.ClearSlot(slot.slotId);
             }
@@ -146,12 +151,20 @@ namespace UI.Components
         private void OnPointerMove(PointerMoveEvent e)
         {
             #region OnPointerMove
-            if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
+            if (!isBeingDragged) return;
 
             Vector2 pos = e.position;
             style.left = pos.x - _dragOffset.x;
             style.top = pos.y - _dragOffset.y;
             #endregion
+        }
+
+        private void OnGlobalPointerMove(PointerMoveEvent e)
+        {
+            if (!isBeingDragged) return;
+            Vector2 pos = e.position;
+            style.left = pos.x - _dragOffset.x;
+            style.top = pos.y - _dragOffset.y;
         }
 
         private void OnPointerUp(PointerUpEvent e)
@@ -163,6 +176,7 @@ namespace UI.Components
             rootElm.RemoveFromClassList("item-dragged");
 
             Items.ItemStack stack = new(item) { amount = (short)amount, };
+            int originalAmount = amount;
             List<VisualElement> foundElements = new();
             panel.PickAll(e.position, foundElements);
 
@@ -171,13 +185,20 @@ namespace UI.Components
                 // TODO: Add drag to outside
                 if (element is not Slot targetSlot) continue;
                 if (!targetSlot.isDroppable) break;
-                bool sucess = targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
-                if (sucess) { RemoveFromHierarchy(); return; }
+                targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
+                if (stack.amount == 0) { RemoveFromHierarchy(); return; }
+                if (stack.amount < originalAmount)
+                {
+                    amount = stack.amount;
+                    return; // partially accepted, keep ghost with remaining
+                }
                 break;
             }
 
             if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
-            RemoveFromHierarchy();
+            if (stack.amount == 0) { RemoveFromHierarchy(); return; }
+            amount = stack.amount;
+            // keep ghost with remaining amount
             #endregion
         }
         #endregion

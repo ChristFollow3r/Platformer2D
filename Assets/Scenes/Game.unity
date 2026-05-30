@@ -686,11 +686,19 @@ MonoBehaviour:
     durability: 0
     duration: 0
   - data: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
-    amount: 4
+    amount: 64
     durability: 0
     duration: 0
   - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
-    amount: 4
+    amount: 64
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
+    amount: 64
     durability: 0
     duration: 0
 --- !u!114 &448283168

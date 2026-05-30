@@ -114,7 +114,7 @@ namespace Items.Overlays
             slot.Add(itemStack);
             OnSlotChanged?.Invoke(slotId, slot.item);
             if (slot.id != resultSlot.id) EvaluateCook();
-            return true;
+            return itemStack.amount == 0;
             #endregion
         }
         public bool RemoveAmount(int slotId, short amount)

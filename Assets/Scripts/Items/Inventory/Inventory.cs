@@ -146,7 +146,7 @@ namespace Items
 
             slot.Add(item);
             OnSlotChanged?.Invoke(slotId, slot.item);
-            return true;
+            return item.amount == 0;
             #endregion
         }
 
