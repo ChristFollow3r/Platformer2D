@@ -693,11 +693,15 @@ MonoBehaviour:
     amount: 4
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: 2f260f3f1ccaac54788fbf912453f8bd, type: 2}
+  - data: {fileID: 11400000, guid: 1bd51d29b6eb76c4da71e1fe290de690, type: 2}
     amount: 10
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - data: {fileID: 11400000, guid: cb50e3636ad34cf439709535d7b1abe5, type: 2}
+    amount: 10
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 5c0dfc1fd9a80074cb4c7857b10efef5, type: 2}
     amount: 10
     durability: 0
     duration: 0
