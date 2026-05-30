@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
   m_Name: PrimordialUpgrade
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
-  result: {fileID: 0}
+  result: {fileID: 11400000, guid: f6bad479859a08445bd19826c2bca2ca, type: 2}
   amount: 1
   gridSize: 4
   ingredients:
