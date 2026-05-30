@@ -7,5 +7,17 @@
             <ui:Button text="Save" name="Save" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-image: url(&quot;project://database/Assets/Sprites/UI_Art/UI_Assets/Sprout%20Lands%20-%20UI%20Pack%20-%20Basic%20pack/Sprite%20sheets/UI%20Big%20Play%20Button.png?fileID=-7635131891296033614&amp;guid=37ff9dbef34be1143b9dd72cadecd16c&amp;type=3#UI Big Play Button_0&quot;); width: 180px; height: 60px; margin-top: 10px; margin-bottom: 10px; background-color: rgba(55, 55, 55, 0); font-size: 30px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);"/>
             <ui:Button text="Exit" name="Exit" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-image: url(&quot;project://database/Assets/Sprites/UI_Art/UI_Assets/Sprout%20Lands%20-%20UI%20Pack%20-%20Basic%20pack/Sprite%20sheets/UI%20Big%20Play%20Button.png?fileID=-7635131891296033614&amp;guid=37ff9dbef34be1143b9dd72cadecd16c&amp;type=3#UI Big Play Button_0&quot;); width: 180px; height: 60px; margin-top: 10px; margin-bottom: 30px; background-color: rgba(55, 55, 55, 0); font-size: 30px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);"/>
         </ui:VisualElement>
+        <ui:VisualElement name="RecipeBookContainer" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Sprites/UI_Art/UI_Assets/BookEdited/FullPage.png?fileID=2800000&amp;guid=e7e1749ada902104ba6e8c96db0cbc06&amp;type=3#FullPage&quot;); -unity-slice-left: 15; -unity-slice-top: 15; -unity-slice-right: 15; -unity-slice-bottom: 15; position: absolute; width: 800px; height: 600px; margin-left: auto; margin-top: auto; margin-right: auto; margin-bottom: auto; flex-direction: row;">
+            <ui:VisualElement name="RightPage" style="flex-grow: 1; width: 50%; height: 100%; flex-direction: column; flex-shrink: 0;">
+                <ui:Button text="Button" name="NextPage"/>
+                <ui:Label text="Label" name="RightPageTitle"/>
+                <ui:VisualElement name="RightPageGrid" style="flex-grow: 1; flex-wrap: wrap; flex-direction: row;"/>
+            </ui:VisualElement>
+            <ui:VisualElement name="LeftPage" style="flex-grow: 1; width: 50%; height: 100%; flex-shrink: 0;">
+                <ui:Button text="Button" name="PrevPage"/>
+                <ui:Label text="Label" name="LeftPageTitle"/>
+                <ui:VisualElement name="LeftPageGrid" style="flex-grow: 1; flex-wrap: wrap; flex-direction: row;"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
