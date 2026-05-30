@@ -11,7 +11,8 @@ namespace Player
     public enum OverlayType
     {
         Inventory,
-        Furnace
+        Furnace,
+        Chest
     };
 
     [DefaultExecutionOrder(-50)]
