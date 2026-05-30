@@ -24,7 +24,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 6d977b190b2fb8f48ade4b34db86ffcd, type: 3}
   name: Oak_Tree
   type: 3
-  hardness: 5
+  hardness: 30
   spawnChance: 100
   hasPriority: 1
   isFromSurface: 1

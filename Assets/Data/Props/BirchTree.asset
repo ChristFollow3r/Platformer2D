@@ -24,7 +24,7 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: f4672648b2f68df4899554f564cfdba2, type: 3}
   name: BirchTree
   type: 4
-  hardness: 4
+  hardness: 15
   spawnChance: 100
   hasPriority: 1
   isFromSurface: 1

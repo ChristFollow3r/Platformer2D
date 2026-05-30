@@ -20,7 +20,7 @@ MonoBehaviour:
   sprite: {fileID: -8683477458368390101, guid: a9cd264e2e56fae4eb33bb95700069c3, type: 3}
   name: Stone
   type: 2
-  hardness: 1
+  hardness: 6
   spawnChance: 36
   hasPriority: 0
   isFromSurface: 1

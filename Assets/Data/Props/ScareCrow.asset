@@ -20,7 +20,7 @@ MonoBehaviour:
   sprite: {fileID: -1947704308521943788, guid: a9cd264e2e56fae4eb33bb95700069c3, type: 3}
   name: ScareCrow
   type: 9
-  hardness: 3
+  hardness: 9
   spawnChance: 20
   hasPriority: 0
   isFromSurface: 1

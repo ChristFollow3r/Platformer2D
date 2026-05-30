@@ -28,6 +28,10 @@ namespace Player
         private float currentBlockDamage = 3f;
         private Collider2D playerCollider;
 
+        [Header("Prop Attack Data")]
+        private Vector2Int currentPropTarget = new Vector2Int(-999, -999);
+        private float currentPropDamage = 0f;
+
         [Header("Prefabs")]
         [SerializeField] private GameObject itemEntityPrefab;
 
@@ -111,42 +115,60 @@ namespace Player
         #region Animation Events (Public Methods)
 
         public void ExecuteAttack()
+{
+    int direction = cachedTargetPosition.x < transform.position.x ? -1 : 1;
+    Vector2 attackCenter = (Vector2)transform.position + new Vector2(attackOffset.x * direction, attackOffset.y);
+
+    int hitCount = Physics2D.OverlapBoxNonAlloc(attackCenter, attackBoxSize, 0f, hitResults);
+
+    for (int i = 0; i < hitCount; i++)
+    {
+        if (hitResults[i].TryGetComponent(out UnityEngine.Tilemaps.Tilemap tilemap))
         {
-            int direction = cachedTargetPosition.x < transform.position.x ? -1 : 1;
-            Vector2 attackCenter = (Vector2)transform.position + new Vector2(attackOffset.x * direction, attackOffset.y);
+            Vector3Int hitCell = tilemap.WorldToCell(attackCenter);
+            bool foundProp = false;
 
-            int hitCount = Physics2D.OverlapBoxNonAlloc(attackCenter, attackBoxSize, 0f, hitResults);
-
-            for (int i = 0; i < hitCount; i++)
+            for (int yOffset = 0; yOffset >= -6; yOffset--)
             {
-                if (hitResults[i].TryGetComponent(out UnityEngine.Tilemaps.Tilemap tilemap))
+                for (int xOffset = -1; xOffset <= 1; xOffset++)
                 {
-                    Vector3Int hitCell = tilemap.WorldToCell(attackCenter);
-                    bool foundProp = false;
+                    int checkX = hitCell.x + xOffset;
+                    int checkY = hitCell.y + yOffset;
 
-                    for (int yOffset = 0; yOffset >= -6; yOffset--)
+                    if (!WorldData.World.SafeCheck(checkX, checkY)) continue;
+
+                    PropType hitType = WorldData.World.GetPropType(checkX, checkY);
+
+                    if (hitType != PropType.None)
                     {
-                        for (int xOffset = -1; xOffset <= 1; xOffset++)
+                        if (currentPropTarget.x != checkX || currentPropTarget.y != checkY)
                         {
-                            int checkX = hitCell.x + xOffset;
-                            int checkY = hitCell.y + yOffset;
-
-                            if (!WorldData.World.SafeCheck(checkX, checkY)) continue;
-
-                            PropType hitType = WorldData.World.GetPropType(checkX, checkY);
-
-                            if (hitType != PropType.None)
-                            {
-                                BreakProp(hitType, checkX, checkY);
-                                foundProp = true;
-                                break;
-                            }
+                            currentPropTarget = new Vector2Int(checkX, checkY);
+                            currentPropDamage = 0f;
                         }
-                        if (foundProp) break;
+
+                        Prop propHitData = WorldData.PropDictionary[hitType];
+                        float hitPower = Equipment.Singleton.GetMiningPower();
+
+                        currentPropDamage += hitPower;
+
+                        Debug.Log($"[Prop Attack] Hitting {hitType} at ({checkX}, {checkY}) | Dmg: {currentPropDamage}/{propHitData.hardness}");
+
+                        if (currentPropDamage >= propHitData.hardness)
+                        {
+                            BreakProp(hitType, checkX, checkY);
+                            currentPropDamage = 0f;
+                        }
+
+                        foundProp = true;
+                        break;
                     }
                 }
+                if (foundProp) break;
             }
         }
+    }
+}
 
         public void ExecuteMining()
         {
