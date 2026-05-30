@@ -145,33 +145,59 @@ namespace UI.Components
 
         private void DropItem(PointerDownEvent e)
         {
-
-            ItemStack stack = new(item) { amount = (short)amount, };
+            short dropAmount = e.button == 1 ? (short)1 : (short)amount;
+            ItemStack stack = new(item) { amount = dropAmount };
             int originalAmount = amount;
             List<VisualElement> foundElements = new();
             panel.PickAll(e.position, foundElements);
 
             foreach (VisualElement element in foundElements)
             {
-                // TODO: Add drag to outside
                 if (element is not Slot targetSlot) continue;
                 if (!targetSlot.isDroppable) break;
+                if (e.button == 1 && targetSlot.item != null && targetSlot.item.item != item) return;
+
+                // Try normal add first
                 targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
-                if (stack.amount == 0) { RemoveFromHierarchy(); return; }
-                if (stack.amount < originalAmount)
+                if (stack.amount == 0)
                 {
-                    amount = stack.amount;
-                    return; // partially accepted, keep ghost with remaining
+                    amount -= dropAmount;
+                    if (amount <= 0) RemoveFromHierarchy();
+                    return;
                 }
+                if (stack.amount < dropAmount)
+                {
+                    amount -= dropAmount - stack.amount;
+                    return;
+                }
+
+                // Failed — attempt swap (only on full left-click drop, not right-click single)
+                if (e.button != 1 && targetSlot.inventory != null && targetSlot.item != null)
+                {
+                    ItemStack swapped = targetSlot.inventory.ClearSlot(targetSlot.slotId);
+                    if (swapped != null)
+                    {
+                        targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
+                        if (stack.amount == 0)
+                        {
+                            // Become the swapped item
+                            item = swapped.data;
+                            amount = swapped.amount;
+                            return;
+                        }
+                        // AddToSlot still failed somehow — put it back
+                        targetSlot.inventory.AddToSlot(swapped, targetSlot.slotId);
+                    }
+                }
+
                 break;
             }
 
             if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
             if (stack.amount == 0)
             {
-                RemoveFromHierarchy();
-                rootElm.ReleasePointer(e.pointerId);
-                rootElm.RemoveFromClassList("item-dragged");
+                amount -= dropAmount;
+                if (amount <= 0) RemoveFromHierarchy();
                 return;
             }
             amount = stack.amount;
