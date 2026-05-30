@@ -23,6 +23,18 @@ namespace Items.Overlays
         private bool hasFuel;
         private float currentFuelDuration;
         private float currentFuelTimer;
+        private bool _evaluateLocked = false;
+
+        public float fuelFillPercent
+        {
+            get => _fuelFillPercent;
+            private set
+            {
+                _fuelFillPercent = value;
+                OnFuelFillChanged?.Invoke(_fuelFillPercent);
+            }
+        }
+        private float _fuelFillPercent = 0;
         public float fillPercent
         {
             get => _fillPercent;
@@ -43,6 +55,7 @@ namespace Items.Overlays
         #region Events
         public event Action<int, ItemStack> OnSlotChanged;
         public event Action<float> OnFillChanged;
+        public event Action<float> OnFuelFillChanged;
         #endregion
 
         #region Contructor
@@ -70,6 +83,8 @@ namespace Items.Overlays
         public bool EvaluateCook()
         {
             #region EvaluateCook
+            if (_evaluateLocked) return false;
+
             ItemStack result = CookingUtils.EvaluateCook(cookingSlots.Select(s => s.item).ToList(), out CookingRecipe cookingRecipe);
             if (result == null)
             {
@@ -177,8 +192,13 @@ namespace Items.Overlays
         private bool ConsumeFuel()
         {
             #region ConsumeFuel
-            if (fuelSlot.isEmpty) return false;
-            currentFuelTimer = fuelSlot.item.data.fuelDuration;
+            if (fuelSlot.isEmpty)
+            {
+                currentFuelDuration = 0;
+                return false;
+            }
+            currentFuelDuration = fuelSlot.item.data.fuelDuration;
+            currentFuelTimer = currentFuelDuration;
             RemoveAmount(fuelSlot.id, 1);
             return true;
             #endregion
@@ -186,35 +206,70 @@ namespace Items.Overlays
 
         public override void Tick()
         {
-            if (currentResult == null) return;
+            #region Tick
+            bool isBurning = currentFuelTimer > 0;
+            if (currentResult == null && !isBurning && !EvaluateCook())
+            {
+                fuelFillPercent = currentFuelDuration > 0
+                    ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
+                    : 0f;
+                return;
+            }
+
             currentFuelTimer -= Time.deltaTime;
+            fuelFillPercent = currentFuelDuration > 0
+                ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
+                : 0f;
+
             if (currentFuelTimer <= 0)
             {
-                if (!ConsumeFuel()) hasFuel = false;
-                else hasFuel = true;
+                if (!ConsumeFuel())
+                {
+                    hasFuel = false;
+                    fillPercent = 0;
+                    currentCookTimer = 0;
+                    return;
+                }
+                hasFuel = true;
             }
 
             if (!hasFuel)
             {
+                fillPercent = 0;
                 currentCookTimer = 0;
                 return;
             }
 
+            if (currentResult == null) return;
 
             currentCookTimer += Time.deltaTime;
             fillPercent = Mathf.Clamp01(currentCookTimer / currentCookDuration);
             if (currentCookTimer >= currentCookDuration)
             {
-                Debug.Log($"adding {currentResult.amount}");
                 resultSlot.Add(currentResult);
                 OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
-                EvaluateCook();
+
+                _evaluateLocked = true;
                 for (int i = 0; i < CookingSlots; i++)
                 {
                     if (cookingSlots[i].isEmpty) continue;
-                    RemoveAmount(cookingSlots[i].id, 1);
+                    Slot slot = cookingSlots[i];
+                    slot.item.amount--;
+                    if (slot.item.amount <= 0)
+                    {
+                        slot.item = null;
+                        OnSlotChanged?.Invoke(slot.id, null);
+                    }
+                    else OnSlotChanged?.Invoke(slot.id, slot.item);
                 }
+                _evaluateLocked = false;
+
+                currentCookTimer = 0;
+                fillPercent = 0;
+                currentResult = null;
+                EvaluateCook();
             }
+            #endregion
         }
 
         protected override void CloseOverlay()
@@ -234,7 +289,7 @@ namespace Items.Overlays
             }
             if (resultSlot.isEmpty) return;
             OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
-
+            OnFillChanged?.Invoke(_fillPercent);
 
             #endregion
         }

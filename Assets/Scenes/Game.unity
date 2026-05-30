@@ -701,6 +701,10 @@ MonoBehaviour:
     amount: 64
     durability: 0
     duration: 0
+  - data: {fileID: 11400000, guid: 228698ed2f19312448fff2d00955d398, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
 --- !u!114 &448283168
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -41,6 +41,8 @@
     height: 40px;
 }
 
-
+.space-smol {
+    width: 25px;
+}
 
 

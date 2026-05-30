@@ -14,13 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Coal
   sprite: {fileID: 7730272341617240227, guid: 47b821e2a586ea041a483559b8f81c20, type: 3}
-  stack: 32
+  stack: 64
   isPlacable: 0
   isConsumable: 0
   isFuel: 1
   equipmentType: 0
   blockType: 0
   hardness: 0
-  fuelDuration: 32
+  fuelDuration: 5
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
+  drops: []
