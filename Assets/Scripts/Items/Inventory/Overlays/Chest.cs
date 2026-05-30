@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Items.Utils;
+using Player;
 using UnityEngine;
 
 
@@ -12,22 +13,18 @@ namespace Items.Overlays
     public class Chest : Overlay, IInventory
     {
         #region Data
-        public const short EquipmentSlots = 1;
-        public const short CraftingSlots = 4;
-        public const short MaxSlotId = EquipmentSlots + CraftingSlots;
-        public Slot[] equipmentSlots = new Slot[EquipmentSlots];
-        public Slot[] craftingSlots = new Slot[CraftingSlots];
-        public Slot resultSlot;
-        public static Chest Singleton;
+        public const short RowSlots = 6;
+        public const short ColSlots = 5;
+        public const short MaxSlotId = ColSlots * RowSlots;
+        public Slot[] slots = new Slot[ColSlots * RowSlots];
         #endregion
 
         #region Events
         public event Action<int, ItemStack> OnSlotChanged;
-        public event Action<bool, Mod> OnModChange;
         #endregion
 
         #region Contructor
-        public Chest() : base(ulong.MinValue, Player.OverlayType.Inventory)
+        public Chest(ulong blockId) : base(blockId, OverlayType.Chest)
         {
             Init();
         }
@@ -37,57 +34,10 @@ namespace Items.Overlays
         private void Init()
         {
             #region Init
-            Singleton = this;
-            for (int i = 0; i < equipmentSlots.Length; i++)
+            for (int i = 0; i < slots.Length; i++)
             {
-                equipmentSlots[i] = new Slot() { id = i };
+                slots[i] = new Slot() { id = i };
             }
-            for (int i = 0; i < craftingSlots.Length; i++)
-            {
-                craftingSlots[i] = new Slot() { id = EquipmentSlots + i };
-            }
-            resultSlot = new Slot() { id = EquipmentSlots + CraftingSlots };
-            #endregion
-        }
-
-
-        public override void Tick()
-        {
-            #region Tick
-            ItemStack mod = equipmentSlots[(int)EquipmentType.Mod].item;
-            if (mod == null) return;
-
-            mod.duration -= Time.deltaTime;
-            if (mod.duration >= 0) return;
-            ClearSlot((int)EquipmentType.Mod);
-            OnModChange?.Invoke(false, 0);
-            #endregion
-        }
-
-        public ItemStack AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
-        {
-            #region AddEquipment
-            Slot slot = equipmentSlots[(int)equipmentType];
-            ItemStack prev = slot.item;
-
-            slot.item = itemStack;
-            OnSlotChanged?.Invoke(slot.id, slot.item);
-
-            if (equipmentType == EquipmentType.Mod) OnModChange?.Invoke(true, itemStack.data.modData.mod);
-            return prev;
-            #endregion
-        }
-
-        public bool EvaluateCraft()
-        {
-            #region EvaluateCraft
-            ItemStack result = CraftingUtils.EvaluateCraft(craftingSlots.Select(s => s.item).ToList(), 2);
-
-            resultSlot.item = null;
-            if (result != null) resultSlot.Add(result);
-            OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
-
-            return true;
             #endregion
         }
 
@@ -101,24 +51,12 @@ namespace Items.Overlays
                 Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
                 return false;
             }
-            bool isEquipmentSlot = slotId < EquipmentSlots;
-            if (isEquipmentSlot)
-            {
 
-                if (!itemStack.data.isConsumable) return false;
-                if ((int)itemStack.data.equipmentType != slotId) return false;
-                ItemStack prev = AddEquipment(itemStack.data.equipmentType, itemStack);
-                if (prev != null) Inventory.Singleton.Add(prev);
-                return true;
-            }
-
-            bool isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
-            Slot slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
+            Slot slot = slots[slotId];
 
             if (!slot.isEmpty && slot.item.data != itemStack.data) return false;
             slot.Add(itemStack);
             OnSlotChanged?.Invoke(slotId, slot.item);
-            if (isCraftingSlot) EvaluateCraft();
             return true;
             #endregion
         }
@@ -130,9 +68,7 @@ namespace Items.Overlays
                 Debug.LogWarning($"Tried to add to out-of-range slot {slotId}");
                 return false;
             }
-            Slot slot;
-            if (slotId < EquipmentSlots) slot = equipmentSlots[slotId];
-            else slot = craftingSlots[slotId - EquipmentSlots];
+            Slot slot = slots[slotId];
 
             slot.item.amount -= amount;
             if (slot.item.amount <= 0) ClearSlot(slotId);
@@ -144,18 +80,7 @@ namespace Items.Overlays
         public ItemStack ClearSlot(int slotId)
         {
             #region ClearSlot
-            Slot slot;
-            bool isCraftingSlot = false;
-            bool isResultSlot = slotId == resultSlot.id;
-
-
-
-            if (isResultSlot) slot = resultSlot;
-            else
-            {
-                isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
-                slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
-            }
+            Slot slot = slots[slotId];
 
             if (slot.isEmpty) return null;
 
@@ -164,51 +89,20 @@ namespace Items.Overlays
 
             OnSlotChanged?.Invoke(slotId, null);
 
-            if (isCraftingSlot) EvaluateCraft();
-            if (isResultSlot)
-            {
-                for (int i = 0; i < CraftingSlots; i++)
-                {
-                    if (craftingSlots[i].isEmpty) continue;
-                    RemoveAmount(craftingSlots[i].id, 1);
-                }
-            }
-
             return itemStack;
             #endregion
         }
 
-        protected override void CloseOverlay()
-        {
-            #region OnOverlayClose
-            foreach (Slot slot in craftingSlots)
-            {
-                if (slot.isEmpty) continue;
-                Inventory.Singleton.Add(slot.item);
-                slot.item = null;
-            }
-            #endregion
-        }
 
-        /// <summary>Method</summary>
+
         public override void RefreshUI()
         {
             #region RefreshUI
-            foreach (Slot slot in equipmentSlots)
+            foreach (Slot slot in slots)
             {
                 if (slot.isEmpty) continue;
                 OnSlotChanged?.Invoke(slot.id, slot.item);
             }
-            #endregion
-        }
-
-        public float GetMiningPower()
-        {
-            #region GetMiningPower
-            ItemStack modItem = equipmentSlots[(int)EquipmentType.Mod].item;
-            if (modItem == null) return 1f;
-            if (modItem.data.modData == null) return 1f;
-            return modItem.data.modData.minigPower;
             #endregion
         }
         #endregion
