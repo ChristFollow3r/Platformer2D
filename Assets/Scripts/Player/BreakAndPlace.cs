@@ -11,29 +11,27 @@ namespace Player
 {
     public class BreakAndPlace : MonoBehaviour
     {
-        [Header("Refs")]
-        [SerializeField] private PlayerMovement playerMovement;
+        [Header("Refs")] [SerializeField] private PlayerMovement playerMovement;
 
-        [Header("Controls")]
-        public int reachDistance = 5;
+        [Header("Controls")] public int reachDistance = 5;
 
-        [Header("Prop Attack Hitbox (Matched to PlayerAttack)")]
-        [SerializeField] private Vector2 attackOffset = new Vector2(1f, 0f);
+        [Header("Prop Attack Hitbox (Matched to PlayerAttack)")] [SerializeField]
+        private Vector2 attackOffset = new Vector2(1f, 0f);
+
         [SerializeField] private Vector2 attackBoxSize = new Vector2(1.5f, 1.5f);
 
         private const float CellSize = 0.5f;
 
-        [Header("Mining Data")]
-        private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
+        [Header("Mining Data")] private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
         private float currentBlockDamage = 3f;
         private Collider2D playerCollider;
 
-        [Header("Prop Attack Data")]
-        private Vector2Int currentPropTarget = new Vector2Int(-999, -999);
+        [Header("Prop Attack Data")] private Vector2Int currentPropTarget = new Vector2Int(-999, -999);
         private float currentPropDamage = 0f;
 
-        [Header("Prefabs")]
-        [SerializeField] private GameObject itemEntityPrefab;
+        [Header("Prefabs")] [SerializeField] private GameObject itemEntityPrefab;
+
+        [Header("Feedback")] [SerializeField] private Material whiteFlashMaterial;
 
         private Vector2 cachedTargetPosition;
         private readonly Collider2D[] hitResults = new Collider2D[10];
@@ -69,7 +67,8 @@ namespace Player
             {
                 Vector3 realScreenPos = Input.mousePosition;
                 float camZ = Mathf.Abs(Camera.main.transform.position.z);
-                Vector2 worldMousePos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
+                Vector2 worldMousePos =
+                    Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
 
                 ItemStack item = Inventory.Singleton.hand;
 
@@ -115,73 +114,96 @@ namespace Player
         #region Animation Events (Public Methods)
 
         public void ExecuteAttack()
-{
-    int direction = cachedTargetPosition.x < transform.position.x ? -1 : 1;
-    Vector2 attackCenter = (Vector2)transform.position + new Vector2(attackOffset.x * direction, attackOffset.y);
-
-    int hitCount = Physics2D.OverlapBoxNonAlloc(attackCenter, attackBoxSize, 0f, hitResults);
-
-    for (int i = 0; i < hitCount; i++)
-    {
-        if (hitResults[i].TryGetComponent(out UnityEngine.Tilemaps.Tilemap tilemap))
         {
-            Vector3Int hitCell = tilemap.WorldToCell(attackCenter);
-            bool foundProp = false;
+            int direction = cachedTargetPosition.x < transform.position.x ? -1 : 1;
+            Vector2 attackCenter =
+                (Vector2)transform.position + new Vector2(attackOffset.x * direction, attackOffset.y);
 
-            for (int yOffset = 0; yOffset >= -6; yOffset--)
+            int hitCount = Physics2D.OverlapBoxNonAlloc(attackCenter, attackBoxSize, 0f, hitResults);
+
+            for (int i = 0; i < hitCount; i++)
             {
-                for (int xOffset = -1; xOffset <= 1; xOffset++)
+                if (hitResults[i].TryGetComponent(out UnityEngine.Tilemaps.Tilemap tilemap))
                 {
-                    int checkX = hitCell.x + xOffset;
-                    int checkY = hitCell.y + yOffset;
+                    Vector3Int hitCell = tilemap.WorldToCell(attackCenter);
+                    bool foundProp = false;
 
-                    if (!WorldData.World.SafeCheck(checkX, checkY)) continue;
-
-                    PropType hitType = WorldData.World.GetPropType(checkX, checkY);
-
-                    if (hitType != PropType.None)
+                    for (int yOffset = 0; yOffset >= -6; yOffset--)
                     {
-                        if (currentPropTarget.x != checkX || currentPropTarget.y != checkY)
+                        for (int xOffset = -1; xOffset <= 1; xOffset++)
                         {
-                            currentPropTarget = new Vector2Int(checkX, checkY);
-                            currentPropDamage = 0f;
+                            int checkX = hitCell.x + xOffset;
+                            int checkY = hitCell.y + yOffset;
+
+                            if (!WorldData.World.SafeCheck(checkX, checkY)) continue;
+
+                            PropType hitType = WorldData.World.GetPropType(checkX, checkY);
+
+                            if (hitType != PropType.None)
+                            {
+                                if (currentPropTarget.x != checkX || currentPropTarget.y != checkY)
+                                {
+                                    currentPropTarget = new Vector2Int(checkX, checkY);
+                                    currentPropDamage = 0f;
+                                }
+
+                                Prop propHitData = WorldData.PropDictionary[hitType];
+                                float hitPower = Equipment.Singleton.GetMiningPower();
+                                currentPropDamage += hitPower;
+
+                                // --- NEW: VISUAL AND AUDIO FEEDBACK ---
+
+                                // 1. Play Sound
+                                if (propHitData.hitSound != null)
+                                {
+                                    // AudioSource.PlayClipAtPoint creates a temporary audio source that cleans itself up!
+                                    AudioSource.PlayClipAtPoint(propHitData.hitSound, Camera.main.transform.position);
+                                }
+
+                                // 2. Play White Flash
+                                if (propHitData.sprite != null)
+                                {
+                                    // Calculate center of the cell based on your CellSize (0.5f)
+                                    Vector2 cellCenter = new Vector2(checkX, checkY) * CellSize +
+                                                         new Vector2(0.25f, 0.25f);
+                                    StartCoroutine(HitFlashRoutine(propHitData.sprite, cellCenter));
+                                }
+
+                                // --------------------------------------
+
+                                if (currentPropDamage >= propHitData.hardness)
+                                {
+                                    BreakProp(hitType, checkX, checkY);
+                                    currentPropDamage = 0f;
+                                }
+
+                                foundProp = true;
+                                break;
+                            }
                         }
 
-                        Prop propHitData = WorldData.PropDictionary[hitType];
-                        float hitPower = Equipment.Singleton.GetMiningPower();
-
-                        currentPropDamage += hitPower;
-
-                        Debug.Log($"[Prop Attack] Hitting {hitType} at ({checkX}, {checkY}) | Dmg: {currentPropDamage}/{propHitData.hardness}");
-
-                        if (currentPropDamage >= propHitData.hardness)
-                        {
-                            BreakProp(hitType, checkX, checkY);
-                            currentPropDamage = 0f;
-                        }
-
-                        foundProp = true;
-                        break;
+                        if (foundProp) break;
                     }
                 }
-                if (foundProp) break;
             }
         }
-    }
-}
 
         public void ExecuteMining()
         {
             Vector3 realScreenPos = Input.mousePosition;
             float camZ = Mathf.Abs(Camera.main.transform.position.z);
-            Vector2 actualMouseWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
+            Vector2 actualMouseWorldPos =
+                Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
 
-            Vector2 playerCenter = playerCollider != null ? (Vector2)playerCollider.bounds.center : (Vector2)transform.position;
+            Vector2 playerCenter = playerCollider != null
+                ? (Vector2)playerCollider.bounds.center
+                : (Vector2)transform.position;
             float distance = Vector2.Distance(actualMouseWorldPos, playerCenter);
 
             if (distance > reachDistance)
             {
-                Debug.Log($"[Mining] Failed: Distance {distance} | Target: {actualMouseWorldPos} | Player: {playerCenter}");
+                Debug.Log(
+                    $"[Mining] Failed: Distance {distance} | Target: {actualMouseWorldPos} | Player: {playerCenter}");
                 return;
             }
 
@@ -205,7 +227,8 @@ namespace Player
             float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
             float miningPower = Equipment.Singleton.GetMiningPower();
 
-            Debug.Log($"[Mining] Hitting {clickedBlock} at ({x}, {y}) | Power: {miningPower} | Dmg: {currentBlockDamage}/{targetHardness}");
+            Debug.Log(
+                $"[Mining] Hitting {clickedBlock} at ({x}, {y}) | Power: {miningPower} | Dmg: {currentBlockDamage}/{targetHardness}");
 
             currentBlockDamage += miningPower;
 
@@ -221,6 +244,7 @@ namespace Player
                 }
             }
         }
+
         #endregion
 
         #region Core Logic
@@ -236,7 +260,9 @@ namespace Player
 
         private bool TryPlaceBlock(ItemStack item, Vector2 mouseWorldPosition)
         {
-            Vector2 playerCenter = playerCollider != null ? (Vector2)playerCollider.bounds.center : (Vector2)transform.position;
+            Vector2 playerCenter = playerCollider != null
+                ? (Vector2)playerCollider.bounds.center
+                : (Vector2)transform.position;
 
             int x = Mathf.FloorToInt(mouseWorldPosition.x / CellSize);
             int y = Mathf.FloorToInt(mouseWorldPosition.y / CellSize);
@@ -260,6 +286,7 @@ namespace Player
             {
                 UIController.Singleton.CreateOverlay(BlockIdUtils.From(x, y), item.data.overlayType);
             }
+
             return false;
         }
 
@@ -337,6 +364,28 @@ namespace Player
             int chunkY = Mathf.FloorToInt((float)y / Chunk.ChunkSize);
 
             WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(x, y);
+        }
+
+        #endregion
+
+        #region visual feedback
+
+        private System.Collections.IEnumerator HitFlashRoutine(Sprite propSprite, Vector2 position)
+        {
+            GameObject flashObj = new GameObject("PropHitFlash");
+            flashObj.transform.position = position;
+
+            SpriteRenderer sr = flashObj.AddComponent<SpriteRenderer>();
+            sr.sprite = propSprite;
+            sr.sortingOrder = 999;
+
+            if (whiteFlashMaterial != null)
+            {
+                sr.material = whiteFlashMaterial;
+            }
+
+            yield return new WaitForSeconds(0.1f);
+            Destroy(flashObj);
         }
 
         #endregion
