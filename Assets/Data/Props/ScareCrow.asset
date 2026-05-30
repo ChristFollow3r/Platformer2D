@@ -18,6 +18,7 @@ MonoBehaviour:
     maxAmount: 7
     dropChance: 101
   sprite: {fileID: -1947704308521943788, guid: a9cd264e2e56fae4eb33bb95700069c3, type: 3}
+  hitSound: {fileID: 8300000, guid: ca6f43c6bc6045246be60ded6dd1591f, type: 3}
   name: ScareCrow
   type: 9
   hardness: 9

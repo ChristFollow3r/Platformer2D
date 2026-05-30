@@ -18,6 +18,7 @@ MonoBehaviour:
     maxAmount: 3
     dropChance: 101
   sprite: {fileID: -8683477458368390101, guid: a9cd264e2e56fae4eb33bb95700069c3, type: 3}
+  hitSound: {fileID: 8300000, guid: e10b8856a90cd6a41bab368bc339ba6d, type: 3}
   name: Stone
   type: 2
   hardness: 6

@@ -224,13 +224,27 @@ namespace Player
                 return;
             }
 
-            float targetHardness = WorldData.BlockDictionary[clickedBlock].hardness;
+            ItemData blockHitData = WorldData.BlockDictionary[clickedBlock];
+
+            float targetHardness = blockHitData.hardness;
             float miningPower = Equipment.Singleton.GetMiningPower();
 
             Debug.Log(
                 $"[Mining] Hitting {clickedBlock} at ({x}, {y}) | Power: {miningPower} | Dmg: {currentBlockDamage}/{targetHardness}");
 
             currentBlockDamage += miningPower;
+
+
+            if (blockHitData.hitSound != null)
+            {
+                AudioSource.PlayClipAtPoint(blockHitData.hitSound, Camera.main.transform.position);
+            }
+
+            if (blockHitData.sprite != null)
+            {
+                Vector2 cellCenter = new Vector2(x, y) * CellSize + new Vector2(0.25f, 0.25f);
+                StartCoroutine(HitFlashRoutine(blockHitData.sprite, cellCenter));
+            }
 
             if (currentBlockDamage >= targetHardness)
             {

@@ -27,6 +27,9 @@ namespace Data
 
         [Header("Block Drops")]
         public List<Drop> drops = new List<Drop>();
+
+        [Header("Feedback")]
+        public AudioClip hitSound;
     }
 
 }
