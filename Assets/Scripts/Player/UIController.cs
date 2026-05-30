@@ -423,22 +423,26 @@ namespace Player
 
         private void DrawGrid(VisualElement container, ItemData[] ingredients, int gridSize)
         {
-            container.Clear(); // Empties the container before drawing a new grid
+            container.Clear();
 
-            float slotSize = 45f; // Adjust this if the boxes look too big or small
+            // Slightly smaller to ensure a 4x4 fits nicely on the page
+            float slotSize = 40f;
 
-            // Forces the UI Toolkit elements to wrap around exactly at the edge of the grid
-            container.style.width = gridSize * slotSize;
+            // Sets the width limit so the flexbox is forced to drop to a new line
+            // after reaching the 'gridSize' limit (e.g., 4 slots wide).
+            container.style.width = (gridSize * slotSize) + 4;
             container.style.flexDirection = FlexDirection.Row;
             container.style.flexWrap = Wrap.Wrap;
 
+            // THE FIX: Loop through the entire array size (16 for crafting).
+            // This guarantees absolutely zero item data is lost or cut off.
             for (int i = 0; i < ingredients.Length; i++)
             {
                 VisualElement slot = new VisualElement();
                 slot.style.width = slotSize;
                 slot.style.height = slotSize;
 
-                // Draw standard grid borders
+                // Borders
                 slot.style.borderTopWidth = 1;
                 slot.style.borderBottomWidth = 1;
                 slot.style.borderLeftWidth = 1;
@@ -448,10 +452,10 @@ namespace Player
                 slot.style.borderLeftColor = new StyleColor(Color.black);
                 slot.style.borderRightColor = new StyleColor(Color.black);
 
-                // Semi-transparent background for empty slots
+                // Background
                 slot.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.2f));
 
-                // If there's an ingredient here, show it
+                // Add the item icon if one exists in this specific array slot
                 if (ingredients[i] != null && ingredients[i].sprite != null)
                 {
                     Image icon = new Image();
