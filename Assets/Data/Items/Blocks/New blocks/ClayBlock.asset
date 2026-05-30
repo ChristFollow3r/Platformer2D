@@ -29,3 +29,4 @@ MonoBehaviour:
     minAmount: 3
     maxAmount: 5
     dropChance: 101
+  hitSound: {fileID: 8300000, guid: 0944551b2069bb344adb9cbf0e6dfbf1, type: 3}
