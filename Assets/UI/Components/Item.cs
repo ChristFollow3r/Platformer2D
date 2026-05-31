@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using Data;
 using Items;
+using Player;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -28,20 +30,24 @@ namespace UI.Components
         private ItemData _item;
         private Slot _slot;
         private bool isBeingDragged = false;
+        private bool isGhost = false;
         #endregion
 
         #region Elements
         private VisualElement rootElm;
         private Image iconElm;
         private Label amountElm;
+
+        public bool showingName = false;
         #endregion
 
         #region Constructor
         public Item() { Init(); }
-        public Item(IInventory inventory, bool isDraggable)
+        public Item(IInventory inventory, bool isDraggable, bool isGhost = false)
         {
             this.inventory = inventory;
             this.isDraggable = isDraggable;
+            this.isGhost = isGhost;
             Init();
         }
         #endregion
@@ -63,6 +69,8 @@ namespace UI.Components
             VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Components/Item/Item");
             tree.CloneTree(this);
 
+
+
             GetElements();
             SubscribeEvents();
             #endregion
@@ -83,12 +91,23 @@ namespace UI.Components
             if (!isDraggable) return;
             rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
             rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+
+            rootElm.RegisterCallback<PointerEnterEvent>(OnPointerEnter);
+            rootElm.RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
+            if (isGhost)
+            {
+                UIController.Singleton.OnOverlayClose -= OnOverlayClose;
+                UIController.Singleton.OnOverlayClose += OnOverlayClose;
+            }
+
             // rootElm.RegisterCallback<PointerUpEvent>(OnPointerUp);
             #endregion
         }
 
+
         private void GrabItem(PointerDownEvent e)
         {
+
             Slot ghostSlot = orphanAfterPickup ? null : slot;
             IInventory ghostInventory = orphanAfterPickup ? Items.Inventory.Singleton : inventory;
             if (e.button == 1)
@@ -97,7 +116,7 @@ namespace UI.Components
                 stay = (short)Mathf.Floor(amount / 2);
                 leave = (short)(amount - stay);
 
-                Item ghost = new Item(ghostInventory, true)
+                Item ghost = new Item(ghostInventory, true, true)
                 {
                     item = item,
                     amount = leave,
@@ -120,7 +139,7 @@ namespace UI.Components
             }
             else
             {
-                Item ghost = new Item(ghostInventory, true)
+                Item ghost = new Item(ghostInventory, true, true)
                 {
                     item = item,
                     amount = amount,
@@ -147,22 +166,31 @@ namespace UI.Components
         {
             short dropAmount = e.button == 1 ? (short)1 : (short)amount;
             ItemStack stack = new(item) { amount = dropAmount };
-            int originalAmount = amount;
             List<VisualElement> foundElements = new();
             panel.PickAll(e.position, foundElements);
 
             foreach (VisualElement element in foundElements)
             {
                 if (element is not Slot targetSlot) continue;
+
+                if (!targetSlot.isDroppable && targetSlot.item != null && targetSlot.item.item == item)
+                {
+                    ItemStack pulled = targetSlot.inventory.ClearSlot(targetSlot.slotId);
+                    if (pulled != null) amount += pulled.amount;
+                    return;
+                }
+
                 if (!targetSlot.isDroppable) break;
                 if (e.button == 1 && targetSlot.item != null && targetSlot.item.item != item) return;
+
+
 
                 // Try normal add first
                 targetSlot.inventory.AddToSlot(stack, targetSlot.slotId);
                 if (stack.amount == 0)
                 {
                     amount -= dropAmount;
-                    if (amount <= 0) RemoveFromHierarchy();
+                    if (amount <= 0) Cleanup();
                     return;
                 }
                 if (stack.amount < dropAmount)
@@ -193,11 +221,11 @@ namespace UI.Components
                 break;
             }
 
-            if (slot == null || !inventory.AddToSlot(stack, slot.slotId)) inventory.Add(stack);
+            if (e.button == 1) return;
             if (stack.amount == 0)
             {
                 amount -= dropAmount;
-                if (amount <= 0) RemoveFromHierarchy();
+                if (amount <= 0) Cleanup();
                 return;
             }
             amount = stack.amount;
@@ -209,15 +237,30 @@ namespace UI.Components
             #region OnPointerDown
             if (isBeingDragged || rootElm.HasPointerCapture(e.pointerId)) DropItem(e);
             else GrabItem(e);
-
-
             #endregion
+        }
+        private void OnPointerEnter(PointerEnterEvent e)
+        {
+            Vector2 pos = rootElm.worldBound.position;
+            UIController.Singleton.ShowName(_item.name, pos + new Vector2(40, -10));
+            showingName = true;
+        }
+        private void OnPointerLeave(PointerLeaveEvent e)
+        {
+            UIController.Singleton.HideName();
+            showingName = false;
         }
 
         private void OnPointerMove(PointerMoveEvent e)
         {
             #region OnPointerMove
+
             if (!isBeingDragged) return;
+            if (showingName)
+            {
+                UIController.Singleton.HideName();
+                showingName = false;
+            }
 
             Vector2 pos = e.position;
             style.left = pos.x - _dragOffset.x;
@@ -233,15 +276,24 @@ namespace UI.Components
             style.top = pos.y - _dragOffset.y;
         }
 
-        // private void OnPointerUp(PointerUpEvent e)
-        // {
-        //     #region OnPointerUp
-        //     if (e.button == 1) return; // TODO: leave 1
-        //     if (!isBeingDragged || !rootElm.HasPointerCapture(e.pointerId)) return;
+        private void OnOverlayClose()
+        {
+            UIController.Singleton.OnOverlayClose -= OnOverlayClose;
+            if (!isBeingDragged) return;
 
-        //     // keep ghost with remaining amount
-        //     #endregion
-        // }
+            ItemStack stack = new(item) { amount = (short)amount };
+            if (slot == null || slot.inventory == null) Items.Inventory.Singleton.Add(stack);
+            else slot.inventory.Add(stack, false);
+
+
+            RemoveFromHierarchy();
+        }
+
+        private void Cleanup()
+        {
+            UIController.Singleton.OnOverlayClose -= OnOverlayClose;
+            RemoveFromHierarchy();
+        }
         #endregion
     }
 }

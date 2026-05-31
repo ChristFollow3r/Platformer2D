@@ -1,0 +1,7 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
+    <Style src="project://database/Assets/Resources/UI/Overlays/Chest/ChestStyles.uss?fileID=7433441132597879392&amp;guid=c66c25cf670069c4aaba4a414f8ce371&amp;type=3#ChestStyles"/>
+    <ui:VisualElement name="root" class="chest-root">
+        <ui:VisualElement name="grid" class="chest-grid" style="flex-grow: 1;"/>
+    </ui:VisualElement>
+</ui:UXML>

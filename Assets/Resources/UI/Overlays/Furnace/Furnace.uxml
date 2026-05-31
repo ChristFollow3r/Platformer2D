@@ -12,6 +12,13 @@
                 <ui:VisualElement name="progress-holder" class="cooking-progress">
                     <ui:VisualElement name="progress-fill" class="cooking-fill" style="width: 0%;"/>
                 </ui:VisualElement>
+                <ui:VisualElement name="spacer" class="spacer-col"/>
+                <ui:VisualElement name="fuel" class="fuel">
+                    <ui:VisualElement name="progress-holder" class="cooking-progress">
+                        <ui:VisualElement name="fuel-progress-fill" class="cooking-fill" style="width: 0%;"/>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="spacer" class="space-smol"/>
+                </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>

@@ -65,10 +65,7 @@ namespace Items
             #region Start
             foreach (ItemStackBuilder builder in startingItems)
             {
-                Debug.Log($"Adding item {builder.data.name}");
                 ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
-                Debug.Log(itemStack.data.name);
-                Debug.Log(itemStack.amount);
                 Add(itemStack);
             }
             #endregion
@@ -88,17 +85,16 @@ namespace Items
         public bool Fits(ItemData item) => _Add(new(item) { amount = 1 }, true);
 
 
-        public void Add(ItemStack item) => _Add(item);
+        public void Add(ItemStack item, bool stacked = true) => _Add(item, false, stacked);
 
 
-        private bool _Add(ItemStack item, bool dryRun = false)
+        private bool _Add(ItemStack item, bool dryRun = false, bool stacked = true)
         {
             if (item.data == null) return false;
             Slot slot;
             do
             {
-                slot = GetSlotOfItem(item.data);
-                Debug.Log($"Found slot for item {item.data.name} {slot.id}");
+                slot = GetSlotOfItem(item.data, stacked);
                 if (slot is null) break;
                 if (!dryRun)
                 {
@@ -115,7 +111,8 @@ namespace Items
         public void Drop(ItemStack item)
         {
             #region Drop
-            // TODO
+            // TEMP
+            Add(item);
             #endregion
         }
 
@@ -168,9 +165,18 @@ namespace Items
             #endregion
         }
 
-        private Slot GetSlotOfItem(ItemData itemData)
+        private Slot GetSlotOfItem(ItemData itemData, bool stacked)
         {
             #region GetSlotOfItem
+            if (!stacked)
+            {
+                foreach (Slot slot in slots)
+                {
+                    if (slot.isEmpty) return slot;
+                }
+                return null;
+            }
+
             foreach (Slot slot in slots)
             {
                 if (!slot.isEmpty && slot.item.data == itemData && !slot.isFull) return slot;

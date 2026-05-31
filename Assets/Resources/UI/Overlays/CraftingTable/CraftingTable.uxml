@@ -1,0 +1,12 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/Resources/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
+    <Style src="project://database/Assets/Resources/UI/Overlays/CraftingTable/CraftingTableStyles.uss?fileID=7433441132597879392&amp;guid=09337e631d36b344183cf688581357ee&amp;type=3#CraftingTableStyles"/>
+    <ui:VisualElement name="root" class="equipment-root" style="flex-grow: 1;">
+        <ui:VisualElement name="crafting" class="equipment-crafting">
+            <ui:VisualElement name="crafting-holder" class="crafing-holder">
+                <ui:VisualElement name="crafting-grid" class="crafting-grid spaced-right"/>
+                <ui:VisualElement name="spacer" class="space"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
