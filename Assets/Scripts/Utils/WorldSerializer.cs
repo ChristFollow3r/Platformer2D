@@ -51,6 +51,11 @@ public class BlockDiff { public int x, y; public BlockType type; }
 
 [Serializable]
 public class PropDiff { public int x, y; public PropType type; }
+
+
+[Serializable]
+public class PlayerSaveData { public Vector2 pos; }
+
 static class WorldSerializer
 {
     public static bool isNewWorld;
@@ -62,6 +67,7 @@ static class WorldSerializer
 
     private static string WorldPath(string saveName) => Path.Combine(SaveFolder(saveName), "world.json");
     private static string OverlaysPath(string saveName) => Path.Combine(SaveFolder(saveName), "overlays.json");
+    private static string PlayerPath(string saveName) => Path.Combine(SaveFolder(saveName), "player.json");
 
     public static bool Exists(string saveName) => File.Exists(WorldPath(saveName));
 
@@ -88,6 +94,8 @@ static class WorldSerializer
 
         File.WriteAllText(WorldPath(WorldName), JsonUtility.ToJson(data));
         File.WriteAllText(OverlaysPath(WorldName), UIController.Singleton.SerializeAll());
+        if (!PlayerMovement.Singleton) return;
+        File.WriteAllText(PlayerPath(WorldName), PlayerMovement.Singleton.Serialize());
     }
 
     public static WorldSaveData Load()
@@ -133,5 +141,23 @@ static class WorldSerializer
 
         UIController.Singleton.DeserializeAll(json);
         Debug.Log("[WorldSerializer] Overlays deserialized.");
+    }
+
+    public static void LoadPlayer()
+    {
+        string path = PlayerPath(WorldName);
+        Debug.Log($"[WorldSerializer] Loading player from: {path}");
+
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning($"[WorldSerializer] Player file not found at: {path}");
+            return;
+        }
+
+        string json = File.ReadAllText(path);
+        Debug.Log($"[WorldSerializer] Player JSON length: {json.Length}");
+
+        PlayerMovement.Singleton.Deserialize(json);
+        Debug.Log("[WorldSerializer] Player deserialized.");
     }
 }

@@ -97,6 +97,9 @@ namespace World
             PopulateChunks();
             UpdateChunks();
             SpawnPlayer();
+
+            if (!WorldSerializer.isNewWorld)
+                WorldSerializer.LoadPlayer();
         }
 
         private void NewWorld()
