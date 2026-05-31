@@ -196,6 +196,64 @@ namespace Items
             RemoveAmount(handIndex, 1);
             #endregion
         }
+
+        public string ToJson()
+        {
+            var data = new InventoryData
+            {
+                slots = new SlotData[slots.Length]
+            };
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                Slot slot = slots[i];
+                if (slot.isEmpty) continue;
+
+                data.slots[i] = new SlotData
+                {
+                    id = slot.id,
+                    itemId = slot.isEmpty ? null : slot.item.data.name,
+                    amount = slot.isEmpty ? (short)0 : slot.item.amount,
+                    duration = slot.isEmpty ? 0f : slot.item.duration
+                };
+            }
+
+            return JsonUtility.ToJson(data);
+
+        }
+        public void FromJson(string json)
+        {
+            InventoryData data = JsonUtility.FromJson<InventoryData>(json);
+            if (data == null) return;
+
+            ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+
+            for (int i = 0; i < data.slots.Length && i < slots.Length; i++)
+            {
+                SlotData slotData = data.slots[i];
+
+                if (string.IsNullOrEmpty(slotData.itemId) || slotData.amount <= 0)
+                {
+                    slots[i].item = null;
+                }
+                else
+                {
+                    ItemData itemData = db.items.Find(item => item.name == slotData.itemId);
+                    if (itemData != null)
+                        slots[slotData.id].item = new ItemStack(itemData) { amount = slotData.amount };
+                    else
+                        Debug.LogWarning($"[Inventory] Unknown item id '{slotData.itemId}' in slot {i}");
+                }
+
+                OnSlotChanged?.Invoke(slotData.id, slots[slotData.id].item);
+            }
+
+            foreach (ItemStackBuilder builder in startingItems)
+            {
+                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
+                Add(itemStack);
+            }
+        }
         #endregion
     }
 }

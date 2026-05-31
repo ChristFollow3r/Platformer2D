@@ -208,8 +208,6 @@ namespace Player
         public void OpenOverlay(ulong blockId)
         {
             #region OpenOverlay
-
-            Time.timeScale = 0f;
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
             overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             isOverlayOpen = true;
@@ -230,8 +228,6 @@ namespace Player
         public void CloseOverlay()
         {
             #region CloseOverlay
-
-            Time.timeScale = 1f;
             OnOverlayClose?.Invoke();
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
@@ -579,6 +575,45 @@ namespace Player
             gridContainer.Add(resultWrapper);
         }
 
+
+
+        public string SerializeAll()
+        {
+            var entries = overlaysByBlockId.Values.Select(o => new OverlaySaveEntry
+            {
+                type = o.overlayType.ToString(),
+                blockId = o.blockId,
+                data = ((IInventory)o).ToJson()
+            }).ToList();
+
+            entries.Add(new OverlaySaveEntry
+            {
+                type = "Main",
+                data = Items.Inventory.Singleton.ToJson()
+            });
+
+            return JsonUtility.ToJson(new SaveFile { overlays = entries.ToArray() });
+        }
+
+        public void DeserializeAll(string json)
+        {
+            SaveFile save = JsonUtility.FromJson<SaveFile>(json);
+            if (save?.overlays == null) return;
+
+            foreach (OverlaySaveEntry entry in save.overlays)
+            {
+                if (entry.type == "Main")
+                {
+                    Items.Inventory.Singleton.FromJson(entry.data);
+                    continue;
+                }
+
+                if (!Enum.TryParse(entry.type, out OverlayType type)) continue;
+
+                Overlay overlay = CreateOverlay(entry.blockId, type);
+                ((IInventory)overlay).FromJson(entry.data);
+            }
+        }
         #endregion
     }
 }

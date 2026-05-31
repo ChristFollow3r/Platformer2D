@@ -10,5 +10,7 @@ namespace Items
         public bool AddToSlot(ItemStack itemStack, int slotId);
         public bool RemoveAmount(int slotId, short amount);
         public ItemStack ClearSlot(int slotId);
+        public string ToJson();
+        public void FromJson(string json);
     }
 }

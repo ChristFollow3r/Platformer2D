@@ -7,6 +7,28 @@ namespace Player
 {
     public class PlayerMovement : MonoBehaviour
     {
+
+        #region Singleton setup
+
+        public static PlayerMovement Singleton;
+
+        private void SetupSingleton()
+        {
+            #region SetupSingleton
+
+            if (Singleton != null && Singleton != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Singleton = this;
+
+            #endregion
+        }
+
+        #endregion
+
         private static readonly int HasMined = Animator.StringToHash("hasMined");
         private static readonly int HasAttacked = Animator.StringToHash("hasAttacked");
         private static readonly int IsGrounded = Animator.StringToHash("isGrounded");
@@ -70,6 +92,8 @@ namespace Player
 
         private void Awake()
         {
+            SetupSingleton();
+
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
@@ -95,7 +119,7 @@ namespace Player
 
         private void Update()
         {
-            if (UIController.Singleton.isOverlayOpen) return;
+            if (UIController.Singleton.isOverlayOpen || UIController.Singleton.isMenuOpen) return;
 
             Vector2 colSize = playerCollider.bounds.size;
             Vector2 colCenter = playerCollider.bounds.center;
@@ -294,6 +318,17 @@ namespace Player
         {
             yield return new WaitForSeconds(0.15f);
             Destroy(this.gameObject);
+        }
+
+        public string Serialize()
+        {
+            return JsonUtility.ToJson(new PlayerSaveData() { pos = transform.position });
+        }
+
+        public void Deserialize(string json)
+        {
+            PlayerSaveData save = JsonUtility.FromJson<PlayerSaveData>(json);
+            transform.position = save.pos + new Vector2(0, 0.75f);
         }
     }
 

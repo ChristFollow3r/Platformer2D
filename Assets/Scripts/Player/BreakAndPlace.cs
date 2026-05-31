@@ -221,6 +221,8 @@ namespace Player
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
+            if (clickedBlock == BlockType.Air) return;
+
             ItemData blockHitData = WorldData.BlockDictionary[clickedBlock];
 
             float targetHardness = blockHitData.hardness;
