@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27860a1728689a5419b76eb62afb79b4, type: 3}
+  m_Name: IronIngot
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.CookingRecipe
+  result: {fileID: 11400000, guid: 4791c8ddec30328448eae342ac48d416, type: 2}
+  amount: 1
+  cookTime: 32
+  gridSize: 2
+  ingredients:
+  - {fileID: 11400000, guid: 25561a64222709545841482360762211, type: 2}
+  - {fileID: 11400000, guid: 25561a64222709545841482360762211, type: 2}
+  - {fileID: 11400000, guid: 25561a64222709545841482360762211, type: 2}
+  - {fileID: 11400000, guid: 25561a64222709545841482360762211, type: 2}

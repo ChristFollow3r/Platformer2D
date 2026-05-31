@@ -9,26 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
+  m_Script: {fileID: 11500000, guid: 27860a1728689a5419b76eb62afb79b4, type: 3}
   m_Name: BronzeIngot
-  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.CookingRecipe
   result: {fileID: 11400000, guid: 2f260f3f1ccaac54788fbf912453f8bd, type: 2}
   amount: 1
-  gridSize: 3
+  cookTime: 26
+  gridSize: 2
   ingredients:
   - {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 11400000, guid: 5770df88f953965479fb144f4deb1752, type: 2}
   - {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 11400000, guid: 5770df88f953965479fb144f4deb1752, type: 2}
-  - {fileID: 11400000, guid: 5770df88f953965479fb144f4deb1752, type: 2}
-  - {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
