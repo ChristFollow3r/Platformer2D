@@ -3,7 +3,6 @@
     width: 75px;
     height: 75px;
     flex-shrink: 0;
-
     transition-property: all;
     transition-duration: 100ms;
     transition-timing-function: ease-in;
@@ -23,10 +22,14 @@
 .item-amount {
     position: absolute;
     right: 0;
-    bottom: 0;
+    bottom: -5px;
     -unity-text-align: upper-right;
     -unity-font-style: bold;
     color: rgb(255, 255, 255);
+    font-size: 24px;
+    -unity-text-outline-color: rgba(0, 0, 0, 0);
+    -unity-text-outline-width: 0;
+    text-shadow: 2px 2px 2px rgb(0, 0, 0);
 }
 
 .item-root {
