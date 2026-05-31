@@ -19,10 +19,7 @@
     height: 100%;
 }
 
-.item-amount {
-    position: absolute;
-    right: 0;
-    bottom: -5px;
+.item-text {
     -unity-text-align: upper-right;
     -unity-font-style: bold;
     color: rgb(255, 255, 255);
@@ -46,3 +43,11 @@
     height: 100px;
     z-index: 100;
 }
+
+.item-amount {
+    top: auto;
+    bottom: -5px;
+    right: 0;
+    position: absolute;
+}
+

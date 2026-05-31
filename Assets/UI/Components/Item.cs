@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Data;
 using Items;
 using Player;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -36,6 +37,8 @@ namespace UI.Components
         private VisualElement rootElm;
         private Image iconElm;
         private Label amountElm;
+
+        public bool showingName = false;
         #endregion
 
         #region Constructor
@@ -66,6 +69,8 @@ namespace UI.Components
             VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Components/Item/Item");
             tree.CloneTree(this);
 
+
+
             GetElements();
             SubscribeEvents();
             #endregion
@@ -86,6 +91,9 @@ namespace UI.Components
             if (!isDraggable) return;
             rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
             rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+
+            rootElm.RegisterCallback<PointerEnterEvent>(OnPointerEnter);
+            rootElm.RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
             if (isGhost)
             {
                 UIController.Singleton.OnOverlayClose -= OnOverlayClose;
@@ -229,15 +237,29 @@ namespace UI.Components
             #region OnPointerDown
             if (isBeingDragged || rootElm.HasPointerCapture(e.pointerId)) DropItem(e);
             else GrabItem(e);
-
-
             #endregion
+        }
+        private void OnPointerEnter(PointerEnterEvent e)
+        {
+            UIController.Singleton.ShowName(_item.name, new Vector2(e.position.x, e.position.y));
+            showingName = true;
+        }
+        private void OnPointerLeave(PointerLeaveEvent e)
+        {
+            UIController.Singleton.HideName();
+            showingName = false;
         }
 
         private void OnPointerMove(PointerMoveEvent e)
         {
             #region OnPointerMove
+
             if (!isBeingDragged) return;
+            if (showingName)
+            {
+                UIController.Singleton.HideName();
+                showingName = false;
+            }
 
             Vector2 pos = e.position;
             style.left = pos.x - _dragOffset.x;

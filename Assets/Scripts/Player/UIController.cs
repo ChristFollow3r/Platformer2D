@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Items;
 using UI.Components;
 using UnityEngine;
@@ -39,6 +40,7 @@ namespace Player
         [Header("Elements")]
         [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
+        private VisualElement nameShower;
 
 
         private VisualElement overlayRoot;
@@ -97,6 +99,8 @@ namespace Player
 
             overlay.rootVisualElement.Q("inventory").Add(inventory);
             overlay.rootVisualElement.Q("holder").Add(overlayHotbar);
+            Debug.Log($"Overlay has {string.Join(", ", overlay.rootVisualElement.Children().ToList()[0].Children().Select(c => c.name))}");
+            nameShower = overlay.rootVisualElement.Q("name-holder");
 
             Hotbar hudHotbar = new Hotbar { isMain = true };
             hud.rootVisualElement.Q("hotbar-holder").Add(hudHotbar);
@@ -115,6 +119,8 @@ namespace Player
             menuRoot.Q<Button>("Recipes").clicked += () => Debug.Log("Recipes");
             menuRoot.Q<Button>("Save").clicked += () => Debug.Log("Save");
             menuRoot.Q<Button>("Exit").clicked += () => Application.Quit();
+
+
             #endregion
         }
 
@@ -269,6 +275,19 @@ namespace Player
             if (move.y > 0) Items.Inventory.Singleton.handIndex += 1;
             else Items.Inventory.Singleton.handIndex -= 1;
             #endregion
+        }
+
+        public void ShowName(string name, Vector2 pos)
+        {
+            nameShower.style.display = DisplayStyle.Flex;
+            Label nameLb = nameShower.Q<Label>("name");
+            nameLb.text = name;
+            // nameShower.style.left = pos.x;
+            // nameShower.style.top = pos.y;
+        }
+        public void HideName()
+        {
+            nameShower.style.display = DisplayStyle.None;
         }
         #endregion
     }
