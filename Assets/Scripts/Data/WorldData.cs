@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Scriptable_Objects_Scripts;
+using UnityEngine;
 
 namespace Data
 {
@@ -52,5 +53,9 @@ namespace Data
         public static readonly Dictionary<BlockType, ItemData> BlockDictionary = new();
         public static readonly Dictionary<PropType, Prop> PropDictionary = new();
         public static World World;
+
+        public static bool isGenerating = false;
+        public static readonly HashSet<Vector2Int> dirtyBlocks = new();
+        public static readonly HashSet<Vector2Int> dirtyProps = new();
     }
 }

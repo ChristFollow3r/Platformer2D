@@ -74,7 +74,6 @@ namespace World
             WorldData.World = new Data.World(worldWidth, worldHeight);
             chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize];
             cameraPosition = mainCamera.transform.position;
-            seedOffset = ComputeSeedOffset(worldSeed);
 
             lightmapTexture = new Texture2D(worldWidth, worldHeight, TextureFormat.RGBAHalf, false);
             lightmapTexture.filterMode = FilterMode.Bilinear;
@@ -84,13 +83,52 @@ namespace World
             tilemapMaterial.SetVector("_WorldSize", new Vector2(worldWidth, worldHeight));
             tilemapMaterial.SetFloat("_CellSize", gridParent.cellSize.x);
 
-            GenerateWorld();
-            GenerateProps();
+            if (WorldSerializer.Exists())
+                LoadWorld();
+            else
+                NewWorld();
+
             CalculateLighting();
             ApplyLightingToTexture();
             PopulateChunks();
             UpdateChunks();
             SpawnPlayer();
+        }
+
+        private void NewWorld()
+        {
+            seedOffset = ComputeSeedOffset(worldSeed);
+
+            WorldData.isGenerating = true;
+            GenerateWorld();
+            GenerateProps();
+            WorldData.isGenerating = false;
+        }
+
+        private void LoadWorld()
+        {
+            WorldSaveData save = WorldSerializer.Load();
+
+            seedOffset = ComputeSeedOffset(save.seed);
+
+            WorldData.isGenerating = true;
+            GenerateWorld();
+            GenerateProps();
+            WorldData.isGenerating = false;
+
+            // apply diffs on top of generation
+            WorldData.isGenerating = true;
+            foreach (var b in save.blocks)
+                WorldData.World.SetBlockType(b.x, b.y, b.type);
+            foreach (var p in save.props)
+                WorldData.World.SetPropType(p.x, p.y, p.type);
+            WorldData.isGenerating = false;
+
+            // re-populate dirty so future saves include them
+            foreach (var b in save.blocks)
+                WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
+            foreach (var p in save.props)
+                WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
         }
 
         private void Update()
