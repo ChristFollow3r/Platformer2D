@@ -207,6 +207,8 @@ namespace Items
             for (int i = 0; i < slots.Length; i++)
             {
                 Slot slot = slots[i];
+                if (slot.isEmpty) continue;
+
                 data.slots[i] = new SlotData
                 {
                     id = slot.id,
@@ -237,12 +239,12 @@ namespace Items
                 {
                     ItemData itemData = db.items.Find(item => item.name == slotData.itemId);
                     if (itemData != null)
-                        slots[i].item = new ItemStack(itemData) { amount = slotData.amount };
+                        slots[slotData.id].item = new ItemStack(itemData) { amount = slotData.amount };
                     else
                         Debug.LogWarning($"[Inventory] Unknown item id '{slotData.itemId}' in slot {i}");
                 }
 
-                OnSlotChanged?.Invoke(i, slots[i].item);
+                OnSlotChanged?.Invoke(slotData.id, slots[slotData.id].item);
             }
         }
         #endregion

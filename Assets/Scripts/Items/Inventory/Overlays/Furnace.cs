@@ -334,7 +334,7 @@ namespace Items.Overlays
         {
             return JsonUtility.ToJson(new FurnaceData
             {
-                cookingSlots = cookingSlots.Select(s => new SlotData
+                cookingSlots = cookingSlots.Where(s => !s.isEmpty).Select(s => new SlotData
                 {
                     id = s.id,
                     itemId = s.isEmpty ? null : s.item.data.name,
@@ -359,9 +359,9 @@ namespace Items.Overlays
             for (int i = 0; i < data.cookingSlots.Length && i < cookingSlots.Length; i++)
             {
                 SlotData s = data.cookingSlots[i];
-                cookingSlots[i].item = string.IsNullOrEmpty(s.itemId) ? null
+                cookingSlots[s.id].item = string.IsNullOrEmpty(s.itemId) ? null
                     : new ItemStack(db.items.Find(item => item.name == s.itemId)) { amount = s.amount };
-                OnSlotChanged?.Invoke(i, cookingSlots[i].item);
+                OnSlotChanged?.Invoke(s.id, cookingSlots[s.id].item);
             }
 
             fuelSlot.item = string.IsNullOrEmpty(data.fuelSlot.itemId) ? null

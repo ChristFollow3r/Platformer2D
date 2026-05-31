@@ -138,9 +138,9 @@ namespace Items.Overlays
                 if (s.itemId == null) continue;
                 ItemData itemData = db.items.Find(item => item.name == s.itemId);
 
-                slots[i].item = string.IsNullOrEmpty(s.itemId) ? null
+                slots[s.id].item = string.IsNullOrEmpty(s.itemId) ? null
                     : new ItemStack(itemData) { amount = s.amount };
-                OnSlotChanged?.Invoke(i, slots[i].item);
+                OnSlotChanged?.Invoke(s.id, slots[s.id].item);
             }
         }
         #endregion

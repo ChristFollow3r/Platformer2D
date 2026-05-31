@@ -588,9 +588,16 @@ namespace Player
                 type = o.overlayType.ToString(),
                 blockId = o.blockId,
                 data = ((IInventory)o).ToJson()
-            }).ToArray();
+            }).ToList();
 
-            return JsonUtility.ToJson(new SaveFile { overlays = entries });
+            entries.Add(new OverlaySaveEntry
+            {
+                type = OverlayType.Inventory.ToString(),
+                blockId = ulong.MaxValue,
+                data = Items.Inventory.Singleton.ToJson()
+            });
+
+            return JsonUtility.ToJson(new SaveFile { overlays = entries.ToArray() });
         }
 
         public void DeserializeAll(string json)
@@ -600,6 +607,12 @@ namespace Player
 
             foreach (OverlaySaveEntry entry in save.overlays)
             {
+                if (entry.type == OverlayType.Inventory.ToString())
+                {
+                    Items.Inventory.Singleton.FromJson(entry.data);
+                    continue;
+                }
+
                 if (!Enum.TryParse(entry.type, out OverlayType type)) continue;
 
                 Overlay overlay = CreateOverlay(entry.blockId, type);

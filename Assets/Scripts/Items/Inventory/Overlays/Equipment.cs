@@ -233,7 +233,7 @@ namespace Items.Overlays
             CloseOverlay();
             return JsonUtility.ToJson(new EquipmentData
             {
-                equipmentSlots = equipmentSlots.Select(s => new SlotData
+                equipmentSlots = equipmentSlots.Where(s => !s.isEmpty).Select(s => new SlotData
                 {
                     id = s.id,
                     itemId = s.isEmpty ? null : s.item.data.name,
@@ -253,9 +253,9 @@ namespace Items.Overlays
             for (int i = 0; i < data.equipmentSlots.Length && i < equipmentSlots.Length; i++)
             {
                 SlotData s = data.equipmentSlots[i];
-                equipmentSlots[i].item = string.IsNullOrEmpty(s.itemId) ? null
+                equipmentSlots[s.id].item = string.IsNullOrEmpty(s.itemId) ? null
                     : new ItemStack(db.items.Find(item => item.name == s.itemId)) { amount = s.amount };
-                OnSlotChanged?.Invoke(i, equipmentSlots[i].item);
+                OnSlotChanged?.Invoke(s.id, equipmentSlots[s.id].item);
             }
         }
         #endregion
