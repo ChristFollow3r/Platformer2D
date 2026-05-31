@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: ClayBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Clay
   sprite: {fileID: 5237308054453034914, guid: 29ba295bf2562684ea02eba40dab5685, type: 3}
   stack: 64
   isPlacable: 0
@@ -29,3 +29,4 @@ MonoBehaviour:
     minAmount: 3
     maxAmount: 5
     dropChance: 101
+  hitSound: {fileID: 8300000, guid: 0944551b2069bb344adb9cbf0e6dfbf1, type: 3}

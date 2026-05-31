@@ -327,7 +327,7 @@ MonoBehaviour:
   attackPauseDuration: 0.2
   jumpCooldown: 0.1
   attackCooldown: 0.2
-  mineCooldown: 0.2
+  mineCooldown: 0.6
   deathVFX: {fileID: 7111893719700219089, guid: e7785114cefe80f4c91185771514b69b, type: 3}
 --- !u!114 &7660838302539183182
 MonoBehaviour:
@@ -346,6 +346,7 @@ MonoBehaviour:
   attackOffset: {x: 1, y: 0}
   attackBoxSize: {x: 1.5, y: 1.5}
   itemEntityPrefab: {fileID: 930996324388520816, guid: 9b10d5916f6136f458b805b4050ae45b, type: 3}
+  whiteFlashMaterial: {fileID: 2100000, guid: 9e810140203886946a65ab6f7f34401d, type: 2}
 --- !u!114 &2163750078930779904
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: IronMod
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: IronMod
+  name: Iron Upgrade
   sprite: {fileID: 6994244249176476746, guid: c711a4309a7723b4db2d541d64603822, type: 3}
   stack: 1
   isPlacable: 0
@@ -24,3 +24,5 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: cdd49fc9ad22a504f8ca1cec21fd3785, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}

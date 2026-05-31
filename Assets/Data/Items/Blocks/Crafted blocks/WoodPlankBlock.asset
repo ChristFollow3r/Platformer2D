@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: WoodPlankBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Wood Plank Block
   sprite: {fileID: -1670090247194102519, guid: 5ac76cb853b43f64da9c65dcb31cfcf0, type: 3}
   stack: 64
   isPlacable: 1
@@ -29,3 +29,4 @@ MonoBehaviour:
     minAmount: 1
     maxAmount: 1
     dropChance: 101
+  hitSound: {fileID: 8300000, guid: ac6330d650f08914196df18b20666478, type: 3}

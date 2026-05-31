@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: CopperBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Copper Block
   sprite: {fileID: 1878272093867856738, guid: 435ff0833c150d843b84e362f56ac3ff, type: 3}
   stack: 64
   isPlacable: 1
@@ -29,3 +29,4 @@ MonoBehaviour:
     minAmount: 1
     maxAmount: 1
     dropChance: 101
+  hitSound: {fileID: 8300000, guid: 671703ee3f6ea2e41b94b4344f79905d, type: 3}

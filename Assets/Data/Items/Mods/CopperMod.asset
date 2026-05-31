@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: CopperMod
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: CopperMod
+  name: Copper Upgrade
   sprite: {fileID: 5942707261081859092, guid: a5dda35206050734ba4d26d2c3282048, type: 3}
   stack: 1
   isPlacable: 0
@@ -24,3 +24,5 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: a412e00ab5047f449b070c7a96dda56d, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: StoneBrickBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Stone Brick Block
   sprite: {fileID: -2244790331337046487, guid: 3bd8fe26c445026488877b586f5614b8, type: 3}
   stack: 64
   isPlacable: 1
@@ -29,3 +29,4 @@ MonoBehaviour:
     minAmount: 1
     maxAmount: 1
     dropChance: 101
+  hitSound: {fileID: 8300000, guid: a63d498c623eddf4abe827d17e9b9860, type: 3}

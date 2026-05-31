@@ -718,6 +718,8 @@ MonoBehaviour:
   overlay: {fileID: 1849100690}
   hud: {fileID: 91914541}
   isOverlayOpen: 0
+  craftingDatabase: {fileID: 11400000, guid: 033e1871160fae945bdde8d91c2c5643, type: 2}
+  cookingDatabase: {fileID: 11400000, guid: c820abba9a384854d9eb2994ab9b6506, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

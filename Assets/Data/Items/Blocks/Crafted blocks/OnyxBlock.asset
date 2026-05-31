@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: OnyxBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Onyx Block
   sprite: {fileID: 6431509017140433872, guid: 9d7c86f28a18af041800e863a3aeffd0, type: 3}
   stack: 64
   isPlacable: 1
@@ -29,3 +29,4 @@ MonoBehaviour:
     minAmount: 1
     maxAmount: 1
     dropChance: 101
+  hitSound: {fileID: 8300000, guid: 02d88e8a87cbbe94a8cc5b934143be29, type: 3}

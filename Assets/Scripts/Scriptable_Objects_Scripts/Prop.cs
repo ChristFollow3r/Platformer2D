@@ -19,6 +19,10 @@ namespace Scriptable_Objects_Scripts
         public List<Drop> drops = new List<Drop>();
         public Sprite sprite;
 
+        [Header("Feedback")]
+        public AudioClip hitSound;
+
+
         public new string name;
         public PropType type;
 

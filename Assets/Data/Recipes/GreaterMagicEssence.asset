@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
   m_Name: GreaterMagicEssence
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
-  result: {fileID: 0}
+  result: {fileID: 11400000, guid: fa66d1ec14201da43b8c63eac2bde9bc, type: 2}
   amount: 1
   gridSize: 4
   ingredients:
