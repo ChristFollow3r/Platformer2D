@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
   result: {fileID: 11400000, guid: cd9d4dadef1d0f143893d6d9a97429b3, type: 2}
   amount: 1
-  gridSize: 3
+  gridSize: 4
   ingredients:
   - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
   - {fileID: 11400000, guid: e3e4633ccdb9c5744a35bec228687bfa, type: 2}

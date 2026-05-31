@@ -15,7 +15,7 @@ namespace Items
 
         [Header("Settings")]
         [Tooltip("Time in seconds before the item can be picked up")]
-        [SerializeField] private float pickupDelay = 1.0f;
+        [SerializeField] private float pickupDelay = 0f;
         private float spawnTime;
 
         [Header("Data")]
