@@ -366,6 +366,7 @@ MonoBehaviour:
     minAmount: 2
     maxAmount: 5
     dropChance: 100
+  hitVFXPrefab: {fileID: 930996324388520816, guid: 755d2f80aaca8ab4aa521e3f92f862a2, type: 3}
 --- !u!114 &8774736623719842949
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using Chunks;
 using Data;
@@ -220,7 +219,6 @@ namespace World
                     {
                         foundSurface = true;
 
-                        // 2D noise applied here to wobble the biome boundaries
                         float surfaceWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, y * 0.2f + seedOffset) - 0.5f) * 0.15f;
                         float surfaceBiome = baseBiomeNoise + surfaceWobble;
 
@@ -601,7 +599,13 @@ namespace World
 
                     currentSpawnPoint = new Vector3(worldX, worldY, 0);
 
-                    RespawnPlayer();
+                    GameObject spawnedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
+
+                    if (virtualCamera != null)
+                    {
+                        virtualCamera.Follow = spawnedPlayer.transform;
+                    }
+
                     break;
                 }
             }
@@ -612,15 +616,9 @@ namespace World
             currentSpawnPoint = newSpawnPoint;
         }
 
-        public void RespawnPlayer()
+        public void RespawnPlayer(GameObject playerObject)
         {
-            GameObject spawnedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
-
-            if (virtualCamera != null)
-            {
-                virtualCamera.Follow = spawnedPlayer.transform;
-            }
+            playerObject.transform.position = currentSpawnPoint;
         }
-
     }
 }
