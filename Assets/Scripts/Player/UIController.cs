@@ -118,15 +118,15 @@ namespace Player
 
         private VisualElement recipeBookContainer;
 
-        // Left Page UI
         private Label leftTitleText;
         private VisualElement leftGridContainer;
         private Button prevPageBtn;
 
-        // Right Page UI
         private Label rightTitleText;
         private VisualElement rightGridContainer;
         private Button nextPageBtn;
+
+        private Button closeRecipeBtn;
 
         #endregion
 
@@ -146,7 +146,6 @@ namespace Player
             hud.rootVisualElement.Q("hotbar-holder").Add(hudHotbar);
             CreateOverlay(ulong.MinValue, OverlayType.Inventory);
 
-            // MENU
             pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
 
             Button openMenuBtn = hud.rootVisualElement.Q<Button>("OpenMenu");
@@ -170,11 +169,13 @@ namespace Player
 
             if (isMenuOpen)
             {
+                Time.timeScale = 0f;
                 pauseMenu.rootVisualElement.style.display = DisplayStyle.Flex;
                 hud.rootVisualElement.style.display = DisplayStyle.None;
             }
             else
             {
+                Time.timeScale = 1f;
                 pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
                 hud.rootVisualElement.style.display = DisplayStyle.Flex;
             }
@@ -202,6 +203,7 @@ namespace Player
         {
             #region OpenOverlay
 
+            Time.timeScale = 0f;
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
             overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             isOverlayOpen = true;
@@ -223,6 +225,7 @@ namespace Player
         {
             #region CloseOverlay
 
+            Time.timeScale = 1f;
             OnOverlayClose?.Invoke();
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
@@ -314,18 +317,46 @@ namespace Player
             recipeBookContainer = menuRoot.Q<VisualElement>("RecipeBookContainer");
             if (recipeBookContainer == null) return;
 
+            recipeBookContainer.style.position = Position.Absolute;
+            recipeBookContainer.style.width = 800;
+            recipeBookContainer.style.height = 600;
+            recipeBookContainer.style.left = new Length(50, LengthUnit.Percent);
+            recipeBookContainer.style.top = new Length(50, LengthUnit.Percent);
+            recipeBookContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent), new Length(-50, LengthUnit.Percent), 0));
+
             leftTitleText = recipeBookContainer.Q<Label>("LeftPageTitle");
-            // Updated queries to match your UI Builder hierarchy
             leftGridContainer = recipeBookContainer.Q<VisualElement>("LeftRecipeHolder");
             prevPageBtn = recipeBookContainer.Q<Button>("PrevPage");
 
+            if (prevPageBtn != null)
+            {
+                prevPageBtn.style.position = Position.Absolute;
+                prevPageBtn.style.bottom = 20;
+                prevPageBtn.style.left = 20;
+                prevPageBtn.clicked += () => TurnPage(-1);
+            }
+
             rightTitleText = recipeBookContainer.Q<Label>("RightPageTitle");
-            // Updated queries to match your UI Builder hierarchy
             rightGridContainer = recipeBookContainer.Q<VisualElement>("RightRecipeHolder");
             nextPageBtn = recipeBookContainer.Q<Button>("NextPage");
 
-            if (nextPageBtn != null) nextPageBtn.clicked += () => TurnPage(1);
-            if (prevPageBtn != null) prevPageBtn.clicked += () => TurnPage(-1);
+            if (nextPageBtn != null)
+            {
+                nextPageBtn.style.position = Position.Absolute;
+                nextPageBtn.style.bottom = 20;
+                nextPageBtn.style.right = 20;
+                nextPageBtn.clicked += () => TurnPage(1);
+            }
+
+            closeRecipeBtn = menuRoot.Q<Button>("CloseRecipeBtn");
+
+            if (closeRecipeBtn != null)
+            {
+                closeRecipeBtn.style.position = Position.Absolute;
+                closeRecipeBtn.style.top = 20;
+                closeRecipeBtn.style.left = 20;
+                closeRecipeBtn.clicked += CloseRecipeBook;
+            }
 
             recipeBookContainer.style.display = DisplayStyle.None;
         }
@@ -344,6 +375,14 @@ namespace Player
             recipeBookContainer.style.display = DisplayStyle.Flex;
             currentRecipeIndex = 0;
             DisplayPages();
+        }
+
+        private void CloseRecipeBook()
+        {
+            if (recipeBookContainer != null)
+            {
+                recipeBookContainer.style.display = DisplayStyle.None;
+            }
         }
 
         private void TurnPage(int direction)
@@ -366,8 +405,8 @@ namespace Player
 
             if (currentRecipeIndex + 1 < totalRecipes)
             {
-                rightTitleText.style.display = DisplayStyle.Flex;
-                rightGridContainer.style.display = DisplayStyle.Flex;
+                if (rightTitleText != null) rightTitleText.style.display = DisplayStyle.Flex;
+                if (rightGridContainer != null) rightGridContainer.style.display = DisplayStyle.Flex;
                 PopulatePageData(currentRecipeIndex + 1, rightTitleText, rightGridContainer);
             }
             else
@@ -388,7 +427,6 @@ namespace Player
             if (titleLabel == null || gridContainer == null) return;
 
             gridContainer.Clear();
-            // Layout styling removed here so the UI Builder settings take over
 
             int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null ? craftingDatabase.recipes.Count : 0;
 
@@ -414,16 +452,14 @@ namespace Player
                 if (titleLabel != null) titleLabel.text = "Furnace";
             }
 
-            // --- 1. DRAW INGREDIENT GRID FIRST ---
             VisualElement gridWrapper = new VisualElement();
-            float slotSize = 40f;
+            float slotSize = 60f;
 
-            // Basic layout to form the grid shape remains in code because this element is generated dynamically
             gridWrapper.style.width = (displayColumns * slotSize) + 4;
             gridWrapper.style.flexDirection = FlexDirection.Row;
             gridWrapper.style.flexWrap = Wrap.Wrap;
             gridWrapper.style.justifyContent = Justify.Center;
-            gridWrapper.style.marginBottom = 20;
+            gridWrapper.style.marginBottom = 30;
 
             for (int i = 0; i < ingredientsArray.Length; i++)
             {
@@ -455,14 +491,13 @@ namespace Player
 
             gridContainer.Add(gridWrapper);
 
-            // --- 2. DRAW RESULT ICON AND LABEL BELOW ---
             VisualElement resultWrapper = new VisualElement();
             resultWrapper.style.alignItems = Align.Center;
             resultWrapper.style.flexDirection = FlexDirection.Column;
 
             VisualElement resultBox = new VisualElement();
-            resultBox.style.width = 60;
-            resultBox.style.height = 60;
+            resultBox.style.width = 90;
+            resultBox.style.height = 90;
             resultBox.style.borderTopWidth = 2;
             resultBox.style.borderBottomWidth = 2;
             resultBox.style.borderLeftWidth = 2;
@@ -487,9 +522,10 @@ namespace Player
             {
                 Label resultLabel = new Label();
                 resultLabel.text = resultItem.name;
-                resultLabel.style.marginTop = 5;
+                resultLabel.style.marginTop = 10;
                 resultLabel.style.color = new StyleColor(Color.black);
                 resultLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+                resultLabel.style.fontSize = 18;
 
                 resultWrapper.Add(resultLabel);
             }

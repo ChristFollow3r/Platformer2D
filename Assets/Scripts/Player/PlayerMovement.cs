@@ -227,6 +227,7 @@ namespace Player
         private void HandleMouseInput()
         {
             if (knockbackTimer > 0f) return;
+            if (Player.UIController.Singleton.isMenuOpen || Player.UIController.Singleton.isOverlayOpen) return; // Don't swing if a menu is open
 
             if (Mouse.current.leftButton.wasPressedThisFrame && attackCooldownTimer <= 0f)
             {
