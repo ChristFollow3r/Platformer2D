@@ -247,6 +247,12 @@ namespace Items
 
                 OnSlotChanged?.Invoke(slotData.id, slots[slotData.id].item);
             }
+
+            foreach (ItemStackBuilder builder in startingItems)
+            {
+                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
+                Add(itemStack);
+            }
         }
         #endregion
     }

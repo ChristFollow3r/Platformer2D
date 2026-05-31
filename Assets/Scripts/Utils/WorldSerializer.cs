@@ -37,7 +37,7 @@ public class OverlaySaveEntry
 
 [Serializable] public class ChestData { public SlotData[] slots; }
 [Serializable] public class EquipmentData { public SlotData[] equipmentSlots; }
-[Serializable] public class FurnaceData { public SlotData[] cookingSlots; public SlotData fuelSlot; }
+[Serializable] public class FurnaceData { public SlotData[] cookingSlots; public SlotData fuelSlot; public SlotData resultSlot; }
 
 [Serializable]
 public class WorldSaveData

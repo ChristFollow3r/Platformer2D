@@ -680,7 +680,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990a799ba3cb33c42a968d4ab5b4637d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
-  startingItems: []
+  startingItems:
+  - data: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
+    amount: 1
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
+    amount: 10
+    durability: 0
+    duration: 0
+  - data: {fileID: 11400000, guid: 228698ed2f19312448fff2d00955d398, type: 2}
+    amount: 10
+    durability: 0
+    duration: 0
 --- !u!114 &448283168
 MonoBehaviour:
   m_ObjectHideFlags: 0

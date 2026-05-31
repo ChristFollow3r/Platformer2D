@@ -63,6 +63,8 @@ namespace Items.Overlays
         private float currentCookTimer = 0;
 
         private Sprite furnaceOnSprite;
+
+        bool isInit = false;
         #endregion
 
 
@@ -92,6 +94,8 @@ namespace Items.Overlays
             fuelSlot = new Slot() { id = CookingSlots + 1 };
 
             furnaceOnSprite = Resources.Load<Sprite>("sprites/furnace_on");
+
+            isInit = true;
             #endregion
         }
 
@@ -173,7 +177,7 @@ namespace Items.Overlays
 
             slot.item.amount -= amount;
             if (slot.item.amount <= 0) ClearSlot(slotId);
-            else OnSlotChanged(slotId, slot.item);
+            else OnSlotChanged?.Invoke(slotId, slot.item);
             return true;
             #endregion
         }
@@ -227,6 +231,8 @@ namespace Items.Overlays
         public override void Tick()
         {
             #region Tick
+            if (!isInit) return;
+
             isOn = currentFuelTimer > 0;
 
             if (currentResult == null && !isOn && !EvaluateCook())
@@ -345,6 +351,12 @@ namespace Items.Overlays
                     id = fuelSlot.id,
                     itemId = fuelSlot.isEmpty ? null : fuelSlot.item.data.name,
                     amount = fuelSlot.isEmpty ? (short)0 : fuelSlot.item.amount
+                },
+                resultSlot = new SlotData
+                {
+                    id = resultSlot.id,
+                    itemId = resultSlot.isEmpty ? null : resultSlot.item.data.name,
+                    amount = resultSlot.isEmpty ? (short)0 : resultSlot.item.amount
                 }
             });
         }
@@ -366,6 +378,10 @@ namespace Items.Overlays
 
             fuelSlot.item = string.IsNullOrEmpty(data.fuelSlot.itemId) ? null
                 : new ItemStack(db.items.Find(item => item.name == data.fuelSlot.itemId)) { amount = data.fuelSlot.amount };
+
+            resultSlot.item = string.IsNullOrEmpty(data.resultSlot.itemId) ? null
+                          : new ItemStack(db.items.Find(item => item.name == data.resultSlot.itemId)) { amount = data.resultSlot.amount };
+
             OnSlotChanged?.Invoke(fuelSlot.id, fuelSlot.item);
 
             EvaluateCook();
