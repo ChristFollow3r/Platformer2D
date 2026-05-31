@@ -282,8 +282,9 @@ namespace Player
             nameShower.style.display = DisplayStyle.Flex;
             Label nameLb = nameShower.Q<Label>("name");
             nameLb.text = name;
-            // nameShower.style.left = pos.x;
-            // nameShower.style.top = pos.y;
+            nameShower.style.width = name.Length * 20;
+            nameShower.style.left = pos.x;
+            nameShower.style.top = pos.y;
         }
         public void HideName()
         {

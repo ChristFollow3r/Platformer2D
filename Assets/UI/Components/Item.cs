@@ -241,7 +241,8 @@ namespace UI.Components
         }
         private void OnPointerEnter(PointerEnterEvent e)
         {
-            UIController.Singleton.ShowName(_item.name, new Vector2(e.position.x, e.position.y));
+            Vector2 pos = rootElm.worldBound.position;
+            UIController.Singleton.ShowName(_item.name, pos + new Vector2(40, -10));
             showingName = true;
         }
         private void OnPointerLeave(PointerLeaveEvent e)
