@@ -329,6 +329,47 @@ namespace Items.Overlays
 
             #endregion
         }
+
+        public string ToJson()
+        {
+            return JsonUtility.ToJson(new FurnaceData
+            {
+                cookingSlots = cookingSlots.Select(s => new SlotData
+                {
+                    id = s.id,
+                    itemId = s.isEmpty ? null : s.item.data.name,
+                    amount = s.isEmpty ? (short)0 : s.item.amount
+                }).ToArray(),
+                fuelSlot = new SlotData
+                {
+                    id = fuelSlot.id,
+                    itemId = fuelSlot.isEmpty ? null : fuelSlot.item.data.name,
+                    amount = fuelSlot.isEmpty ? (short)0 : fuelSlot.item.amount
+                }
+            });
+        }
+
+        public void FromJson(string json)
+        {
+            FurnaceData data = JsonUtility.FromJson<FurnaceData>(json);
+            if (data == null) return;
+
+            ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+
+            for (int i = 0; i < data.cookingSlots.Length && i < cookingSlots.Length; i++)
+            {
+                SlotData s = data.cookingSlots[i];
+                cookingSlots[i].item = string.IsNullOrEmpty(s.itemId) ? null
+                    : new ItemStack(db.items.Find(item => item.name == s.itemId)) { amount = s.amount };
+                OnSlotChanged?.Invoke(i, cookingSlots[i].item);
+            }
+
+            fuelSlot.item = string.IsNullOrEmpty(data.fuelSlot.itemId) ? null
+                : new ItemStack(db.items.Find(item => item.name == data.fuelSlot.itemId)) { amount = data.fuelSlot.amount };
+            OnSlotChanged?.Invoke(fuelSlot.id, fuelSlot.item);
+
+            EvaluateCook();
+        }
         #endregion
     }
 }

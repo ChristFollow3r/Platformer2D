@@ -211,7 +211,8 @@ namespace Items
                 {
                     id = slot.id,
                     itemId = slot.isEmpty ? null : slot.item.data.name,
-                    amount = slot.isEmpty ? (short)0 : slot.item.amount
+                    amount = slot.isEmpty ? (short)0 : slot.item.amount,
+                    duration = slot.isEmpty ? 0f : slot.item.duration
                 };
             }
 

@@ -579,6 +579,33 @@ namespace Player
             gridContainer.Add(resultWrapper);
         }
 
+
+
+        public string SerializeAll()
+        {
+            var entries = overlaysByBlockId.Values.Select(o => new OverlaySaveEntry
+            {
+                type = o.overlayType.ToString(),
+                blockId = o.blockId,
+                data = ((IInventory)o).ToJson()
+            }).ToArray();
+
+            return JsonUtility.ToJson(new SaveFile { overlays = entries });
+        }
+
+        public void DeserializeAll(string json)
+        {
+            SaveFile save = JsonUtility.FromJson<SaveFile>(json);
+            if (save?.overlays == null) return;
+
+            foreach (OverlaySaveEntry entry in save.overlays)
+            {
+                if (!Enum.TryParse(entry.type, out OverlayType type)) continue;
+
+                Overlay overlay = CreateOverlay(entry.blockId, type);
+                ((IInventory)overlay).FromJson(entry.data);
+            }
+        }
         #endregion
     }
 }

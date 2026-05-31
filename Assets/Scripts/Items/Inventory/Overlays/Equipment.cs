@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Data;
 using Items.Utils;
 using UnityEngine;
 
@@ -225,6 +226,37 @@ namespace Items.Overlays
             if (modItem.data.modData == null) return 1f;
             return modItem.data.modData.minigPower;
             #endregion
+        }
+
+        public string ToJson()
+        {
+            CloseOverlay();
+            return JsonUtility.ToJson(new EquipmentData
+            {
+                equipmentSlots = equipmentSlots.Select(s => new SlotData
+                {
+                    id = s.id,
+                    itemId = s.isEmpty ? null : s.item.data.name,
+                    amount = s.isEmpty ? (short)0 : s.item.amount,
+                    duration = s.isEmpty ? 0f : s.item.duration
+                }).ToArray()
+            });
+        }
+
+        public void FromJson(string json)
+        {
+            EquipmentData data = JsonUtility.FromJson<EquipmentData>(json);
+            if (data == null) return;
+
+            ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+
+            for (int i = 0; i < data.equipmentSlots.Length && i < equipmentSlots.Length; i++)
+            {
+                SlotData s = data.equipmentSlots[i];
+                equipmentSlots[i].item = string.IsNullOrEmpty(s.itemId) ? null
+                    : new ItemStack(db.items.Find(item => item.name == s.itemId)) { amount = s.amount };
+                OnSlotChanged?.Invoke(i, equipmentSlots[i].item);
+            }
         }
         #endregion
     }
