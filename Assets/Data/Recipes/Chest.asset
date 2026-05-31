@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
   m_Name: Chest
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
-  result: {fileID: 11400000, guid: 1db3a63a3cbe1054fab7c25e1a933bba, type: 2}
+  result: {fileID: 11400000, guid: ef10172a4dcf57c41b1038256c54d40b, type: 2}
   amount: 1
   gridSize: 4
   ingredients:
