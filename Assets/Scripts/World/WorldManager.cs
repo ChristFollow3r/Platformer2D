@@ -83,10 +83,8 @@ namespace World
             tilemapMaterial.SetVector("_WorldSize", new Vector2(worldWidth, worldHeight));
             tilemapMaterial.SetFloat("_CellSize", gridParent.cellSize.x);
 
-            if (WorldSerializer.Exists())
-                LoadWorld();
-            else
-                NewWorld();
+            if (string.IsNullOrEmpty(WorldSerializer.WorldName)) NewWorld();
+            else LoadWorld();
 
             CalculateLighting();
             ApplyLightingToTexture();
@@ -129,6 +127,9 @@ namespace World
                 WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
             foreach (var p in save.props)
                 WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
+
+
+            WorldSerializer.LoadOverlays();
         }
 
         private void Update()

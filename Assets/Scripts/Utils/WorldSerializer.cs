@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Data;
+using Player;
 using UnityEngine;
 
 [Serializable]
@@ -50,14 +51,28 @@ public class BlockDiff { public int x, y; public BlockType type; }
 
 [Serializable]
 public class PropDiff { public int x, y; public PropType type; }
-
 static class WorldSerializer
 {
-    public static string currentSavePath;
-    private static string SavePath => currentSavePath ?? Application.persistentDataPath + "/world.json";
+    public static string WorldName;
 
-    public static void Save(string seed)
+    private static string SaveFolder(string saveName) =>
+        Path.Combine(Application.persistentDataPath, saveName);
+
+    private static string WorldPath(string saveName) => Path.Combine(SaveFolder(saveName), "world.json");
+    private static string OverlaysPath(string saveName) => Path.Combine(SaveFolder(saveName), "overlays.json");
+
+    public static bool Exists(string saveName) => File.Exists(WorldPath(saveName));
+
+    public static void Delete(string saveName)
     {
+        if (Directory.Exists(SaveFolder(saveName)))
+            Directory.Delete(SaveFolder(saveName), recursive: true);
+    }
+
+    public static void Save(string saveName, string seed)
+    {
+        Directory.CreateDirectory(SaveFolder(saveName));
+
         var data = new WorldSaveData
         {
             seed = seed,
@@ -69,19 +84,19 @@ static class WorldSerializer
                 .ToArray()
         };
 
-        File.WriteAllText(SavePath, JsonUtility.ToJson(data));
+        File.WriteAllText(WorldPath(saveName), JsonUtility.ToJson(data));
+        File.WriteAllText(OverlaysPath(saveName), UIController.Singleton.SerializeAll());
     }
 
     public static WorldSaveData Load()
     {
-        if (!File.Exists(SavePath)) return null;
-        return JsonUtility.FromJson<WorldSaveData>(File.ReadAllText(SavePath));
+        if (!File.Exists(WorldPath(WorldName))) return null;
+        return JsonUtility.FromJson<WorldSaveData>(File.ReadAllText(WorldPath(WorldName)));
     }
 
-    public static bool Exists() => File.Exists(SavePath);
-
-    public static void Delete()
+    public static void LoadOverlays()
     {
-        if (File.Exists(SavePath)) File.Delete(SavePath);
+        if (!File.Exists(OverlaysPath(WorldName))) return;
+        UIController.Singleton.DeserializeAll(File.ReadAllText(OverlaysPath(WorldName)));
     }
 }
