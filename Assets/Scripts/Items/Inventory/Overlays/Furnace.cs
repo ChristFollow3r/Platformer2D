@@ -131,7 +131,7 @@ namespace Items.Overlays
             #endregion
         }
 
-        public void Add(ItemStack itemStack) => Inventory.Singleton.Drop(itemStack);
+        public void Add(ItemStack itemStack, bool stacked = true) => Inventory.Singleton.Drop(itemStack);
 
         public bool AddToSlot(ItemStack itemStack, int slotId)
         {
