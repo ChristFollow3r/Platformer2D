@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19507406fb458ae459dbacbeea3dda76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.ItemEntity
+  pickupDelay: 0.25
   itemData: {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
 --- !u!114 &7243765266166736406
 MonoBehaviour:
@@ -161,11 +162,9 @@ MonoBehaviour:
   collider: {fileID: 6424570704822434071}
   spriteRenderer: {fileID: 4732772619590479897}
   itemData: {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
-  bobHeight: 0.2
-  bobSpeed: 0.2
   rotateSpeed: 0
-  initialPopForce: 0
-  gravity: -9.8
+  popForceUp: 5
+  popForceSide: 2
   player: {fileID: 846664854750277049, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
 --- !u!60 &-5714636835351564510
 PolygonCollider2D:

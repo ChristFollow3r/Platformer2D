@@ -12,6 +12,11 @@ namespace Items
         private readonly float pickUpRadius = 0.4f;
         private readonly float speed = 10f;
 
+        [Header("Settings")]
+        [Tooltip("Time in seconds before the item can be picked up")]
+        [SerializeField] private float pickupDelay = 1.0f;
+        private float spawnTime;
+
         [Header("Data")]
         public ItemData itemData;
 
@@ -21,6 +26,9 @@ namespace Items
         private void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
+
+            // Record the time the item was created
+            spawnTime = Time.time;
         }
 
         private void Start()
@@ -36,10 +44,16 @@ namespace Items
             {
                 spriteRenderer.sprite = itemData.sprite;
             }
+
+            // Reset the timer when initialized (crucial if you are dropping the item dynamically)
+            spawnTime = Time.time;
         }
 
         private void OnTriggerStay2D(Collider2D other)
         {
+            // DELAY CHECK: If the current time is less than the spawn time plus the delay, do nothing.
+            if (Time.time < spawnTime + pickupDelay) return;
+
             if (!other.CompareTag("Player")) return;
 
             collisionCollider.enabled = false;

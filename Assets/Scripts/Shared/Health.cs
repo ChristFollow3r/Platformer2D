@@ -86,11 +86,12 @@ namespace Shared
             if (hitVFXPrefab != null)
             {
                 var drop = Instantiate(hitVFXPrefab, transform.position, Quaternion.identity);
+                Destroy(drop, 180f);
 
                 if (drop.TryGetComponent(out Rigidbody2D rb))
                 {
-                    float randomX = Random.Range(-4f, 4f);
-                    float randomY = Random.Range(3f, 6f);
+                    float randomX = Random.Range(-0.5f, 0.5f);
+                    float randomY = Random.Range(-0.5f, 0.5f);
                     rb.AddForce(new Vector2(randomX, randomY), ForceMode2D.Impulse);
                 }
             }
