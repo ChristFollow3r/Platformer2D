@@ -51,7 +51,6 @@ namespace Player
         [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
 
-
         private VisualElement overlayRoot;
         private VisualElement hudRoot;
 
@@ -72,7 +71,6 @@ namespace Player
 
         #region Unity
 
-        /// <summary>Ran by unity on load</summary>
         private void Awake()
         {
             #region Awake
@@ -85,7 +83,6 @@ namespace Player
             #endregion
         }
 
-        /// <summary>Ran by unity on first enable</summary>
         private void Start()
         {
             #region Start
@@ -95,7 +92,6 @@ namespace Player
             #endregion
         }
 
-        /// <summary>Ran by unity each frame</summary>
         private void Update()
         {
             #region Update
@@ -158,14 +154,10 @@ namespace Player
 
             var menuRoot = pauseMenu.rootVisualElement;
 
-            // Initialize Recipe Book UI elements
             InitializeRecipeBook(menuRoot);
 
             menuRoot.Q<Button>("Settings").clicked += () => Debug.Log("Settings");
-
-            // Hook up the Recipes button to our new method
             menuRoot.Q<Button>("Recipes").clicked += OpenRecipeBook;
-
             menuRoot.Q<Button>("Save").clicked += () => Debug.Log("Save");
             menuRoot.Q<Button>("Exit").clicked += () => Application.Quit();
 
@@ -315,7 +307,6 @@ namespace Player
 
         #endregion
 
-
         #region Recipe Book Logic
 
         private void InitializeRecipeBook(VisualElement menuRoot)
@@ -323,17 +314,14 @@ namespace Player
             recipeBookContainer = menuRoot.Q<VisualElement>("RecipeBookContainer");
             if (recipeBookContainer == null) return;
 
-            // Find Left Page Elements
             leftTitleText = recipeBookContainer.Q<Label>("LeftPageTitle");
             leftGridContainer = recipeBookContainer.Q<VisualElement>("LeftPageGrid");
             prevPageBtn = recipeBookContainer.Q<Button>("PrevPage");
 
-            // Find Right Page Elements
             rightTitleText = recipeBookContainer.Q<Label>("RightPageTitle");
             rightGridContainer = recipeBookContainer.Q<VisualElement>("RightPageGrid");
             nextPageBtn = recipeBookContainer.Q<Button>("NextPage");
 
-            // Bind buttons
             if (nextPageBtn != null) nextPageBtn.clicked += () => TurnPage(1);
             if (prevPageBtn != null) prevPageBtn.clicked += () => TurnPage(-1);
 
@@ -352,18 +340,15 @@ namespace Player
             if (GetTotalRecipes() == 0) return;
 
             recipeBookContainer.style.display = DisplayStyle.Flex;
-            currentRecipeIndex = 0; // Always start on page 0
+            currentRecipeIndex = 0;
             DisplayPages();
         }
 
         private void TurnPage(int direction)
         {
             int totalRecipes = GetTotalRecipes();
-
-            // Advance or go back by 2 pages at a time
             int newIndex = currentRecipeIndex + (direction * 2);
 
-            // Only turn the page if we aren't going out of bounds
             if (newIndex >= 0 && newIndex < totalRecipes)
             {
                 currentRecipeIndex = newIndex;
@@ -375,10 +360,8 @@ namespace Player
         {
             int totalRecipes = GetTotalRecipes();
 
-            // Populate Left Page
             PopulatePageData(currentRecipeIndex, leftTitleText, leftGridContainer);
 
-            // Populate Right Page (Check if there is actually a recipe for the right page)
             if (currentRecipeIndex + 1 < totalRecipes)
             {
                 rightTitleText.style.display = DisplayStyle.Flex;
@@ -387,12 +370,10 @@ namespace Player
             }
             else
             {
-                // Blank out the right page if we are at the end of an odd-numbered list
                 if (rightTitleText != null) rightTitleText.text = "";
                 if (rightGridContainer != null) rightGridContainer.Clear();
             }
 
-            // Hide/Show navigation buttons
             if (prevPageBtn != null)
                 prevPageBtn.style.display = (currentRecipeIndex == 0) ? DisplayStyle.None : DisplayStyle.Flex;
 
@@ -404,45 +385,52 @@ namespace Player
         {
             if (titleLabel == null || gridContainer == null) return;
 
+            gridContainer.Clear();
+
+            // Force the container to stack everything vertically and center it
+            gridContainer.style.flexDirection = FlexDirection.Column;
+            gridContainer.style.alignItems = Align.Center;
+
             int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null ? craftingDatabase.recipes.Count : 0;
+
+            ItemData resultItem = null;
+            ItemData[] ingredientsArray = null;
+            int displayColumns = 4;
 
             if (index < craftingCount)
             {
                 var recipe = craftingDatabase.recipes[index];
-                titleLabel.text = recipe.result != null ? recipe.result.name + " (Crafting)" : "Unknown Recipe";
-                DrawGrid(gridContainer, recipe.ingredients, recipe.gridSize);
+                resultItem = recipe.result;
+                ingredientsArray = recipe.ingredients;
+                displayColumns = 4;
+                titleLabel.text = "Crafting Table";
             }
             else
             {
                 int cookingIndex = index - craftingCount;
                 var recipe = cookingDatabase.recipes[cookingIndex];
-                titleLabel.text = recipe.result != null ? recipe.result.name + " (Furnace)" : "Unknown Recipe";
-                DrawGrid(gridContainer, recipe.ingredients, recipe.gridSize);
+                resultItem = recipe.result;
+                ingredientsArray = recipe.ingredients;
+                displayColumns = recipe.gridSize;
+                titleLabel.text = "Furnace";
             }
-        }
 
-        private void DrawGrid(VisualElement container, ItemData[] ingredients, int gridSize)
-        {
-            container.Clear();
-
-            // Slightly smaller to ensure a 4x4 fits nicely on the page
+            // --- 1. DRAW INGREDIENT GRID FIRST ---
+            VisualElement gridWrapper = new VisualElement();
             float slotSize = 40f;
 
-            // Sets the width limit so the flexbox is forced to drop to a new line
-            // after reaching the 'gridSize' limit (e.g., 4 slots wide).
-            container.style.width = (gridSize * slotSize) + 4;
-            container.style.flexDirection = FlexDirection.Row;
-            container.style.flexWrap = Wrap.Wrap;
+            gridWrapper.style.width = (displayColumns * slotSize) + 4;
+            gridWrapper.style.flexDirection = FlexDirection.Row;
+            gridWrapper.style.flexWrap = Wrap.Wrap;
+            gridWrapper.style.justifyContent = Justify.Center;
+            gridWrapper.style.marginBottom = 20; // Adds a nice gap between the grid and the result
 
-            // THE FIX: Loop through the entire array size (16 for crafting).
-            // This guarantees absolutely zero item data is lost or cut off.
-            for (int i = 0; i < ingredients.Length; i++)
+            for (int i = 0; i < ingredientsArray.Length; i++)
             {
                 VisualElement slot = new VisualElement();
                 slot.style.width = slotSize;
                 slot.style.height = slotSize;
 
-                // Borders
                 slot.style.borderTopWidth = 1;
                 slot.style.borderBottomWidth = 1;
                 slot.style.borderLeftWidth = 1;
@@ -451,23 +439,63 @@ namespace Player
                 slot.style.borderBottomColor = new StyleColor(Color.black);
                 slot.style.borderLeftColor = new StyleColor(Color.black);
                 slot.style.borderRightColor = new StyleColor(Color.black);
-
-                // Background
                 slot.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.2f));
 
-                // Add the item icon if one exists in this specific array slot
-                if (ingredients[i] != null && ingredients[i].sprite != null)
+                if (ingredientsArray[i] != null && ingredientsArray[i].sprite != null)
                 {
                     Image icon = new Image();
-                    icon.sprite = ingredients[i].sprite;
+                    icon.sprite = ingredientsArray[i].sprite;
                     icon.style.width = Length.Percent(100);
                     icon.style.height = Length.Percent(100);
-
                     slot.Add(icon);
                 }
 
-                container.Add(slot);
+                gridWrapper.Add(slot);
             }
+
+            gridContainer.Add(gridWrapper);
+
+            // --- 2. DRAW RESULT ICON AND LABEL BELOW ---
+            VisualElement resultWrapper = new VisualElement();
+            resultWrapper.style.alignItems = Align.Center; // Centers the box and label
+            resultWrapper.style.flexDirection = FlexDirection.Column; // Stacks box and label vertically
+
+            VisualElement resultBox = new VisualElement();
+            resultBox.style.width = 60;
+            resultBox.style.height = 60;
+            resultBox.style.borderTopWidth = 2;
+            resultBox.style.borderBottomWidth = 2;
+            resultBox.style.borderLeftWidth = 2;
+            resultBox.style.borderRightWidth = 2;
+            resultBox.style.borderTopColor = new StyleColor(Color.black);
+            resultBox.style.borderBottomColor = new StyleColor(Color.black);
+            resultBox.style.borderLeftColor = new StyleColor(Color.black);
+            resultBox.style.borderRightColor = new StyleColor(Color.black);
+            resultBox.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.4f));
+
+            if (resultItem != null && resultItem.sprite != null)
+            {
+                Image resIcon = new Image();
+                resIcon.sprite = resultItem.sprite;
+                resIcon.style.width = Length.Percent(100);
+                resIcon.style.height = Length.Percent(100);
+                resultBox.Add(resIcon);
+            }
+            resultWrapper.Add(resultBox);
+
+            // Add the text label below the box
+            if (resultItem != null)
+            {
+                Label resultLabel = new Label();
+                resultLabel.text = resultItem.name;
+                resultLabel.style.marginTop = 5;
+                resultLabel.style.color = new StyleColor(Color.black);
+                resultLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+
+                resultWrapper.Add(resultLabel);
+            }
+
+            gridContainer.Add(resultWrapper);
         }
 
         #endregion
