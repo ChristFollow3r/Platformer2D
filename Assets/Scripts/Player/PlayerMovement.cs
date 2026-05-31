@@ -95,7 +95,7 @@ namespace Player
 
         private void Update()
         {
-            if (UIController.Singleton.isOverlayOpen) return;
+            if (UIController.Singleton.isOverlayOpen || UIController.Singleton.isMenuOpen) return;
 
             Vector2 colSize = playerCollider.bounds.size;
             Vector2 colCenter = playerCollider.bounds.center;
