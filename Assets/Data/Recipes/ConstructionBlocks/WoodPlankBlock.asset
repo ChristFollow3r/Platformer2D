@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49cd15bd4c67d2d4c99f5fc89c069f29, type: 3}
+  m_Name: WoodPlankBlock
+  m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
+  result: {fileID: 11400000, guid: 2d06c742202d42e4096f5425730eb821, type: 2}
+  amount: 1
+  gridSize: 4
+  ingredients:
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 5c0dfc1fd9a80074cb4c7857b10efef5, type: 2}
+  - {fileID: 11400000, guid: 5c0dfc1fd9a80074cb4c7857b10efef5, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 5c0dfc1fd9a80074cb4c7857b10efef5, type: 2}
+  - {fileID: 11400000, guid: 5c0dfc1fd9a80074cb4c7857b10efef5, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 8bccc04a6493cad44924dda7a77d8b01, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
+  - {fileID: 11400000, guid: 34431020333559243a92a568e1269fcc, type: 2}
