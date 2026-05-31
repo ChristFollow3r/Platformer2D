@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Bone_Dust
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: Bone dust
+  name: Bone Dust
   sprite: {fileID: -4680566372727789136, guid: 6ff6f7bc994031049b2b183b56fe11f2, type: 3}
   stack: 64
   isPlacable: 0
@@ -24,3 +24,5 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}

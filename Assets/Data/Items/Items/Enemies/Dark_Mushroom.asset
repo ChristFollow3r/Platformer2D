@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Dark_Mushroom
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: Dark mushroom
+  name: Dark Mushroom
   sprite: {fileID: 1299752200858058203, guid: a6d407494fc43c248aeb73b7ca1febd6, type: 3}
   stack: 16
   isPlacable: 0
@@ -24,3 +24,5 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}

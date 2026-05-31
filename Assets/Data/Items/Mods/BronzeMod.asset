@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: BronzeMod
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: BronzeMod
+  name: Bronze Upgrade
   sprite: {fileID: -1513400475487111133, guid: 18db8109b366238448f2dc12d5e3c7d9, type: 3}
   stack: 1
   isPlacable: 0
@@ -24,3 +24,5 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 720387aeebfe7cf4f898a454cb6b4c3e, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}

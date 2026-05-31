@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: RubyBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Ruby Block
   sprite: {fileID: -5649905719658263951, guid: 6bb9e14348bc76c43a2809f17f2f28cc, type: 3}
   stack: 64
   isPlacable: 1

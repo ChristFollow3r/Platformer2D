@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: CraftingTable
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Crafting Table
   sprite: {fileID: 7536810191865729410, guid: 6af7234248e230c4580b5e1627d26a2e, type: 3}
   stack: 64
   isPlacable: 1

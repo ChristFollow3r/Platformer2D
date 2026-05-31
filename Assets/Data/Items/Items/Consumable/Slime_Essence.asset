@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Slime_Essence
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: Slime essence
+  name: Slime Essence
   sprite: {fileID: -1156587458614563205, guid: 4271e86f82134174daf5ed6d315f25d1, type: 3}
   stack: 16
   isPlacable: 0
@@ -24,3 +24,5 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: IronBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Iron Block
   sprite: {fileID: 5980421564451727887, guid: 2857d7d3803252948a486a048e56cbd1, type: 3}
   stack: 64
   isPlacable: 1
