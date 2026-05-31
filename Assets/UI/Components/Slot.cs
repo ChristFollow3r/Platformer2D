@@ -14,7 +14,6 @@ namespace UI.Components
         public bool hasItem => item != null;
 
         public bool isDroppable;
-        public bool isCumulative;
         public IInventory inventory;
         #endregion
 
@@ -29,11 +28,10 @@ namespace UI.Components
 
         #region Constructor
         public Slot() { Init(); }
-        public Slot(IInventory inventory, bool isDroppable, bool isCumulative = false)
+        public Slot(IInventory inventory, bool isDroppable)
         {
             this.inventory = inventory;
             this.isDroppable = isDroppable;
-            this.isCumulative = isCumulative;
             Init();
         }
         #endregion

@@ -164,15 +164,17 @@ namespace UI.Components
             foreach (VisualElement element in foundElements)
             {
                 if (element is not Slot targetSlot) continue;
-                if (!targetSlot.isDroppable) break;
-                if (e.button == 1 && targetSlot.item != null && targetSlot.item.item != item) return;
 
-                if (targetSlot.isCumulative && targetSlot.item != null && targetSlot.item.item == item)
+                if (!targetSlot.isDroppable && targetSlot.item != null && targetSlot.item.item == item)
                 {
                     ItemStack pulled = targetSlot.inventory.ClearSlot(targetSlot.slotId);
                     if (pulled != null) amount += pulled.amount;
                     return;
                 }
+
+                if (!targetSlot.isDroppable) break;
+                if (e.button == 1 && targetSlot.item != null && targetSlot.item.item != item) return;
+
 
 
                 // Try normal add first
