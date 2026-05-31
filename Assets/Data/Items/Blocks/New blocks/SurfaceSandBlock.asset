@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: SurfaceSandBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: 
+  name: Sand
   sprite: {fileID: 3125931293861704754, guid: 4314cbce99e747541a66074d9138c03c, type: 3}
   stack: 64
   isPlacable: 1
@@ -25,7 +25,7 @@ MonoBehaviour:
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
   drops:
-  - item: {fileID: 11400000}
+  - item: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
     minAmount: 1
     maxAmount: 1
     dropChance: 101
