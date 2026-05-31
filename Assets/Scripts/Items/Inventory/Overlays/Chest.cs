@@ -112,7 +112,7 @@ namespace Items.Overlays
             CloseOverlay();
             return JsonUtility.ToJson(new ChestData
             {
-                slots = slots.Select(s => new SlotData
+                slots = slots.Where(s => !s.isEmpty).Select(s => new SlotData
                 {
                     id = s.id,
                     itemId = s.isEmpty ? null : s.item.data.name,
@@ -127,9 +127,15 @@ namespace Items.Overlays
             ChestData data = JsonUtility.FromJson<ChestData>(json);
             if (data == null) return;
             ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+            if (!db)
+            {
+                Debug.LogError("Item db not found!");
+                return;
+            }
             for (int i = 0; i < data.slots.Length && i < slots.Length; i++)
             {
                 SlotData s = data.slots[i];
+                if (s.itemId == null) continue;
                 ItemData itemData = db.items.Find(item => item.name == s.itemId);
 
                 slots[i].item = string.IsNullOrEmpty(s.itemId) ? null

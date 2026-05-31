@@ -53,6 +53,7 @@ public class BlockDiff { public int x, y; public BlockType type; }
 public class PropDiff { public int x, y; public PropType type; }
 static class WorldSerializer
 {
+    public static bool isNewWorld;
     public static string WorldName;
 
     private static string SaveFolder(string saveName) =>
@@ -69,9 +70,9 @@ static class WorldSerializer
             Directory.Delete(SaveFolder(saveName), recursive: true);
     }
 
-    public static void Save(string saveName, string seed)
+    public static void Save(string seed)
     {
-        Directory.CreateDirectory(SaveFolder(saveName));
+        Directory.CreateDirectory(SaveFolder(WorldName));
 
         var data = new WorldSaveData
         {
@@ -84,19 +85,51 @@ static class WorldSerializer
                 .ToArray()
         };
 
-        File.WriteAllText(WorldPath(saveName), JsonUtility.ToJson(data));
-        File.WriteAllText(OverlaysPath(saveName), UIController.Singleton.SerializeAll());
+        File.WriteAllText(WorldPath(WorldName), JsonUtility.ToJson(data));
+        File.WriteAllText(OverlaysPath(WorldName), UIController.Singleton.SerializeAll());
     }
 
     public static WorldSaveData Load()
     {
-        if (!File.Exists(WorldPath(WorldName))) return null;
-        return JsonUtility.FromJson<WorldSaveData>(File.ReadAllText(WorldPath(WorldName)));
+        string path = WorldPath(WorldName);
+        Debug.Log($"[WorldSerializer] Loading world from: {path}");
+
+        if (!File.Exists(path))
+        {
+            Debug.LogError($"[WorldSerializer] World file not found at: {path}");
+            return null;
+        }
+
+        string json = File.ReadAllText(path);
+        Debug.Log($"[WorldSerializer] World JSON length: {json.Length}");
+
+        WorldSaveData save = JsonUtility.FromJson<WorldSaveData>(json);
+
+        if (save == null)
+        {
+            Debug.LogError("[WorldSerializer] Failed to deserialize world JSON.");
+            return null;
+        }
+
+        Debug.Log($"[WorldSerializer] Loaded world. Seed: '{save.seed}', Blocks: {save.blocks?.Length ?? 0}, Props: {save.props?.Length ?? 0}");
+        return save;
     }
 
     public static void LoadOverlays()
     {
-        if (!File.Exists(OverlaysPath(WorldName))) return;
-        UIController.Singleton.DeserializeAll(File.ReadAllText(OverlaysPath(WorldName)));
+        string path = OverlaysPath(WorldName);
+        Debug.Log($"[WorldSerializer] Loading overlays from: {path}");
+
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning($"[WorldSerializer] Overlays file not found at: {path}");
+            return;
+        }
+
+        string json = File.ReadAllText(path);
+        Debug.Log($"[WorldSerializer] Overlays JSON length: {json.Length}");
+
+        UIController.Singleton.DeserializeAll(json);
+        Debug.Log("[WorldSerializer] Overlays deserialized.");
     }
 }

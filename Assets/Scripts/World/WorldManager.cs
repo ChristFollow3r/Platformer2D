@@ -36,6 +36,10 @@ namespace World
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
 
+        [Header("Autosave")]
+        [SerializeField] private float autosaveInterval = 60f;
+        private float _autosaveTimer;
+
         public static WorldManager Instance { get; private set; }
 
         private float seedOffset;
@@ -71,6 +75,9 @@ namespace World
 
         private void Start()
         {
+            WorldData.dirtyBlocks.Clear();
+            WorldData.dirtyProps.Clear();
+
             WorldData.World = new Data.World(worldWidth, worldHeight);
             chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize];
             cameraPosition = mainCamera.transform.position;
@@ -83,7 +90,7 @@ namespace World
             tilemapMaterial.SetVector("_WorldSize", new Vector2(worldWidth, worldHeight));
             tilemapMaterial.SetFloat("_CellSize", gridParent.cellSize.x);
 
-            if (string.IsNullOrEmpty(WorldSerializer.WorldName)) NewWorld();
+            if (WorldSerializer.isNewWorld) NewWorld();
             else LoadWorld();
 
             CalculateLighting();
@@ -101,41 +108,63 @@ namespace World
             GenerateWorld();
             GenerateProps();
             WorldData.isGenerating = false;
+            WorldSerializer.Save(worldSeed);
         }
 
         private void LoadWorld()
         {
-            WorldSaveData save = WorldSerializer.Load();
+            Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
 
+            WorldSaveData save = WorldSerializer.Load();
+            if (save == null)
+            {
+                Debug.LogError("[WorldManager] Save data is null, falling back to new world.");
+                NewWorld();
+                return;
+            }
+
+            Debug.Log($"[WorldManager] Applying seed: '{save.seed}'");
             seedOffset = ComputeSeedOffset(save.seed);
 
             WorldData.isGenerating = true;
             GenerateWorld();
             GenerateProps();
             WorldData.isGenerating = false;
+            Debug.Log("[WorldManager] Base generation done.");
 
-            // apply diffs on top of generation
             WorldData.isGenerating = true;
             foreach (var b in save.blocks)
                 WorldData.World.SetBlockType(b.x, b.y, b.type);
             foreach (var p in save.props)
                 WorldData.World.SetPropType(p.x, p.y, p.type);
             WorldData.isGenerating = false;
+            Debug.Log($"[WorldManager] Applied {save.blocks.Length} block diffs, {save.props.Length} prop diffs.");
 
-            // re-populate dirty so future saves include them
             foreach (var b in save.blocks)
                 WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
             foreach (var p in save.props)
                 WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
 
-
+            Debug.Log("[WorldManager] Loading overlays...");
             WorldSerializer.LoadOverlays();
+            Debug.Log("[WorldManager] LoadWorld complete.");
         }
 
         private void Update()
         {
             if (CheckCameraMovement())
                 UpdateChunks();
+
+            if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
+            {
+                _autosaveTimer += Time.deltaTime;
+                if (_autosaveTimer >= autosaveInterval)
+                {
+                    _autosaveTimer = 0f;
+                    WorldSerializer.Save(worldSeed);
+                    Debug.Log("[WorldManager] Autosaved.");
+                }
+            }
         }
 
         public float GetSurfaceY(float worldX)
@@ -661,5 +690,13 @@ namespace World
             }
         }
 
+        private void OnApplicationQuit()
+        {
+            if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
+            {
+                WorldSerializer.Save(worldSeed);
+                Debug.Log("[WorldManager] Saved on quit.");
+            }
+        }
     }
 }
