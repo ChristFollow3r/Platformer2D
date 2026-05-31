@@ -150,6 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WorldLoader
   gameSceneName: Game
   saveName: save1
+  seed: Test seed! 2asd
 --- !u!4 &1033964301
 Transform:
   m_ObjectHideFlags: 0

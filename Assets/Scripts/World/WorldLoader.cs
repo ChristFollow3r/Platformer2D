@@ -8,12 +8,14 @@ public class WorldLoader : MonoBehaviour
 
     [SerializeField] private string gameSceneName = "Game";
     [SerializeField] private string saveName = "save1";
+    [SerializeField] private string seed = "Test seed!";
 
     [ContextMenu("New World")]
     public void NewWorld()
     {
         if (string.IsNullOrEmpty(saveName)) return;
         WorldSerializer.isNewWorld = true;
+        WorldSerializer.Seed = seed;
         WorldSerializer.WorldName = saveName;
         SceneManager.LoadScene(gameSceneName);
     }

@@ -16,7 +16,6 @@ namespace World
 
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
-        [SerializeField] private string worldSeed;
 
         [Header("Player Settings")]
         [SerializeField]
@@ -102,13 +101,14 @@ namespace World
 
         private void NewWorld()
         {
-            seedOffset = ComputeSeedOffset(worldSeed);
+            seedOffset = ComputeSeedOffset(WorldSerializer.Seed);
+            Random.InitState(WorldSerializer.Seed.GetHashCode());
 
             WorldData.isGenerating = true;
             GenerateWorld();
             GenerateProps();
             WorldData.isGenerating = false;
-            WorldSerializer.Save(worldSeed);
+            WorldSerializer.Save();
         }
 
         private void LoadWorld()
@@ -116,6 +116,7 @@ namespace World
             Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
 
             WorldSaveData save = WorldSerializer.Load();
+            Random.InitState(save.seed.GetHashCode());
             if (save == null)
             {
                 Debug.LogError("[WorldManager] Save data is null, falling back to new world.");
@@ -161,7 +162,7 @@ namespace World
                 if (_autosaveTimer >= autosaveInterval)
                 {
                     _autosaveTimer = 0f;
-                    WorldSerializer.Save(worldSeed);
+                    WorldSerializer.Save();
                     Debug.Log("[WorldManager] Autosaved.");
                 }
             }
@@ -694,7 +695,7 @@ namespace World
         {
             if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
             {
-                WorldSerializer.Save(worldSeed);
+                WorldSerializer.Save();
                 Debug.Log("[WorldManager] Saved on quit.");
             }
         }

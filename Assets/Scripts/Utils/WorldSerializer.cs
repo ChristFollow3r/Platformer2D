@@ -55,6 +55,7 @@ static class WorldSerializer
 {
     public static bool isNewWorld;
     public static string WorldName;
+    public static string Seed;
 
     private static string SaveFolder(string saveName) =>
         Path.Combine(Application.persistentDataPath, saveName);
@@ -70,13 +71,13 @@ static class WorldSerializer
             Directory.Delete(SaveFolder(saveName), recursive: true);
     }
 
-    public static void Save(string seed)
+    public static void Save()
     {
         Directory.CreateDirectory(SaveFolder(WorldName));
 
         var data = new WorldSaveData
         {
-            seed = seed,
+            seed = Seed,
             blocks = WorldData.dirtyBlocks
                 .Select(p => new BlockDiff { x = p.x, y = p.y, type = WorldData.World.GetBlockTypes(p.x, p.y) })
                 .ToArray(),
@@ -110,6 +111,7 @@ static class WorldSerializer
             Debug.LogError("[WorldSerializer] Failed to deserialize world JSON.");
             return null;
         }
+        Seed = save.seed;
 
         Debug.Log($"[WorldSerializer] Loaded world. Seed: '{save.seed}', Blocks: {save.blocks?.Length ?? 0}, Props: {save.props?.Length ?? 0}");
         return save;
