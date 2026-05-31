@@ -701,6 +701,10 @@ MonoBehaviour:
     amount: 64
     durability: 0
     duration: 0
+  - data: {fileID: 11400000, guid: ef10172a4dcf57c41b1038256c54d40b, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
 --- !u!114 &448283168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -718,7 +722,7 @@ MonoBehaviour:
   overlay: {fileID: 1849100690}
   hud: {fileID: 91914541}
   isOverlayOpen: 0
-  craftingDatabase: {fileID: 11400000, guid: 033e1871160fae945bdde8d91c2c5643, type: 2}
+  craftingDatabase: {fileID: 0}
   cookingDatabase: {fileID: 11400000, guid: c820abba9a384854d9eb2994ab9b6506, type: 2}
 --- !u!1 &519420028
 GameObject:
@@ -1414,7 +1418,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3e972d726261d2c41b5f7843cfd45ab4, type: 2}
   - {fileID: 11400000, guid: 2d06c742202d42e4096f5425730eb821, type: 2}
   - {fileID: 11400000, guid: 833de8d64f46b08439bffe50fe855a3a, type: 2}
-  - {fileID: 11400000, guid: 1db3a63a3cbe1054fab7c25e1a933bba, type: 2}
+  - {fileID: 11400000, guid: ef10172a4dcf57c41b1038256c54d40b, type: 2}
   props:
   - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
   - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}

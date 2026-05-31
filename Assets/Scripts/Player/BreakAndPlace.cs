@@ -221,12 +221,6 @@ namespace Player
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
-            if (clickedBlock == BlockType.Air)
-            {
-                Debug.Log($"[Mining] Failed: Clicked on Air at Grid ({x}, {y})");
-                return;
-            }
-
             ItemData blockHitData = WorldData.BlockDictionary[clickedBlock];
 
             float targetHardness = blockHitData.hardness;
