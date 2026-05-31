@@ -681,32 +681,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
   startingItems:
-  - data: {fileID: 11400000, guid: c22ac466a56ef44478706e564ed88ad2, type: 2}
+  - data: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
     amount: 1
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
-    amount: 4
+  - data: {fileID: 11400000, guid: 228698ed2f19312448fff2d00955d398, type: 2}
+    amount: 64
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: 5770df88f953965479fb144f4deb1752, type: 2}
-    amount: 4
+  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
+    amount: 64
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: 1bd51d29b6eb76c4da71e1fe290de690, type: 2}
-    amount: 10
+  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
+    amount: 64
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: cb50e3636ad34cf439709535d7b1abe5, type: 2}
-    amount: 10
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: 5c0dfc1fd9a80074cb4c7857b10efef5, type: 2}
-    amount: 10
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
-    amount: 10
+  - data: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
+    amount: 64
     durability: 0
     duration: 0
 --- !u!114 &448283168

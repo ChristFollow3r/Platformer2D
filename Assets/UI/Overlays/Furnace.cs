@@ -85,7 +85,7 @@ namespace UI.Components
                 allSlots[slot.slotId] = slot;
             }
 
-            resultSlot = new Slot(furnace, false) { slotId = (short)cookingSlots.Length };
+            resultSlot = new Slot(furnace, false, true) { slotId = (short)cookingSlots.Length };
             fuelSlot = new Slot(furnace, true) { slotId = (short)(cookingSlots.Length + 1) };
 
             cookingSlotsElm.Add(resultSlot);
