@@ -78,7 +78,7 @@ namespace Items
 
                 if (Vector2.Distance(transform.position, player.position) <= pickUpRadius)
                 {
-                    AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+                    AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position);
                     Inventory.Singleton.Add(new ItemStack(itemData) { amount = 1 });
                     Destroy(gameObject);
                 }

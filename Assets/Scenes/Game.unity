@@ -297,7 +297,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &260356699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -705,6 +705,7 @@ MonoBehaviour:
     amount: 64
     durability: 0
     duration: 0
+  pickupSound: {fileID: 8300000, guid: 30104bd62d2f2364f8cfce8f6a9912a7, type: 3}
 --- !u!114 &448283168
 MonoBehaviour:
   m_ObjectHideFlags: 0
