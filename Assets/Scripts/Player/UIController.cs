@@ -315,11 +315,13 @@ namespace Player
             if (recipeBookContainer == null) return;
 
             leftTitleText = recipeBookContainer.Q<Label>("LeftPageTitle");
-            leftGridContainer = recipeBookContainer.Q<VisualElement>("LeftPageGrid");
+            // Updated queries to match your UI Builder hierarchy
+            leftGridContainer = recipeBookContainer.Q<VisualElement>("LeftRecipeHolder");
             prevPageBtn = recipeBookContainer.Q<Button>("PrevPage");
 
             rightTitleText = recipeBookContainer.Q<Label>("RightPageTitle");
-            rightGridContainer = recipeBookContainer.Q<VisualElement>("RightPageGrid");
+            // Updated queries to match your UI Builder hierarchy
+            rightGridContainer = recipeBookContainer.Q<VisualElement>("RightRecipeHolder");
             nextPageBtn = recipeBookContainer.Q<Button>("NextPage");
 
             if (nextPageBtn != null) nextPageBtn.clicked += () => TurnPage(1);
@@ -386,10 +388,7 @@ namespace Player
             if (titleLabel == null || gridContainer == null) return;
 
             gridContainer.Clear();
-
-            // Force the container to stack everything vertically and center it
-            gridContainer.style.flexDirection = FlexDirection.Column;
-            gridContainer.style.alignItems = Align.Center;
+            // Layout styling removed here so the UI Builder settings take over
 
             int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null ? craftingDatabase.recipes.Count : 0;
 
@@ -403,7 +402,7 @@ namespace Player
                 resultItem = recipe.result;
                 ingredientsArray = recipe.ingredients;
                 displayColumns = 4;
-                titleLabel.text = "Crafting Table";
+                if (titleLabel != null) titleLabel.text = "Crafting Table";
             }
             else
             {
@@ -412,18 +411,19 @@ namespace Player
                 resultItem = recipe.result;
                 ingredientsArray = recipe.ingredients;
                 displayColumns = recipe.gridSize;
-                titleLabel.text = "Furnace";
+                if (titleLabel != null) titleLabel.text = "Furnace";
             }
 
             // --- 1. DRAW INGREDIENT GRID FIRST ---
             VisualElement gridWrapper = new VisualElement();
             float slotSize = 40f;
 
+            // Basic layout to form the grid shape remains in code because this element is generated dynamically
             gridWrapper.style.width = (displayColumns * slotSize) + 4;
             gridWrapper.style.flexDirection = FlexDirection.Row;
             gridWrapper.style.flexWrap = Wrap.Wrap;
             gridWrapper.style.justifyContent = Justify.Center;
-            gridWrapper.style.marginBottom = 20; // Adds a nice gap between the grid and the result
+            gridWrapper.style.marginBottom = 20;
 
             for (int i = 0; i < ingredientsArray.Length; i++)
             {
@@ -457,8 +457,8 @@ namespace Player
 
             // --- 2. DRAW RESULT ICON AND LABEL BELOW ---
             VisualElement resultWrapper = new VisualElement();
-            resultWrapper.style.alignItems = Align.Center; // Centers the box and label
-            resultWrapper.style.flexDirection = FlexDirection.Column; // Stacks box and label vertically
+            resultWrapper.style.alignItems = Align.Center;
+            resultWrapper.style.flexDirection = FlexDirection.Column;
 
             VisualElement resultBox = new VisualElement();
             resultBox.style.width = 60;
@@ -483,7 +483,6 @@ namespace Player
             }
             resultWrapper.Add(resultBox);
 
-            // Add the text label below the box
             if (resultItem != null)
             {
                 Label resultLabel = new Label();

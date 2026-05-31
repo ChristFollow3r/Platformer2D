@@ -13,14 +13,14 @@
                     <ui:Label text="Label" name="LeftPageTitle"/>
                     <ui:VisualElement name="LeftPageGrid" style="flex-grow: 1; flex-wrap: wrap; flex-direction: row;"/>
                 </ui:VisualElement>
-                <ui:Button text="Button" name="PrevPage"/>
+                <ui:Button text="Button" name="PrevPage" style="position: absolute; bottom: 20px; left: 20px;"/>
             </ui:VisualElement>
             <ui:VisualElement name="RightPage" style="flex-grow: 1; width: 50%; height: 100%; flex-shrink: 0; align-items: center; -unity-text-align: upper-center;">
-                <ui:VisualElement name="RightRecipeHolder" style="flex-grow: 1; align-items: center; justify-content: center; align-self: center; height: auto; align-content: flex-start; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);">
+                <ui:VisualElement name="RightRecipeHolder" style="flex-grow: 1; align-items: center; justify-content: center; align-self: center; height: auto; align-content: auto; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;); flex-wrap: nowrap;">
                     <ui:Label text="Label" name="RightPageTitle"/>
                     <ui:VisualElement name="RightPageGrid" style="flex-grow: 1; flex-wrap: wrap; flex-direction: row;"/>
                 </ui:VisualElement>
-                <ui:Button text="Button" name="NextPage" style="align-items: center;"/>
+                <ui:Button text="Button" name="NextPage" style="align-items: center; position: absolute; right: 20px; bottom: 20px;"/>
             </ui:VisualElement>
         </ui:VisualElement>
     </ui:VisualElement>
