@@ -227,6 +227,7 @@ namespace Items
             if (data == null) return;
 
             ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+
             for (int i = 0; i < data.slots.Length && i < slots.Length; i++)
             {
                 SlotData slotData = data.slots[i];

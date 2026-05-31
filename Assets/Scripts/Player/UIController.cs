@@ -592,8 +592,7 @@ namespace Player
 
             entries.Add(new OverlaySaveEntry
             {
-                type = OverlayType.Inventory.ToString(),
-                blockId = ulong.MaxValue,
+                type = "Main",
                 data = Items.Inventory.Singleton.ToJson()
             });
 
@@ -607,7 +606,7 @@ namespace Player
 
             foreach (OverlaySaveEntry entry in save.overlays)
             {
-                if (entry.type == OverlayType.Inventory.ToString())
+                if (entry.type == "Main")
                 {
                     Items.Inventory.Singleton.FromJson(entry.data);
                     continue;
