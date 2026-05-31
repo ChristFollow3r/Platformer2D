@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Furnace
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Furnace
-  sprite: {fileID: 5839503353984351374, guid: f328169ee987e874bb81d85d76e96be8, type: 3}
+  sprite: {fileID: 5204727687788830948, guid: 6f4dc50b9570d3a44a953dafb3059a33, type: 3}
   stack: 64
   isPlacable: 1
   isConsumable: 0
   isFuel: 0
   equipmentType: 0
-  blockType: 21
+  blockType: 26
   hardness: 4
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}

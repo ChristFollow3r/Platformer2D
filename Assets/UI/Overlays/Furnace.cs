@@ -12,8 +12,9 @@ namespace UI.Components
         #region Data
         private Slot[] cookingSlots = new Slot[4];
         private Slot resultSlot;
+        private Slot fuelSlot;
 
-        private Slot[] allSlots = new Slot[Items.Overlays.Furnace.CookingSlots + 1];
+        private Slot[] allSlots = new Slot[Items.Overlays.Furnace.CookingSlots + 2];
         public Items.Overlays.Furnace furnace;
         #endregion
 
@@ -24,8 +25,10 @@ namespace UI.Components
         private VisualElement rootElm;
         private VisualElement cookingHolder;
         private VisualElement cookingSlotsElm;
+        private VisualElement fuelSlotHolder;
         private VisualElement cookingGrid;
         private VisualElement fill;
+        private VisualElement fuelFill;
         #endregion
 
         #region Constructor
@@ -57,7 +60,9 @@ namespace UI.Components
             cookingHolder = this.Q<VisualElement>("cooking-holder");
             cookingSlotsElm = this.Q<VisualElement>("cooking-slots");
             cookingGrid = this.Q<VisualElement>("cooking-grid");
+            fuelSlotHolder = this.Q<VisualElement>("fuel");
             fill = this.Q<VisualElement>("progress-fill");
+            fuelFill = this.Q<VisualElement>("fuel-progress-fill");
             #endregion
         }
 
@@ -81,8 +86,13 @@ namespace UI.Components
             }
 
             resultSlot = new Slot(furnace, false) { slotId = (short)cookingSlots.Length };
+            fuelSlot = new Slot(furnace, true) { slotId = (short)(cookingSlots.Length + 1) };
+
             cookingSlotsElm.Add(resultSlot);
+            fuelSlotHolder.Add(fuelSlot);
+
             allSlots[resultSlot.slotId] = resultSlot;
+            allSlots[fuelSlot.slotId] = fuelSlot;
             #endregion
         }
         private void SubscribeEvents()
@@ -91,6 +101,7 @@ namespace UI.Components
             if (furnace == null) return;
             furnace.OnSlotChanged += OnSlotChanged;
             furnace.OnFillChanged += OnFillChanged;
+            furnace.OnFuelFillChanged += OnFuelFillChanged;
             #endregion
         }
 
@@ -118,6 +129,11 @@ namespace UI.Components
         private void OnFillChanged(float fillPercent)
         {
             fill.style.width = Length.Percent(fillPercent * 100);
+        }
+
+        private void OnFuelFillChanged(float fillPercent)
+        {
+            fuelFill.style.width = Length.Percent(fillPercent * 100);
         }
         #endregion
     }

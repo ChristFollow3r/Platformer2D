@@ -3,7 +3,8 @@ using Scriptable_Objects_Scripts;
 
 namespace Data
 {
-    public enum BlockType {
+    public enum BlockType
+    {
         None,
         Air,
         Dirt,
@@ -25,12 +26,13 @@ namespace Data
         Onyx,
         Ruby,
         Bedrock,
-        Entity,
         WoodPlank,
         StoneBrick,
         SlateBrick,
         SandBrick,
         CraftingTable,
+        Furnace,
+        Chest,
         SaphireBlock,
         TopazBlock,
         EmeraldBlock,

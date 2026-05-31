@@ -6,16 +6,18 @@ using Scriptable_Objects_Scripts;
 using World;
 using Items;
 using Items.Overlays;
+using System.Linq;
 
 namespace Player
 {
     public class BreakAndPlace : MonoBehaviour
     {
-        [Header("Refs")] [SerializeField] private PlayerMovement playerMovement;
+        [Header("Refs")][SerializeField] private PlayerMovement playerMovement;
 
         [Header("Controls")] public int reachDistance = 5;
 
-        [Header("Prop Attack Hitbox (Matched to PlayerAttack)")] [SerializeField]
+        [Header("Prop Attack Hitbox (Matched to PlayerAttack)")]
+        [SerializeField]
         private Vector2 attackOffset = new Vector2(1f, 0f);
 
         [SerializeField] private Vector2 attackBoxSize = new Vector2(1.5f, 1.5f);
@@ -29,12 +31,19 @@ namespace Player
         [Header("Prop Attack Data")] private Vector2Int currentPropTarget = new Vector2Int(-999, -999);
         private float currentPropDamage = 0f;
 
-        [Header("Prefabs")] [SerializeField] private GameObject itemEntityPrefab;
+        [Header("Prefabs")][SerializeField] private GameObject itemEntityPrefab;
 
-        [Header("Feedback")] [SerializeField] private Material whiteFlashMaterial;
+        [Header("Feedback")][SerializeField] private Material whiteFlashMaterial;
 
         private Vector2 cachedTargetPosition;
         private readonly Collider2D[] hitResults = new Collider2D[10];
+
+        private BlockType[] entities = new BlockType[]
+        {
+            BlockType.Chest,
+            BlockType.CraftingTable,
+            BlockType.Furnace
+        };
 
         private void Awake()
         {
@@ -89,7 +98,7 @@ namespace Player
 
             BlockType clickedBlock = GetClickedBlock(worldMousePos, out ulong blockId);
 
-            if (clickedBlock == BlockType.Entity)
+            if (IsBlockEntity(clickedBlock))
             {
                 UIController.Singleton.OpenOverlay(blockId);
                 return;
@@ -200,12 +209,6 @@ namespace Player
                 : (Vector2)transform.position;
             float distance = Vector2.Distance(actualMouseWorldPos, playerCenter);
 
-            if (distance > reachDistance)
-            {
-                Debug.Log(
-                    $"[Mining] Failed: Distance {distance} | Target: {actualMouseWorldPos} | Player: {playerCenter}");
-                return;
-            }
 
             int x = Mathf.FloorToInt(actualMouseWorldPos.x / CellSize);
             int y = Mathf.FloorToInt(actualMouseWorldPos.y / CellSize);
@@ -218,19 +221,11 @@ namespace Player
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
 
-            if (clickedBlock == BlockType.Air)
-            {
-                Debug.Log($"[Mining] Failed: Clicked on Air at Grid ({x}, {y})");
-                return;
-            }
-
             ItemData blockHitData = WorldData.BlockDictionary[clickedBlock];
 
             float targetHardness = blockHitData.hardness;
             float miningPower = Equipment.Singleton.GetMiningPower();
 
-            Debug.Log(
-                $"[Mining] Hitting {clickedBlock} at ({x}, {y}) | Power: {miningPower} | Dmg: {currentBlockDamage}/{targetHardness}");
 
             currentBlockDamage += miningPower;
 
@@ -248,11 +243,10 @@ namespace Player
 
             if (currentBlockDamage >= targetHardness)
             {
-                Debug.Log($"[Mining] SUCCESS! Broke {clickedBlock}.");
                 BreakBlock(x, y, clickedBlock);
                 currentBlockDamage = 0f;
 
-                if (clickedBlock == BlockType.Entity)
+                if (IsBlockEntity(clickedBlock))
                 {
                     UIController.Singleton.DestroyEntity(BlockIdUtils.From(x, y));
                 }
@@ -296,7 +290,7 @@ namespace Player
 
             Inventory.Singleton.RemoveFromHand();
 
-            if (item.data.blockType == BlockType.Entity)
+            if (IsBlockEntity(item.data.blockType))
             {
                 UIController.Singleton.CreateOverlay(BlockIdUtils.From(x, y), item.data.overlayType);
             }
@@ -379,6 +373,8 @@ namespace Player
 
             WorldManager.Instance.chunks[chunkX, chunkY].UpdateTile(x, y);
         }
+
+        private bool IsBlockEntity(BlockType blockType) => entities.Contains(blockType);
 
         #endregion
 

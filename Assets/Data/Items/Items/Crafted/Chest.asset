@@ -19,14 +19,10 @@ MonoBehaviour:
   isConsumable: 0
   isFuel: 0
   equipmentType: 0
-  blockType: 21
-  hardness: 12
+  blockType: 27
+  hardness: 4
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
-  overlayType: 0
-  drops:
-  - item: {fileID: 11400000}
-    minAmount: 1
-    maxAmount: 1
-    dropChance: 101
-  hitSound: {fileID: 8300000, guid: ac6330d650f08914196df18b20666478, type: 3}
+  overlayType: 2
+  drops: []
+  hitSound: {fileID: 0}

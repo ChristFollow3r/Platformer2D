@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Items;
 using UI.Components;
 using UnityEngine;
@@ -13,7 +14,8 @@ namespace Player
     {
         Inventory,
         Furnace,
-        Chest
+        Chest,
+        CraftingTable
     };
 
     [DefaultExecutionOrder(-50)]
@@ -50,6 +52,8 @@ namespace Player
         [Header("Elements")]
         [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
+        private VisualElement nameShower;
+
 
         private VisualElement overlayRoot;
         private VisualElement hudRoot;
@@ -141,6 +145,8 @@ namespace Player
 
             overlay.rootVisualElement.Q("inventory").Add(inventory);
             overlay.rootVisualElement.Q("holder").Add(overlayHotbar);
+            Debug.Log($"Overlay has {string.Join(", ", overlay.rootVisualElement.Children().ToList()[0].Children().Select(c => c.name))}");
+            nameShower = overlay.rootVisualElement.Q("name-holder");
 
             Hotbar hudHotbar = new Hotbar { isMain = true };
             hud.rootVisualElement.Q("hotbar-holder").Add(hudHotbar);
@@ -238,18 +244,30 @@ namespace Player
             switch (foundOverlay.overlayType)
             {
                 case OverlayType.Inventory:
-                {
-                    Items.Overlays.Equipment data = (Items.Overlays.Equipment)foundOverlay;
-                    VisualElement element = new Equipment(data);
-                    return element;
-                }
+                    {
+                        Items.Overlays.Equipment data = (Items.Overlays.Equipment)foundOverlay;
+                        VisualElement element = new Equipment(data);
+                        return element;
+                    }
 
                 case OverlayType.Furnace:
-                {
-                    Items.Overlays.Furnace data = (Items.Overlays.Furnace)foundOverlay;
-                    VisualElement element = new Furnace(data);
-                    return element;
-                }
+                    {
+                        Items.Overlays.Furnace data = (Items.Overlays.Furnace)foundOverlay;
+                        VisualElement element = new Furnace(data);
+                        return element;
+                    }
+                case OverlayType.Chest:
+                    {
+                        Items.Overlays.Chest data = (Items.Overlays.Chest)foundOverlay;
+                        VisualElement element = new Chest(data);
+                        return element;
+                    }
+                case OverlayType.CraftingTable:
+                    {
+                        Items.Overlays.CraftingTable data = (Items.Overlays.CraftingTable)foundOverlay;
+                        VisualElement element = new CraftingTable(data);
+                        return element;
+                    }
                 default:
                     return null;
             }
@@ -273,18 +291,32 @@ namespace Player
             switch (overlayType)
             {
                 case OverlayType.Inventory:
-                {
-                    Items.Overlays.Equipment data = new Items.Overlays.Equipment();
-                    overlaysByBlockId[blockId] = data;
-                    return data;
-                }
+                    {
+                        Items.Overlays.Equipment data = new Items.Overlays.Equipment();
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
 
                 case OverlayType.Furnace:
-                {
-                    Items.Overlays.Furnace data = new Items.Overlays.Furnace(blockId);
-                    overlaysByBlockId[blockId] = data;
-                    return data;
-                }
+                    {
+                        Items.Overlays.Furnace data = new Items.Overlays.Furnace(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
+
+                case OverlayType.Chest:
+                    {
+                        Items.Overlays.Chest data = new Items.Overlays.Chest(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
+
+                case OverlayType.CraftingTable:
+                    {
+                        Items.Overlays.CraftingTable data = new Items.Overlays.CraftingTable(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
                 default:
                     return null;
             }
@@ -303,6 +335,20 @@ namespace Player
             else Items.Inventory.Singleton.handIndex -= 1;
 
             #endregion
+        }
+
+        public void ShowName(string name, Vector2 pos)
+        {
+            nameShower.style.display = DisplayStyle.Flex;
+            Label nameLb = nameShower.Q<Label>("name");
+            nameLb.text = name;
+            nameShower.style.width = name.Length * 20;
+            nameShower.style.left = pos.x;
+            nameShower.style.top = pos.y;
+        }
+        public void HideName()
+        {
+            nameShower.style.display = DisplayStyle.None;
         }
 
         #endregion

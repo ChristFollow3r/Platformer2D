@@ -1,4 +1,4 @@
-using System.Collections;
+
 using System.Collections.Generic;
 using Chunks;
 using Data;
@@ -18,13 +18,15 @@ namespace World
         [SerializeField] private Camera mainCamera;
         [SerializeField] private string worldSeed;
 
-        [Header("Player Settings")] [SerializeField]
+        [Header("Player Settings")]
+        [SerializeField]
         private GameObject playerPrefab;
 
         [SerializeField] private CinemachineCamera virtualCamera;
         public Vector3 currentSpawnPoint;
 
-        [Header("Shader Setup")] [SerializeField]
+        [Header("Shader Setup")]
+        [SerializeField]
         private Material tilemapMaterial;
 
         private Texture2D lightmapTexture;
@@ -47,7 +49,14 @@ namespace World
 
         private void Awake()
         {
-            foreach (var block in blocks) WorldData.BlockDictionary[block.blockType] = block;
+            foreach (var block in blocks)
+            {
+                if (WorldData.BlockDictionary.TryGetValue(block.blockType, out ItemData current))
+                {
+                    Debug.LogWarning($"Block {block.name} / {block.sprite} is trying to override {block.blockType} held by  {current.name} / {current.sprite}");
+                }
+                WorldData.BlockDictionary[block.blockType] = block;
+            }
             foreach (var prop in props) WorldData.PropDictionary[prop.type] = prop;
 
             if (Instance != null)

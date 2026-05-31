@@ -2,6 +2,6 @@
     <Style src="project://database/Assets/Resources/UI/Components/Item/ItemStyles.uss?fileID=7433441132597879392&amp;guid=5aa44926d477c1a458f3db8dac93ce9b&amp;type=3#ItemStyles"/>
     <ui:VisualElement name="root" class="item-root">
         <ui:Image name="icon" source="" scale-mode="StretchToFill" class="item-image"/>
-        <ui:Label text="0" name="amount" class="item-amount"/>
+        <ui:Label text="0" name="amount" class="item-amount item-text"/>
     </ui:VisualElement>
 </ui:UXML>

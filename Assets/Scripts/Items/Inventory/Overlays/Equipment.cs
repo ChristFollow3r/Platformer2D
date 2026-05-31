@@ -106,7 +106,7 @@ namespace Items.Overlays
             #endregion
         }
 
-        public void Add(ItemStack itemStack) => Inventory.Singleton.Drop(itemStack);
+        public void Add(ItemStack itemStack, bool stacked = true) => Inventory.Singleton.Drop(itemStack);
 
         public bool AddToSlot(ItemStack itemStack, int slotId)
         {
@@ -179,7 +179,7 @@ namespace Items.Overlays
 
             OnSlotChanged?.Invoke(slotId, null);
 
-            if (isCraftingSlot) EvaluateCraft();
+            if (isCraftingSlot || isResultSlot) EvaluateCraft();
             if (isResultSlot)
             {
                 for (int i = 0; i < CraftingSlots; i++)
