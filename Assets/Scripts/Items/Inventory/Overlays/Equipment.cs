@@ -41,11 +41,14 @@ namespace Items.Overlays
         #region Events
         public event Action<int, ItemStack> OnSlotChanged;
         public event Action<bool, Mod> OnModChange;
+
+        private RuntimeAnimatorController defaultController;
         #endregion
 
         #region Contructor
-        public Equipment() : base(ulong.MinValue, Player.OverlayType.Inventory)
+        public Equipment(RuntimeAnimatorController defaultController) : base(ulong.MinValue, Player.OverlayType.Inventory)
         {
+            this.defaultController = defaultController;
             Init();
         }
         #endregion
@@ -82,6 +85,9 @@ namespace Items.Overlays
             UIController.Singleton.UpdateMod(mod.duration, mod.data.modData.duration);
             if (mod.duration >= 0) return;
             ClearSlot((int)EquipmentType.Mod);
+            GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
+            if (!playerGo) return;
+            playerGo.GetComponent<Animator>().runtimeAnimatorController = defaultController;
             OnModChange?.Invoke(false, 0);
             #endregion
         }
@@ -93,7 +99,13 @@ namespace Items.Overlays
             slot.Add(itemStack);
             OnSlotChanged?.Invoke(slot.id, slot.item);
 
-            if (equipmentType == EquipmentType.Mod) OnModChange?.Invoke(true, itemStack.data.modData.mod);
+            if (equipmentType == EquipmentType.Mod)
+            {
+                OnModChange?.Invoke(true, itemStack.data.modData.mod);
+                GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
+                if (!playerGo) return;
+                playerGo.GetComponent<Animator>().runtimeAnimatorController = itemStack.data.modData.controller;
+            }
             #endregion
         }
 

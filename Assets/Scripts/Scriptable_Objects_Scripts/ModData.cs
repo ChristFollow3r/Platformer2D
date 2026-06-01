@@ -11,5 +11,6 @@ namespace Scriptable_Objects_Scripts
         public float attackPower;
         public int defence;
         public float duration;
+        public RuntimeAnimatorController controller;
     }
 }

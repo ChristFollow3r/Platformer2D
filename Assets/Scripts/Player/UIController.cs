@@ -118,6 +118,8 @@ namespace Player
         [SerializeField] private RecipeDatabase craftingDatabase;
         [SerializeField] private CookingRecipeDatabase cookingDatabase;
 
+        [SerializeField] private RuntimeAnimatorController defaultController;
+
         private int currentRecipeIndex = 0;
 
         private VisualElement recipeBookContainer;
@@ -292,7 +294,7 @@ namespace Player
             {
                 case OverlayType.Inventory:
                     {
-                        Items.Overlays.Equipment data = new Items.Overlays.Equipment();
+                        Items.Overlays.Equipment data = new Items.Overlays.Equipment(defaultController);
                         overlaysByBlockId[blockId] = data;
                         return data;
                     }
