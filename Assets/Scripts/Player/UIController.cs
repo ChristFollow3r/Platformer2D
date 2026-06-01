@@ -5,6 +5,7 @@ using Items;
 using UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Audio; // Added for AudioMixer support
 using Data;
 using Scriptable_Objects_Scripts;
 
@@ -54,7 +55,6 @@ namespace Player
         [SerializeField] private UIDocument hud;
         private VisualElement nameShower;
 
-
         private VisualElement overlayRoot;
         private VisualElement hudRoot;
 
@@ -63,6 +63,22 @@ namespace Player
         [Header("Controls")]
         public bool isOverlayOpen;
         private InputSystem_Actions playerInput;
+
+        [Header("Audio")]
+        [SerializeField] private AudioSource uiAudioSource;
+        [SerializeField] private AudioClip defaultClickSound;
+        [SerializeField] private AudioClip pageTurnSound;
+
+        [Header("Audio Mixing")]
+        [SerializeField] private AudioMixer mainAudioMixer; // Drag your MainMixer here in the inspector
+
+        [Header("Controls Panel")]
+        private VisualElement controlsPanel;
+        private Button toggleControlsBtn;
+
+        [Header("Settings Panel")]
+        private VisualElement settingsContainer;
+        private Button closeSettingsBtn;
 
         #endregion
 
@@ -154,17 +170,38 @@ namespace Player
 
             pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
 
+            var menuRoot = pauseMenu.rootVisualElement;
+
+            // Apply default click sounds
+            menuRoot.Query<Button>().ForEach(btn => {
+                if (btn.name != "PrevPage" && btn.name != "NextPage")
+                {
+                    btn.clicked += () => PlaySound(defaultClickSound);
+                }
+            });
+
+            InitializeRecipeBook(menuRoot);
+            InitializeControls(menuRoot);
+            InitializeSettings(menuRoot); // Initialize our new Settings menu
+
+            // Main Menu Button Bindings
             Button openMenuBtn = hud.rootVisualElement.Q<Button>("OpenMenu");
             if (openMenuBtn != null) openMenuBtn.clicked += ToggleMenu;
 
-            var menuRoot = pauseMenu.rootVisualElement;
+            Button backBtn = menuRoot.Q<Button>("Back");
+            if (backBtn != null) backBtn.clicked += ToggleMenu; // Closes the menu
 
-            InitializeRecipeBook(menuRoot);
+            Button settingsBtn = menuRoot.Q<Button>("Settings");
+            if (settingsBtn != null) settingsBtn.clicked += OpenSettings; // Opens settings panel
 
-            menuRoot.Q<Button>("Settings").clicked += () => Debug.Log("Settings");
-            menuRoot.Q<Button>("Recipes").clicked += OpenRecipeBook;
-            menuRoot.Q<Button>("Save").clicked += () => Debug.Log("Save");
-            menuRoot.Q<Button>("Exit").clicked += () => Application.Quit();
+            Button recipesBtn = menuRoot.Q<Button>("Recipes");
+            if (recipesBtn != null) recipesBtn.clicked += OpenRecipeBook;
+
+            Button saveBtn = menuRoot.Q<Button>("Save");
+            if (saveBtn != null) saveBtn.clicked += () => Debug.Log("Save");
+
+            Button exitBtn = menuRoot.Q<Button>("Exit");
+            if (exitBtn != null) exitBtn.clicked += () => Application.Quit();
 
             #endregion
         }
@@ -184,6 +221,10 @@ namespace Player
                 Time.timeScale = 1f;
                 pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
                 hud.rootVisualElement.style.display = DisplayStyle.Flex;
+
+                // Ensure sub-menus close when the main menu closes
+                CloseRecipeBook();
+                CloseSettings();
             }
         }
 
@@ -349,9 +390,115 @@ namespace Player
             nameShower.style.left = pos.x;
             nameShower.style.top = pos.y;
         }
+
         public void HideName()
         {
             nameShower.style.display = DisplayStyle.None;
+        }
+
+        private void PlaySound(AudioClip clip)
+        {
+            if (uiAudioSource != null && clip != null)
+            {
+                uiAudioSource.PlayOneShot(clip);
+            }
+        }
+
+        private void InitializeControls(VisualElement menuRoot)
+        {
+            controlsPanel = menuRoot.Q<VisualElement>("ControlsPanel");
+            toggleControlsBtn = menuRoot.Q<Button>("ToggleControlsBtn");
+
+            if (controlsPanel != null) controlsPanel.style.display = DisplayStyle.None;
+
+            if (toggleControlsBtn != null)
+            {
+                toggleControlsBtn.clicked += () => {
+                    if (controlsPanel == null) return;
+
+                    bool isHidden = controlsPanel.style.display == DisplayStyle.None;
+                    controlsPanel.style.display = isHidden ? DisplayStyle.Flex : DisplayStyle.None;
+                };
+            }
+        }
+
+        #endregion
+
+        #region Settings Logic
+
+        private void InitializeSettings(VisualElement menuRoot)
+        {
+            settingsContainer = menuRoot.Q<VisualElement>("SettingsContainer");
+            if (settingsContainer == null) return;
+
+            // Center the settings container exactly like the recipe book
+            settingsContainer.style.position = Position.Absolute;
+            settingsContainer.style.width = 800;
+            settingsContainer.style.height = 600;
+            settingsContainer.style.left = new Length(50, LengthUnit.Percent);
+            settingsContainer.style.top = new Length(50, LengthUnit.Percent);
+            settingsContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent), new Length(-50, LengthUnit.Percent), 0));
+
+            settingsContainer.style.display = DisplayStyle.None;
+
+            closeSettingsBtn = settingsContainer.Q<Button>("CloseSettingsBtn");
+            if (closeSettingsBtn != null)
+            {
+                closeSettingsBtn.clicked += CloseSettings;
+            }
+
+            // Hook up the audio sliders to the Audio Mixer
+            SetupAudioSlider(settingsContainer, "MasterSlider", "MasterVolume");
+            SetupAudioSlider(settingsContainer, "MusicSlider", "MusicVolume");
+            SetupAudioSlider(settingsContainer, "SurfaceSlider", "SurfaceVolume");
+            SetupAudioSlider(settingsContainer, "CaveSlider", "CaveVolume");
+            SetupAudioSlider(settingsContainer, "EntitiesSlider", "EntitiesVolume");
+            SetupAudioSlider(settingsContainer, "AmbienceSlider", "AmbienceVolume");
+        }
+
+        private void SetupAudioSlider(VisualElement container, string sliderName, string exposedParameterName)
+        {
+            Slider volumeSlider = container.Q<Slider>(sliderName);
+            if (volumeSlider != null)
+            {
+                volumeSlider.lowValue = 0.0001f;
+                volumeSlider.highValue = 1f;
+
+                if (mainAudioMixer != null)
+                {
+                    float currentMixerVolume;
+                    if (mainAudioMixer.GetFloat(exposedParameterName, out currentMixerVolume))
+                    {
+                        volumeSlider.value = Mathf.Pow(10f, currentMixerVolume / 20f);
+                    }
+                }
+
+                volumeSlider.RegisterValueChangedCallback(evt =>
+                {
+                    if (mainAudioMixer != null)
+                    {
+                        mainAudioMixer.SetFloat(exposedParameterName, Mathf.Log10(evt.newValue) * 20f);
+                    }
+                });
+            }
+        }
+
+        private void OpenSettings()
+        {
+            // Close other panels to avoid overlapping
+            CloseRecipeBook();
+            if (settingsContainer != null)
+            {
+                settingsContainer.style.display = DisplayStyle.Flex;
+            }
+        }
+
+        private void CloseSettings()
+        {
+            if (settingsContainer != null)
+            {
+                settingsContainer.style.display = DisplayStyle.None;
+            }
         }
 
         #endregion
@@ -379,7 +526,7 @@ namespace Player
                 prevPageBtn.style.position = Position.Absolute;
                 prevPageBtn.style.bottom = 20;
                 prevPageBtn.style.left = 20;
-                prevPageBtn.clicked += () => TurnPage(-1);
+                prevPageBtn.clicked += () => { TurnPage(-1); PlaySound(pageTurnSound); };
             }
 
             rightTitleText = recipeBookContainer.Q<Label>("RightPageTitle");
@@ -391,10 +538,10 @@ namespace Player
                 nextPageBtn.style.position = Position.Absolute;
                 nextPageBtn.style.bottom = 20;
                 nextPageBtn.style.right = 20;
-                nextPageBtn.clicked += () => TurnPage(1);
+                nextPageBtn.clicked += () => { TurnPage(1); PlaySound(pageTurnSound); };
             }
 
-            closeRecipeBtn = menuRoot.Q<Button>("CloseRecipeBtn");
+            closeRecipeBtn = recipeBookContainer.Q<Button>("CloseRecipeBtn");
 
             if (closeRecipeBtn != null)
             {
@@ -417,6 +564,9 @@ namespace Player
         private void OpenRecipeBook()
         {
             if (GetTotalRecipes() == 0) return;
+
+            // Close other panels
+            CloseSettings();
 
             recipeBookContainer.style.display = DisplayStyle.Flex;
             currentRecipeIndex = 0;

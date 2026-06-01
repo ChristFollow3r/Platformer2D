@@ -122,7 +122,19 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: f2cdde4b03918dc4dac886ddb7cae44e
+    name: AmbienceVolume
+  - guid: 26bb9b8f00231a54cb5ca1fdb3fccf77
+    name: CaveVolume
+  - guid: 9a16787f1540f3d409bb36e6ecab168e
+    name: EntitiesVolume
+  - guid: b2c59838eee386646aef9f70de1521ff
+    name: MasterVolume
+  - guid: 6855e268ba76cb74c81d67154280d546
+    name: MusicVolume
+  - guid: c288bd7497e465a488162a3080c5c3db
+    name: SurfaceVolume
   m_AudioMixerGroupViews:
   - guids:
     - f7470f3bfe6f1ea49941f24a970baccd
@@ -133,7 +145,7 @@ AudioMixerController:
     - 79bf246c1cfcc8d4e988049c0bb226ae
     name: View
   m_CurrentViewIndex: 0
-  m_TargetSnapshot: {fileID: 1055415234033313916}
+  m_TargetSnapshot: {fileID: 24500006}
 --- !u!243 &24300002
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
