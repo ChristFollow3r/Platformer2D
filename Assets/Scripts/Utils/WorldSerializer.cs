@@ -54,7 +54,7 @@ public class PropDiff { public int x, y; public PropType type; }
 
 
 [Serializable]
-public class PlayerSaveData { public Vector2 pos; }
+public class PlayerSaveData { public Vector2 pos; public int health; public Vector3 spawnPoint; }
 
 static class WorldSerializer
 {

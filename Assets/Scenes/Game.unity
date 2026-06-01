@@ -680,17 +680,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990a799ba3cb33c42a968d4ab5b4637d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
+  itemEntityPrefab: {fileID: 930996324388520816, guid: 9b10d5916f6136f458b805b4050ae45b, type: 3}
   startingItems:
-  - data: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
+  - data: {fileID: 11400000, guid: 23d96971da1e6394299f660d7b366d94, type: 2}
     amount: 1
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
-    amount: 10
+  - data: {fileID: 11400000, guid: e69f76e0476ce3e4d8d3c2d9def6be10, type: 2}
+    amount: 1
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: 228698ed2f19312448fff2d00955d398, type: 2}
-    amount: 10
+  - data: {fileID: 11400000, guid: daf4e14edd9069240ae9bf93f8e3539c, type: 2}
+    amount: 1
     durability: 0
     duration: 0
 --- !u!114 &448283168
@@ -712,6 +713,7 @@ MonoBehaviour:
   isOverlayOpen: 0
   craftingDatabase: {fileID: 0}
   cookingDatabase: {fileID: 11400000, guid: c820abba9a384854d9eb2994ab9b6506, type: 2}
+  defaultController: {fileID: 9100000, guid: e061f26e16934ab41ac0d7b58478b23e, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,6 +3,8 @@ using System;
 using Data;
 using Items;
 using Random = UnityEngine.Random;
+using Player;
+using Items.Overlays;
 
 namespace Shared
 {
@@ -21,7 +23,7 @@ namespace Shared
         [SerializeField] private int maxHealth;
         [SerializeField] private DropItem[] deathDrops;
 
-        private int currentHealth;
+        public int currentHealth;
         private bool isDead = false;
 
         public event Action<float> OnHealthChanged;
@@ -30,15 +32,25 @@ namespace Shared
 
         private void Awake() => currentHealth = maxHealth;
 
+        public void SetHealth(int health)
+        {
+            currentHealth = health;
+            OnHealthChanged?.Invoke(currentHealth);
+            if (gameObject.tag == "Player") UIController.Singleton.UpdateHealth(currentHealth, maxHealth);
+        }
         public void TakeDamage(int damage, int direction, float knockback)
         {
             if (isDead) return;
-
+            if (gameObject.tag == "Player")
+            {
+                damage -= Equipment.Singleton.GetDefence();
+            }
             currentHealth -= damage;
             OnKnockbackRecieved?.Invoke(direction, knockback);
 
             float healthPercentage = (float)currentHealth / maxHealth;
             OnHealthChanged?.Invoke(healthPercentage);
+            if (gameObject.tag == "Player") UIController.Singleton.UpdateHealth(currentHealth, maxHealth);
 
             if (currentHealth <= 0)
             {

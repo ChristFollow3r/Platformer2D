@@ -12,6 +12,8 @@ namespace Items
         private readonly float pickUpRadius = 0.4f;
         private readonly float speed = 10f;
 
+        private ItemStack stack = null;
+
         [Header("Data")]
         public ItemData itemData;
 
@@ -38,6 +40,17 @@ namespace Items
             }
         }
 
+        public void Initialize(ItemStack stack)
+        {
+            this.stack = stack;
+            itemData = stack.data;
+            if (itemData != null && spriteRenderer != null)
+            {
+                spriteRenderer.sprite = itemData.sprite;
+            }
+        }
+
+
         private void OnTriggerStay2D(Collider2D other)
         {
             if (!other.CompareTag("Player")) return;
@@ -48,10 +61,11 @@ namespace Items
 
             if (Vector2.Distance(transform.position, other.transform.position) <= pickUpRadius)
             {
-                ItemStack itemStack = new(itemData)
+
+                ItemStack itemStack = stack == null ? new(itemData)
                 {
                     amount = 1,
-                };
+                } : stack;
                 Inventory.Singleton.Add(itemStack);
                 Destroy(gameObject);
             }

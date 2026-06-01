@@ -36,7 +36,6 @@ namespace Player
             }
 
             Singleton = this;
-
             #endregion
         }
 
@@ -53,6 +52,8 @@ namespace Player
         [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
         private VisualElement nameShower;
+        private VisualElement healthElm;
+        private VisualElement modElm;
 
 
         private VisualElement overlayRoot;
@@ -99,7 +100,6 @@ namespace Player
         private void Update()
         {
             #region Update
-
             CheckOverlay();
             MoveHand();
             foreach (Overlay overlay in overlaysByBlockId.Values)
@@ -117,6 +117,8 @@ namespace Player
         [Header("Recipe Book")]
         [SerializeField] private RecipeDatabase craftingDatabase;
         [SerializeField] private CookingRecipeDatabase cookingDatabase;
+
+        [SerializeField] private RuntimeAnimatorController defaultController;
 
         private int currentRecipeIndex = 0;
 
@@ -166,6 +168,8 @@ namespace Player
             menuRoot.Q<Button>("Save").clicked += () => Debug.Log("Save");
             menuRoot.Q<Button>("Exit").clicked += () => Application.Quit();
 
+            healthElm = hud.rootVisualElement.Q("health");
+            modElm = hud.rootVisualElement.Q("mod");
             #endregion
         }
 
@@ -277,9 +281,8 @@ namespace Player
         public void DestroyEntity(ulong blockId)
         {
             #region DestroyEntity
-
+            overlaysByBlockId[blockId].OnBlockDestroyed();
             overlaysByBlockId.Remove(blockId);
-
             #endregion
         }
 
@@ -291,7 +294,7 @@ namespace Player
             {
                 case OverlayType.Inventory:
                     {
-                        Items.Overlays.Equipment data = new Items.Overlays.Equipment();
+                        Items.Overlays.Equipment data = new Items.Overlays.Equipment(defaultController);
                         overlaysByBlockId[blockId] = data;
                         return data;
                     }
@@ -574,7 +577,17 @@ namespace Player
 
             gridContainer.Add(resultWrapper);
         }
+        public void UpdateHealth(int health, int maxHealth)
+        {
+            float percent = Mathf.Clamp01((float)health / (float)maxHealth);
+            healthElm.style.width = Length.Percent(percent * 100f);
+        }
 
+        public void UpdateMod(float durationLeft, float duration)
+        {
+            float percent = Mathf.Clamp01(durationLeft / duration);
+            modElm.style.width = Length.Percent(percent * 100f);
+        }
 
 
         public string SerializeAll()

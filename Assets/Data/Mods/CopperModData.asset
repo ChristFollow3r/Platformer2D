@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.ModData
   mod: 1
   minigPower: 12
+  attackPower: 2
+  defence: 10
   duration: 120
+  controller: {fileID: 9100000, guid: 21bbff6f1187bf3408eb89dae2a0f50e, type: 2}

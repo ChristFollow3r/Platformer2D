@@ -1,8 +1,6 @@
-
-
-using System;
 using System.Collections.Generic;
 using Data;
+using Player;
 using UnityEngine;
 
 namespace Items
@@ -28,6 +26,8 @@ namespace Items
         public const short ColSlots = 5;
         public Slot[] slots = new Slot[HotbarSlots + ColSlots * RowSlots];
         public ItemStack hand => slots[handIndex].item;
+
+        [Header("Prefabs")][SerializeField] private GameObject itemEntityPrefab;
         public short handIndex
         {
             get => _handIndex; set
@@ -44,8 +44,8 @@ namespace Items
         #endregion
 
         #region Events
-        public event Action<int, ItemStack> OnSlotChanged;
-        public event Action<short> OnHandChanged;
+        public event System.Action<int, ItemStack> OnSlotChanged;
+        public event System.Action<short> OnHandChanged;
         #endregion
 
 
@@ -90,7 +90,7 @@ namespace Items
 
         private bool _Add(ItemStack item, bool dryRun = false, bool stacked = true)
         {
-            if (item.data == null) return false;
+            if (item == null || item.data == null) return false;
             Slot slot;
             do
             {
@@ -111,8 +111,27 @@ namespace Items
         public void Drop(ItemStack item)
         {
             #region Drop
-            // TEMP
-            Add(item);
+            if (item == null || item.data == null) return;
+
+            if (PlayerMovement.Singleton == null) return;
+            Drop(item, PlayerMovement.Singleton.gameObject.transform.position);
+            #endregion
+        }
+
+        public void Drop(ItemStack item, Vector2 pos)
+        {
+            #region Drop
+            if (item == null || item.data == null) return;
+
+            GameObject droppedItem = Instantiate(itemEntityPrefab, pos, Quaternion.identity);
+            Vector2 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
+            droppedItem.transform.position += (Vector3)randomOffset;
+
+            if (droppedItem.TryGetComponent(out ItemEntity entity))
+            {
+                entity.Initialize(item);
+            }
+
             #endregion
         }
 
