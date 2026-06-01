@@ -5,7 +5,7 @@ using Items;
 using UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEngine.Audio; // Added for AudioMixer support
+using UnityEngine.Audio;
 using Data;
 using Scriptable_Objects_Scripts;
 
@@ -45,13 +45,12 @@ namespace Player
 
         #region Data
 
-        [Header("Menu Elements")]
-        [SerializeField] private UIDocument pauseMenu;
+        [Header("Menu Elements")] [SerializeField]
+        private UIDocument pauseMenu;
 
         public bool isMenuOpen = false;
 
-        [Header("Elements")]
-        [SerializeField] private UIDocument overlay;
+        [Header("Elements")] [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
         private VisualElement nameShower;
 
@@ -60,24 +59,20 @@ namespace Player
 
         private Dictionary<ulong, Overlay> overlaysByBlockId = new();
 
-        [Header("Controls")]
-        public bool isOverlayOpen;
+        [Header("Controls")] public bool isOverlayOpen;
         private InputSystem_Actions playerInput;
 
-        [Header("Audio")]
-        [SerializeField] private AudioSource uiAudioSource;
+        [Header("Audio")] [SerializeField] private AudioSource uiAudioSource;
         [SerializeField] private AudioClip defaultClickSound;
         [SerializeField] private AudioClip pageTurnSound;
 
-        [Header("Audio Mixing")]
-        [SerializeField] private AudioMixer mainAudioMixer; // Drag your MainMixer here in the inspector
+        [Header("Audio Mixing")] [SerializeField]
+        private AudioMixer mainAudioMixer;
 
-        [Header("Controls Panel")]
-        private VisualElement controlsPanel;
+        [Header("Controls Panel")] private VisualElement controlsPanel;
         private Button toggleControlsBtn;
 
-        [Header("Settings Panel")]
-        private VisualElement settingsContainer;
+        [Header("Settings Panel")] private VisualElement settingsContainer;
         private Button closeSettingsBtn;
 
         #endregion
@@ -130,8 +125,9 @@ namespace Player
 
         #region Recipe Book Data
 
-        [Header("Recipe Book")]
-        [SerializeField] private RecipeDatabase craftingDatabase;
+        [Header("Recipe Book")] [SerializeField]
+        private RecipeDatabase craftingDatabase;
+
         [SerializeField] private CookingRecipeDatabase cookingDatabase;
 
         private int currentRecipeIndex = 0;
@@ -161,7 +157,8 @@ namespace Player
 
             overlay.rootVisualElement.Q("inventory").Add(inventory);
             overlay.rootVisualElement.Q("holder").Add(overlayHotbar);
-            Debug.Log($"Overlay has {string.Join(", ", overlay.rootVisualElement.Children().ToList()[0].Children().Select(c => c.name))}");
+            Debug.Log(
+                $"Overlay has {string.Join(", ", overlay.rootVisualElement.Children().ToList()[0].Children().Select(c => c.name))}");
             nameShower = overlay.rootVisualElement.Q("name-holder");
 
             Hotbar hudHotbar = new Hotbar { isMain = true };
@@ -172,8 +169,8 @@ namespace Player
 
             var menuRoot = pauseMenu.rootVisualElement;
 
-            // Apply default click sounds
-            menuRoot.Query<Button>().ForEach(btn => {
+            menuRoot.Query<Button>().ForEach(btn =>
+            {
                 if (btn.name != "PrevPage" && btn.name != "NextPage")
                 {
                     btn.clicked += () => PlaySound(defaultClickSound);
@@ -182,17 +179,16 @@ namespace Player
 
             InitializeRecipeBook(menuRoot);
             InitializeControls(menuRoot);
-            InitializeSettings(menuRoot); // Initialize our new Settings menu
+            InitializeSettings(menuRoot);
 
-            // Main Menu Button Bindings
             Button openMenuBtn = hud.rootVisualElement.Q<Button>("OpenMenu");
             if (openMenuBtn != null) openMenuBtn.clicked += ToggleMenu;
 
             Button backBtn = menuRoot.Q<Button>("Back");
-            if (backBtn != null) backBtn.clicked += ToggleMenu; // Closes the menu
+            if (backBtn != null) backBtn.clicked += ToggleMenu;
 
             Button settingsBtn = menuRoot.Q<Button>("Settings");
-            if (settingsBtn != null) settingsBtn.clicked += OpenSettings; // Opens settings panel
+            if (settingsBtn != null) settingsBtn.clicked += OpenSettings;
 
             Button recipesBtn = menuRoot.Q<Button>("Recipes");
             if (recipesBtn != null) recipesBtn.clicked += OpenRecipeBook;
@@ -222,7 +218,6 @@ namespace Player
                 pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
                 hud.rootVisualElement.style.display = DisplayStyle.Flex;
 
-                // Ensure sub-menus close when the main menu closes
                 CloseRecipeBook();
                 CloseSettings();
             }
@@ -288,30 +283,30 @@ namespace Player
             switch (foundOverlay.overlayType)
             {
                 case OverlayType.Inventory:
-                    {
-                        Items.Overlays.Equipment data = (Items.Overlays.Equipment)foundOverlay;
-                        VisualElement element = new Equipment(data);
-                        return element;
-                    }
+                {
+                    Items.Overlays.Equipment data = (Items.Overlays.Equipment)foundOverlay;
+                    VisualElement element = new Equipment(data);
+                    return element;
+                }
 
                 case OverlayType.Furnace:
-                    {
-                        Items.Overlays.Furnace data = (Items.Overlays.Furnace)foundOverlay;
-                        VisualElement element = new Furnace(data);
-                        return element;
-                    }
+                {
+                    Items.Overlays.Furnace data = (Items.Overlays.Furnace)foundOverlay;
+                    VisualElement element = new Furnace(data);
+                    return element;
+                }
                 case OverlayType.Chest:
-                    {
-                        Items.Overlays.Chest data = (Items.Overlays.Chest)foundOverlay;
-                        VisualElement element = new Chest(data);
-                        return element;
-                    }
+                {
+                    Items.Overlays.Chest data = (Items.Overlays.Chest)foundOverlay;
+                    VisualElement element = new Chest(data);
+                    return element;
+                }
                 case OverlayType.CraftingTable:
-                    {
-                        Items.Overlays.CraftingTable data = (Items.Overlays.CraftingTable)foundOverlay;
-                        VisualElement element = new CraftingTable(data);
-                        return element;
-                    }
+                {
+                    Items.Overlays.CraftingTable data = (Items.Overlays.CraftingTable)foundOverlay;
+                    VisualElement element = new CraftingTable(data);
+                    return element;
+                }
                 default:
                     return null;
             }
@@ -335,32 +330,32 @@ namespace Player
             switch (overlayType)
             {
                 case OverlayType.Inventory:
-                    {
-                        Items.Overlays.Equipment data = new Items.Overlays.Equipment();
-                        overlaysByBlockId[blockId] = data;
-                        return data;
-                    }
+                {
+                    Items.Overlays.Equipment data = new Items.Overlays.Equipment();
+                    overlaysByBlockId[blockId] = data;
+                    return data;
+                }
 
                 case OverlayType.Furnace:
-                    {
-                        Items.Overlays.Furnace data = new Items.Overlays.Furnace(blockId);
-                        overlaysByBlockId[blockId] = data;
-                        return data;
-                    }
+                {
+                    Items.Overlays.Furnace data = new Items.Overlays.Furnace(blockId);
+                    overlaysByBlockId[blockId] = data;
+                    return data;
+                }
 
                 case OverlayType.Chest:
-                    {
-                        Items.Overlays.Chest data = new Items.Overlays.Chest(blockId);
-                        overlaysByBlockId[blockId] = data;
-                        return data;
-                    }
+                {
+                    Items.Overlays.Chest data = new Items.Overlays.Chest(blockId);
+                    overlaysByBlockId[blockId] = data;
+                    return data;
+                }
 
                 case OverlayType.CraftingTable:
-                    {
-                        Items.Overlays.CraftingTable data = new Items.Overlays.CraftingTable(blockId);
-                        overlaysByBlockId[blockId] = data;
-                        return data;
-                    }
+                {
+                    Items.Overlays.CraftingTable data = new Items.Overlays.CraftingTable(blockId);
+                    overlaysByBlockId[blockId] = data;
+                    return data;
+                }
                 default:
                     return null;
             }
@@ -409,16 +404,9 @@ namespace Player
             controlsPanel = menuRoot.Q<VisualElement>("ControlsPanel");
             toggleControlsBtn = menuRoot.Q<Button>("ToggleControlsBtn");
 
-            if (controlsPanel != null) controlsPanel.style.display = DisplayStyle.None;
-
             if (toggleControlsBtn != null)
             {
-                toggleControlsBtn.clicked += () => {
-                    if (controlsPanel == null) return;
-
-                    bool isHidden = controlsPanel.style.display == DisplayStyle.None;
-                    controlsPanel.style.display = isHidden ? DisplayStyle.Flex : DisplayStyle.None;
-                };
+                toggleControlsBtn.style.display = DisplayStyle.None;
             }
         }
 
@@ -431,32 +419,109 @@ namespace Player
             settingsContainer = menuRoot.Q<VisualElement>("SettingsContainer");
             if (settingsContainer == null) return;
 
-            // Center the settings container exactly like the recipe book
             settingsContainer.style.position = Position.Absolute;
             settingsContainer.style.width = 800;
             settingsContainer.style.height = 600;
             settingsContainer.style.left = new Length(50, LengthUnit.Percent);
             settingsContainer.style.top = new Length(50, LengthUnit.Percent);
-            settingsContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent), new Length(-50, LengthUnit.Percent), 0));
-
+            settingsContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent),
+                new Length(-50, LengthUnit.Percent), 0));
+            settingsContainer.style.flexDirection = FlexDirection.Row;
             settingsContainer.style.display = DisplayStyle.None;
+
+            VisualElement leftColumn = new VisualElement();
+            leftColumn.style.width = new Length(50, LengthUnit.Percent);
+            leftColumn.style.height = new Length(100, LengthUnit.Percent);
+            leftColumn.style.justifyContent = Justify.Center;
+
+            VisualElement rightColumn = new VisualElement();
+            rightColumn.style.width = new Length(50, LengthUnit.Percent);
+            rightColumn.style.height = new Length(100, LengthUnit.Percent);
+            rightColumn.style.justifyContent = Justify.Center;
+            rightColumn.style.alignItems = Align.Center;
+            rightColumn.style.borderLeftWidth = 2;
+            rightColumn.style.borderLeftColor = new StyleColor(new Color(0.15f, 0.15f, 0.15f));
+
+            var allSliders = settingsContainer.Query<Slider>().ToList();
+            foreach (var slider in allSliders)
+            {
+                leftColumn.Add(slider);
+
+                // 1. Set the slider to take up more of the column's space
+                slider.style.marginTop = 12;
+                slider.style.marginBottom = 12;
+                slider.style.width = 500; // Increased width
+                slider.style.height = 35;
+                slider.style.alignSelf = Align.Center;
+                slider.style.flexDirection = FlexDirection.Row;
+
+                // 2. Make the Label font bigger
+                Label label = slider.Q<Label>();
+                if (label != null)
+                {
+                    label.style.width = 260;
+                    label.style.minWidth = 220;
+                    label.style.marginRight = 10;
+                    label.style.fontSize = 20;
+                    label.style.unityTextAlign = TextAnchor.MiddleLeft;
+                }
+
+                // 3. FORCE the drag container to stretch and fill the slider width
+                var dragContainer = slider.Q<VisualElement>("unity-drag-container");
+                if (dragContainer != null)
+                {
+                    dragContainer.style.flexGrow = 1;
+                }
+
+                // 4. Style the tracker bar
+                var tracker = slider.Q<VisualElement>("unity-tracker");
+                if (tracker != null)
+                {
+                    tracker.style.height = 10;
+                    tracker.style.top = new Length(50, LengthUnit.Percent);
+                    tracker.style.translate = new StyleTranslate(new Translate(0, new Length(-50, LengthUnit.Percent), 0));
+                }
+
+                // 5. Style the dragger knob
+                var dragger = slider.Q<VisualElement>("unity-dragger");
+                if (dragger != null)
+                {
+                    dragger.style.width = 16;
+                    dragger.style.height = 26;
+                    dragger.style.top = new Length(50, LengthUnit.Percent);
+                    dragger.style.translate = new StyleTranslate(new Translate(0, new Length(-50, LengthUnit.Percent), 0));
+                }
+            }
+
+            if (controlsPanel != null)
+            {
+                controlsPanel.style.display = DisplayStyle.Flex;
+                rightColumn.Add(controlsPanel);
+            }
+
+            settingsContainer.Add(leftColumn);
+            settingsContainer.Add(rightColumn);
 
             closeSettingsBtn = settingsContainer.Q<Button>("CloseSettingsBtn");
             if (closeSettingsBtn != null)
             {
+                closeSettingsBtn.style.position = Position.Absolute;
+                closeSettingsBtn.style.top = 20;
+                closeSettingsBtn.style.right = 20;
+                closeSettingsBtn.style.width = 100;
+                closeSettingsBtn.style.height = 40;
+                //closeSettingsBtn.style.zIndex = 100;
                 closeSettingsBtn.clicked += CloseSettings;
+                closeSettingsBtn.BringToFront();
             }
 
-            // Hook up the audio sliders to the Audio Mixer
             SetupAudioSlider(settingsContainer, "MasterSlider", "MasterVolume");
             SetupAudioSlider(settingsContainer, "MusicSlider", "MusicVolume");
-            SetupAudioSlider(settingsContainer, "SurfaceSlider", "SurfaceVolume");
-            SetupAudioSlider(settingsContainer, "CaveSlider", "CaveVolume");
             SetupAudioSlider(settingsContainer, "EntitiesSlider", "EntitiesVolume");
             SetupAudioSlider(settingsContainer, "AmbienceSlider", "AmbienceVolume");
         }
 
-        private void SetupAudioSlider(VisualElement container, string sliderName, string exposedParameterName)
+        private void SetupAudioSlider(VisualElement container, string sliderName, params string[] exposedParameterNames)
         {
             Slider volumeSlider = container.Q<Slider>(sliderName);
             if (volumeSlider != null)
@@ -464,10 +529,10 @@ namespace Player
                 volumeSlider.lowValue = 0.0001f;
                 volumeSlider.highValue = 1f;
 
-                if (mainAudioMixer != null)
+                if (mainAudioMixer != null && exposedParameterNames.Length > 0)
                 {
                     float currentMixerVolume;
-                    if (mainAudioMixer.GetFloat(exposedParameterName, out currentMixerVolume))
+                    if (mainAudioMixer.GetFloat(exposedParameterNames[0], out currentMixerVolume))
                     {
                         volumeSlider.value = Mathf.Pow(10f, currentMixerVolume / 20f);
                     }
@@ -477,7 +542,10 @@ namespace Player
                 {
                     if (mainAudioMixer != null)
                     {
-                        mainAudioMixer.SetFloat(exposedParameterName, Mathf.Log10(evt.newValue) * 20f);
+                        foreach (string param in exposedParameterNames)
+                        {
+                            mainAudioMixer.SetFloat(param, Mathf.Log10(evt.newValue) * 20f);
+                        }
                     }
                 });
             }
@@ -485,7 +553,6 @@ namespace Player
 
         private void OpenSettings()
         {
-            // Close other panels to avoid overlapping
             CloseRecipeBook();
             if (settingsContainer != null)
             {
@@ -515,7 +582,8 @@ namespace Player
             recipeBookContainer.style.height = 600;
             recipeBookContainer.style.left = new Length(50, LengthUnit.Percent);
             recipeBookContainer.style.top = new Length(50, LengthUnit.Percent);
-            recipeBookContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent), new Length(-50, LengthUnit.Percent), 0));
+            recipeBookContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent),
+                new Length(-50, LengthUnit.Percent), 0));
 
             leftTitleText = recipeBookContainer.Q<Label>("LeftPageTitle");
             leftGridContainer = recipeBookContainer.Q<VisualElement>("LeftRecipeHolder");
@@ -526,7 +594,11 @@ namespace Player
                 prevPageBtn.style.position = Position.Absolute;
                 prevPageBtn.style.bottom = 20;
                 prevPageBtn.style.left = 20;
-                prevPageBtn.clicked += () => { TurnPage(-1); PlaySound(pageTurnSound); };
+                prevPageBtn.clicked += () =>
+                {
+                    TurnPage(-1);
+                    PlaySound(pageTurnSound);
+                };
             }
 
             rightTitleText = recipeBookContainer.Q<Label>("RightPageTitle");
@@ -538,7 +610,11 @@ namespace Player
                 nextPageBtn.style.position = Position.Absolute;
                 nextPageBtn.style.bottom = 20;
                 nextPageBtn.style.right = 20;
-                nextPageBtn.clicked += () => { TurnPage(1); PlaySound(pageTurnSound); };
+                nextPageBtn.clicked += () =>
+                {
+                    TurnPage(1);
+                    PlaySound(pageTurnSound);
+                };
             }
 
             closeRecipeBtn = recipeBookContainer.Q<Button>("CloseRecipeBtn");
@@ -556,8 +632,12 @@ namespace Player
 
         private int GetTotalRecipes()
         {
-            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null ? craftingDatabase.recipes.Count : 0;
-            int cookingCount = cookingDatabase != null && cookingDatabase.recipes != null ? cookingDatabase.recipes.Count : 0;
+            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null
+                ? craftingDatabase.recipes.Count
+                : 0;
+            int cookingCount = cookingDatabase != null && cookingDatabase.recipes != null
+                ? cookingDatabase.recipes.Count
+                : 0;
             return craftingCount + cookingCount;
         }
 
@@ -565,7 +645,6 @@ namespace Player
         {
             if (GetTotalRecipes() == 0) return;
 
-            // Close other panels
             CloseSettings();
 
             recipeBookContainer.style.display = DisplayStyle.Flex;
@@ -615,7 +694,8 @@ namespace Player
                 prevPageBtn.style.display = (currentRecipeIndex == 0) ? DisplayStyle.None : DisplayStyle.Flex;
 
             if (nextPageBtn != null)
-                nextPageBtn.style.display = (currentRecipeIndex + 2 >= totalRecipes) ? DisplayStyle.None : DisplayStyle.Flex;
+                nextPageBtn.style.display =
+                    (currentRecipeIndex + 2 >= totalRecipes) ? DisplayStyle.None : DisplayStyle.Flex;
         }
 
         private void PopulatePageData(int index, Label titleLabel, VisualElement gridContainer)
@@ -624,7 +704,9 @@ namespace Player
 
             gridContainer.Clear();
 
-            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null ? craftingDatabase.recipes.Count : 0;
+            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null
+                ? craftingDatabase.recipes.Count
+                : 0;
 
             ItemData resultItem = null;
             ItemData[] ingredientsArray = null;
@@ -712,6 +794,7 @@ namespace Player
                 resIcon.style.height = Length.Percent(100);
                 resultBox.Add(resIcon);
             }
+
             resultWrapper.Add(resultBox);
 
             if (resultItem != null)
