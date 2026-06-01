@@ -20,6 +20,11 @@ namespace Items
         [SerializeField] private float popForceUp = 5f;
         [SerializeField] private float popForceSide = 2f;
 
+        [Header("Settings")]
+        [Tooltip("Delay before item can be picked up so player doesn't instantly catch dropped items.")]
+        [SerializeField] private float pickupDelay = 0.5f;
+        private float spawnTime;
+
         private Rigidbody2D rb;
         public Transform player;
         private bool isBeingPickedUp;
@@ -27,11 +32,22 @@ namespace Items
         private void Start()
         {
             rb = GetComponent<Rigidbody2D>();
+            spawnTime = Time.time;
 
             if (player == null)
             {
                 GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-                if (playerObj != null) player = playerObj.transform;
+                if (playerObj != null)
+                {
+                    player = playerObj.transform;
+
+                    // FIX: Ignore collision so tossed items bounce on the ground, not off the player's head/feet
+                    Collider2D playerCollider = playerObj.GetComponent<Collider2D>();
+                    if (playerCollider != null && collider != null)
+                    {
+                        Physics2D.IgnoreCollision(collider, playerCollider, true);
+                    }
+                }
             }
 
             if (itemData == null)
@@ -56,6 +72,9 @@ namespace Items
 
             if (itemData == null) return;
 
+            // DELAY CHECK
+            if (Time.time < spawnTime + pickupDelay) return;
+
             // Check if player is close enough to suck the item in
             if (!isBeingPickedUp && Inventory.Singleton.Fits(itemData))
             {
@@ -78,7 +97,9 @@ namespace Items
 
                 if (Vector2.Distance(transform.position, player.position) <= pickUpRadius)
                 {
-                    AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position);
+                    if (pickupSound != null)
+                        AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position);
+
                     Inventory.Singleton.Add(new ItemStack(itemData) { amount = 1 });
                     Destroy(gameObject);
                 }

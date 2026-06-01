@@ -211,8 +211,7 @@ namespace Items
                 // Plays the sound directly at the Main Camera's position
                 if (Camera.main != null)
                 {
-                    AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position);
-                }
+                    AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position); }
                 else
                 {
                     Debug.LogWarning("Camera.main is null! Make sure your camera has the 'MainCamera' tag.");
