@@ -14,6 +14,7 @@ namespace Items.Overlays
     public class Chest : Overlay, IInventory
     {
         #region Data
+        private const float CellSize = 0.5f;
         public const short RowSlots = 6;
         public const short ColSlots = 5;
         public const short MaxSlotId = ColSlots * RowSlots;
@@ -105,6 +106,17 @@ namespace Items.Overlays
                 OnSlotChanged?.Invoke(slot.id, slot.item);
             }
             #endregion
+        }
+
+        public override void OnBlockDestroyed()
+        {
+            var (x, y) = BlockIdUtils.ToCell(blockId);
+            Vector2 pos = new Vector2(x * CellSize, y * CellSize);
+
+            foreach (Slot slot in slots)
+            {
+                if (!slot.isEmpty) Inventory.Singleton.Drop(slot.item, pos);
+            }
         }
 
         public string ToJson()

@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using Chunks;
 using Data;
@@ -6,6 +5,7 @@ using Scriptable_Objects_Scripts;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Cinemachine;
+using Player;
 
 namespace World
 {
@@ -16,7 +16,6 @@ namespace World
 
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
-        [SerializeField] private string worldSeed;
 
         [Header("Player Settings")]
         [SerializeField]
@@ -81,7 +80,6 @@ namespace World
             WorldData.World = new Data.World(worldWidth, worldHeight);
             chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize];
             cameraPosition = mainCamera.transform.position;
-            seedOffset = ComputeSeedOffset(worldSeed);
 
             lightmapTexture = new Texture2D(worldWidth, worldHeight, TextureFormat.RGBAHalf, false);
             lightmapTexture.filterMode = FilterMode.Bilinear;
@@ -91,8 +89,9 @@ namespace World
             tilemapMaterial.SetVector("_WorldSize", new Vector2(worldWidth, worldHeight));
             tilemapMaterial.SetFloat("_CellSize", gridParent.cellSize.x);
 
-            GenerateWorld();
-            GenerateProps();
+            if (WorldSerializer.isNewWorld) NewWorld();
+            else LoadWorld();
+
             CalculateLighting();
             ApplyLightingToTexture();
             PopulateChunks();
@@ -159,6 +158,17 @@ namespace World
         {
             if (CheckCameraMovement())
                 UpdateChunks();
+
+            if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
+            {
+                _autosaveTimer += Time.deltaTime;
+                if (_autosaveTimer >= autosaveInterval)
+                {
+                    _autosaveTimer = 0f;
+                    WorldSerializer.Save();
+                    Debug.Log("[WorldManager] Autosaved.");
+                }
+            }
         }
 
         public float GetSurfaceY(float worldX)
@@ -282,7 +292,6 @@ namespace World
                     {
                         foundSurface = true;
 
-                        // 2D noise applied here to wobble the biome boundaries
                         float surfaceWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, y * 0.2f + seedOffset) - 0.5f) * 0.15f;
                         float surfaceBiome = baseBiomeNoise + surfaceWobble;
 
@@ -682,8 +691,12 @@ namespace World
 
         public void RespawnPlayer(GameObject playerObject)
         {
+
             playerObject.transform.position = currentSpawnPoint;
+            PlayerMovement.Singleton.enableTimer = 0.5f;
+            UIController.Singleton.UpdateHealth(1, 1);
         }
+
 
         public bool TrySetSpawnFromAnchor(Vector3 interactWorldPosition)
         {
@@ -704,7 +717,6 @@ namespace World
 
             return false;
         }
-
         private void OnApplicationQuit()
         {
             if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
@@ -712,6 +724,7 @@ namespace World
                 WorldSerializer.Save();
                 Debug.Log("[WorldManager] Saved on quit.");
             }
+
         }
     }
 }

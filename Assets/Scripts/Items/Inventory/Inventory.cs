@@ -1,13 +1,10 @@
-
-
-using System;
 using System.Collections.Generic;
 using Data;
+using Player;
 using UnityEngine;
 
 namespace Items
 {
-
     [DefaultExecutionOrder(-100)]
     public class Inventory : MonoBehaviour, IInventory
     {
@@ -28,6 +25,8 @@ namespace Items
         public const short ColSlots = 5;
         public Slot[] slots = new Slot[HotbarSlots + ColSlots * RowSlots];
         public ItemStack hand => slots[handIndex].item;
+
+        [Header("Prefabs")][SerializeField] private GameObject itemEntityPrefab;
         public short handIndex
         {
             get => _handIndex; set
@@ -40,14 +39,16 @@ namespace Items
             }
         }
         private short _handIndex = 0;
+        private bool isInitialized = false;
+
         [SerializeField] private List<ItemStackBuilder> startingItems = new();
+        [SerializeField] private AudioClip pickupSound;
         #endregion
 
         #region Events
-        public event Action<int, ItemStack> OnSlotChanged;
-        public event Action<short> OnHandChanged;
+        public event System.Action<int, ItemStack> OnSlotChanged;
+        public event System.Action<short> OnHandChanged;
         #endregion
-
 
         #region Unity
         /// <summary>Ran by unity on load</summary>
@@ -68,6 +69,9 @@ namespace Items
                 ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
                 Add(itemStack);
             }
+
+            // Allow sounds to play only after starting items are loaded
+            isInitialized = true;
             #endregion
         }
         #endregion
@@ -82,16 +86,17 @@ namespace Items
             }
             #endregion
         }
-        public bool Fits(ItemData item) => _Add(new(item) { amount = 1 }, true);
 
+        public bool Fits(ItemData item) => _Add(new(item) { amount = 1 }, true);
 
         public void Add(ItemStack item, bool stacked = true) => _Add(item, false, stacked);
 
-
         private bool _Add(ItemStack item, bool dryRun = false, bool stacked = true)
         {
-            if (item.data == null) return false;
+            if (item == null || item.data == null) return false;
             Slot slot;
+            bool itemWasAdded = false;
+
             do
             {
                 slot = GetSlotOfItem(item.data, stacked);
@@ -99,10 +104,13 @@ namespace Items
                 if (!dryRun)
                 {
                     slot.Add(item);
+                    itemWasAdded = true;
                     OnSlotChanged?.Invoke(slot.id, slot.item);
                 }
                 else break;
             } while (item.amount > 0);
+
+            if (!dryRun && itemWasAdded) PlayPickupSound();
 
             if (!dryRun && item.amount > 0) Drop(item);
             return slot is not null;
@@ -111,8 +119,27 @@ namespace Items
         public void Drop(ItemStack item)
         {
             #region Drop
-            // TEMP
-            Add(item);
+            if (item == null || item.data == null) return;
+
+            if (PlayerMovement.Singleton == null) return;
+            Drop(item, PlayerMovement.Singleton.gameObject.transform.position);
+            #endregion
+        }
+
+        public void Drop(ItemStack item, Vector2 pos)
+        {
+            #region Drop
+            if (item == null || item.data == null) return;
+
+            GameObject droppedItem = Instantiate(itemEntityPrefab, pos, Quaternion.identity);
+            Vector2 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
+            droppedItem.transform.position += (Vector3)randomOffset;
+
+            if (droppedItem.TryGetComponent(out ItemEntity entity))
+            {
+                entity.Initialize(item);
+            }
+
             #endregion
         }
 
@@ -142,6 +169,8 @@ namespace Items
             if (!slot.isEmpty && slot.item.data != item.data) return false;
 
             slot.Add(item);
+            PlayPickupSound();
+
             OnSlotChanged?.Invoke(slotId, slot.item);
             return item.amount == 0;
             #endregion
@@ -189,12 +218,28 @@ namespace Items
             #endregion
         }
 
-        /// <summary>Method</summary>
         public void RemoveFromHand()
         {
             #region RemoveFromHand
             RemoveAmount(handIndex, 1);
             #endregion
+        }
+
+
+        private void PlayPickupSound()
+        {
+            if (pickupSound != null && isInitialized)
+            {
+                // Plays the sound directly at the Main Camera's position
+                if (Camera.main != null)
+                {
+                    AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position);
+                }
+                else
+                {
+                    Debug.LogWarning("Camera.main is null! Make sure your camera has the 'MainCamera' tag.");
+                }
+            }
         }
 
         public string ToJson()

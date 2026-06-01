@@ -37,7 +37,6 @@ namespace Player
             }
 
             Singleton = this;
-
             #endregion
         }
 
@@ -45,15 +44,18 @@ namespace Player
 
         #region Data
 
-        [Header("Menu Elements")] [SerializeField]
+        [Header("Menu Elements")]
+        [SerializeField]
         private UIDocument pauseMenu;
 
         public bool isMenuOpen = false;
 
-        [Header("Elements")] [SerializeField] private UIDocument overlay;
+        [Header("Elements")][SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
         [SerializeField] private Font fontPixel;
         private VisualElement nameShower;
+        private VisualElement healthElm;
+        private VisualElement modElm;
 
         private VisualElement overlayRoot;
         private VisualElement hudRoot;
@@ -63,11 +65,12 @@ namespace Player
         [Header("Controls")] public bool isOverlayOpen;
         private InputSystem_Actions playerInput;
 
-        [Header("Audio")] [SerializeField] private AudioSource uiAudioSource;
+        [Header("Audio")][SerializeField] private AudioSource uiAudioSource;
         [SerializeField] private AudioClip defaultClickSound;
         [SerializeField] private AudioClip pageTurnSound;
 
-        [Header("Audio Mixing")] [SerializeField]
+        [Header("Audio Mixing")]
+        [SerializeField]
         private AudioMixer mainAudioMixer;
 
         [Header("Controls Panel")] private VisualElement controlsPanel;
@@ -111,7 +114,6 @@ namespace Player
         private void Update()
         {
             #region Update
-
             CheckOverlay();
             MoveHand();
             foreach (Overlay overlay in overlaysByBlockId.Values)
@@ -126,10 +128,13 @@ namespace Player
 
         #region Recipe Book Data
 
-        [Header("Recipe Book")] [SerializeField]
+        [Header("Recipe Book")]
+        [SerializeField]
         private RecipeDatabase craftingDatabase;
 
         [SerializeField] private CookingRecipeDatabase cookingDatabase;
+
+        [SerializeField] private RuntimeAnimatorController defaultController;
 
         private int currentRecipeIndex = 0;
 
@@ -199,6 +204,8 @@ namespace Player
             Button exitBtn = menuRoot.Q<Button>("Exit");
             if (exitBtn != null) exitBtn.clicked += () => Application.Quit();
 
+            healthElm = hud.rootVisualElement.Q("health");
+            modElm = hud.rootVisualElement.Q("mod");
             #endregion
         }
 
@@ -279,30 +286,30 @@ namespace Player
             switch (foundOverlay.overlayType)
             {
                 case OverlayType.Inventory:
-                {
-                    Items.Overlays.Equipment data = (Items.Overlays.Equipment)foundOverlay;
-                    VisualElement element = new Equipment(data);
-                    return element;
-                }
+                    {
+                        Items.Overlays.Equipment data = (Items.Overlays.Equipment)foundOverlay;
+                        VisualElement element = new Equipment(data);
+                        return element;
+                    }
 
                 case OverlayType.Furnace:
-                {
-                    Items.Overlays.Furnace data = (Items.Overlays.Furnace)foundOverlay;
-                    VisualElement element = new Furnace(data);
-                    return element;
-                }
+                    {
+                        Items.Overlays.Furnace data = (Items.Overlays.Furnace)foundOverlay;
+                        VisualElement element = new Furnace(data);
+                        return element;
+                    }
                 case OverlayType.Chest:
-                {
-                    Items.Overlays.Chest data = (Items.Overlays.Chest)foundOverlay;
-                    VisualElement element = new Chest(data);
-                    return element;
-                }
+                    {
+                        Items.Overlays.Chest data = (Items.Overlays.Chest)foundOverlay;
+                        VisualElement element = new Chest(data);
+                        return element;
+                    }
                 case OverlayType.CraftingTable:
-                {
-                    Items.Overlays.CraftingTable data = (Items.Overlays.CraftingTable)foundOverlay;
-                    VisualElement element = new CraftingTable(data);
-                    return element;
-                }
+                    {
+                        Items.Overlays.CraftingTable data = (Items.Overlays.CraftingTable)foundOverlay;
+                        VisualElement element = new CraftingTable(data);
+                        return element;
+                    }
                 default:
                     return null;
             }
@@ -313,9 +320,8 @@ namespace Player
         public void DestroyEntity(ulong blockId)
         {
             #region DestroyEntity
-
+            overlaysByBlockId[blockId].OnBlockDestroyed();
             overlaysByBlockId.Remove(blockId);
-
             #endregion
         }
 
@@ -326,32 +332,32 @@ namespace Player
             switch (overlayType)
             {
                 case OverlayType.Inventory:
-                {
-                    Items.Overlays.Equipment data = new Items.Overlays.Equipment();
-                    overlaysByBlockId[blockId] = data;
-                    return data;
-                }
+                    {
+                        Items.Overlays.Equipment data = new Items.Overlays.Equipment(defaultController);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
 
                 case OverlayType.Furnace:
-                {
-                    Items.Overlays.Furnace data = new Items.Overlays.Furnace(blockId);
-                    overlaysByBlockId[blockId] = data;
-                    return data;
-                }
+                    {
+                        Items.Overlays.Furnace data = new Items.Overlays.Furnace(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
 
                 case OverlayType.Chest:
-                {
-                    Items.Overlays.Chest data = new Items.Overlays.Chest(blockId);
-                    overlaysByBlockId[blockId] = data;
-                    return data;
-                }
+                    {
+                        Items.Overlays.Chest data = new Items.Overlays.Chest(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
 
                 case OverlayType.CraftingTable:
-                {
-                    Items.Overlays.CraftingTable data = new Items.Overlays.CraftingTable(blockId);
-                    overlaysByBlockId[blockId] = data;
-                    return data;
-                }
+                    {
+                        Items.Overlays.CraftingTable data = new Items.Overlays.CraftingTable(blockId);
+                        overlaysByBlockId[blockId] = data;
+                        return data;
+                    }
                 default:
                     return null;
             }
@@ -881,7 +887,17 @@ namespace Player
 
             gridContainer.Add(resultWrapper);
         }
+        public void UpdateHealth(int health, int maxHealth)
+        {
+            float percent = Mathf.Clamp01((float)health / (float)maxHealth);
+            healthElm.style.width = Length.Percent(percent * 100f);
+        }
 
+        public void UpdateMod(float durationLeft, float duration)
+        {
+            float percent = Mathf.Clamp01(durationLeft / duration);
+            modElm.style.width = Length.Percent(percent * 100f);
+        }
 
 
         public string SerializeAll()

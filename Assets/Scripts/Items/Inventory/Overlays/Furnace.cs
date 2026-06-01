@@ -15,6 +15,7 @@ namespace Items.Overlays
     public class Furnace : Overlay, IInventory
     {
         #region Data
+        private const float CellSize = 0.5f;
         public const short CookingSlots = 4;
         public const short MaxSlotId = CookingSlots + 1;
         public Slot[] cookingSlots = new Slot[CookingSlots];
@@ -238,14 +239,14 @@ namespace Items.Overlays
             if (currentResult == null && !isOn && !EvaluateCook())
             {
                 fuelFillPercent = currentFuelDuration > 0
-                    ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
+                    ? Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
                     : 0f;
                 return;
             }
 
             currentFuelTimer -= Time.deltaTime;
             fuelFillPercent = currentFuelDuration > 0
-                ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
+                ? Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
                 : 0f;
 
             if (currentFuelTimer <= 0)
@@ -336,6 +337,18 @@ namespace Items.Overlays
             #endregion
         }
 
+        public override void OnBlockDestroyed()
+        {
+            var (x, y) = BlockIdUtils.ToCell(blockId);
+            Vector2 pos = new Vector2(x * CellSize, y * CellSize);
+
+            if (!fuelSlot.isEmpty) Inventory.Singleton.Drop(fuelSlot.item, pos);
+            if (!resultSlot.isEmpty) Inventory.Singleton.Drop(resultSlot.item, pos);
+            foreach (Slot slot in cookingSlots)
+            {
+                if (!slot.isEmpty) Inventory.Singleton.Drop(slot.item, pos);
+            }
+        }
         public string ToJson()
         {
             return JsonUtility.ToJson(new FurnaceData

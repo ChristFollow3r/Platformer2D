@@ -168,7 +168,7 @@ namespace Player
                                 }
 
                                 Prop propHitData = WorldData.PropDictionary[hitType];
-                                float hitPower = Equipment.Singleton.GetMiningPower();
+                                float hitPower = Equipment.Singleton.GetHitPower();
                                 currentPropDamage += hitPower;
 
                                 // --- NEW: VISUAL AND AUDIO FEEDBACK ---

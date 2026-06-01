@@ -41,6 +41,8 @@ namespace Items
         protected virtual void CloseOverlay() { }
 
         public virtual void RefreshUI() { }
+
+        public virtual void OnBlockDestroyed() { }
         #endregion
     }
 }

@@ -20,6 +20,8 @@ namespace Items
         [SerializeField] private float pickupDelay = 0.5f;
         private float spawnTime;
         private bool isBeingPickedUp = false;
+        private ItemStack stack = null;
+
 
         [Header("Data")]
         public ItemData itemData;
@@ -60,7 +62,19 @@ namespace Items
             spawnTime = Time.time;
         }
 
+        public void Initialize(ItemStack stack)
+        {
+            this.stack = stack;
+            itemData = stack.data;
+            if (itemData != null && spriteRenderer != null)
+            {
+                spriteRenderer.sprite = itemData.sprite;
+            }
+            spawnTime = Time.time;
+        }
+
         private void Update()
+
         {
             if (player == null || Inventory.Singleton == null) return;
 
@@ -85,10 +99,20 @@ namespace Items
 
                 if (Vector2.Distance(transform.position, player.position) <= pickUpRadius)
                 {
-                    ItemStack itemStack = new(itemData) { amount = 1 };
-                    Inventory.Singleton.Add(itemStack);
+                    ItemStack itemStack1 = stack == null ? new(itemData)
+                    {
+                        amount = 1,
+                    } : stack;
+                    Inventory.Singleton.Add(itemStack1);
                     Destroy(gameObject);
                 }
+
+                ItemStack itemStack = stack == null ? new(itemData)
+                {
+                    amount = 1,
+                } : stack;
+                Inventory.Singleton.Add(itemStack);
+                Destroy(gameObject);
             }
         }
     }
