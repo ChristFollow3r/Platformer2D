@@ -4,6 +4,7 @@ using Data;
 using Items;
 using Random = UnityEngine.Random;
 using Player;
+using Items.Overlays;
 
 namespace Shared
 {
@@ -40,7 +41,10 @@ namespace Shared
         public void TakeDamage(int damage, int direction, float knockback)
         {
             if (isDead) return;
-
+            if (gameObject.tag == "Player")
+            {
+                damage -= Equipment.Singleton.GetDefence();
+            }
             currentHealth -= damage;
             OnKnockbackRecieved?.Invoke(direction, knockback);
 

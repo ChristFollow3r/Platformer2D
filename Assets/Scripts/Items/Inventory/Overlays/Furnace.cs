@@ -238,14 +238,14 @@ namespace Items.Overlays
             if (currentResult == null && !isOn && !EvaluateCook())
             {
                 fuelFillPercent = currentFuelDuration > 0
-                    ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
+                    ? Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
                     : 0f;
                 return;
             }
 
             currentFuelTimer -= Time.deltaTime;
             fuelFillPercent = currentFuelDuration > 0
-                ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
+                ? Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
                 : 0f;
 
             if (currentFuelTimer <= 0)

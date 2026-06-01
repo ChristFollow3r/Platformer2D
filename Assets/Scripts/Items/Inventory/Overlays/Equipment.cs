@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Data;
 using Items.Utils;
+using Player;
 using UnityEngine;
 
 
@@ -71,26 +72,28 @@ namespace Items.Overlays
         {
             #region Tick
             ItemStack mod = equipmentSlots[(int)EquipmentType.Mod].item;
-            if (mod == null) return;
+            if (mod == null)
+            {
+                UIController.Singleton.UpdateMod(0, 1);
+                return;
+            }
 
             mod.duration -= Time.deltaTime;
+            UIController.Singleton.UpdateMod(mod.duration, mod.data.modData.duration);
             if (mod.duration >= 0) return;
             ClearSlot((int)EquipmentType.Mod);
             OnModChange?.Invoke(false, 0);
             #endregion
         }
 
-        public ItemStack AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
+        public void AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
         {
             #region AddEquipment
             Slot slot = equipmentSlots[(int)equipmentType];
-            ItemStack prev = slot.item;
-
-            slot.item = itemStack;
+            slot.Add(itemStack);
             OnSlotChanged?.Invoke(slot.id, slot.item);
 
             if (equipmentType == EquipmentType.Mod) OnModChange?.Invoke(true, itemStack.data.modData.mod);
-            return prev;
             #endregion
         }
 
@@ -123,8 +126,7 @@ namespace Items.Overlays
 
                 if (!itemStack.data.isConsumable) return false;
                 if ((int)itemStack.data.equipmentType != slotId) return false;
-                ItemStack prev = AddEquipment(itemStack.data.equipmentType, itemStack);
-                if (prev != null) Inventory.Singleton.Add(prev);
+                AddEquipment(itemStack.data.equipmentType, itemStack);
                 return true;
             }
 
@@ -226,6 +228,22 @@ namespace Items.Overlays
             if (modItem.data.modData == null) return 1f;
             return modItem.data.modData.minigPower;
             #endregion
+        }
+
+        public float GetHitPower()
+        {
+            ItemStack modItem = equipmentSlots[(int)EquipmentType.Mod].item;
+            if (modItem == null) return 1f;
+            if (modItem.data.modData == null) return 1f;
+            return modItem.data.modData.attackPower;
+        }
+
+        public int GetDefence()
+        {
+            ItemStack modItem = equipmentSlots[(int)EquipmentType.Mod].item;
+            if (modItem == null) return 0;
+            if (modItem.data.modData == null) return 0;
+            return modItem.data.modData.defence;
         }
 
         public string ToJson()

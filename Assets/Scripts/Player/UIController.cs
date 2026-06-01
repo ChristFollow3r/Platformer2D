@@ -53,6 +53,7 @@ namespace Player
         [SerializeField] private UIDocument hud;
         private VisualElement nameShower;
         private VisualElement healthElm;
+        private VisualElement modElm;
 
 
         private VisualElement overlayRoot;
@@ -99,7 +100,6 @@ namespace Player
         private void Update()
         {
             #region Update
-
             CheckOverlay();
             MoveHand();
             foreach (Overlay overlay in overlaysByBlockId.Values)
@@ -167,6 +167,7 @@ namespace Player
             menuRoot.Q<Button>("Exit").clicked += () => Application.Quit();
 
             healthElm = hud.rootVisualElement.Q("health");
+            modElm = hud.rootVisualElement.Q("mod");
             #endregion
         }
 
@@ -581,6 +582,11 @@ namespace Player
             healthElm.style.width = Length.Percent(percent * 100f);
         }
 
+        public void UpdateMod(float durationLeft, float duration)
+        {
+            float percent = Mathf.Clamp01(durationLeft / duration);
+            modElm.style.width = Length.Percent(percent * 100f);
+        }
 
 
         public string SerializeAll()
