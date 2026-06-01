@@ -694,6 +694,7 @@ namespace World
 
             playerObject.transform.position = currentSpawnPoint;
             PlayerMovement.Singleton.enableTimer = 0.5f;
+            UIController.Singleton.UpdateHealth(1, 1);
         }
 
 
