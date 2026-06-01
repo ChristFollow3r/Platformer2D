@@ -3,6 +3,7 @@ using System.Collections;
 using Shared;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using World;
 
 namespace Player
 {
@@ -91,7 +92,7 @@ namespace Player
         public event Action<Vector2> OnAttackPerformed;
         public event Action OnJumpPerformed;
 
-        private float enableTimer = 1f;
+        public float enableTimer = 1f;
 
 
         private void Awake()
@@ -242,14 +243,11 @@ namespace Player
             float moveInput = playerInput.Player.Move.ReadValue<Vector2>().x;
             bool isMoving = Mathf.Abs(moveInput) > 0.1f;
 
-            // This logic is still fine because it requires the movement input to match the wall!
             bool isSliding = !isGrounded && rb.linearVelocityY < 0 &&
                              ((isTouchingLeftWall && moveInput < 0) || (isTouchingRightWall && moveInput > 0));
 
             if (isSliding)
             {
-                // Fix: Use the moveInput to determine the flip, completely avoiding the 1x1 hole overlap issue.
-                // If moving right (> 0), flipX becomes true. If moving left (< 0), flipX becomes false.
                 spriteRenderer.flipX = moveInput > 0;
             }
             else if (Mathf.Abs(rb.linearVelocityX) > 0.1f && wallJumpTime <= 0)
@@ -268,7 +266,7 @@ namespace Player
             if (!mainCamera) mainCamera = Camera.main;
 
             if (knockbackTimer > 0f) return;
-            if (Player.UIController.Singleton.isMenuOpen || Player.UIController.Singleton.isOverlayOpen) return; // Don't swing if a menu is open
+            if (Player.UIController.Singleton.isMenuOpen || Player.UIController.Singleton.isOverlayOpen) return;
 
             if (Mouse.current.leftButton.wasPressedThisFrame && attackCooldownTimer <= 0f)
             {
@@ -324,17 +322,35 @@ namespace Player
             spriteRenderer.color = Color.white;
         }
 
-        private void PLayerDeath() // Dirty solution but works like a charm
+        private void PLayerDeath()
         {
-            var deathParticles = Instantiate(deathVFX, transform.position, Quaternion.identity);
-            StartCoroutine(WaitForDeathParticles());
-            // S'haurien de borrar tots els enemigos del mapa ?
+            if (deathVFX != null)
+            {
+                Instantiate(deathVFX, transform.position, Quaternion.identity);
+            }
+
+            spriteRenderer.enabled = false;
+            playerCollider.enabled = false;
+            rb.simulated = false;
+
+            playerInput.Disable();
+
+            StartCoroutine(DeathCoroutine());
         }
 
-        private IEnumerator WaitForDeathParticles()
+        private IEnumerator DeathCoroutine()
         {
-            yield return new WaitForSeconds(0.15f);
-            Destroy(this.gameObject);
+            yield return new WaitForSeconds(3f);
+
+            World.WorldManager.Instance.RespawnPlayer(this.gameObject);
+
+            spriteRenderer.enabled = true;
+            playerCollider.enabled = true;
+            rb.simulated = true;
+
+            playerInput.Enable();
+
+            playerHealth.ResetHealth();
         }
         private Vector2 FindSafeSpawnPosition(Vector2 startPos)
         {
@@ -355,7 +371,7 @@ namespace Player
         public string Serialize()
         {
             int health = GetComponent<Health>().currentHealth;
-            return JsonUtility.ToJson(new PlayerSaveData() { pos = transform.position, health = health });
+            return JsonUtility.ToJson(new PlayerSaveData() { pos = transform.position, health = health, spawnPoint = WorldManager.Instance.currentSpawnPoint });
         }
 
         public void Deserialize(string json)
@@ -367,9 +383,9 @@ namespace Player
             rb.position = safePos;
             rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             Physics2D.SyncTransforms();
+            WorldManager.Instance.currentSpawnPoint = save.spawnPoint;
 
             GetComponent<Health>().SetHealth(save.health);
         }
     }
-
 }

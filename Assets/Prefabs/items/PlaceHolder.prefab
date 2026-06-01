@@ -144,7 +144,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19507406fb458ae459dbacbeea3dda76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.ItemEntity
-  itemData: {fileID: 0}
+  pickupDelay: 1
+  itemData: {fileID: 11400000, guid: 2f260f3f1ccaac54788fbf912453f8bd, type: 2}
 --- !u!114 &7243765266166736406
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using Items;
 using UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Audio;
 using Data;
 using Scriptable_Objects_Scripts;
 
@@ -44,26 +45,39 @@ namespace Player
         #region Data
 
         [Header("Menu Elements")]
-        [SerializeField] private UIDocument pauseMenu;
+        [SerializeField]
+        private UIDocument pauseMenu;
 
         public bool isMenuOpen = false;
 
-        [Header("Elements")]
-        [SerializeField] private UIDocument overlay;
+        [Header("Elements")][SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
+        [SerializeField] private Font fontPixel;
         private VisualElement nameShower;
         private VisualElement healthElm;
         private VisualElement modElm;
-
 
         private VisualElement overlayRoot;
         private VisualElement hudRoot;
 
         private Dictionary<ulong, Overlay> overlaysByBlockId = new();
 
-        [Header("Controls")]
-        public bool isOverlayOpen;
+        [Header("Controls")] public bool isOverlayOpen;
         private InputSystem_Actions playerInput;
+
+        [Header("Audio")][SerializeField] private AudioSource uiAudioSource;
+        [SerializeField] private AudioClip defaultClickSound;
+        [SerializeField] private AudioClip pageTurnSound;
+
+        [Header("Audio Mixing")]
+        [SerializeField]
+        private AudioMixer mainAudioMixer;
+
+        [Header("Controls Panel")] private VisualElement controlsPanel;
+        private Button toggleControlsBtn;
+
+        [Header("Settings Panel")] private VisualElement settingsContainer;
+        private Button closeSettingsBtn;
 
         #endregion
 
@@ -115,7 +129,9 @@ namespace Player
         #region Recipe Book Data
 
         [Header("Recipe Book")]
-        [SerializeField] private RecipeDatabase craftingDatabase;
+        [SerializeField]
+        private RecipeDatabase craftingDatabase;
+
         [SerializeField] private CookingRecipeDatabase cookingDatabase;
 
         [SerializeField] private RuntimeAnimatorController defaultController;
@@ -147,7 +163,7 @@ namespace Player
 
             overlay.rootVisualElement.Q("inventory").Add(inventory);
             overlay.rootVisualElement.Q("holder").Add(overlayHotbar);
-            Debug.Log($"Overlay has {string.Join(", ", overlay.rootVisualElement.Children().ToList()[0].Children().Select(c => c.name))}");
+
             nameShower = overlay.rootVisualElement.Q("name-holder");
 
             Hotbar hudHotbar = new Hotbar { isMain = true };
@@ -156,17 +172,37 @@ namespace Player
 
             pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
 
+            var menuRoot = pauseMenu.rootVisualElement;
+
+            menuRoot.Query<Button>().ForEach(btn =>
+            {
+                if (btn.name != "PrevPage" && btn.name != "NextPage")
+                {
+                    btn.clicked += () => PlaySound(defaultClickSound);
+                }
+            });
+
+            InitializeRecipeBook(menuRoot);
+            InitializeControls(menuRoot);
+            InitializeSettings(menuRoot);
+
             Button openMenuBtn = hud.rootVisualElement.Q<Button>("OpenMenu");
             if (openMenuBtn != null) openMenuBtn.clicked += ToggleMenu;
 
-            var menuRoot = pauseMenu.rootVisualElement;
+            Button backBtn = menuRoot.Q<Button>("Back");
+            if (backBtn != null) backBtn.clicked += ToggleMenu;
 
-            InitializeRecipeBook(menuRoot);
+            Button settingsBtn = menuRoot.Q<Button>("Settings");
+            if (settingsBtn != null) settingsBtn.clicked += OpenSettings;
 
-            menuRoot.Q<Button>("Settings").clicked += () => Debug.Log("Settings");
-            menuRoot.Q<Button>("Recipes").clicked += OpenRecipeBook;
-            menuRoot.Q<Button>("Save").clicked += () => Debug.Log("Save");
-            menuRoot.Q<Button>("Exit").clicked += () => Application.Quit();
+            Button recipesBtn = menuRoot.Q<Button>("Recipes");
+            if (recipesBtn != null) recipesBtn.clicked += OpenRecipeBook;
+
+            Button saveBtn = menuRoot.Q<Button>("Save");
+            if (saveBtn != null) saveBtn.clicked += () => Debug.Log("Save");
+
+            Button exitBtn = menuRoot.Q<Button>("Exit");
+            if (exitBtn != null) exitBtn.clicked += () => Application.Quit();
 
             healthElm = hud.rootVisualElement.Q("health");
             modElm = hud.rootVisualElement.Q("mod");
@@ -188,6 +224,9 @@ namespace Player
                 Time.timeScale = 1f;
                 pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
                 hud.rootVisualElement.style.display = DisplayStyle.Flex;
+
+                CloseRecipeBook();
+                CloseSettings();
             }
         }
 
@@ -348,9 +387,261 @@ namespace Player
             nameShower.style.left = pos.x;
             nameShower.style.top = pos.y;
         }
+
         public void HideName()
         {
             nameShower.style.display = DisplayStyle.None;
+        }
+
+        private void PlaySound(AudioClip clip)
+        {
+            if (uiAudioSource != null && clip != null)
+            {
+                uiAudioSource.PlayOneShot(clip);
+            }
+        }
+
+        private void InitializeControls(VisualElement menuRoot)
+        {
+            controlsPanel = menuRoot.Q<VisualElement>("ControlsPanel");
+            toggleControlsBtn = menuRoot.Q<Button>("ToggleControlsBtn");
+
+            if (toggleControlsBtn != null)
+            {
+                toggleControlsBtn.style.display = DisplayStyle.None;
+            }
+        }
+
+        #endregion
+
+        #region Settings Logic
+
+        private void InitializeSettings(VisualElement menuRoot)
+        {
+            settingsContainer = menuRoot.Q<VisualElement>("SettingsContainer");
+            if (settingsContainer == null) return;
+
+            settingsContainer.style.position = Position.Absolute;
+            settingsContainer.style.width = 800;
+            settingsContainer.style.height = 600;
+            settingsContainer.style.left = new Length(50, LengthUnit.Percent);
+            settingsContainer.style.top = new Length(50, LengthUnit.Percent);
+            settingsContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent),
+                new Length(-50, LengthUnit.Percent), 0));
+            settingsContainer.style.flexDirection = FlexDirection.Row;
+            settingsContainer.style.display = DisplayStyle.None;
+
+            VisualElement leftColumn = new VisualElement();
+            leftColumn.style.width = new Length(50, LengthUnit.Percent);
+            leftColumn.style.height = new Length(100, LengthUnit.Percent);
+            leftColumn.style.justifyContent = Justify.Center;
+
+            VisualElement rightColumn = new VisualElement();
+            rightColumn.style.width = new Length(50, LengthUnit.Percent);
+            rightColumn.style.height = new Length(100, LengthUnit.Percent);
+            rightColumn.style.justifyContent = Justify.Center;
+            rightColumn.style.alignItems = Align.Center;
+            rightColumn.style.borderLeftWidth = 2;
+            rightColumn.style.borderLeftColor = new StyleColor(new Color(0.15f, 0.15f, 0.15f));
+
+            var allSliders = settingsContainer.Query<Slider>().ToList();
+            foreach (var slider in allSliders)
+            {
+                if (slider.name.Contains("Surface") || slider.name.Contains("Cave"))
+                {
+                    slider.style.display = DisplayStyle.None;
+                    continue;
+                }
+
+                leftColumn.Add(slider);
+
+                slider.style.marginTop = 20;
+                slider.style.marginBottom = 20;
+                slider.style.width = 380;
+                slider.style.minWidth = 380;
+                slider.style.height = 50;
+                slider.style.alignSelf = Align.Center;
+                slider.style.flexDirection = FlexDirection.Row;
+
+                Label label = slider.Q<Label>();
+                if (label != null)
+                {
+                    label.style.width = 160;
+                    label.style.minWidth = 160;
+                    label.style.fontSize = 24;
+                    label.style.unityTextAlign = TextAnchor.MiddleLeft;
+
+                    label.style.paddingTop = 0;
+                    label.style.paddingBottom = 0;
+                    label.style.marginTop = 0;
+                    label.style.marginBottom = 0;
+                    label.style.paddingLeft = 15;
+                }
+
+                var dragContainer = slider.Q<VisualElement>("unity-drag-container");
+                if (dragContainer != null)
+                {
+                    dragContainer.style.flexGrow = 1;
+                    dragContainer.style.justifyContent = Justify.Center;
+                    dragContainer.style.marginRight = 15;
+                }
+
+                var tracker = slider.Q<VisualElement>("unity-tracker");
+                if (tracker != null)
+                {
+                    tracker.style.position = Position.Relative;
+                    tracker.style.top = StyleKeyword.Auto;
+                    tracker.style.marginTop = 0;
+                    tracker.style.height = 16;
+                    tracker.style.backgroundColor = new StyleColor(new Color(0.3f, 0.3f, 0.3f));
+                    tracker.style.borderTopWidth = 0;
+                    tracker.style.borderBottomWidth = 0;
+                    tracker.style.borderLeftWidth = 0;
+                    tracker.style.borderRightWidth = 0;
+                }
+
+                var dragger = slider.Q<VisualElement>("unity-dragger");
+                if (dragger != null)
+                {
+                    dragger.style.position = Position.Absolute;
+                    dragger.style.top = new Length(50, LengthUnit.Percent);
+                    dragger.style.marginTop = -20;
+                    dragger.style.width = 40;
+                    dragger.style.height = 40;
+                    dragger.style.borderTopWidth = 0;
+                    dragger.style.borderBottomWidth = 0;
+                    dragger.style.borderLeftWidth = 0;
+                    dragger.style.borderRightWidth = 0;
+                    dragger.style.borderTopLeftRadius = 0;
+                    dragger.style.borderTopRightRadius = 0;
+                    dragger.style.borderBottomLeftRadius = 0;
+                    dragger.style.borderBottomRightRadius = 0;
+                }
+            }
+
+            if (controlsPanel != null)
+            {
+                controlsPanel.style.display = DisplayStyle.Flex;
+                rightColumn.Add(controlsPanel);
+            }
+
+            VisualElement keybindsContainer = new VisualElement();
+
+            // Force the container to take up 100% of the right column's width
+            keybindsContainer.style.width = new Length(100, LengthUnit.Percent);
+
+            // This is the magic line that centers all the labels inside the container!
+            keybindsContainer.style.alignItems = Align.Center;
+
+            // Use Absolute positioning to force it to the top, ignoring standard spacing rules
+            keybindsContainer.style.position = Position.Absolute;
+            keybindsContainer.style.top = 90; // Decrease this number (e.g., 10 or 0) to move it even higher!
+
+
+            // 2. Title Setup
+            Label titleLabel = new Label("Controls");
+            if (fontPixel != null) titleLabel.style.unityFontDefinition = new StyleFontDefinition(fontPixel);
+            titleLabel.style.fontSize = 28;
+            titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            titleLabel.style.marginBottom = 20;
+            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter; // Center text inside the label
+            keybindsContainer.Add(titleLabel);
+
+
+            // 3. Keybinds Loop
+            string[] keybindsList = new string[]
+            {
+                "Move: A / D",
+                "Jump & Double Jump: Space",
+                "Wall Slide: Hold A / D on wall",
+                "Attack: Right Click",
+                "Mine: Left Click",
+                "Build: Middle Mouse - Mouse Wheel"
+            };
+
+            foreach (string bind in keybindsList)
+            {
+                Label bindLabel = new Label(bind);
+                if (fontPixel != null) bindLabel.style.unityFontDefinition = new StyleFontDefinition(fontPixel);
+                bindLabel.style.fontSize = 22;
+                bindLabel.style.marginBottom = 15;
+                bindLabel.style.whiteSpace = WhiteSpace.Normal;
+                bindLabel.style.unityTextAlign = TextAnchor.MiddleCenter; // Center text inside the label
+                keybindsContainer.Add(bindLabel);
+            }
+
+            // 4. Add to right column
+            if (rightColumn != null)
+            {
+                rightColumn.Add(keybindsContainer);
+            }
+
+            settingsContainer.Add(leftColumn);
+            settingsContainer.Add(rightColumn);
+
+            closeSettingsBtn = settingsContainer.Q<Button>("CloseSettingsBtn");
+            if (closeSettingsBtn != null)
+            {
+                closeSettingsBtn.style.position = Position.Absolute;
+                closeSettingsBtn.style.top = 20;
+                closeSettingsBtn.style.right = 20;
+                closeSettingsBtn.style.width = 100;
+                closeSettingsBtn.style.height = 40;
+                closeSettingsBtn.clicked += CloseSettings;
+                closeSettingsBtn.BringToFront();
+            }
+
+            SetupAudioSlider(settingsContainer, "MasterSlider", "MasterVolume");
+            SetupAudioSlider(settingsContainer, "MusicSlider", "MusicVolume");
+            SetupAudioSlider(settingsContainer, "EntitiesSlider", "EntitiesVolume");
+            SetupAudioSlider(settingsContainer, "AmbienceSlider", "AmbienceVolume");
+        }
+
+        private void SetupAudioSlider(VisualElement container, string sliderName, params string[] exposedParameterNames)
+        {
+            Slider volumeSlider = container.Q<Slider>(sliderName);
+            if (volumeSlider != null)
+            {
+                volumeSlider.lowValue = 0.0001f;
+                volumeSlider.highValue = 1f;
+
+                if (mainAudioMixer != null && exposedParameterNames.Length > 0)
+                {
+                    float currentMixerVolume;
+                    if (mainAudioMixer.GetFloat(exposedParameterNames[0], out currentMixerVolume))
+                    {
+                        volumeSlider.value = Mathf.Pow(10f, currentMixerVolume / 20f);
+                    }
+                }
+
+                volumeSlider.RegisterValueChangedCallback(evt =>
+                {
+                    if (mainAudioMixer != null)
+                    {
+                        foreach (string param in exposedParameterNames)
+                        {
+                            mainAudioMixer.SetFloat(param, Mathf.Log10(evt.newValue) * 20f);
+                        }
+                    }
+                });
+            }
+        }
+
+        private void OpenSettings()
+        {
+            CloseRecipeBook();
+            if (settingsContainer != null)
+            {
+                settingsContainer.style.display = DisplayStyle.Flex;
+            }
+        }
+
+        private void CloseSettings()
+        {
+            if (settingsContainer != null)
+            {
+                settingsContainer.style.display = DisplayStyle.None;
+            }
         }
 
         #endregion
@@ -367,7 +658,8 @@ namespace Player
             recipeBookContainer.style.height = 600;
             recipeBookContainer.style.left = new Length(50, LengthUnit.Percent);
             recipeBookContainer.style.top = new Length(50, LengthUnit.Percent);
-            recipeBookContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent), new Length(-50, LengthUnit.Percent), 0));
+            recipeBookContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent),
+                new Length(-50, LengthUnit.Percent), 0));
 
             leftTitleText = recipeBookContainer.Q<Label>("LeftPageTitle");
             leftGridContainer = recipeBookContainer.Q<VisualElement>("LeftRecipeHolder");
@@ -378,7 +670,11 @@ namespace Player
                 prevPageBtn.style.position = Position.Absolute;
                 prevPageBtn.style.bottom = 20;
                 prevPageBtn.style.left = 20;
-                prevPageBtn.clicked += () => TurnPage(-1);
+                prevPageBtn.clicked += () =>
+                {
+                    TurnPage(-1);
+                    PlaySound(pageTurnSound);
+                };
             }
 
             rightTitleText = recipeBookContainer.Q<Label>("RightPageTitle");
@@ -390,10 +686,14 @@ namespace Player
                 nextPageBtn.style.position = Position.Absolute;
                 nextPageBtn.style.bottom = 20;
                 nextPageBtn.style.right = 20;
-                nextPageBtn.clicked += () => TurnPage(1);
+                nextPageBtn.clicked += () =>
+                {
+                    TurnPage(1);
+                    PlaySound(pageTurnSound);
+                };
             }
 
-            closeRecipeBtn = menuRoot.Q<Button>("CloseRecipeBtn");
+            closeRecipeBtn = recipeBookContainer.Q<Button>("CloseRecipeBtn");
 
             if (closeRecipeBtn != null)
             {
@@ -408,14 +708,20 @@ namespace Player
 
         private int GetTotalRecipes()
         {
-            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null ? craftingDatabase.recipes.Count : 0;
-            int cookingCount = cookingDatabase != null && cookingDatabase.recipes != null ? cookingDatabase.recipes.Count : 0;
+            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null
+                ? craftingDatabase.recipes.Count
+                : 0;
+            int cookingCount = cookingDatabase != null && cookingDatabase.recipes != null
+                ? cookingDatabase.recipes.Count
+                : 0;
             return craftingCount + cookingCount;
         }
 
         private void OpenRecipeBook()
         {
             if (GetTotalRecipes() == 0) return;
+
+            CloseSettings();
 
             recipeBookContainer.style.display = DisplayStyle.Flex;
             currentRecipeIndex = 0;
@@ -464,7 +770,8 @@ namespace Player
                 prevPageBtn.style.display = (currentRecipeIndex == 0) ? DisplayStyle.None : DisplayStyle.Flex;
 
             if (nextPageBtn != null)
-                nextPageBtn.style.display = (currentRecipeIndex + 2 >= totalRecipes) ? DisplayStyle.None : DisplayStyle.Flex;
+                nextPageBtn.style.display =
+                    (currentRecipeIndex + 2 >= totalRecipes) ? DisplayStyle.None : DisplayStyle.Flex;
         }
 
         private void PopulatePageData(int index, Label titleLabel, VisualElement gridContainer)
@@ -473,7 +780,9 @@ namespace Player
 
             gridContainer.Clear();
 
-            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null ? craftingDatabase.recipes.Count : 0;
+            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null
+                ? craftingDatabase.recipes.Count
+                : 0;
 
             ItemData resultItem = null;
             ItemData[] ingredientsArray = null;
@@ -561,6 +870,7 @@ namespace Player
                 resIcon.style.height = Length.Percent(100);
                 resultBox.Add(resIcon);
             }
+
             resultWrapper.Add(resultBox);
 
             if (resultItem != null)

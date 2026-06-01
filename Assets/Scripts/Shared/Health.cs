@@ -22,6 +22,7 @@ namespace Shared
     {
         [SerializeField] private int maxHealth;
         [SerializeField] private DropItem[] deathDrops;
+        [SerializeField] private GameObject hitVFXPrefab;
 
         public int currentHealth;
         private bool isDead = false;
@@ -92,6 +93,23 @@ namespace Shared
             }
         }
 
+        public void SpawnHitDrops()
+        {
+            if (hitVFXPrefab != null)
+            {
+                var drop = Instantiate(hitVFXPrefab, transform.position, Quaternion.identity);
+                Destroy(drop, 180f);
+
+                if (drop.TryGetComponent(out Rigidbody2D rb))
+                {
+                    float randomX = Random.Range(-0.5f, 0.5f);
+                    float randomY = Random.Range(-0.5f, 0.5f);
+                    rb.AddForce(new Vector2(randomX, randomY), ForceMode2D.Impulse);
+                }
+            }
+        }
+
         public int GetCurrentHealth() => currentHealth;
+        public void ResetHealth() { currentHealth = maxHealth; isDead = false; }
     }
 }

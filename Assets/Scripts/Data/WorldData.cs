@@ -41,7 +41,8 @@ namespace Data
         RubyBlock,
         CopperBlock,
         BronzeBlock,
-        IronBlock
+        IronBlock,
+        spawnAnchor
     } // Added none for the items
 
     public enum PropType { None, Bush, StoneProp, OakTree, BirchTree, Copper, Iron, Coal, Sulphur, ScareCrow }

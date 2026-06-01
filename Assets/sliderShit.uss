@@ -1,0 +1,17 @@
+:root {
+}
+
+.unity-base-slider__tracker {
+    background-color: rgb(255, 255, 255);
+    background-image: url("project://database/Assets/Sprites/UI_Art/UI_Assets/Sprout%20Lands%20-%20UI%20Pack%20-%20Basic%20pack/Sprite%20sheets/Sprite%20sheet%20for%20Basic%20Pack.png?fileID=2292737356795794705&guid=85707a2e52c8fa540ac07c7f133422bd&type=3#Sprite sheet for Basic Pack_180");
+    -unity-slice-left: 2;
+    -unity-slice-top: 2;
+    -unity-slice-right: 2;
+    -unity-slice-bottom: 2;
+}
+
+.unity-base-slider__dragger {
+    background-color: rgba(255, 255, 255, 0);
+    background-image: url("project://database/Assets/Sprites/UI_Art/UI_Assets/Sprout%20Lands%20-%20UI%20Pack%20-%20Basic%20pack/Sprite%20sheets/Sprite%20sheet%20for%20Basic%20Pack.png?fileID=-7126499568671097942&guid=85707a2e52c8fa540ac07c7f133422bd&type=3#Sprite sheet for Basic Pack_103");
+    background-size: 80% 80%;
+}

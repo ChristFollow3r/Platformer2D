@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using Chunks;
 using Data;
@@ -6,6 +5,7 @@ using Scriptable_Objects_Scripts;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Cinemachine;
+using Player;
 
 namespace World
 {
@@ -292,7 +292,6 @@ namespace World
                     {
                         foundSurface = true;
 
-                        // 2D noise applied here to wobble the biome boundaries
                         float surfaceWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, y * 0.2f + seedOffset) - 0.5f) * 0.15f;
                         float surfaceBiome = baseBiomeNoise + surfaceWobble;
 
@@ -673,7 +672,13 @@ namespace World
 
                     currentSpawnPoint = new Vector3(worldX, worldY, 0);
 
-                    RespawnPlayer();
+                    GameObject spawnedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
+
+                    if (virtualCamera != null)
+                    {
+                        virtualCamera.Follow = spawnedPlayer.transform;
+                    }
+
                     break;
                 }
             }
@@ -684,16 +689,34 @@ namespace World
             currentSpawnPoint = newSpawnPoint;
         }
 
-        public void RespawnPlayer()
+        public void RespawnPlayer(GameObject playerObject)
         {
-            GameObject spawnedPlayer = Instantiate(playerPrefab, currentSpawnPoint, Quaternion.identity);
 
-            if (virtualCamera != null)
-            {
-                virtualCamera.Follow = spawnedPlayer.transform;
-            }
+            playerObject.transform.position = currentSpawnPoint;
+            PlayerMovement.Singleton.enableTimer = 0.5f;
+            UIController.Singleton.UpdateHealth(1, 1);
         }
 
+
+        public bool TrySetSpawnFromAnchor(Vector3 interactWorldPosition)
+        {
+            float cellSize = gridParent.cellSize.x;
+            int gridX = Mathf.FloorToInt(interactWorldPosition.x / cellSize);
+            int gridY = Mathf.FloorToInt(interactWorldPosition.y / cellSize);
+
+            if (!WorldData.World.SafeCheck(gridX, gridY)) return false;
+
+            if (WorldData.World.GetBlockTypes(gridX, gridY) == BlockType.spawnAnchor)
+            {
+                float spawnX = (gridX * cellSize) + (cellSize / 2f);
+                float spawnY = (gridY + 1) * cellSize;
+
+                SetSpawnPoint(new Vector3(spawnX, spawnY, 0));
+                return true;
+            }
+
+            return false;
+        }
         private void OnApplicationQuit()
         {
             if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
@@ -701,6 +724,7 @@ namespace World
                 WorldSerializer.Save();
                 Debug.Log("[WorldManager] Saved on quit.");
             }
+
         }
     }
 }

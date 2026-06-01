@@ -144,6 +144,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19507406fb458ae459dbacbeea3dda76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.ItemEntity
+  pickupDelay: 1
   itemData: {fileID: 11400000, guid: 053457a2ebb336a44acb907ab111475c, type: 2}
 --- !u!114 &7243765266166736406
 MonoBehaviour:
@@ -157,15 +158,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e26046273504aa449c4fb4e299ead04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.DropComponent
-  pickupSound: {fileID: 0}
+  pickupSound: {fileID: 8300000, guid: 30104bd62d2f2364f8cfce8f6a9912a7, type: 3}
   collider: {fileID: 6424570704822434071}
   spriteRenderer: {fileID: 4732772619590479897}
   itemData: {fileID: 11400000, guid: 053457a2ebb336a44acb907ab111475c, type: 2}
-  bobHeight: 0.2
-  bobSpeed: 0.2
   rotateSpeed: 0
-  initialPopForce: 0
-  gravity: -9.8
+  popForceUp: 5
+  popForceSide: 2
   player: {fileID: 846664854750277049, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
 --- !u!50 &6235443194795820044
 Rigidbody2D:
