@@ -52,6 +52,7 @@ namespace Player
 
         [Header("Elements")] [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
+        [SerializeField] private Font fontPixel;
         private VisualElement nameShower;
 
         private VisualElement overlayRoot;
@@ -157,8 +158,7 @@ namespace Player
 
             overlay.rootVisualElement.Q("inventory").Add(inventory);
             overlay.rootVisualElement.Q("holder").Add(overlayHotbar);
-            Debug.Log(
-                $"Overlay has {string.Join(", ", overlay.rootVisualElement.Children().ToList()[0].Children().Select(c => c.name))}");
+
             nameShower = overlay.rootVisualElement.Q("name-holder");
 
             Hotbar hudHotbar = new Hotbar { isMain = true };
@@ -445,52 +445,75 @@ namespace Player
             var allSliders = settingsContainer.Query<Slider>().ToList();
             foreach (var slider in allSliders)
             {
+                if (slider.name.Contains("Surface") || slider.name.Contains("Cave"))
+                {
+                    slider.style.display = DisplayStyle.None;
+                    continue;
+                }
+
                 leftColumn.Add(slider);
 
-                // 1. Force the parent container
-                slider.style.marginTop = 15;
-                slider.style.marginBottom = 15;
-                slider.style.width = 350;
-                slider.style.height = 40;
+                slider.style.marginTop = 20;
+                slider.style.marginBottom = 20;
+                slider.style.width = 380;
+                slider.style.minWidth = 380;
+                slider.style.height = 50;
                 slider.style.alignSelf = Align.Center;
                 slider.style.flexDirection = FlexDirection.Row;
-                slider.style.flexShrink = 0; // Prevent shrinking
 
-                // 2. Style the Label
                 Label label = slider.Q<Label>();
                 if (label != null)
                 {
-                    label.style.width = 130;
-                    label.style.minWidth = 130;
-                    label.style.flexShrink = 0; // Ensure label doesn't get crushed
-                    label.style.fontSize = 20;
+                    label.style.width = 160;
+                    label.style.minWidth = 160;
+                    label.style.fontSize = 24;
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
+
+                    label.style.paddingTop = 0;
+                    label.style.paddingBottom = 0;
+                    label.style.marginTop = 0;
+                    label.style.marginBottom = 0;
+                    label.style.paddingLeft = 15;
                 }
 
-                // 3. Force the drag container to fill space
                 var dragContainer = slider.Q<VisualElement>("unity-drag-container");
                 if (dragContainer != null)
                 {
                     dragContainer.style.flexGrow = 1;
-                    dragContainer.style.flexShrink = 1;
-                    dragContainer.style.marginLeft = 10;
+                    dragContainer.style.justifyContent = Justify.Center;
+                    dragContainer.style.marginRight = 15;
                 }
 
-                // 4. Tracker
                 var tracker = slider.Q<VisualElement>("unity-tracker");
                 if (tracker != null)
                 {
-                    tracker.style.height = 12;
-                    tracker.style.flexGrow = 1; // Ensure the tracker fills the drag container
+                    tracker.style.position = Position.Relative;
+                    tracker.style.top = StyleKeyword.Auto;
+                    tracker.style.marginTop = 0;
+                    tracker.style.height = 16;
+                    tracker.style.backgroundColor = new StyleColor(new Color(0.3f, 0.3f, 0.3f));
+                    tracker.style.borderTopWidth = 0;
+                    tracker.style.borderBottomWidth = 0;
+                    tracker.style.borderLeftWidth = 0;
+                    tracker.style.borderRightWidth = 0;
                 }
 
-                // 5. Dragger (Knob)
                 var dragger = slider.Q<VisualElement>("unity-dragger");
                 if (dragger != null)
                 {
-                    dragger.style.width = 20;
-                    dragger.style.height = 30;
-                    dragger.style.flexShrink = 0; // Don't let the knob shrink
+                    dragger.style.position = Position.Absolute;
+                    dragger.style.top = new Length(50, LengthUnit.Percent);
+                    dragger.style.marginTop = -20;
+                    dragger.style.width = 40;
+                    dragger.style.height = 40;
+                    dragger.style.borderTopWidth = 0;
+                    dragger.style.borderBottomWidth = 0;
+                    dragger.style.borderLeftWidth = 0;
+                    dragger.style.borderRightWidth = 0;
+                    dragger.style.borderTopLeftRadius = 0;
+                    dragger.style.borderTopRightRadius = 0;
+                    dragger.style.borderBottomLeftRadius = 0;
+                    dragger.style.borderBottomRightRadius = 0;
                 }
             }
 
@@ -498,6 +521,57 @@ namespace Player
             {
                 controlsPanel.style.display = DisplayStyle.Flex;
                 rightColumn.Add(controlsPanel);
+            }
+
+            VisualElement keybindsContainer = new VisualElement();
+
+            // Force the container to take up 100% of the right column's width
+            keybindsContainer.style.width = new Length(100, LengthUnit.Percent);
+
+            // This is the magic line that centers all the labels inside the container!
+            keybindsContainer.style.alignItems = Align.Center;
+
+            // Use Absolute positioning to force it to the top, ignoring standard spacing rules
+            keybindsContainer.style.position = Position.Absolute;
+            keybindsContainer.style.top = 90; // Decrease this number (e.g., 10 or 0) to move it even higher!
+
+
+            // 2. Title Setup
+            Label titleLabel = new Label("Controls");
+            if (fontPixel != null) titleLabel.style.unityFontDefinition = new StyleFontDefinition(fontPixel);
+            titleLabel.style.fontSize = 28;
+            titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            titleLabel.style.marginBottom = 20;
+            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter; // Center text inside the label
+            keybindsContainer.Add(titleLabel);
+
+
+            // 3. Keybinds Loop
+            string[] keybindsList = new string[]
+            {
+                "Move: A / D",
+                "Jump & Double Jump: Space",
+                "Wall Slide: Hold A / D on wall",
+                "Attack: Right Click",
+                "Mine: Left Click",
+                "Build: Middle Mouse - Mouse Wheel"
+            };
+
+            foreach (string bind in keybindsList)
+            {
+                Label bindLabel = new Label(bind);
+                if (fontPixel != null) bindLabel.style.unityFontDefinition = new StyleFontDefinition(fontPixel);
+                bindLabel.style.fontSize = 22;
+                bindLabel.style.marginBottom = 15;
+                bindLabel.style.whiteSpace = WhiteSpace.Normal;
+                bindLabel.style.unityTextAlign = TextAnchor.MiddleCenter; // Center text inside the label
+                keybindsContainer.Add(bindLabel);
+            }
+
+            // 4. Add to right column
+            if (rightColumn != null)
+            {
+                rightColumn.Add(keybindsContainer);
             }
 
             settingsContainer.Add(leftColumn);
@@ -511,7 +585,6 @@ namespace Player
                 closeSettingsBtn.style.right = 20;
                 closeSettingsBtn.style.width = 100;
                 closeSettingsBtn.style.height = 40;
-                //closeSettingsBtn.style.zIndex = 100;
                 closeSettingsBtn.clicked += CloseSettings;
                 closeSettingsBtn.BringToFront();
             }

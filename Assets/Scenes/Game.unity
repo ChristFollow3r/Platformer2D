@@ -727,6 +727,7 @@ MonoBehaviour:
   isMenuOpen: 0
   overlay: {fileID: 1849100690}
   hud: {fileID: 91914541}
+  fontPixel: {fileID: 12800000, guid: 74a5091d8707f334b9a5c31ef71a64ba, type: 3}
   isOverlayOpen: 0
   uiAudioSource: {fileID: 1722273475}
   defaultClickSound: {fileID: 8300000, guid: 1e7ca19f8662e604785e8c9a05ca5c43, type: 3}
