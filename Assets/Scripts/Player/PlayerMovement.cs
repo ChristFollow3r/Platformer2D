@@ -90,21 +90,25 @@ namespace Player
         public event Action<Vector2> OnAttackPerformed;
         public event Action OnJumpPerformed;
 
+        private float enableTimer = 1f;
+
+
         private void Awake()
         {
             SetupSingleton();
-
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             playerCollider = GetComponent<Collider2D>();
             playerHealth = GetComponent<Shared.Health>();
-            mainCamera = Camera.main;
-
             playerInput = new InputSystem_Actions();
             playerInput.Enable();
         }
+        void Start()
+        {
+            mainCamera = Camera.main;
 
+        }
         private void OnEnable()
         {
             playerHealth.OnKnockbackRecieved += SlimeHitAnimation;
@@ -119,6 +123,16 @@ namespace Player
 
         private void Update()
         {
+            if (enableTimer > 0)
+            {
+                enableTimer -= Time.deltaTime;
+                if (enableTimer <= 0)
+                {
+                    rb.constraints &= ~RigidbodyConstraints2D.FreezePosition;
+                }
+            }
+
+
             if (UIController.Singleton.isOverlayOpen || UIController.Singleton.isMenuOpen) return;
 
             Vector2 colSize = playerCollider.bounds.size;
@@ -250,6 +264,8 @@ namespace Player
 
         private void HandleMouseInput()
         {
+            if (!mainCamera) mainCamera = Camera.main;
+
             if (knockbackTimer > 0f) return;
             if (Player.UIController.Singleton.isMenuOpen || Player.UIController.Singleton.isOverlayOpen) return; // Don't swing if a menu is open
 
@@ -319,6 +335,21 @@ namespace Player
             yield return new WaitForSeconds(0.15f);
             Destroy(this.gameObject);
         }
+        private Vector2 FindSafeSpawnPosition(Vector2 startPos)
+        {
+            Vector2 size = playerCollider.bounds.size * 0.8f; // slightly smaller to avoid edge touches
+
+            // Walk upward until we find a clear spot
+            for (int i = 0; i < 20; i++)
+            {
+                Vector2 candidate = startPos + new Vector2(0, i * 0.2f);
+                if (!Physics2D.OverlapBox(candidate, size, 0f, groundLayer))
+                    return candidate;
+            }
+
+            Debug.LogWarning("[PlayerMovement] Could not find safe spawn position, using original.");
+            return startPos;
+        }
 
         public string Serialize()
         {
@@ -328,7 +359,12 @@ namespace Player
         public void Deserialize(string json)
         {
             PlayerSaveData save = JsonUtility.FromJson<PlayerSaveData>(json);
-            transform.position = save.pos + new Vector2(0, 0.75f);
+            Vector2 safePos = FindSafeSpawnPosition(save.pos + new Vector2(0, 0.75f));
+
+            rb.linearVelocity = Vector2.zero;
+            rb.position = safePos;
+            rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
+            Physics2D.SyncTransforms();
         }
     }
 

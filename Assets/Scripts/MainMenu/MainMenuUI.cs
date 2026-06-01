@@ -165,5 +165,13 @@ public class MainMenuUI : MonoBehaviour
     {
         Singleton.loader.LoadWorld(worldName);
     }
+
+    public void SetLoading()
+    {
+        menuPanel.style.display = DisplayStyle.None;
+        newPanel.style.display = DisplayStyle.None;
+        loadPanel.style.display = DisplayStyle.None;
+        loadingPanel.style.display = DisplayStyle.Flex;
+    }
     #endregion
 }
