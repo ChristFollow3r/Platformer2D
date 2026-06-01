@@ -6,22 +6,21 @@ public class WorldLoader : MonoBehaviour
 
 
 
-    [SerializeField] private string gameSceneName = "Game";
-    [SerializeField] private string saveName = "save1";
-    [SerializeField] private string seed = "Test seed!";
+    [SerializeField] public string gameSceneName = "Game";
 
     [ContextMenu("New World")]
-    public void NewWorld()
+    public void NewWorld(string name, string seed)
     {
-        if (string.IsNullOrEmpty(saveName)) return;
+        if (string.IsNullOrEmpty(name)) return;
         WorldSerializer.isNewWorld = true;
         WorldSerializer.Seed = seed;
-        WorldSerializer.WorldName = saveName;
+        WorldSerializer.WorldName = name;
         SceneManager.LoadScene(gameSceneName);
+        //TODO: handle async
     }
 
     [ContextMenu("Load World")]
-    public void LoadWorld()
+    public void LoadWorld(string saveName)
     {
         if (string.IsNullOrEmpty(saveName)) return;
         WorldSerializer.isNewWorld = false;
@@ -33,10 +32,11 @@ public class WorldLoader : MonoBehaviour
 
         WorldSerializer.WorldName = saveName;
         SceneManager.LoadScene(gameSceneName);
+        //TODO: handle async
     }
 
     [ContextMenu("Delete World")]
-    public void DeleteWorld()
+    public void DeleteWorld(string saveName)
     {
         if (!WorldSerializer.Exists(saveName))
         {

@@ -1,5 +1,6 @@
 
 
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI.Components
@@ -26,10 +27,13 @@ namespace UI.Components
         #region Constructor
         public World()
         {
+            VisualTreeAsset tree = Resources.Load<VisualTreeAsset>("UI/Components/World/World");
+            tree.CloneTree(this);
+
             worldNameElm = this.Q<Label>("name");
             loadBtn = this.Q<Button>("Load");
 
-            loadBtn.clicked += () => { }; // TODO ADD cb
+            loadBtn.clicked += () => MainMenuUI.LoadWorld(worldName); // TODO ADD cb
         }
         #endregion
     }
