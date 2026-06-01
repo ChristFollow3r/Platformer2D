@@ -62,6 +62,17 @@ namespace Items
             spawnTime = Time.time;
         }
 
+        public void Initialize(ItemStack stack)
+        {
+            this.stack = stack;
+            itemData = stack.data;
+            if (itemData != null && spriteRenderer != null)
+            {
+                spriteRenderer.sprite = itemData.sprite;
+            }
+            spawnTime = Time.time;
+        }
+
         private void Update()
 
         {

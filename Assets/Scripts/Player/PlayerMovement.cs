@@ -3,6 +3,7 @@ using System.Collections;
 using Shared;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using World;
 
 namespace Player
 {
@@ -91,7 +92,7 @@ namespace Player
         public event Action<Vector2> OnAttackPerformed;
         public event Action OnJumpPerformed;
 
-        private float enableTimer = 1f;
+        public float enableTimer = 1f;
 
 
         private void Awake()
@@ -370,7 +371,7 @@ namespace Player
         public string Serialize()
         {
             int health = GetComponent<Health>().currentHealth;
-            return JsonUtility.ToJson(new PlayerSaveData() { pos = transform.position, health = health });
+            return JsonUtility.ToJson(new PlayerSaveData() { pos = transform.position, health = health, spawnPoint = WorldManager.Instance.currentSpawnPoint });
         }
 
         public void Deserialize(string json)
@@ -382,6 +383,7 @@ namespace Player
             rb.position = safePos;
             rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             Physics2D.SyncTransforms();
+            WorldManager.Instance.currentSpawnPoint = save.spawnPoint;
 
             GetComponent<Health>().SetHealth(save.health);
         }

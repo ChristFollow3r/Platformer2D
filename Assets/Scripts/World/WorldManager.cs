@@ -5,6 +5,7 @@ using Scriptable_Objects_Scripts;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Unity.Cinemachine;
+using Player;
 
 namespace World
 {
@@ -690,7 +691,9 @@ namespace World
 
         public void RespawnPlayer(GameObject playerObject)
         {
+
             playerObject.transform.position = currentSpawnPoint;
+            PlayerMovement.Singleton.enableTimer = 0.5f;
         }
 
 
