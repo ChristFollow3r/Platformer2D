@@ -686,24 +686,12 @@ MonoBehaviour:
     amount: 1
     durability: 0
     duration: 0
+  - data: {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
+    amount: 10
+    durability: 0
+    duration: 0
   - data: {fileID: 11400000, guid: 228698ed2f19312448fff2d00955d398, type: 2}
-    amount: 64
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
-    amount: 64
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
-    amount: 64
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
-    amount: 64
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: ef10172a4dcf57c41b1038256c54d40b, type: 2}
-    amount: 64
+    amount: 10
     durability: 0
     duration: 0
   - data: {fileID: 11400000, guid: c15f07e36b3d784419787d7e42331221, type: 2}
@@ -1440,7 +1428,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9697fcf0983bcf247a2cfc91aea1561e, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
-  worldSeed: Minecraft
   playerPrefab: {fileID: 6493406502564964188, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
   virtualCamera: {fileID: 91711888}
   currentSpawnPoint: {x: 0, y: 0, z: 0}
@@ -1449,6 +1436,7 @@ MonoBehaviour:
   worldHeight: 400
   globalSpawnChance: 70
   dirtLayerThickness: 5
+  autosaveInterval: 60
   tallMountains: 0.004
   mediumMountains: 0.016
   smallMountains: 0.048

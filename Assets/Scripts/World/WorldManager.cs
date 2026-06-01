@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using Chunks;
 using Data;
@@ -35,6 +36,10 @@ namespace World
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
 
+        [Header("Autosave")]
+        [SerializeField] private float autosaveInterval = 60f;
+        private float _autosaveTimer;
+
         public static WorldManager Instance { get; private set; }
 
         private float seedOffset;
@@ -70,6 +75,9 @@ namespace World
 
         private void Start()
         {
+            WorldData.dirtyBlocks.Clear();
+            WorldData.dirtyProps.Clear();
+
             WorldData.World = new Data.World(worldWidth, worldHeight);
             chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize];
             cameraPosition = mainCamera.transform.position;
@@ -90,6 +98,61 @@ namespace World
             PopulateChunks();
             UpdateChunks();
             SpawnPlayer();
+
+            if (!WorldSerializer.isNewWorld)
+                WorldSerializer.LoadPlayer();
+        }
+
+        private void NewWorld()
+        {
+            seedOffset = ComputeSeedOffset(WorldSerializer.Seed);
+            Random.InitState(WorldSerializer.Seed.GetHashCode());
+
+            WorldData.isGenerating = true;
+            GenerateWorld();
+            GenerateProps();
+            WorldData.isGenerating = false;
+            WorldSerializer.Save();
+        }
+
+        private void LoadWorld()
+        {
+            Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
+
+            WorldSaveData save = WorldSerializer.Load();
+            Random.InitState(save.seed.GetHashCode());
+            if (save == null)
+            {
+                Debug.LogError("[WorldManager] Save data is null, falling back to new world.");
+                NewWorld();
+                return;
+            }
+
+            Debug.Log($"[WorldManager] Applying seed: '{save.seed}'");
+            seedOffset = ComputeSeedOffset(save.seed);
+
+            WorldData.isGenerating = true;
+            GenerateWorld();
+            GenerateProps();
+            WorldData.isGenerating = false;
+            Debug.Log("[WorldManager] Base generation done.");
+
+            WorldData.isGenerating = true;
+            foreach (var b in save.blocks)
+                WorldData.World.SetBlockType(b.x, b.y, b.type);
+            foreach (var p in save.props)
+                WorldData.World.SetPropType(p.x, p.y, p.type);
+            WorldData.isGenerating = false;
+            Debug.Log($"[WorldManager] Applied {save.blocks.Length} block diffs, {save.props.Length} prop diffs.");
+
+            foreach (var b in save.blocks)
+                WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
+            foreach (var p in save.props)
+                WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
+
+            Debug.Log("[WorldManager] Loading overlays...");
+            WorldSerializer.LoadOverlays();
+            Debug.Log("[WorldManager] LoadWorld complete.");
         }
 
         private void Update()
@@ -219,6 +282,7 @@ namespace World
                     {
                         foundSurface = true;
 
+                        // 2D noise applied here to wobble the biome boundaries
                         float surfaceWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, y * 0.2f + seedOffset) - 0.5f) * 0.15f;
                         float surfaceBiome = baseBiomeNoise + surfaceWobble;
 
@@ -639,6 +703,15 @@ namespace World
             }
 
             return false;
+        }
+
+        private void OnApplicationQuit()
+        {
+            if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
+            {
+                WorldSerializer.Save();
+                Debug.Log("[WorldManager] Saved on quit.");
+            }
         }
     }
 }

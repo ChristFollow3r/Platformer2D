@@ -85,33 +85,48 @@ namespace Items.Utils
         }
 
 
-        private static bool MatchesAtOffset(List<ItemStack> items, int gridSize, CookingRecipe CookingRecipe, int rowOffset, int colOffset)
+        private static bool MatchesAtOffset(List<ItemStack> items, int gridSize, CookingRecipe cookingRecipe, int rowOffset, int colOffset)
         {
+            // collect all non-null recipe slots and check they match
+            for (int row = 0; row < cookingRecipe.gridSize; row++)
+            {
+                for (int col = 0; col < cookingRecipe.gridSize; col++)
+                {
+                    ItemData expected = cookingRecipe.ingredients[row * cookingRecipe.gridSize + col];
+                    if (expected == null) continue; // ignore empty recipe slots
+
+                    int gridRow = row + rowOffset;
+                    int gridCol = col + colOffset;
+                    int craftIndex = gridRow * gridSize + gridCol;
+
+                    ItemData provided = craftIndex < items.Count ? items[craftIndex]?.data : null;
+                    if (provided != expected) return false;
+                }
+            }
+
+            // also make sure slots NOT covered by the recipe are empty
             for (int row = 0; row < gridSize; row++)
             {
                 for (int col = 0; col < gridSize; col++)
                 {
-                    int craftIndex = row * gridSize + col;
-                    ItemData provided = craftIndex < items.Count ? items[craftIndex]?.data : null;
-
                     int recipeRow = row - rowOffset;
                     int recipeCol = col - colOffset;
 
-                    bool inBounds = recipeRow >= 0 && recipeRow < CookingRecipe.gridSize
-                                 && recipeCol >= 0 && recipeCol < CookingRecipe.gridSize;
+                    bool inBounds = recipeRow >= 0 && recipeRow < cookingRecipe.gridSize
+                                 && recipeCol >= 0 && recipeCol < cookingRecipe.gridSize;
 
-                    if (inBounds)
-                    {
-                        ItemData expected = CookingRecipe.ingredients[recipeRow * 2 + recipeCol];
-                        if (expected != provided) return false;
-                    }
-                    else
-                    {
-                        // Slots outside the CookingRecipe area must be empty
-                        if (provided != null) return false;
-                    }
+                    ItemData expected = inBounds
+                        ? cookingRecipe.ingredients[recipeRow * cookingRecipe.gridSize + recipeCol]
+                        : null;
+
+                    if (expected != null) continue; // already checked above
+
+                    int craftIndex = row * gridSize + col;
+                    ItemData provided = craftIndex < items.Count ? items[craftIndex]?.data : null;
+                    if (provided != null) return false; // slot should be empty but isn't
                 }
             }
+
             return true;
         }
     }

@@ -1,3 +1,5 @@
+
+
 using System;
 using System.Collections.Generic;
 using Data;
@@ -5,6 +7,7 @@ using UnityEngine;
 
 namespace Items
 {
+
     [DefaultExecutionOrder(-100)]
     public class Inventory : MonoBehaviour, IInventory
     {
@@ -37,16 +40,14 @@ namespace Items
             }
         }
         private short _handIndex = 0;
-        private bool isInitialized = false;
-
         [SerializeField] private List<ItemStackBuilder> startingItems = new();
-        [SerializeField] private AudioClip pickupSound;
         #endregion
 
         #region Events
         public event Action<int, ItemStack> OnSlotChanged;
         public event Action<short> OnHandChanged;
         #endregion
+
 
         #region Unity
         /// <summary>Ran by unity on load</summary>
@@ -67,9 +68,6 @@ namespace Items
                 ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
                 Add(itemStack);
             }
-
-            // Allow sounds to play only after starting items are loaded
-            isInitialized = true;
             #endregion
         }
         #endregion
@@ -84,17 +82,16 @@ namespace Items
             }
             #endregion
         }
-
         public bool Fits(ItemData item) => _Add(new(item) { amount = 1 }, true);
 
+
         public void Add(ItemStack item, bool stacked = true) => _Add(item, false, stacked);
+
 
         private bool _Add(ItemStack item, bool dryRun = false, bool stacked = true)
         {
             if (item.data == null) return false;
             Slot slot;
-            bool itemWasAdded = false;
-
             do
             {
                 slot = GetSlotOfItem(item.data, stacked);
@@ -102,13 +99,10 @@ namespace Items
                 if (!dryRun)
                 {
                     slot.Add(item);
-                    itemWasAdded = true;
                     OnSlotChanged?.Invoke(slot.id, slot.item);
                 }
                 else break;
             } while (item.amount > 0);
-
-            if (!dryRun && itemWasAdded) PlayPickupSound();
 
             if (!dryRun && item.amount > 0) Drop(item);
             return slot is not null;
@@ -148,8 +142,6 @@ namespace Items
             if (!slot.isEmpty && slot.item.data != item.data) return false;
 
             slot.Add(item);
-            PlayPickupSound();
-
             OnSlotChanged?.Invoke(slotId, slot.item);
             return item.amount == 0;
             #endregion
@@ -197,6 +189,7 @@ namespace Items
             #endregion
         }
 
+        /// <summary>Method</summary>
         public void RemoveFromHand()
         {
             #region RemoveFromHand
@@ -204,18 +197,61 @@ namespace Items
             #endregion
         }
 
-        private void PlayPickupSound()
+        public string ToJson()
         {
-            if (pickupSound != null && isInitialized)
+            var data = new InventoryData
             {
-                // Plays the sound directly at the Main Camera's position
-                if (Camera.main != null)
+                slots = new SlotData[slots.Length]
+            };
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                Slot slot = slots[i];
+                if (slot.isEmpty) continue;
+
+                data.slots[i] = new SlotData
                 {
-                    AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position); }
+                    id = slot.id,
+                    itemId = slot.isEmpty ? null : slot.item.data.name,
+                    amount = slot.isEmpty ? (short)0 : slot.item.amount,
+                    duration = slot.isEmpty ? 0f : slot.item.duration
+                };
+            }
+
+            return JsonUtility.ToJson(data);
+
+        }
+        public void FromJson(string json)
+        {
+            InventoryData data = JsonUtility.FromJson<InventoryData>(json);
+            if (data == null) return;
+
+            ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+
+            for (int i = 0; i < data.slots.Length && i < slots.Length; i++)
+            {
+                SlotData slotData = data.slots[i];
+
+                if (string.IsNullOrEmpty(slotData.itemId) || slotData.amount <= 0)
+                {
+                    slots[i].item = null;
+                }
                 else
                 {
-                    Debug.LogWarning("Camera.main is null! Make sure your camera has the 'MainCamera' tag.");
+                    ItemData itemData = db.items.Find(item => item.name == slotData.itemId);
+                    if (itemData != null)
+                        slots[slotData.id].item = new ItemStack(itemData) { amount = slotData.amount };
+                    else
+                        Debug.LogWarning($"[Inventory] Unknown item id '{slotData.itemId}' in slot {i}");
                 }
+
+                OnSlotChanged?.Invoke(slotData.id, slots[slotData.id].item);
+            }
+
+            foreach (ItemStackBuilder builder in startingItems)
+            {
+                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
+                Add(itemStack);
             }
         }
         #endregion
