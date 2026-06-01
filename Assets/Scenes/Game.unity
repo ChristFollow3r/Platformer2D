@@ -681,29 +681,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 990a799ba3cb33c42a968d4ab5b4637d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
+  itemEntityPrefab: {fileID: 930996324388520816, guid: 9b10d5916f6136f458b805b4050ae45b, type: 3}
   startingItems:
-  - data: {fileID: 11400000, guid: 10cb3675850041049aae5ab8b217ce80, type: 2}
+  - data: {fileID: 11400000, guid: 23d96971da1e6394299f660d7b366d94, type: 2}
     amount: 1
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: 228698ed2f19312448fff2d00955d398, type: 2}
-    amount: 64
+  - data: {fileID: 11400000, guid: e69f76e0476ce3e4d8d3c2d9def6be10, type: 2}
+    amount: 1
     durability: 0
     duration: 0
-  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
-    amount: 64
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: 91bb6de602bf86e468a50d308a8c0e0f, type: 2}
-    amount: 64
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
-    amount: 64
-    durability: 0
-    duration: 0
-  - data: {fileID: 11400000, guid: ef10172a4dcf57c41b1038256c54d40b, type: 2}
-    amount: 64
+  - data: {fileID: 11400000, guid: daf4e14edd9069240ae9bf93f8e3539c, type: 2}
+    amount: 1
     durability: 0
     duration: 0
   - data: {fileID: 11400000, guid: c15f07e36b3d784419787d7e42331221, type: 2}
@@ -735,6 +724,7 @@ MonoBehaviour:
   mainAudioMixer: {fileID: 24100000, guid: a96ebfb9af9687a4b8632c755d798dc7, type: 2}
   craftingDatabase: {fileID: 11400000, guid: 033e1871160fae945bdde8d91c2c5643, type: 2}
   cookingDatabase: {fileID: 11400000, guid: c820abba9a384854d9eb2994ab9b6506, type: 2}
+  defaultController: {fileID: 9100000, guid: e061f26e16934ab41ac0d7b58478b23e, type: 2}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,7 +1430,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9697fcf0983bcf247a2cfc91aea1561e, type: 2}
   gridParent: {fileID: 885701830}
   mainCamera: {fileID: 519420031}
-  worldSeed: Minecraft
   playerPrefab: {fileID: 6493406502564964188, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
   virtualCamera: {fileID: 91711888}
   currentSpawnPoint: {x: 0, y: 0, z: 0}
@@ -1449,6 +1438,7 @@ MonoBehaviour:
   worldHeight: 400
   globalSpawnChance: 70
   dirtLayerThickness: 5
+  autosaveInterval: 60
   tallMountains: 0.004
   mediumMountains: 0.016
   smallMountains: 0.048

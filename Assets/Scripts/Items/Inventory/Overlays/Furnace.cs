@@ -15,6 +15,7 @@ namespace Items.Overlays
     public class Furnace : Overlay, IInventory
     {
         #region Data
+        private const float CellSize = 0.5f;
         public const short CookingSlots = 4;
         public const short MaxSlotId = CookingSlots + 1;
         public Slot[] cookingSlots = new Slot[CookingSlots];
@@ -63,6 +64,8 @@ namespace Items.Overlays
         private float currentCookTimer = 0;
 
         private Sprite furnaceOnSprite;
+
+        bool isInit = false;
         #endregion
 
 
@@ -92,6 +95,8 @@ namespace Items.Overlays
             fuelSlot = new Slot() { id = CookingSlots + 1 };
 
             furnaceOnSprite = Resources.Load<Sprite>("sprites/furnace_on");
+
+            isInit = true;
             #endregion
         }
 
@@ -173,7 +178,7 @@ namespace Items.Overlays
 
             slot.item.amount -= amount;
             if (slot.item.amount <= 0) ClearSlot(slotId);
-            else OnSlotChanged(slotId, slot.item);
+            else OnSlotChanged?.Invoke(slotId, slot.item);
             return true;
             #endregion
         }
@@ -227,19 +232,21 @@ namespace Items.Overlays
         public override void Tick()
         {
             #region Tick
+            if (!isInit) return;
+
             isOn = currentFuelTimer > 0;
 
             if (currentResult == null && !isOn && !EvaluateCook())
             {
                 fuelFillPercent = currentFuelDuration > 0
-                    ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
+                    ? Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
                     : 0f;
                 return;
             }
 
             currentFuelTimer -= Time.deltaTime;
             fuelFillPercent = currentFuelDuration > 0
-                ? 1.0f - Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
+                ? Mathf.Clamp01(currentFuelTimer / currentFuelDuration)
                 : 0f;
 
             if (currentFuelTimer <= 0)
@@ -328,6 +335,69 @@ namespace Items.Overlays
             OnFuelFillChanged?.Invoke(_fillPercent);
 
             #endregion
+        }
+
+        public override void OnBlockDestroyed()
+        {
+            var (x, y) = BlockIdUtils.ToCell(blockId);
+            Vector2 pos = new Vector2(x * CellSize, y * CellSize);
+
+            if (!fuelSlot.isEmpty) Inventory.Singleton.Drop(fuelSlot.item, pos);
+            if (!resultSlot.isEmpty) Inventory.Singleton.Drop(resultSlot.item, pos);
+            foreach (Slot slot in cookingSlots)
+            {
+                if (!slot.isEmpty) Inventory.Singleton.Drop(slot.item, pos);
+            }
+        }
+        public string ToJson()
+        {
+            return JsonUtility.ToJson(new FurnaceData
+            {
+                cookingSlots = cookingSlots.Where(s => !s.isEmpty).Select(s => new SlotData
+                {
+                    id = s.id,
+                    itemId = s.isEmpty ? null : s.item.data.name,
+                    amount = s.isEmpty ? (short)0 : s.item.amount
+                }).ToArray(),
+                fuelSlot = new SlotData
+                {
+                    id = fuelSlot.id,
+                    itemId = fuelSlot.isEmpty ? null : fuelSlot.item.data.name,
+                    amount = fuelSlot.isEmpty ? (short)0 : fuelSlot.item.amount
+                },
+                resultSlot = new SlotData
+                {
+                    id = resultSlot.id,
+                    itemId = resultSlot.isEmpty ? null : resultSlot.item.data.name,
+                    amount = resultSlot.isEmpty ? (short)0 : resultSlot.item.amount
+                }
+            });
+        }
+
+        public void FromJson(string json)
+        {
+            FurnaceData data = JsonUtility.FromJson<FurnaceData>(json);
+            if (data == null) return;
+
+            ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+
+            for (int i = 0; i < data.cookingSlots.Length && i < cookingSlots.Length; i++)
+            {
+                SlotData s = data.cookingSlots[i];
+                cookingSlots[s.id].item = string.IsNullOrEmpty(s.itemId) ? null
+                    : new ItemStack(db.items.Find(item => item.name == s.itemId)) { amount = s.amount };
+                OnSlotChanged?.Invoke(s.id, cookingSlots[s.id].item);
+            }
+
+            fuelSlot.item = string.IsNullOrEmpty(data.fuelSlot.itemId) ? null
+                : new ItemStack(db.items.Find(item => item.name == data.fuelSlot.itemId)) { amount = data.fuelSlot.amount };
+
+            resultSlot.item = string.IsNullOrEmpty(data.resultSlot.itemId) ? null
+                          : new ItemStack(db.items.Find(item => item.name == data.resultSlot.itemId)) { amount = data.resultSlot.amount };
+
+            OnSlotChanged?.Invoke(fuelSlot.id, fuelSlot.item);
+
+            EvaluateCook();
         }
         #endregion
     }

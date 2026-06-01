@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Data;
+using Player;
 using UnityEngine;
 
 namespace Items
@@ -25,6 +25,8 @@ namespace Items
         public const short ColSlots = 5;
         public Slot[] slots = new Slot[HotbarSlots + ColSlots * RowSlots];
         public ItemStack hand => slots[handIndex].item;
+
+        [Header("Prefabs")][SerializeField] private GameObject itemEntityPrefab;
         public short handIndex
         {
             get => _handIndex; set
@@ -44,8 +46,8 @@ namespace Items
         #endregion
 
         #region Events
-        public event Action<int, ItemStack> OnSlotChanged;
-        public event Action<short> OnHandChanged;
+        public event System.Action<int, ItemStack> OnSlotChanged;
+        public event System.Action<short> OnHandChanged;
         #endregion
 
         #region Unity
@@ -91,7 +93,7 @@ namespace Items
 
         private bool _Add(ItemStack item, bool dryRun = false, bool stacked = true)
         {
-            if (item.data == null) return false;
+            if (item == null || item.data == null) return false;
             Slot slot;
             bool itemWasAdded = false;
 
@@ -117,8 +119,27 @@ namespace Items
         public void Drop(ItemStack item)
         {
             #region Drop
-            // TEMP
-            Add(item);
+            if (item == null || item.data == null) return;
+
+            if (PlayerMovement.Singleton == null) return;
+            Drop(item, PlayerMovement.Singleton.gameObject.transform.position);
+            #endregion
+        }
+
+        public void Drop(ItemStack item, Vector2 pos)
+        {
+            #region Drop
+            if (item == null || item.data == null) return;
+
+            GameObject droppedItem = Instantiate(itemEntityPrefab, pos, Quaternion.identity);
+            Vector2 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
+            droppedItem.transform.position += (Vector3)randomOffset;
+
+            if (droppedItem.TryGetComponent(out ItemEntity entity))
+            {
+                entity.Initialize(item);
+            }
+
             #endregion
         }
 
@@ -204,6 +225,7 @@ namespace Items
             #endregion
         }
 
+
         private void PlayPickupSound()
         {
             if (pickupSound != null && isInitialized)
@@ -211,11 +233,70 @@ namespace Items
                 // Plays the sound directly at the Main Camera's position
                 if (Camera.main != null)
                 {
-                    AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position); }
+                    AudioSource.PlayClipAtPoint(pickupSound, Camera.main.transform.position);
+                }
                 else
                 {
                     Debug.LogWarning("Camera.main is null! Make sure your camera has the 'MainCamera' tag.");
                 }
+            }
+        }
+
+        public string ToJson()
+        {
+            var data = new InventoryData
+            {
+                slots = new SlotData[slots.Length]
+            };
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                Slot slot = slots[i];
+                if (slot.isEmpty) continue;
+
+                data.slots[i] = new SlotData
+                {
+                    id = slot.id,
+                    itemId = slot.isEmpty ? null : slot.item.data.name,
+                    amount = slot.isEmpty ? (short)0 : slot.item.amount,
+                    duration = slot.isEmpty ? 0f : slot.item.duration
+                };
+            }
+
+            return JsonUtility.ToJson(data);
+
+        }
+        public void FromJson(string json)
+        {
+            InventoryData data = JsonUtility.FromJson<InventoryData>(json);
+            if (data == null) return;
+
+            ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+
+            for (int i = 0; i < data.slots.Length && i < slots.Length; i++)
+            {
+                SlotData slotData = data.slots[i];
+
+                if (string.IsNullOrEmpty(slotData.itemId) || slotData.amount <= 0)
+                {
+                    slots[i].item = null;
+                }
+                else
+                {
+                    ItemData itemData = db.items.Find(item => item.name == slotData.itemId);
+                    if (itemData != null)
+                        slots[slotData.id].item = new ItemStack(itemData) { amount = slotData.amount };
+                    else
+                        Debug.LogWarning($"[Inventory] Unknown item id '{slotData.itemId}' in slot {i}");
+                }
+
+                OnSlotChanged?.Invoke(slotData.id, slots[slotData.id].item);
+            }
+
+            foreach (ItemStackBuilder builder in startingItems)
+            {
+                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
+                Add(itemStack);
             }
         }
         #endregion

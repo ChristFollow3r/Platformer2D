@@ -15,7 +15,6 @@ namespace World
 
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
-        [SerializeField] private string worldSeed;
 
         [Header("Player Settings")]
         [SerializeField]
@@ -34,6 +33,10 @@ namespace World
         public int worldHeight = 90;
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
+
+        [Header("Autosave")]
+        [SerializeField] private float autosaveInterval = 60f;
+        private float _autosaveTimer;
 
         public static WorldManager Instance { get; private set; }
 
@@ -70,10 +73,12 @@ namespace World
 
         private void Start()
         {
+            WorldData.dirtyBlocks.Clear();
+            WorldData.dirtyProps.Clear();
+
             WorldData.World = new Data.World(worldWidth, worldHeight);
             chunks = new Chunk[(worldWidth + 15) / Chunk.ChunkSize, (worldHeight + 15) / Chunk.ChunkSize];
             cameraPosition = mainCamera.transform.position;
-            seedOffset = ComputeSeedOffset(worldSeed);
 
             lightmapTexture = new Texture2D(worldWidth, worldHeight, TextureFormat.RGBAHalf, false);
             lightmapTexture.filterMode = FilterMode.Bilinear;
@@ -83,19 +88,86 @@ namespace World
             tilemapMaterial.SetVector("_WorldSize", new Vector2(worldWidth, worldHeight));
             tilemapMaterial.SetFloat("_CellSize", gridParent.cellSize.x);
 
-            GenerateWorld();
-            GenerateProps();
+            if (WorldSerializer.isNewWorld) NewWorld();
+            else LoadWorld();
+
             CalculateLighting();
             ApplyLightingToTexture();
             PopulateChunks();
             UpdateChunks();
             SpawnPlayer();
+
+            if (!WorldSerializer.isNewWorld)
+                WorldSerializer.LoadPlayer();
+        }
+
+        private void NewWorld()
+        {
+            seedOffset = ComputeSeedOffset(WorldSerializer.Seed);
+            Random.InitState(WorldSerializer.Seed.GetHashCode());
+
+            WorldData.isGenerating = true;
+            GenerateWorld();
+            GenerateProps();
+            WorldData.isGenerating = false;
+            WorldSerializer.Save();
+        }
+
+        private void LoadWorld()
+        {
+            Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
+
+            WorldSaveData save = WorldSerializer.Load();
+            Random.InitState(save.seed.GetHashCode());
+            if (save == null)
+            {
+                Debug.LogError("[WorldManager] Save data is null, falling back to new world.");
+                NewWorld();
+                return;
+            }
+
+            Debug.Log($"[WorldManager] Applying seed: '{save.seed}'");
+            seedOffset = ComputeSeedOffset(save.seed);
+
+            WorldData.isGenerating = true;
+            GenerateWorld();
+            GenerateProps();
+            WorldData.isGenerating = false;
+            Debug.Log("[WorldManager] Base generation done.");
+
+            WorldData.isGenerating = true;
+            foreach (var b in save.blocks)
+                WorldData.World.SetBlockType(b.x, b.y, b.type);
+            foreach (var p in save.props)
+                WorldData.World.SetPropType(p.x, p.y, p.type);
+            WorldData.isGenerating = false;
+            Debug.Log($"[WorldManager] Applied {save.blocks.Length} block diffs, {save.props.Length} prop diffs.");
+
+            foreach (var b in save.blocks)
+                WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
+            foreach (var p in save.props)
+                WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
+
+            Debug.Log("[WorldManager] Loading overlays...");
+            WorldSerializer.LoadOverlays();
+            Debug.Log("[WorldManager] LoadWorld complete.");
         }
 
         private void Update()
         {
             if (CheckCameraMovement())
                 UpdateChunks();
+
+            if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
+            {
+                _autosaveTimer += Time.deltaTime;
+                if (_autosaveTimer >= autosaveInterval)
+                {
+                    _autosaveTimer = 0f;
+                    WorldSerializer.Save();
+                    Debug.Log("[WorldManager] Autosaved.");
+                }
+            }
         }
 
         public float GetSurfaceY(float worldX)
@@ -621,6 +693,7 @@ namespace World
             playerObject.transform.position = currentSpawnPoint;
         }
 
+
         public bool TrySetSpawnFromAnchor(Vector3 interactWorldPosition)
         {
             float cellSize = gridParent.cellSize.x;
@@ -639,6 +712,15 @@ namespace World
             }
 
             return false;
+        }
+        private void OnApplicationQuit()
+        {
+            if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
+            {
+                WorldSerializer.Save();
+                Debug.Log("[WorldManager] Saved on quit.");
+            }
+
         }
     }
 }

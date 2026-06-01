@@ -168,7 +168,7 @@ namespace Player
                                 }
 
                                 Prop propHitData = WorldData.PropDictionary[hitType];
-                                float hitPower = Equipment.Singleton.GetMiningPower();
+                                float hitPower = Equipment.Singleton.GetHitPower();
                                 currentPropDamage += hitPower;
 
                                 // --- NEW: VISUAL AND AUDIO FEEDBACK ---
@@ -231,6 +231,8 @@ namespace Player
             }
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
+
+            if (clickedBlock == BlockType.Air) return;
 
             ItemData blockHitData = WorldData.BlockDictionary[clickedBlock];
 

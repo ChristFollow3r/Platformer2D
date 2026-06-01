@@ -133,6 +133,13 @@ namespace Items.Overlays
             }
             #endregion
         }
+
+        public string ToJson()
+        {
+            CloseOverlay();
+            return "{}";
+        }
+        public void FromJson(string json) { }
         #endregion
     }
 }

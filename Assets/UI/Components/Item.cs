@@ -17,7 +17,17 @@ namespace UI.Components
         #region Data
         [UxmlAttribute] public ItemData item { get => _item; set => SetItem(value); }
         [UxmlAttribute] public Slot slot { get => _slot; set => _slot = value; }
-        [UxmlAttribute] public int amount { get => int.Parse(amountElm.text); set => amountElm.text = value.ToString(); }
+        [UxmlAttribute]
+        public int amount
+        {
+            get => int.Parse(amountElm.text); set
+            {
+
+                if (value == 1) amountElm.style.display = DisplayStyle.None;
+                else amountElm.style.display = DisplayStyle.Flex;
+                amountElm.text = value.ToString();
+            }
+        }
 
         private Vector2 _dragOffset = new Vector2(50, 50);
         private bool isDraggable;

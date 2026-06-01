@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+using Data;
 using Items.Utils;
+using Player;
 using UnityEngine;
 
 
@@ -39,11 +41,15 @@ namespace Items.Overlays
         #region Events
         public event Action<int, ItemStack> OnSlotChanged;
         public event Action<bool, Mod> OnModChange;
+
+        private RuntimeAnimatorController defaultController;
+        bool modQueued = false;
         #endregion
 
         #region Contructor
-        public Equipment() : base(ulong.MinValue, Player.OverlayType.Inventory)
+        public Equipment(RuntimeAnimatorController defaultController) : base(ulong.MinValue, Player.OverlayType.Inventory)
         {
+            this.defaultController = defaultController;
             Init();
         }
         #endregion
@@ -69,27 +75,52 @@ namespace Items.Overlays
         public override void Tick()
         {
             #region Tick
+
+
+
             ItemStack mod = equipmentSlots[(int)EquipmentType.Mod].item;
-            if (mod == null) return;
+            if (mod == null)
+            {
+
+                UIController.Singleton.UpdateMod(0, 1);
+                return;
+            }
+            else
+            {
+                if (modQueued)
+                {
+
+                    GameObject playerGO = GameObject.FindGameObjectWithTag("Player");
+                    if (playerGO)
+                    {
+                        playerGO.GetComponent<Animator>().runtimeAnimatorController = mod.data.modData.controller;
+                        modQueued = false;
+                    }
+                }
+            }
 
             mod.duration -= Time.deltaTime;
+            UIController.Singleton.UpdateMod(mod.duration, mod.data.modData.duration);
             if (mod.duration >= 0) return;
             ClearSlot((int)EquipmentType.Mod);
-            OnModChange?.Invoke(false, 0);
+
             #endregion
         }
 
-        public ItemStack AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
+        public void AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
         {
             #region AddEquipment
             Slot slot = equipmentSlots[(int)equipmentType];
-            ItemStack prev = slot.item;
-
-            slot.item = itemStack;
+            slot.Add(itemStack);
             OnSlotChanged?.Invoke(slot.id, slot.item);
 
-            if (equipmentType == EquipmentType.Mod) OnModChange?.Invoke(true, itemStack.data.modData.mod);
-            return prev;
+            if (equipmentType == EquipmentType.Mod)
+            {
+                OnModChange?.Invoke(true, itemStack.data.modData.mod);
+                GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
+                if (!playerGo) return;
+                playerGo.GetComponent<Animator>().runtimeAnimatorController = itemStack.data.modData.controller;
+            }
             #endregion
         }
 
@@ -122,8 +153,7 @@ namespace Items.Overlays
 
                 if (!itemStack.data.isConsumable) return false;
                 if ((int)itemStack.data.equipmentType != slotId) return false;
-                ItemStack prev = AddEquipment(itemStack.data.equipmentType, itemStack);
-                if (prev != null) Inventory.Singleton.Add(prev);
+                AddEquipment(itemStack.data.equipmentType, itemStack);
                 return true;
             }
 
@@ -188,6 +218,15 @@ namespace Items.Overlays
                     RemoveAmount(craftingSlots[i].id, 1);
                 }
             }
+            if (slot.id == (int)EquipmentType.Mod)
+            {
+                GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
+                if (playerGo)
+                {
+                    playerGo.GetComponent<Animator>().runtimeAnimatorController = defaultController;
+                    OnModChange?.Invoke(false, 0);
+                }
+            }
 
             return itemStack;
             #endregion
@@ -225,6 +264,58 @@ namespace Items.Overlays
             if (modItem.data.modData == null) return 1f;
             return modItem.data.modData.minigPower;
             #endregion
+        }
+
+        public float GetHitPower()
+        {
+            ItemStack modItem = equipmentSlots[(int)EquipmentType.Mod].item;
+            if (modItem == null) return 1f;
+            if (modItem.data.modData == null) return 1f;
+            return modItem.data.modData.attackPower;
+        }
+
+        public int GetDefence()
+        {
+            ItemStack modItem = equipmentSlots[(int)EquipmentType.Mod].item;
+            if (modItem == null) return 0;
+            if (modItem.data.modData == null) return 0;
+            return modItem.data.modData.defence;
+        }
+
+        public string ToJson()
+        {
+            CloseOverlay();
+            return JsonUtility.ToJson(new EquipmentData
+            {
+                equipmentSlots = equipmentSlots.Where(s => !s.isEmpty).Select(s => new SlotData
+                {
+                    id = s.id,
+                    itemId = s.isEmpty ? null : s.item.data.name,
+                    amount = s.isEmpty ? (short)0 : s.item.amount,
+                    duration = s.isEmpty ? 0f : s.item.duration
+                }).ToArray()
+            });
+        }
+
+        public void FromJson(string json)
+        {
+            EquipmentData data = JsonUtility.FromJson<EquipmentData>(json);
+            if (data == null) return;
+
+            ItemDatabase db = Resources.Load<ItemDatabase>("ItemDatabase");
+
+            for (int i = 0; i < data.equipmentSlots.Length && i < equipmentSlots.Length; i++)
+            {
+                SlotData s = data.equipmentSlots[i];
+                equipmentSlots[s.id].item = string.IsNullOrEmpty(s.itemId) ? null
+                    : new ItemStack(db.items.Find(item => item.name == s.itemId)) { amount = s.amount, duration = s.duration };
+                OnSlotChanged?.Invoke(s.id, equipmentSlots[s.id].item);
+
+                if (s.id == (int)EquipmentType.Mod && !equipmentSlots[s.id].isEmpty)
+                {
+                    modQueued = true;
+                }
+            }
         }
         #endregion
     }
