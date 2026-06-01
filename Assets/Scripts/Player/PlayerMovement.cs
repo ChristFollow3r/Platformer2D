@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Shared;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -353,7 +354,8 @@ namespace Player
 
         public string Serialize()
         {
-            return JsonUtility.ToJson(new PlayerSaveData() { pos = transform.position });
+            int health = GetComponent<Health>().currentHealth;
+            return JsonUtility.ToJson(new PlayerSaveData() { pos = transform.position, health = health });
         }
 
         public void Deserialize(string json)
@@ -365,6 +367,8 @@ namespace Player
             rb.position = safePos;
             rb.constraints = RigidbodyConstraints2D.FreezePosition | RigidbodyConstraints2D.FreezeRotation;
             Physics2D.SyncTransforms();
+
+            GetComponent<Health>().SetHealth(save.health);
         }
     }
 

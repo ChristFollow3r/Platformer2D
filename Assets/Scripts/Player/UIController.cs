@@ -36,7 +36,6 @@ namespace Player
             }
 
             Singleton = this;
-
             #endregion
         }
 
@@ -53,6 +52,7 @@ namespace Player
         [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
         private VisualElement nameShower;
+        private VisualElement healthElm;
 
 
         private VisualElement overlayRoot;
@@ -166,6 +166,7 @@ namespace Player
             menuRoot.Q<Button>("Save").clicked += () => Debug.Log("Save");
             menuRoot.Q<Button>("Exit").clicked += () => Application.Quit();
 
+            healthElm = hud.rootVisualElement.Q("health");
             #endregion
         }
 
@@ -573,6 +574,11 @@ namespace Player
             }
 
             gridContainer.Add(resultWrapper);
+        }
+        public void UpdateHealth(int health, int maxHealth)
+        {
+            float percent = Mathf.Clamp01((float)health / (float)maxHealth);
+            healthElm.style.width = Length.Percent(percent * 100f);
         }
 
 
