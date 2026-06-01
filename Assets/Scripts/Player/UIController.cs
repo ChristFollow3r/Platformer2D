@@ -447,49 +447,50 @@ namespace Player
             {
                 leftColumn.Add(slider);
 
-                // 1. Set the slider to take up more of the column's space
-                slider.style.marginTop = 12;
-                slider.style.marginBottom = 12;
-                slider.style.width = 500; // Increased width
-                slider.style.height = 35;
+                // 1. Force the parent container
+                slider.style.marginTop = 15;
+                slider.style.marginBottom = 15;
+                slider.style.width = 350;
+                slider.style.height = 40;
                 slider.style.alignSelf = Align.Center;
                 slider.style.flexDirection = FlexDirection.Row;
+                slider.style.flexShrink = 0; // Prevent shrinking
 
-                // 2. Make the Label font bigger
+                // 2. Style the Label
                 Label label = slider.Q<Label>();
                 if (label != null)
                 {
-                    label.style.width = 260;
-                    label.style.minWidth = 220;
-                    label.style.marginRight = 10;
+                    label.style.width = 130;
+                    label.style.minWidth = 130;
+                    label.style.flexShrink = 0; // Ensure label doesn't get crushed
                     label.style.fontSize = 20;
                     label.style.unityTextAlign = TextAnchor.MiddleLeft;
                 }
 
-                // 3. FORCE the drag container to stretch and fill the slider width
+                // 3. Force the drag container to fill space
                 var dragContainer = slider.Q<VisualElement>("unity-drag-container");
                 if (dragContainer != null)
                 {
                     dragContainer.style.flexGrow = 1;
+                    dragContainer.style.flexShrink = 1;
+                    dragContainer.style.marginLeft = 10;
                 }
 
-                // 4. Style the tracker bar
+                // 4. Tracker
                 var tracker = slider.Q<VisualElement>("unity-tracker");
                 if (tracker != null)
                 {
-                    tracker.style.height = 10;
-                    tracker.style.top = new Length(50, LengthUnit.Percent);
-                    tracker.style.translate = new StyleTranslate(new Translate(0, new Length(-50, LengthUnit.Percent), 0));
+                    tracker.style.height = 12;
+                    tracker.style.flexGrow = 1; // Ensure the tracker fills the drag container
                 }
 
-                // 5. Style the dragger knob
+                // 5. Dragger (Knob)
                 var dragger = slider.Q<VisualElement>("unity-dragger");
                 if (dragger != null)
                 {
-                    dragger.style.width = 16;
-                    dragger.style.height = 26;
-                    dragger.style.top = new Length(50, LengthUnit.Percent);
-                    dragger.style.translate = new StyleTranslate(new Translate(0, new Length(-50, LengthUnit.Percent), 0));
+                    dragger.style.width = 20;
+                    dragger.style.height = 30;
+                    dragger.style.flexShrink = 0; // Don't let the knob shrink
                 }
             }
 
