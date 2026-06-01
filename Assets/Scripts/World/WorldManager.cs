@@ -620,5 +620,25 @@ namespace World
         {
             playerObject.transform.position = currentSpawnPoint;
         }
+
+        public bool TrySetSpawnFromAnchor(Vector3 interactWorldPosition)
+        {
+            float cellSize = gridParent.cellSize.x;
+            int gridX = Mathf.FloorToInt(interactWorldPosition.x / cellSize);
+            int gridY = Mathf.FloorToInt(interactWorldPosition.y / cellSize);
+
+            if (!WorldData.World.SafeCheck(gridX, gridY)) return false;
+
+            if (WorldData.World.GetBlockTypes(gridX, gridY) == BlockType.spawnAnchor)
+            {
+                float spawnX = (gridX * cellSize) + (cellSize / 2f);
+                float spawnY = (gridY + 1) * cellSize;
+
+                SetSpawnPoint(new Vector3(spawnX, spawnY, 0));
+                return true;
+            }
+
+            return false;
+        }
     }
 }

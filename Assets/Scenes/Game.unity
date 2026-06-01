@@ -705,6 +705,10 @@ MonoBehaviour:
     amount: 64
     durability: 0
     duration: 0
+  - data: {fileID: 11400000, guid: c15f07e36b3d784419787d7e42331221, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
   pickupSound: {fileID: 8300000, guid: 30104bd62d2f2364f8cfce8f6a9912a7, type: 3}
 --- !u!114 &448283168
 MonoBehaviour:
@@ -1420,6 +1424,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 2d06c742202d42e4096f5425730eb821, type: 2}
   - {fileID: 11400000, guid: 833de8d64f46b08439bffe50fe855a3a, type: 2}
   - {fileID: 11400000, guid: ef10172a4dcf57c41b1038256c54d40b, type: 2}
+  - {fileID: 11400000, guid: c15f07e36b3d784419787d7e42331221, type: 2}
   props:
   - {fileID: 11400000, guid: d19a8d6f4bb7ea14fba6df22cb9d75f9, type: 2}
   - {fileID: 11400000, guid: e73fc7d8ff155524583b98ed45590fac, type: 2}

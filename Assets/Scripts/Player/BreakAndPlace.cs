@@ -104,6 +104,17 @@ namespace Player
                 return;
             }
 
+            if (clickedBlock == BlockType.spawnAnchor)
+            {
+                bool spawnUpdated = WorldManager.Instance.TrySetSpawnFromAnchor(worldMousePos);
+
+                if (spawnUpdated)
+                {
+                    Debug.Log($"Spawn anchor activated! New spawn point: {WorldManager.Instance.currentSpawnPoint}");
+                }
+                return;
+            }
+
             cachedTargetPosition = worldMousePos;
         }
 
