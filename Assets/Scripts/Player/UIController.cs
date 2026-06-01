@@ -279,9 +279,8 @@ namespace Player
         public void DestroyEntity(ulong blockId)
         {
             #region DestroyEntity
-
+            overlaysByBlockId[blockId].OnBlockDestroyed();
             overlaysByBlockId.Remove(blockId);
-
             #endregion
         }
 

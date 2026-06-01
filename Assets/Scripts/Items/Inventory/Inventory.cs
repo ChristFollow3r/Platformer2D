@@ -114,7 +114,16 @@ namespace Items
             if (item == null || item.data == null) return;
 
             if (PlayerMovement.Singleton == null) return;
-            GameObject droppedItem = Instantiate(itemEntityPrefab, PlayerMovement.Singleton.gameObject.transform.position, Quaternion.identity);
+            Drop(item, PlayerMovement.Singleton.gameObject.transform.position);
+            #endregion
+        }
+
+        public void Drop(ItemStack item, Vector2 pos)
+        {
+            #region Drop
+            if (item == null || item.data == null) return;
+
+            GameObject droppedItem = Instantiate(itemEntityPrefab, pos, Quaternion.identity);
             Vector2 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
             droppedItem.transform.position += (Vector3)randomOffset;
 
