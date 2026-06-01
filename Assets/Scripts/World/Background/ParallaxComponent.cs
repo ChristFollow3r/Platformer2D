@@ -48,6 +48,7 @@ namespace World.Background
 
         public void SetAlpha(float alpha)
         {
+            if (allRenderers == null) return;
             // 3. Now we just loop through the cached array. Zero performance hit!
             foreach (var sr in allRenderers)
             {
