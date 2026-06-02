@@ -45,9 +45,8 @@ namespace Player
         #region Data
 
         [Header("Menu Elements")]
-        [SerializeField]
-        private UIDocument pauseMenu;
-
+        [SerializeField] private UIDocument pauseMenu;
+        [SerializeField] private UIDocument thankScreen;
         public bool isMenuOpen = false;
 
         [Header("Elements")][SerializeField] private UIDocument overlay;
@@ -206,7 +205,23 @@ namespace Player
 
             healthElm = hud.rootVisualElement.Q("health");
             modElm = hud.rootVisualElement.Q("mod");
+
+            thankScreen.rootVisualElement.Q<Button>("continue").clicked += RemoveThankyouScreen;
             #endregion
+        }
+
+        public void ShowThankYouScreen()
+        {
+            Time.timeScale = 0f;
+            thankScreen.rootVisualElement.Q("root").style.display = DisplayStyle.Flex;
+            hud.rootVisualElement.style.display = DisplayStyle.None;
+        }
+
+        public void RemoveThankyouScreen()
+        {
+            Time.timeScale = 1f;
+            thankScreen.rootVisualElement.Q("root").style.display = DisplayStyle.None;
+            pauseMenu.rootVisualElement.style.display = DisplayStyle.Flex;
         }
 
         public void ToggleMenu()

@@ -683,8 +683,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
   itemEntityPrefab: {fileID: 930996324388520816, guid: 9b10d5916f6136f458b805b4050ae45b, type: 3}
   startingItems:
-  - data: {fileID: 11400000, guid: 23d96971da1e6394299f660d7b366d94, type: 2}
-    amount: 5
+  - data: {fileID: 11400000, guid: c22ac466a56ef44478706e564ed88ad2, type: 2}
+    amount: 1
     duration: 0
   pickupSound: {fileID: 8300000, guid: 30104bd62d2f2364f8cfce8f6a9912a7, type: 3}
 --- !u!114 &448283168
