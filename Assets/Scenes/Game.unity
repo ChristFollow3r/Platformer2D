@@ -682,7 +682,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
   itemEntityPrefab: {fileID: 930996324388520816, guid: 9b10d5916f6136f458b805b4050ae45b, type: 3}
-  startingItems: []
+  startingItems:
+  - data: {fileID: 11400000, guid: d312196429a153d4d9f178894b171bb1, type: 2}
+    amount: 64
+    duration: 0
+  - data: {fileID: 11400000, guid: e0b8c3884682f624398d6ecbd73e0fce, type: 2}
+    amount: 64
+    duration: 0
+  - data: {fileID: 11400000, guid: 919fc6cc2c798ef47b20a29bb91c5381, type: 2}
+    amount: 64
+    duration: 0
+  - data: {fileID: 11400000, guid: fa66d1ec14201da43b8c63eac2bde9bc, type: 2}
+    amount: 64
+    duration: 0
+  - data: {fileID: 11400000, guid: c6e592467daa76543b9290c9f99126f2, type: 2}
+    amount: 64
+    duration: 0
+  - data: {fileID: 11400000, guid: f03f1d63448d58a438b6f2e8331fc4fe, type: 2}
+    amount: 64
+    duration: 0
   pickupSound: {fileID: 8300000, guid: 30104bd62d2f2364f8cfce8f6a9912a7, type: 3}
 --- !u!114 &448283168
 MonoBehaviour:

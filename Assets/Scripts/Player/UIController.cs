@@ -226,6 +226,7 @@ namespace Player
         public void ShowThankYouScreen()
         {
             Time.timeScale = 0f;
+            CloseOverlay();
             thankScreen.rootVisualElement.Q("root").style.display = DisplayStyle.Flex;
             hud.rootVisualElement.style.display = DisplayStyle.None;
         }

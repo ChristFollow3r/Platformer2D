@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Items.Utils;
+using Player;
 using UnityEngine;
 
 
@@ -47,7 +48,6 @@ namespace Items.Overlays
         {
             #region EvaluateCraft
             ItemStack result = CraftingUtils.EvaluateCraft(craftingSlots.Select(s => s.item).ToList(), 4);
-            Debug.Log($"EvaluateCraft result: {result?.data?.name ?? "null"}");
             resultSlot.item = null;
             if (result != null) resultSlot.Add(result);
             OnSlotChanged?.Invoke(resultSlot.id, resultSlot.item);
@@ -104,9 +104,7 @@ namespace Items.Overlays
             if (slot.isEmpty) return null;
 
             ItemStack itemStack = slot.item;
-            slot.item = null;
 
-            OnSlotChanged?.Invoke(slotId, null);
 
             if (isResultSlot)
             {
@@ -115,7 +113,16 @@ namespace Items.Overlays
                     if (craftingSlots[i].isEmpty) continue;
                     RemoveAmount(craftingSlots[i].id, 1);
                 }
+                Debug.Log(itemStack?.data?.name ?? "xd");
+                if (itemStack.data.name == "Flex")
+                {
+                    UIController.Singleton.ShowThankYouScreen();
+                }
             }
+
+            slot.item = null;
+
+            OnSlotChanged?.Invoke(slotId, null);
 
             EvaluateCraft();
             return itemStack;
