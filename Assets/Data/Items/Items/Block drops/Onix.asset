@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: Onix
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: Onix
+  name: Onyx
   sprite: {fileID: -4572420196032167209, guid: 3f23e9687dd55b548a28e20d16b2a4da, type: 3}
   stack: 16
   isPlacable: 0
@@ -24,3 +24,5 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}
