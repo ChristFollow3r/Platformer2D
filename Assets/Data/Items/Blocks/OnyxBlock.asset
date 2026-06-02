@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: OnyxBlock
   m_EditorClassIdentifier: 
-  name: Onyx
+  name: Onyx Block
   sprite: {fileID: 8526142464161278961, guid: 8a2ac09da92fc0d4bac2824d8baa3dfc, type: 3}
   stack: 64
   isPlacable: 1

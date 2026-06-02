@@ -28,6 +28,8 @@ namespace UI.Components
                 amountElm.text = value.ToString();
             }
         }
+        [UxmlAttribute]
+        public float duration;
 
         private Vector2 _dragOffset = new Vector2(50, 50);
         private bool isDraggable;
@@ -120,6 +122,7 @@ namespace UI.Components
 
             Slot ghostSlot = orphanAfterPickup ? null : slot;
             IInventory ghostInventory = orphanAfterPickup ? Items.Inventory.Singleton : inventory;
+
             if (e.button == 1)
             {
                 short stay, leave;
@@ -130,6 +133,7 @@ namespace UI.Components
                 {
                     item = item,
                     amount = leave,
+                    duration = duration,
                     slot = ghostSlot,
                 };
 
@@ -153,6 +157,7 @@ namespace UI.Components
                 {
                     item = item,
                     amount = amount,
+                    duration = duration,
                     slot = ghostSlot,
                 };
 
@@ -168,6 +173,7 @@ namespace UI.Components
                 currentDraggedItem = ghost;
                 if (ghost.panel != null) ghost.panel.visualTree.RegisterCallback<PointerMoveEvent>(ghost.OnGlobalPointerMove);
 
+                Debug.Log($"Creating ghost with amount {amount}");
                 if (slot != null) inventory.ClearSlot(slot.slotId);
             }
         }
@@ -175,7 +181,7 @@ namespace UI.Components
         private void DropItem(PointerDownEvent e)
         {
             short dropAmount = e.button == 1 ? (short)1 : (short)amount;
-            ItemStack stack = new(item) { amount = dropAmount };
+            ItemStack stack = new(item) { amount = dropAmount, duration = duration };
             List<VisualElement> foundElements = new();
             panel.PickAll(e.position, foundElements);
 

@@ -8,7 +8,8 @@ using UnityEngine.UIElements;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using Data;
-using Scriptable_Objects_Scripts;
+using UnityEngine.InputSystem;
+using Shared;
 
 namespace Player
 {
@@ -46,9 +47,8 @@ namespace Player
         #region Data
 
         [Header("Menu Elements")]
-        [SerializeField]
-        private UIDocument pauseMenu;
-
+        [SerializeField] private UIDocument pauseMenu;
+        [SerializeField] private UIDocument thankScreen;
         public bool isMenuOpen = false;
 
         [Header("Elements")][SerializeField] private UIDocument overlay;
@@ -80,6 +80,8 @@ namespace Player
         [Header("Settings Panel")] private VisualElement settingsContainer;
         private Button closeSettingsBtn;
 
+        private Label itemNameElm;
+
         #endregion
 
         #region Events
@@ -108,7 +110,7 @@ namespace Player
             #region Start
 
             CloseOverlay();
-
+            playerInput.UI.Hand.performed += OnHandNumber;
             #endregion
         }
 
@@ -117,6 +119,7 @@ namespace Player
             #region Update
             CheckOverlay();
             MoveHand();
+            Consume();
             foreach (Overlay overlay in overlaysByBlockId.Values)
             {
                 overlay.Tick();
@@ -207,11 +210,31 @@ namespace Player
             if (saveBtn != null) saveBtn.clicked += () => Debug.Log("Save");
 
             Button exitBtn = menuRoot.Q<Button>("Exit");
-            if (exitBtn != null) exitBtn.clicked += () => SceneManager.LoadScene("Menu");
+            if (exitBtn != null) exitBtn.clicked += () =>
+            {
+                WorldSerializer.Save();
+                SceneManager.LoadScene("Menu");
+            };
 
             healthElm = hud.rootVisualElement.Q("health");
             modElm = hud.rootVisualElement.Q("mod");
+            itemNameElm = hud.rootVisualElement.Q<Label>("itemName");
+            thankScreen.rootVisualElement.Q<Button>("continue").clicked += RemoveThankyouScreen;
             #endregion
+        }
+
+        public void ShowThankYouScreen()
+        {
+            Time.timeScale = 0f;
+            thankScreen.rootVisualElement.Q("root").style.display = DisplayStyle.Flex;
+            hud.rootVisualElement.style.display = DisplayStyle.None;
+        }
+
+        public void RemoveThankyouScreen()
+        {
+            Time.timeScale = 1f;
+            thankScreen.rootVisualElement.Q("root").style.display = DisplayStyle.None;
+            pauseMenu.rootVisualElement.style.display = DisplayStyle.Flex;
         }
 
         public void ToggleMenu()
@@ -248,7 +271,11 @@ namespace Player
                 return;
             }
 
-            if (playerInput.UI.CloseOverlay.WasPressedThisFrame() && isOverlayOpen) CloseOverlay();
+            if (playerInput.UI.CloseOverlay.WasPressedThisFrame())
+            {
+                if (isOverlayOpen) CloseOverlay();
+                else ToggleMenu();
+            }
 
             #endregion
         }
@@ -380,7 +407,18 @@ namespace Player
             if (move.y > 0) Items.Inventory.Singleton.handIndex += 1;
             else Items.Inventory.Singleton.handIndex -= 1;
 
+
             #endregion
+        }
+
+        private void OnHandNumber(InputAction.CallbackContext ctx)
+        {
+            string name = ctx.control.name;
+            if (!int.TryParse(name, out int digit)) return;
+            int slot = (digit == 0) ? 9 : digit - 1;
+            if (slot >= Items.Inventory.HotbarSlots) return;
+
+            Items.Inventory.Singleton.handIndex = (short)slot;
         }
 
         public void ShowName(string name, Vector2 pos)
@@ -556,6 +594,7 @@ namespace Player
                 "Wall Slide: Hold A / D on wall",
                 "Attack: Right Click",
                 "Mine: Left Click",
+                "Consume: R",
                 "Build: Middle Mouse - Mouse Wheel"
             };
 
@@ -919,6 +958,8 @@ namespace Player
 
         public void DeserializeAll(string json)
         {
+            Debug.Log($"De-Serializing aswell!");
+
             SaveFile save = JsonUtility.FromJson<SaveFile>(json);
             if (save?.overlays == null) return;
 
@@ -935,6 +976,33 @@ namespace Player
                 Overlay overlay = CreateOverlay(entry.blockId, type);
                 ((IInventory)overlay).FromJson(entry.data);
             }
+        }
+
+        public void SetItemName(string name)
+        {
+            itemNameElm.text = name;
+        }
+
+        private void Consume()
+        {
+            if (!playerInput.Player.Consume.WasPressedThisFrame()) return;
+            ItemStack hand = Items.Inventory.Singleton.hand;
+            if (hand == null || !hand.data.isConsumable || hand.data.equipmentType == Items.Overlays.EquipmentType.Mod) return;
+
+            if (hand.data.name == "Slime Essence")
+            {
+                Health h = PlayerMovement.Singleton.GetComponent<Health>();
+                int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 25);
+                h.SetHealth(newHp);
+            }
+            else if (hand.data.name == "Health Potion")
+            {
+                Health h = PlayerMovement.Singleton.GetComponent<Health>();
+                int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 80);
+                h.SetHealth(newHp);
+            }
+            Items.Inventory.Singleton.RemoveFromHand();
+
         }
         #endregion
     }

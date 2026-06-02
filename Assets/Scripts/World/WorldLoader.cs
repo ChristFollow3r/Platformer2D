@@ -1,4 +1,5 @@
 using System.Collections;
+using Sounds.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
@@ -47,16 +48,20 @@ public class WorldLoader : MonoBehaviour
 
     private IEnumerator LoadSceneAsync(string sceneName)
     {
+        MenuMusicManager.Instance.FadeOutAndDestroy();
+
         Scene loaderScene = gameObject.scene;
 
         AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         load.allowSceneActivation = false;
         MainMenuUI.Singleton.SetLoading();
 
-        if (Sounds.UI.MenuMusicManager.Instance != null)
-        {
-            Sounds.UI.MenuMusicManager.Instance.FadeOutAndDestroy();
-        }
+        // if (Sounds.UI.MenuMusicManager.Instance != null)
+        // {
+        //     Sounds.UI.MenuMusicManager.Instance.FadeOutAndDestroy();
+        // }
+
+
 
         while (load.progress < 0.9f)
         {

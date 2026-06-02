@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using Data;
+using Items;
 using Player;
 using UnityEngine;
 
@@ -15,10 +16,20 @@ public class InventoryData
 [Serializable]
 public class SlotData
 {
+
     public int id;
     public string itemId;
     public short amount;
     public float duration;
+    public SlotData(Slot slot)
+    {
+        id = slot.id;
+        if (slot.isEmpty) return;
+
+        itemId = slot.item.data.name;
+        amount = slot.item.amount;
+        duration = slot.item.duration;
+    }
 }
 
 [Serializable]

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: StoneBlock
   m_EditorClassIdentifier: 
-  name: Stone
+  name: Stone Block
   sprite: {fileID: 3452003437791708593, guid: 88f18940e13e28c448a34e17becb540e, type: 3}
   stack: 64
   isPlacable: 1

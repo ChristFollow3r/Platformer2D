@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: CopperBlock
   m_EditorClassIdentifier: 
-  name: Copper
+  name: Copper Block
   sprite: {fileID: 6398492527668056779, guid: 75ea879725e13a547a6763b5a8b2a5a7, type: 3}
   stack: 64
   isPlacable: 1

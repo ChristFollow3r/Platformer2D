@@ -7,7 +7,7 @@ namespace Sounds.UI
     public class MenuMusicManager : MonoBehaviour
     {
         public AudioClip[] menuTracks;
-        public float fadeDuration = 1.5f;
+        public float fadeDuration = 0.3f;
 
         private AudioSource audioSource;
         public static MenuMusicManager Instance;
@@ -21,7 +21,6 @@ namespace Sounds.UI
             }
 
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
             audioSource = GetComponent<AudioSource>();
         }
 
@@ -53,15 +52,18 @@ namespace Sounds.UI
 
         private IEnumerator FadeOutCoroutine()
         {
+            Debug.Log("Fading out");
             float startVolume = audioSource.volume;
             float timeElapsed = 0f;
 
             while (timeElapsed < fadeDuration)
             {
                 timeElapsed += Time.deltaTime;
+                Debug.Log(Mathf.Lerp(startVolume, 0f, timeElapsed / fadeDuration));
                 audioSource.volume = Mathf.Lerp(startVolume, 0f, timeElapsed / fadeDuration);
                 yield return null;
             }
+            audioSource.volume = 0;
 
             Destroy(gameObject);
         }

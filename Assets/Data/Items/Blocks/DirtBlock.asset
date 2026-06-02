@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: DirtBlock
   m_EditorClassIdentifier: 
-  name: Dirt
+  name: Dirt Block
   sprite: {fileID: -8275502208090371910, guid: a5a8dff0fab06184887c331370f7c574, type: 3}
   stack: 64
   isPlacable: 1

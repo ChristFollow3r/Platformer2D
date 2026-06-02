@@ -44,7 +44,7 @@ namespace Items
             if (itemToAdd == null) return;
             if (isEmpty)
             {
-                item = new ItemStack(itemToAdd.data) { amount = itemToAdd.amount };
+                item = new ItemStack(itemToAdd);
                 itemToAdd.amount = 0;
                 return;
             }

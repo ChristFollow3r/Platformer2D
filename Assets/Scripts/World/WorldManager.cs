@@ -69,7 +69,6 @@ namespace World
             }
 
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
@@ -537,6 +536,7 @@ namespace World
                     propChunkChild.AddComponent<Tilemap>();
                     var pRenderer = propChunkChild.AddComponent<TilemapRenderer>();
                     pRenderer.material = tilemapMaterial;
+                    pRenderer.sortingOrder = -1;
 
                     var propCollider = propChunkChild.AddComponent<TilemapCollider2D>();
                     propCollider.isTrigger = true;

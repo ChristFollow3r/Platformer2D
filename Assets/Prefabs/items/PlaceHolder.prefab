@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4732772619590479897}
   - component: {fileID: 6424570704822434071}
   - component: {fileID: 221647487546915588}
-  - component: {fileID: 7243765266166736406}
   - component: {fileID: -19479876904053076}
   - component: {fileID: -7652829143167696415}
   m_Layer: 0
@@ -145,27 +144,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.ItemEntity
   pickupDelay: 1
-  itemData: {fileID: 11400000, guid: 2f260f3f1ccaac54788fbf912453f8bd, type: 2}
---- !u!114 &7243765266166736406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 930996324388520816}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e26046273504aa449c4fb4e299ead04, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Items.DropComponent
-  pickupSound: {fileID: 0}
-  collider: {fileID: 6424570704822434071}
-  spriteRenderer: {fileID: 4732772619590479897}
-  itemData: {fileID: 0}
-  rotateSpeed: 0
+  rotateSpeed: 100
   popForceUp: 5
   popForceSide: 2
-  player: {fileID: 846664854750277049, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
+  itemData: {fileID: 11400000, guid: 2f260f3f1ccaac54788fbf912453f8bd, type: 2}
 --- !u!60 &-19479876904053076
 PolygonCollider2D:
   m_ObjectHideFlags: 0

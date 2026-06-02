@@ -353,24 +353,9 @@ namespace Items.Overlays
         {
             return JsonUtility.ToJson(new FurnaceData
             {
-                cookingSlots = cookingSlots.Where(s => !s.isEmpty).Select(s => new SlotData
-                {
-                    id = s.id,
-                    itemId = s.isEmpty ? null : s.item.data.name,
-                    amount = s.isEmpty ? (short)0 : s.item.amount
-                }).ToArray(),
-                fuelSlot = new SlotData
-                {
-                    id = fuelSlot.id,
-                    itemId = fuelSlot.isEmpty ? null : fuelSlot.item.data.name,
-                    amount = fuelSlot.isEmpty ? (short)0 : fuelSlot.item.amount
-                },
-                resultSlot = new SlotData
-                {
-                    id = resultSlot.id,
-                    itemId = resultSlot.isEmpty ? null : resultSlot.item.data.name,
-                    amount = resultSlot.isEmpty ? (short)0 : resultSlot.item.amount
-                }
+                cookingSlots = cookingSlots.Where(s => !s.isEmpty).Select(s => new SlotData(s)).ToArray(),
+                fuelSlot = new SlotData(fuelSlot),
+                resultSlot = new SlotData(resultSlot)
             });
         }
 
@@ -385,15 +370,15 @@ namespace Items.Overlays
             {
                 SlotData s = data.cookingSlots[i];
                 cookingSlots[s.id].item = string.IsNullOrEmpty(s.itemId) ? null
-                    : new ItemStack(db.items.Find(item => item.name == s.itemId)) { amount = s.amount };
+                    : new ItemStack(db.items.Find(item => item.name == s.itemId)) { amount = s.amount, duration = s.duration };
                 OnSlotChanged?.Invoke(s.id, cookingSlots[s.id].item);
             }
 
             fuelSlot.item = string.IsNullOrEmpty(data.fuelSlot.itemId) ? null
-                : new ItemStack(db.items.Find(item => item.name == data.fuelSlot.itemId)) { amount = data.fuelSlot.amount };
+                : new ItemStack(db.items.Find(item => item.name == data.fuelSlot.itemId)) { amount = data.fuelSlot.amount, duration = data.fuelSlot.duration };
 
             resultSlot.item = string.IsNullOrEmpty(data.resultSlot.itemId) ? null
-                          : new ItemStack(db.items.Find(item => item.name == data.resultSlot.itemId)) { amount = data.resultSlot.amount };
+                          : new ItemStack(db.items.Find(item => item.name == data.resultSlot.itemId)) { amount = data.resultSlot.amount, duration = data.resultSlot.duration };
 
             OnSlotChanged?.Invoke(fuelSlot.id, fuelSlot.item);
 

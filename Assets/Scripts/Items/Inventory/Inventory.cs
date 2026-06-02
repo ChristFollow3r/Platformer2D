@@ -36,6 +36,8 @@ namespace Items
                 if (_handIndex < 0) _handIndex = HotbarSlots - 1;
 
                 OnHandChanged?.Invoke(_handIndex);
+                string name = hand == null ? "" : hand.data.name;
+                UIController.Singleton.SetItemName(name);
             }
         }
         private short _handIndex = 0;
@@ -66,11 +68,10 @@ namespace Items
             #region Start
             foreach (ItemStackBuilder builder in startingItems)
             {
-                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
+                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount };
                 Add(itemStack);
             }
 
-            // Allow sounds to play only after starting items are loaded
             isInitialized = true;
             #endregion
         }
@@ -254,13 +255,7 @@ namespace Items
                 Slot slot = slots[i];
                 if (slot.isEmpty) continue;
 
-                data.slots[i] = new SlotData
-                {
-                    id = slot.id,
-                    itemId = slot.isEmpty ? null : slot.item.data.name,
-                    amount = slot.isEmpty ? (short)0 : slot.item.amount,
-                    duration = slot.isEmpty ? 0f : slot.item.duration
-                };
+                data.slots[i] = new SlotData(slot);
             }
 
             return JsonUtility.ToJson(data);
@@ -285,7 +280,7 @@ namespace Items
                 {
                     ItemData itemData = db.items.Find(item => item.name == slotData.itemId);
                     if (itemData != null)
-                        slots[slotData.id].item = new ItemStack(itemData) { amount = slotData.amount };
+                        slots[slotData.id].item = new ItemStack(itemData) { amount = slotData.amount, duration = slotData.duration };
                     else
                         Debug.LogWarning($"[Inventory] Unknown item id '{slotData.itemId}' in slot {i}");
                 }

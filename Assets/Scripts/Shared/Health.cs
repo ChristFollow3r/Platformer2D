@@ -21,7 +21,7 @@ namespace Shared
 
     public class Health : MonoBehaviour
     {
-        [SerializeField] private int maxHealth;
+        [SerializeField] public int maxHealth;
         [SerializeField] private DropItem[] deathDrops;
         [SerializeField] private GameObject hitVFXPrefab;
 

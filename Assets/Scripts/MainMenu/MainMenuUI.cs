@@ -137,10 +137,6 @@ public class MainMenuUI : MonoBehaviour
             menuPanel.style.display = DisplayStyle.None;
             loadPanel.style.display = DisplayStyle.Flex;
         };
-        menuPanel.Q<Button>("Settings").clicked += () =>
-        {
-            Debug.Log("Settings");
-        };
         menuPanel.Q<Button>("Exit").clicked += () =>
         {
             Application.Quit();

@@ -12,6 +12,7 @@ namespace Items.Overlays
     public enum EquipmentType
     {
         Mod,
+        NONE,
     }
 
     public enum Mod
@@ -75,9 +76,6 @@ namespace Items.Overlays
         public override void Tick()
         {
             #region Tick
-
-
-
             ItemStack mod = equipmentSlots[(int)EquipmentType.Mod].item;
             if (mod == null)
             {
@@ -107,20 +105,26 @@ namespace Items.Overlays
             #endregion
         }
 
-        public void AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
+        public bool AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
         {
             #region AddEquipment
-            Slot slot = equipmentSlots[(int)equipmentType];
-            slot.Add(itemStack);
-            OnSlotChanged?.Invoke(slot.id, slot.item);
+
+
+
 
             if (equipmentType == EquipmentType.Mod)
             {
+                Slot slot = equipmentSlots[(int)equipmentType];
+                slot.Add(itemStack);
+                OnSlotChanged?.Invoke(slot.id, slot.item);
+
                 OnModChange?.Invoke(true, itemStack.data.modData.mod);
                 GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
-                if (!playerGo) return;
+                if (!playerGo) return true;
                 playerGo.GetComponent<Animator>().runtimeAnimatorController = itemStack.data.modData.controller;
             }
+            else return false;
+            return true;
             #endregion
         }
 
@@ -153,8 +157,7 @@ namespace Items.Overlays
 
                 if (!itemStack.data.isConsumable) return false;
                 if ((int)itemStack.data.equipmentType != slotId) return false;
-                AddEquipment(itemStack.data.equipmentType, itemStack);
-                return true;
+                return AddEquipment(itemStack.data.equipmentType, itemStack);
             }
 
             bool isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;
@@ -189,6 +192,7 @@ namespace Items.Overlays
         public ItemStack ClearSlot(int slotId)
         {
             #region ClearSlot
+            Debug.Log($"Attepting to clear slot {slotId}");
             Slot slot;
             bool isCraftingSlot = false;
             bool isResultSlot = slotId == resultSlot.id;
@@ -202,12 +206,17 @@ namespace Items.Overlays
                 slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
             }
 
-            if (slot.isEmpty) return null;
+            if (slot.isEmpty)
+            {
+                Debug.Log($"Slot is empty");
+                return null;
+            }
 
             ItemStack itemStack = slot.item;
             slot.item = null;
 
             OnSlotChanged?.Invoke(slotId, null);
+            Debug.Log($"Slot cleared!");
 
             if (isCraftingSlot || isResultSlot) EvaluateCraft();
             if (isResultSlot)
@@ -284,16 +293,9 @@ namespace Items.Overlays
 
         public string ToJson()
         {
-            CloseOverlay();
             return JsonUtility.ToJson(new EquipmentData
             {
-                equipmentSlots = equipmentSlots.Where(s => !s.isEmpty).Select(s => new SlotData
-                {
-                    id = s.id,
-                    itemId = s.isEmpty ? null : s.item.data.name,
-                    amount = s.isEmpty ? (short)0 : s.item.amount,
-                    duration = s.isEmpty ? 0f : s.item.duration
-                }).ToArray()
+                equipmentSlots = equipmentSlots.Where(s => !s.isEmpty).Select(s => new SlotData(s)).ToArray()
             });
         }
 
