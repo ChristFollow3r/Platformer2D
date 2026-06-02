@@ -223,9 +223,11 @@ MonoBehaviour:
     dropChance: 40
   - prefab: {fileID: 930996324388520816, guid: 1c17e09124b55fb499dc9077866dd7d1, type: 3}
     itemData: {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
-    minAmount: 0
+    minAmount: 1
     maxAmount: 2
-    dropChance: 30
+    dropChance: 60
+  hitVFXPrefab: {fileID: 0}
+  currentHealth: 0
 --- !u!114 &2344844398629145685
 MonoBehaviour:
   m_ObjectHideFlags: 0

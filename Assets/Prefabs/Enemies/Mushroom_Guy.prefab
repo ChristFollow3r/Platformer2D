@@ -321,14 +321,16 @@ MonoBehaviour:
   deathDrops:
   - prefab: {fileID: 930996324388520816, guid: 10ce9acefc5676845a4cf76ab142521a, type: 3}
     itemData: {fileID: 11400000, guid: 338742da0c613ac4d8c4b4ff4412118f, type: 2}
-    minAmount: 0
-    maxAmount: 1
-    dropChance: 0
+    minAmount: 1
+    maxAmount: 3
+    dropChance: 100
   - prefab: {fileID: 930996324388520816, guid: 1c17e09124b55fb499dc9077866dd7d1, type: 3}
     itemData: {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
     minAmount: 1
     maxAmount: 2
-    dropChance: 40
+    dropChance: 70
+  hitVFXPrefab: {fileID: 0}
+  currentHealth: 0
 --- !u!50 &4443844945724580181
 Rigidbody2D:
   serializedVersion: 5
