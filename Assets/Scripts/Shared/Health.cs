@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 using Data;
 using Items;
 using Random = UnityEngine.Random;
@@ -25,7 +26,11 @@ namespace Shared
         [SerializeField] private GameObject hitVFXPrefab;
 
         public int currentHealth;
+        private int cachedHealth;
         private bool isDead = false;
+
+        // Timer variable to track when the player was last hit
+        private float lastDamageTime = -9999f;
 
         public event Action<float> OnHealthChanged;
         public event Action OnDeath;
@@ -33,25 +38,41 @@ namespace Shared
 
         private void Awake() => currentHealth = maxHealth;
 
+        private void Start()
+        {
+            // Start the background healing loop immediately if this is the player
+            if (gameObject.CompareTag("Player"))
+            {
+                StartCoroutine(HealOverTime());
+            }
+        }
+
         public void SetHealth(int health)
         {
             currentHealth = health;
             OnHealthChanged?.Invoke(currentHealth);
-            if (gameObject.tag == "Player") UIController.Singleton.UpdateHealth(currentHealth, maxHealth);
+            if (gameObject.CompareTag("Player")) UIController.Singleton.UpdateHealth(currentHealth, maxHealth);
         }
+
         public void TakeDamage(int damage, int direction, float knockback)
         {
             if (isDead) return;
-            if (gameObject.tag == "Player")
+
+            if (gameObject.CompareTag("Player"))
             {
                 damage -= Equipment.Singleton.GetDefence();
+                cachedHealth = currentHealth;
+
+                lastDamageTime = Time.time;
             }
+
             currentHealth -= damage;
             OnKnockbackRecieved?.Invoke(direction, knockback);
 
             float healthPercentage = (float)currentHealth / maxHealth;
             OnHealthChanged?.Invoke(healthPercentage);
-            if (gameObject.tag == "Player") UIController.Singleton.UpdateHealth(currentHealth, maxHealth);
+
+            if (gameObject.CompareTag("Player")) UIController.Singleton.UpdateHealth(currentHealth, maxHealth);
 
             if (currentHealth <= 0)
             {
@@ -112,7 +133,38 @@ namespace Shared
             }
         }
 
+        private IEnumerator HealOverTime()
+        {
+            while (true)
+            {
+                if (gameObject.CompareTag("Player") && !isDead && currentHealth / (float)maxHealth < 0.8f)
+                {
+                    if (Time.time >= lastDamageTime + 5f)
+                    {
+                        currentHealth += 10;
+
+                        if (currentHealth > maxHealth)
+                        {
+                            currentHealth = maxHealth;
+                        }
+
+                        float healthPercentage = (float)currentHealth / maxHealth;
+                        OnHealthChanged?.Invoke(healthPercentage);
+                        UIController.Singleton.UpdateHealth(currentHealth, maxHealth);
+                        Debug.Log("Healed");
+                    }
+                }
+
+                yield return new WaitForSeconds(3f);
+            }
+        }
+
         public int GetCurrentHealth() => currentHealth;
-        public void ResetHealth() { currentHealth = maxHealth; isDead = false; }
+
+        public void ResetHealth()
+        {
+            currentHealth = maxHealth;
+            isDead = false;
+        }
     }
 }
