@@ -338,6 +338,8 @@ MonoBehaviour:
     minAmount: 0
     maxAmount: 0
     dropChance: 0
+  hitVFXPrefab: {fileID: 0}
+  currentHealth: 0
 --- !u!114 &3937034909001159407
 MonoBehaviour:
   m_ObjectHideFlags: 0

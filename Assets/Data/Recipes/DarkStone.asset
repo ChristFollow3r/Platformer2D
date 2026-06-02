@@ -16,19 +16,19 @@ MonoBehaviour:
   amount: 1
   gridSize: 4
   ingredients:
-  - {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
-  - {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
-  - {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
-  - {fileID: 0}
-  - {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
+  - {fileID: 11400000, guid: e0b8c3884682f624398d6ecbd73e0fce, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 11400000, guid: 919fc6cc2c798ef47b20a29bb91c5381, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
   - {fileID: 11400000, guid: 338742da0c613ac4d8c4b4ff4412118f, type: 2}
+  - {fileID: 11400000, guid: 5903f27f02450e64f86f45e8ee68d230, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
   - {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
-  - {fileID: 0}
   - {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
-  - {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
-  - {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 11400000, guid: d312196429a153d4d9f178894b171bb1, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+  - {fileID: 11400000, guid: 899732b33a26d1747bae92008c7477d3, type: 2}

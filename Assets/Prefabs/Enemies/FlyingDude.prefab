@@ -179,6 +179,11 @@ MonoBehaviour:
     minAmount: 1
     maxAmount: 2
     dropChance: 40
+  - prefab: {fileID: 930996324388520816, guid: 1c17e09124b55fb499dc9077866dd7d1, type: 3}
+    itemData: {fileID: 11400000, guid: 489b4696d4f299345a16452e33fc719d, type: 2}
+    minAmount: 1
+    maxAmount: 1
+    dropChance: 100
   hitVFXPrefab: {fileID: 0}
   currentHealth: 0
 --- !u!50 &5047472912349571532
