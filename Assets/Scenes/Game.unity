@@ -699,6 +699,10 @@ MonoBehaviour:
     amount: 64
     durability: 0
     duration: 0
+  - data: {fileID: 11400000, guid: 2c0f86eac83f72d44b61f9f1fab33aec, type: 2}
+    amount: 64
+    durability: 0
+    duration: 0
   pickupSound: {fileID: 8300000, guid: 30104bd62d2f2364f8cfce8f6a9912a7, type: 3}
 --- !u!114 &448283168
 MonoBehaviour:
