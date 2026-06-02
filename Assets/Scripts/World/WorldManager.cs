@@ -244,7 +244,7 @@ namespace World
                 }
             }
 
-            int smoothingIterations = 4;
+            int smoothingIterations = 7;
             for (int i = 0; i < smoothingIterations; i++)
             {
                 int[,] newCaveMap = new int[worldWidth, worldHeight];
