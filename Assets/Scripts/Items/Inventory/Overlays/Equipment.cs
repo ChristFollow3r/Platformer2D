@@ -186,6 +186,7 @@ namespace Items.Overlays
         public ItemStack ClearSlot(int slotId)
         {
             #region ClearSlot
+            Debug.Log($"Attepting to clear slot {slotId}");
             Slot slot;
             bool isCraftingSlot = false;
             bool isResultSlot = slotId == resultSlot.id;
@@ -199,12 +200,17 @@ namespace Items.Overlays
                 slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
             }
 
-            if (slot.isEmpty) return null;
+            if (slot.isEmpty)
+            {
+                Debug.Log($"Slot is empty");
+                return null;
+            }
 
             ItemStack itemStack = slot.item;
             slot.item = null;
 
             OnSlotChanged?.Invoke(slotId, null);
+            Debug.Log($"Slot cleared!");
 
             if (isCraftingSlot || isResultSlot) EvaluateCraft();
             if (isResultSlot)
@@ -281,7 +287,6 @@ namespace Items.Overlays
 
         public string ToJson()
         {
-            CloseOverlay();
             return JsonUtility.ToJson(new EquipmentData
             {
                 equipmentSlots = equipmentSlots.Where(s => !s.isEmpty).Select(s => new SlotData(s)).ToArray()

@@ -21,7 +21,6 @@ namespace Sounds.UI
             }
 
             Instance = this;
-            DontDestroyOnLoad(this.gameObject);
             audioSource = GetComponent<AudioSource>();
         }
 

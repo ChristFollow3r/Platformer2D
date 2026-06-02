@@ -939,6 +939,8 @@ namespace Player
 
         public void DeserializeAll(string json)
         {
+            Debug.Log($"De-Serializing aswell!");
+
             SaveFile save = JsonUtility.FromJson<SaveFile>(json);
             if (save?.overlays == null) return;
 

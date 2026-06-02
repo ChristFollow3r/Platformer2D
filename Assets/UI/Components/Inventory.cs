@@ -71,7 +71,6 @@ namespace UI.Components
             Item itemElm = null;
             if (item is not null)
             {
-                Debug.Log($"Adding item to slot {slotId} with duration {item.duration}");
                 itemElm = new Item(Items.Inventory.Singleton, true)
                 {
                     item = item.data,

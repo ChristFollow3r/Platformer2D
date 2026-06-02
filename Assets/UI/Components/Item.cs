@@ -123,7 +123,6 @@ namespace UI.Components
             Slot ghostSlot = orphanAfterPickup ? null : slot;
             IInventory ghostInventory = orphanAfterPickup ? Items.Inventory.Singleton : inventory;
 
-            Debug.Log($"My duration is {duration}");
             if (e.button == 1)
             {
                 short stay, leave;
@@ -174,6 +173,7 @@ namespace UI.Components
                 currentDraggedItem = ghost;
                 if (ghost.panel != null) ghost.panel.visualTree.RegisterCallback<PointerMoveEvent>(ghost.OnGlobalPointerMove);
 
+                Debug.Log($"Creating ghost with amount {amount}");
                 if (slot != null) inventory.ClearSlot(slot.slotId);
             }
         }

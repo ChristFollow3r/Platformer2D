@@ -121,7 +121,6 @@ namespace Items.Overlays
 
         public string ToJson()
         {
-            CloseOverlay();
             return JsonUtility.ToJson(new ChestData
             {
                 slots = slots.Where(s => !s.isEmpty).Select(s => new SlotData(s)).ToArray()

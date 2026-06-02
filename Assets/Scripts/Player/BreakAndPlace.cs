@@ -126,6 +126,7 @@ namespace Player
                 if (spawnUpdated)
                 {
                     Debug.Log($"Spawn anchor activated! New spawn point: {WorldManager.Instance.currentSpawnPoint}");
+                    // TODO: Show on ui
                 }
                 return;
             }
