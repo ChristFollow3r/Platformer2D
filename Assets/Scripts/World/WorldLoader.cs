@@ -5,9 +5,6 @@ using UnityEngine.UIElements;
 
 public class WorldLoader : MonoBehaviour
 {
-
-
-
     [SerializeField] public string gameSceneName = "Game";
 
     [ContextMenu("New World")]
@@ -52,26 +49,29 @@ public class WorldLoader : MonoBehaviour
     {
         Scene loaderScene = gameObject.scene;
 
-        // Load new scene additively so both exist simultaneously
         AsyncOperation load = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         load.allowSceneActivation = false;
         MainMenuUI.Singleton.SetLoading();
-        // Wait until the scene is ready (progress stops at 0.9 until activation is allowed)
+
+        if (Sounds.UI.MenuMusicManager.Instance != null)
+        {
+            Sounds.UI.MenuMusicManager.Instance.FadeOutAndDestroy();
+        }
+
         while (load.progress < 0.9f)
         {
             MainMenuUI.Singleton.loadFill.style.width = Length.Percent(load.progress * 100f);
             yield return null;
         }
-        yield return new WaitForSeconds(1);
-        // Activate the new scene
-        load.allowSceneActivation = true;
-        yield return load; // wait for activation to complete
 
-        // Set the new scene as active
+        yield return new WaitForSeconds(1);
+
+        load.allowSceneActivation = true;
+        yield return load;
+
         Scene newScene = SceneManager.GetSceneByName(sceneName);
         SceneManager.SetActiveScene(newScene);
 
-        // Unload the loader scene
         yield return SceneManager.UnloadSceneAsync(loaderScene);
     }
 }
