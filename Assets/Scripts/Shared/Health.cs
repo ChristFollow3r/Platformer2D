@@ -95,16 +95,19 @@ namespace Shared
 
         public void SpawnHitDrops()
         {
-            if (hitVFXPrefab != null)
+            if (Random.Range(0f, 100f) <= 40f)
             {
-                var drop = Instantiate(hitVFXPrefab, transform.position, Quaternion.identity);
-                Destroy(drop, 180f);
-
-                if (drop.TryGetComponent(out Rigidbody2D rb))
+                if (hitVFXPrefab != null)
                 {
-                    float randomX = Random.Range(-0.5f, 0.5f);
-                    float randomY = Random.Range(-0.5f, 0.5f);
-                    rb.AddForce(new Vector2(randomX, randomY), ForceMode2D.Impulse);
+                    var drop = Instantiate(hitVFXPrefab, transform.position, Quaternion.identity);
+                    Destroy(drop, 180f);
+
+                    if (drop.TryGetComponent(out Rigidbody2D rb))
+                    {
+                        float randomX = Random.Range(-0.5f, 0.5f);
+                        float randomY = Random.Range(-0.5f, 0.5f);
+                        rb.AddForce(new Vector2(randomX, randomY), ForceMode2D.Impulse);
+                    }
                 }
             }
         }

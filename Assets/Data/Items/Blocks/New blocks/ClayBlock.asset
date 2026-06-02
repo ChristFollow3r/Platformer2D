@@ -26,7 +26,7 @@ MonoBehaviour:
   overlayType: 0
   drops:
   - item: {fileID: 11400000, guid: 17d6284544d067a419d696db0be831cc, type: 2}
-    minAmount: 3
-    maxAmount: 5
+    minAmount: 2
+    maxAmount: 3
     dropChance: 101
   hitSound: {fileID: 8300000, guid: 0944551b2069bb344adb9cbf0e6dfbf1, type: 3}
