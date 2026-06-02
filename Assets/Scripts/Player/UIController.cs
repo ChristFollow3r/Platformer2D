@@ -8,6 +8,7 @@ using UnityEngine.UIElements;
 using UnityEngine.Audio;
 using Data;
 using Scriptable_Objects_Scripts;
+using UnityEngine.SceneManagement;
 
 namespace Player
 {
@@ -201,7 +202,11 @@ namespace Player
             if (saveBtn != null) saveBtn.clicked += () => Debug.Log("Save");
 
             Button exitBtn = menuRoot.Q<Button>("Exit");
-            if (exitBtn != null) exitBtn.clicked += () => Application.Quit();
+            if (exitBtn != null) exitBtn.clicked += () =>
+            {
+                WorldSerializer.Save();
+                SceneManager.LoadScene("Menu");
+            };
 
             healthElm = hud.rootVisualElement.Q("health");
             modElm = hud.rootVisualElement.Q("mod");

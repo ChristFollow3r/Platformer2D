@@ -69,7 +69,6 @@ namespace World
             }
 
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()

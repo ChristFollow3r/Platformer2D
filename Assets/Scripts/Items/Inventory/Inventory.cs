@@ -70,7 +70,6 @@ namespace Items
                 Add(itemStack);
             }
 
-            // Allow sounds to play only after starting items are loaded
             isInitialized = true;
             #endregion
         }
