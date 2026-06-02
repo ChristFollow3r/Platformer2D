@@ -292,7 +292,7 @@ namespace Player
             Vector2 cellWorldPos = new Vector2(x, y) * CellSize + Vector2.one * (CellSize / 2f);
             float distance = Vector2.Distance(cellWorldPos, playerCenter);
 
-            if (distance > reachDistance) return true;
+            if (distance > 2f) return true; // HARDCODED VALUES FOR BUILDING
 
             BlockType clickedBlock = WorldData.World.GetBlockTypes(x, y);
             if (clickedBlock != BlockType.Air) return true;
