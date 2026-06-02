@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Rock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
   name: Rock
-  sprite: {fileID: 1387010737264629079, guid: 23446c4fc7783a2449976fcdc2368513, type: 3}
+  sprite: {fileID: -2514644114056255219, guid: c43296e6d11faa845b9d11864e06699d, type: 3}
   stack: 32
   isPlacable: 0
   isConsumable: 0
@@ -24,3 +24,5 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drops:
   - item: {fileID: 11400000, guid: 23c6e5442a86e584397b0e5e913a4fb7, type: 2}
-    minAmount: 1
-    maxAmount: 3
+    minAmount: 2
+    maxAmount: 4
     dropChance: 101
   sprite: {fileID: 4099493423532068412, guid: a9cd264e2e56fae4eb33bb95700069c3, type: 3}
   hitSound: {fileID: 8300000, guid: b5fe4bf739c6a0f4aa2ef77ca4b74519, type: 3}

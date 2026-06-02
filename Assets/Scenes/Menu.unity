@@ -354,7 +354,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Sounds.UI.MenuMusicManager
   menuTracks:
   - {fileID: 8300000, guid: b7c953154cb434a4facb75fc28f4e965, type: 3}
-  fadeDuration: 1.5
+  fadeDuration: 3
 --- !u!1 &1478460917
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,6 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2edc08750b7f95d479049cdbe7c8fe70, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuUI
+  clickSound: {fileID: 8300000, guid: 1e7ca19f8662e604785e8c9a05ca5c43, type: 3}
   doc: {fileID: 1478460918}
   loader: {fileID: 1478460921}
 --- !u!114 &1478460921

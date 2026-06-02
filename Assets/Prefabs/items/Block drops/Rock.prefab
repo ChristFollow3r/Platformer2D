@@ -86,7 +86,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 1387010737264629079, guid: 23446c4fc7783a2449976fcdc2368513, type: 3}
+  m_Sprite: {fileID: -2514644114056255219, guid: c43296e6d11faa845b9d11864e06699d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -165,6 +165,7 @@ MonoBehaviour:
   rotateSpeed: 0
   popForceUp: 5
   popForceSide: 2
+  pickupDelay: 0.5
   player: {fileID: 846664854750277049, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
 --- !u!60 &-7741417871952628018
 PolygonCollider2D:

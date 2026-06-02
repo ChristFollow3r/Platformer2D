@@ -20,7 +20,7 @@ MonoBehaviour:
   isFuel: 0
   equipmentType: 0
   blockType: 7
-  hardness: 5
+  hardness: 1
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0

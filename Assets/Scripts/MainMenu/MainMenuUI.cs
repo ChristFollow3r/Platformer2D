@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[RequireComponent(typeof(AudioSource))]
 public class MainMenuUI : MonoBehaviour
 {
     #region Singleton setup
@@ -29,6 +30,11 @@ public class MainMenuUI : MonoBehaviour
 
 
     #region Data
+    [Header("Audio Settings")]
+    [SerializeField] private AudioClip clickSound;
+    private AudioSource audioSource;
+
+    [Space(10)]
     [SerializeField] private UIDocument doc;
     [SerializeField] private WorldLoader loader;
 
@@ -60,6 +66,10 @@ public class MainMenuUI : MonoBehaviour
     {
         #region Awake
         SetupSingleton();
+
+        // Grab the AudioSource component so we can play the sound
+        audioSource = GetComponent<AudioSource>();
+
         GetElements();
         SubscribeEvents();
         #endregion
@@ -78,15 +88,11 @@ public class MainMenuUI : MonoBehaviour
         backBtns.Add(newPanel.Q<Button>("Back"));
         backBtns.Add(loadPanel.Q<Button>("Back"));
 
-
-
-
         nameF = newPanel.Q<TextField>("NameF");
         seedF = newPanel.Q<TextField>("SeedF");
 
         worldList = loadPanel.Q<ScrollView>("worldList");
         loadFill = loadingPanel.Q("loadFill");
-
 
         #endregion
     }
@@ -94,6 +100,23 @@ public class MainMenuUI : MonoBehaviour
     private void SubscribeEvents()
     {
         #region SubscribeEvents
+
+        // Globally listen for clicks on the root visual element
+        r.RegisterCallback<ClickEvent>(evt =>
+        {
+            VisualElement target = evt.target as VisualElement;
+
+            // Traverse up to see if the clicked element is a Button (or inside one)
+            while (target != null)
+            {
+                if (target is Button)
+                {
+                    PlayClickSound();
+                    break;
+                }
+                target = target.parent;
+            }
+        });
 
         backBtns.ForEach(b => b.clicked += () =>
             {
@@ -124,6 +147,16 @@ public class MainMenuUI : MonoBehaviour
         };
 
         newPanel.Q<Button>("Create").clicked += HandleCreate;
+        #endregion
+    }
+
+    private void PlayClickSound()
+    {
+        #region PlayClickSound
+        if (clickSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(clickSound);
+        }
         #endregion
     }
 

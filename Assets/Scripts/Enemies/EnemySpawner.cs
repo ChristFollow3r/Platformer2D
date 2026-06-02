@@ -80,7 +80,17 @@ namespace Enemies
 
         private void AttemptSpawn()
         {
-            bool playerInCave = player.position.y < caveTransitionY;
+            // 1. Check if WorldManager exists to prevent null references
+            if (WorldManager.Instance == null) return;
+
+            // 2. Get the dynamic surface level for the player's current X position
+            float dynamicSurfaceY = WorldManager.Instance.GetSurfaceY(player.position.x);
+
+            // 3. Determine if in cave.
+            // Note: I added a small offset (- 2f) so they don't immediately count as "in cave"
+            // the millisecond they step below the highest grass block. Tweak this as needed!
+            bool playerInCave = player.position.y < (dynamicSurfaceY - 2f);
+
             List<EnemySpawnData> validEnemies = enemies.FindAll(e => e.isCaveEnemy == playerInCave);
 
             if (validEnemies.Count == 0) return;
