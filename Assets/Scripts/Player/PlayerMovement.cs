@@ -134,6 +134,11 @@ namespace Player
                 }
             }
 
+            if (transform.position.y < -10f)
+            {
+                WorldManager.Instance.RespawnPlayer(gameObject);
+            }
+
 
             if (UIController.Singleton.isOverlayOpen || UIController.Singleton.isMenuOpen) return;
 
