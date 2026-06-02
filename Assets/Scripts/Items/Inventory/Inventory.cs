@@ -254,13 +254,7 @@ namespace Items
                 Slot slot = slots[i];
                 if (slot.isEmpty) continue;
 
-                data.slots[i] = new SlotData
-                {
-                    id = slot.id,
-                    itemId = slot.isEmpty ? null : slot.item.data.name,
-                    amount = slot.isEmpty ? (short)0 : slot.item.amount,
-                    duration = slot.isEmpty ? 0f : slot.item.duration
-                };
+                data.slots[i] = new SlotData(slot);
             }
 
             return JsonUtility.ToJson(data);
@@ -285,7 +279,7 @@ namespace Items
                 {
                     ItemData itemData = db.items.Find(item => item.name == slotData.itemId);
                     if (itemData != null)
-                        slots[slotData.id].item = new ItemStack(itemData) { amount = slotData.amount };
+                        slots[slotData.id].item = new ItemStack(itemData) { amount = slotData.amount, duration = slotData.duration };
                     else
                         Debug.LogWarning($"[Inventory] Unknown item id '{slotData.itemId}' in slot {i}");
                 }

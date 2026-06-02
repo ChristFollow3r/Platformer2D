@@ -124,13 +124,7 @@ namespace Items.Overlays
             CloseOverlay();
             return JsonUtility.ToJson(new ChestData
             {
-                slots = slots.Where(s => !s.isEmpty).Select(s => new SlotData
-                {
-                    id = s.id,
-                    itemId = s.isEmpty ? null : s.item.data.name,
-                    amount = s.isEmpty ? (short)0 : s.item.amount,
-                    duration = s.isEmpty ? 0f : s.item.duration
-                }).ToArray()
+                slots = slots.Where(s => !s.isEmpty).Select(s => new SlotData(s)).ToArray()
             });
         }
 
@@ -151,7 +145,7 @@ namespace Items.Overlays
                 ItemData itemData = db.items.Find(item => item.name == s.itemId);
 
                 slots[s.id].item = string.IsNullOrEmpty(s.itemId) ? null
-                    : new ItemStack(itemData) { amount = s.amount };
+                    : new ItemStack(itemData) { amount = s.amount, duration = s.duration };
                 OnSlotChanged?.Invoke(s.id, slots[s.id].item);
             }
         }

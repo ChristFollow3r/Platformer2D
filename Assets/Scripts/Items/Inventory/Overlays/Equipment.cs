@@ -75,9 +75,6 @@ namespace Items.Overlays
         public override void Tick()
         {
             #region Tick
-
-
-
             ItemStack mod = equipmentSlots[(int)EquipmentType.Mod].item;
             if (mod == null)
             {
@@ -287,13 +284,7 @@ namespace Items.Overlays
             CloseOverlay();
             return JsonUtility.ToJson(new EquipmentData
             {
-                equipmentSlots = equipmentSlots.Where(s => !s.isEmpty).Select(s => new SlotData
-                {
-                    id = s.id,
-                    itemId = s.isEmpty ? null : s.item.data.name,
-                    amount = s.isEmpty ? (short)0 : s.item.amount,
-                    duration = s.isEmpty ? 0f : s.item.duration
-                }).ToArray()
+                equipmentSlots = equipmentSlots.Where(s => !s.isEmpty).Select(s => new SlotData(s)).ToArray()
             });
         }
 
