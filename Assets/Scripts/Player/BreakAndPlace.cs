@@ -108,6 +108,21 @@ namespace Player
             {
                 bool spawnUpdated = WorldManager.Instance.TrySetSpawnFromAnchor(worldMousePos);
 
+                // --- THE FIX: Trigger the white flash immediately on Left Click ---
+                ItemData anchorData = WorldData.BlockDictionary[clickedBlock];
+
+                if (anchorData != null && anchorData.sprite != null)
+                {
+                    // Calculate the exact center of the block you clicked
+                    int x = Mathf.FloorToInt(worldMousePos.x / CellSize);
+                    int y = Mathf.FloorToInt(worldMousePos.y / CellSize);
+                    Vector2 cellCenter = new Vector2(x, y) * CellSize + new Vector2(0.25f, 0.25f);
+
+                    // Fire off the same routine blocks and props use
+                    StartCoroutine(HitFlashRoutine(anchorData.sprite, cellCenter));
+                }
+                // -----------------------------------------------------------------
+
                 if (spawnUpdated)
                 {
                     Debug.Log($"Spawn anchor activated! New spawn point: {WorldManager.Instance.currentSpawnPoint}");
