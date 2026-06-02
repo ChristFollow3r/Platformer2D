@@ -302,6 +302,12 @@ namespace Player
             WorldData.World.SetBlockType(x, y, item.data.blockType);
             UpdateChunkVisuals(x, y);
 
+            if (item.data.hitSound != null)
+            {
+                // Playing it at the Camera's position ensures it's perfectly audible in 2D
+                AudioSource.PlayClipAtPoint(item.data.hitSound, Camera.main.transform.position);
+            }
+
             Inventory.Singleton.RemoveFromHand();
 
             if (IsBlockEntity(item.data.blockType))
