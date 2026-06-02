@@ -691,8 +691,18 @@ namespace World
 
         public void RespawnPlayer(GameObject playerObject)
         {
-
             playerObject.transform.position = currentSpawnPoint;
+
+            mainCamera.transform.position = new Vector3(currentSpawnPoint.x, currentSpawnPoint.y, mainCamera.transform.position.z);
+            cameraPosition = mainCamera.transform.position;
+
+            UpdateChunks();
+
+            if (virtualCamera != null)
+            {
+                virtualCamera.PreviousStateIsValid = false;
+            }
+
             PlayerMovement.Singleton.enableTimer = 0.5f;
             UIController.Singleton.UpdateHealth(1, 1);
         }
