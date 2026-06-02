@@ -8,6 +8,8 @@ using UnityEngine.UIElements;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using Data;
+using UnityEngine.InputSystem;
+using Shared;
 
 namespace Player
 {
@@ -78,6 +80,8 @@ namespace Player
         [Header("Settings Panel")] private VisualElement settingsContainer;
         private Button closeSettingsBtn;
 
+        private Label itemNameElm;
+
         #endregion
 
         #region Events
@@ -106,7 +110,7 @@ namespace Player
             #region Start
 
             CloseOverlay();
-
+            playerInput.UI.Hand.performed += OnHandNumber;
             #endregion
         }
 
@@ -115,6 +119,7 @@ namespace Player
             #region Update
             CheckOverlay();
             MoveHand();
+            Consume();
             foreach (Overlay overlay in overlaysByBlockId.Values)
             {
                 overlay.Tick();
@@ -213,7 +218,7 @@ namespace Player
 
             healthElm = hud.rootVisualElement.Q("health");
             modElm = hud.rootVisualElement.Q("mod");
-
+            itemNameElm = hud.rootVisualElement.Q<Label>("itemName");
             thankScreen.rootVisualElement.Q<Button>("continue").clicked += RemoveThankyouScreen;
             #endregion
         }
@@ -402,7 +407,18 @@ namespace Player
             if (move.y > 0) Items.Inventory.Singleton.handIndex += 1;
             else Items.Inventory.Singleton.handIndex -= 1;
 
+
             #endregion
+        }
+
+        private void OnHandNumber(InputAction.CallbackContext ctx)
+        {
+            string name = ctx.control.name;
+            if (!int.TryParse(name, out int digit)) return;
+            int slot = (digit == 0) ? 9 : digit - 1;
+            if (slot >= Items.Inventory.HotbarSlots) return;
+
+            Items.Inventory.Singleton.handIndex = (short)slot;
         }
 
         public void ShowName(string name, Vector2 pos)
@@ -959,6 +975,33 @@ namespace Player
                 Overlay overlay = CreateOverlay(entry.blockId, type);
                 ((IInventory)overlay).FromJson(entry.data);
             }
+        }
+
+        public void SetItemName(string name)
+        {
+            itemNameElm.text = name;
+        }
+
+        private void Consume()
+        {
+            if (!playerInput.Player.Consume.WasPressedThisFrame()) return;
+            ItemStack hand = Items.Inventory.Singleton.hand;
+            if (hand == null || !hand.data.isConsumable || hand.data.equipmentType == Items.Overlays.EquipmentType.Mod) return;
+
+            if (hand.data.name == "Slime Essence")
+            {
+                Health h = PlayerMovement.Singleton.GetComponent<Health>();
+                int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 15);
+                h.SetHealth(newHp);
+            }
+            else if (hand.data.name == "Health Potion")
+            {
+                Health h = PlayerMovement.Singleton.GetComponent<Health>();
+                int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 50);
+                h.SetHealth(newHp);
+            }
+            Items.Inventory.Singleton.RemoveFromHand();
+
         }
         #endregion
     }

@@ -36,6 +36,8 @@ namespace Items
                 if (_handIndex < 0) _handIndex = HotbarSlots - 1;
 
                 OnHandChanged?.Invoke(_handIndex);
+                string name = hand == null ? "" : hand.data.name;
+                UIController.Singleton.SetItemName(name);
             }
         }
         private short _handIndex = 0;

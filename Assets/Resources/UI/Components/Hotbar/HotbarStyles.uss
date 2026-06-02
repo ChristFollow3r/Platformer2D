@@ -39,3 +39,4 @@
 .hotbar-background-show {
     display: flex;
 }
+
