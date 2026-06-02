@@ -16,7 +16,7 @@ MonoBehaviour:
   amount: 1
   gridSize: 2
   ingredients:
-  - {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
+  - {fileID: 11400000, guid: 1bd51d29b6eb76c4da71e1fe290de690, type: 2}
   - {fileID: 11400000, guid: cb50e3636ad34cf439709535d7b1abe5, type: 2}
   - {fileID: 0}
   - {fileID: 0}

@@ -1,28 +1,28 @@
 fileFormatVersion: 2
-guid: 97542c4dee12b874b97caf14581b3b64
+guid: e5fa4edd29a9bf94880399911a426256
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 8596897445487540874
-    second: Slime_Wal_Sheet_Rock_0
+      213: 7484814413748877168
+    second: Slime_Wal_Sheet_Rock_Fixed_0
   - first:
-      213: 34238362650848840
-    second: Slime_Wal_Sheet_Rock_1
+      213: 6422338529654832527
+    second: Slime_Wal_Sheet_Rock_Fixed_1
   - first:
-      213: 4907671779188536002
-    second: Slime_Wal_Sheet_Rock_2
+      213: -4435895253223105437
+    second: Slime_Wal_Sheet_Rock_Fixed_2
   - first:
-      213: -7341568634840947634
-    second: Slime_Wal_Sheet_Rock_3
+      213: 8453038628522510617
+    second: Slime_Wal_Sheet_Rock_Fixed_3
   - first:
-      213: 6867967260116973881
-    second: Slime_Wal_Sheet_Rock_4
+      213: -2932434780595109503
+    second: Slime_Wal_Sheet_Rock_Fixed_4
   - first:
-      213: 2613664727123334802
-    second: Slime_Wal_Sheet_Rock_5
+      213: 1608904866018624396
+    second: Slime_Wal_Sheet_Rock_Fixed_5
   - first:
-      213: 4163286602333456924
-    second: Slime_Wal_Sheet_Rock_6
+      213: -6796890438023130290
+    second: Slime_Wal_Sheet_Rock_Fixed_6
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -118,7 +118,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Slime_Wal_Sheet_Rock_0
+      name: Slime_Wal_Sheet_Rock_Fixed_0
       rect:
         serializedVersion: 2
         x: 0
@@ -133,14 +133,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a8a7fb8ada05e4770800000000000000
-      internalID: 8596897445487540874
+      spriteID: 077b9359d076fd760800000000000000
+      internalID: 7484814413748877168
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Wal_Sheet_Rock_1
+      name: Slime_Wal_Sheet_Rock_Fixed_1
       rect:
         serializedVersion: 2
         x: 64
@@ -155,14 +155,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 84eae730c93a97000800000000000000
-      internalID: 34238362650848840
+      spriteID: f8d716f9ddab02950800000000000000
+      internalID: 6422338529654832527
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Wal_Sheet_Rock_2
+      name: Slime_Wal_Sheet_Rock_Fixed_2
       rect:
         serializedVersion: 2
         x: 128
@@ -177,14 +177,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2c2fdb03b7d8b1440800000000000000
-      internalID: 4907671779188536002
+      spriteID: 36c9bc205c88072c0800000000000000
+      internalID: -4435895253223105437
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Wal_Sheet_Rock_3
+      name: Slime_Wal_Sheet_Rock_Fixed_3
       rect:
         serializedVersion: 2
         x: 192
@@ -199,14 +199,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e44e72259328d1a90800000000000000
-      internalID: -7341568634840947634
+      spriteID: 9194db5b8d93f4570800000000000000
+      internalID: 8453038628522510617
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Wal_Sheet_Rock_4
+      name: Slime_Wal_Sheet_Rock_Fixed_4
       rect:
         serializedVersion: 2
         x: 256
@@ -221,14 +221,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 939f844c5dbef4f50800000000000000
-      internalID: 6867967260116973881
+      spriteID: 181c0af8a16ed47d0800000000000000
+      internalID: -2932434780595109503
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Wal_Sheet_Rock_5
+      name: Slime_Wal_Sheet_Rock_Fixed_5
       rect:
         serializedVersion: 2
         x: 320
@@ -243,14 +243,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2969726b83a954420800000000000000
-      internalID: 2613664727123334802
+      spriteID: c830078837af35610800000000000000
+      internalID: 1608904866018624396
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Wal_Sheet_Rock_6
+      name: Slime_Wal_Sheet_Rock_Fixed_6
       rect:
         serializedVersion: 2
         x: 384
@@ -265,8 +265,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c1a8a365b17f6c930800000000000000
-      internalID: 4163286602333456924
+      spriteID: e43d16878289ca1a0800000000000000
+      internalID: -6796890438023130290
       vertices: []
       indices: 
       edges: []
@@ -275,7 +275,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 84374b1a97e12334cb54cdae0d448d5b
+    spriteID: a15dd474af04fc248b5a42410cb15e3a
     internalID: 0
     vertices: []
     indices: 
@@ -287,13 +287,13 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":7.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":2,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Slime_Wal_Sheet_Rock_0: 8596897445487540874
-      Slime_Wal_Sheet_Rock_1: 34238362650848840
-      Slime_Wal_Sheet_Rock_2: 4907671779188536002
-      Slime_Wal_Sheet_Rock_3: -7341568634840947634
-      Slime_Wal_Sheet_Rock_4: 6867967260116973881
-      Slime_Wal_Sheet_Rock_5: 2613664727123334802
-      Slime_Wal_Sheet_Rock_6: 4163286602333456924
+      Slime_Wal_Sheet_Rock_Fixed_0: 7484814413748877168
+      Slime_Wal_Sheet_Rock_Fixed_1: 6422338529654832527
+      Slime_Wal_Sheet_Rock_Fixed_2: -4435895253223105437
+      Slime_Wal_Sheet_Rock_Fixed_3: 8453038628522510617
+      Slime_Wal_Sheet_Rock_Fixed_4: -2932434780595109503
+      Slime_Wal_Sheet_Rock_Fixed_5: 1608904866018624396
+      Slime_Wal_Sheet_Rock_Fixed_6: -6796890438023130290
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
