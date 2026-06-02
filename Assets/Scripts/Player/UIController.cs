@@ -991,13 +991,13 @@ namespace Player
             if (hand.data.name == "Slime Essence")
             {
                 Health h = PlayerMovement.Singleton.GetComponent<Health>();
-                int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 15);
+                int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 25);
                 h.SetHealth(newHp);
             }
             else if (hand.data.name == "Health Potion")
             {
                 Health h = PlayerMovement.Singleton.GetComponent<Health>();
-                int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 50);
+                int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 80);
                 h.SetHealth(newHp);
             }
             Items.Inventory.Singleton.RemoveFromHand();
