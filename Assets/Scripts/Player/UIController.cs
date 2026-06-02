@@ -8,8 +8,6 @@ using UnityEngine.UIElements;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using Data;
-using Scriptable_Objects_Scripts;
-using UnityEngine.SceneManagement;
 
 namespace Player
 {

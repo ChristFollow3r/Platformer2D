@@ -21,7 +21,12 @@ namespace Items
         private float spawnTime;
         private bool isBeingPickedUp = false;
         private ItemStack stack = null;
+        private readonly float magnetSpeed = 15f;
 
+        [SerializeField] private float rotateSpeed = 100f;
+        [SerializeField] private float popForceUp = 5f;
+        [SerializeField] private float popForceSide = 2f;
+        private Rigidbody2D rb;
 
         [Header("Data")]
         public ItemData itemData;
@@ -35,6 +40,7 @@ namespace Items
 
         private void Start()
         {
+            rb = GetComponent<Rigidbody2D>();
             collisionCollider = GetComponent<PolygonCollider2D>();
 
             // Find the player and explicitly ignore physical collision
@@ -50,6 +56,8 @@ namespace Items
                     Physics2D.IgnoreCollision(collisionCollider, playerCollider, true);
                 }
             }
+            float randomX = Random.Range(-popForceSide, popForceSide);
+            rb.AddForce(new Vector2(randomX, popForceUp), ForceMode2D.Impulse);
         }
 
         public void Initialize(ItemData data)
@@ -84,10 +92,15 @@ namespace Items
             // Magnet start logic (replaces OnTriggerStay2D)
             if (!isBeingPickedUp)
             {
+                transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
+
                 if (Vector2.Distance(transform.position, player.position) <= suckInRadius)
                 {
                     isBeingPickedUp = true;
                     collisionCollider.enabled = false;
+
+                    rb.isKinematic = true;
+                    rb.linearVelocity = Vector2.zero;
                 }
             }
 
@@ -105,14 +118,15 @@ namespace Items
                     } : stack;
                     Inventory.Singleton.Add(itemStack1);
                     Destroy(gameObject);
+                    return;
                 }
 
-                ItemStack itemStack = stack == null ? new(itemData)
-                {
-                    amount = 1,
-                } : stack;
-                Inventory.Singleton.Add(itemStack);
-                Destroy(gameObject);
+                // ItemStack itemStack = stack == null ? new(itemData)
+                // {
+                //     amount = 1,
+                // } : stack;
+                // Inventory.Singleton.Add(itemStack);
+                // Destroy(gameObject);
             }
         }
     }
