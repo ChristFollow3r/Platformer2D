@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: IronModData
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.ModData
   mod: 3
-  minigPower: 36
+  minigPower: 10
   attackPower: 10
   defence: 20
   duration: 720

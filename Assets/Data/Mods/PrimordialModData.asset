@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PrimordialModData
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.ModData
   mod: 4
-  minigPower: 68
+  minigPower: 15
   attackPower: 50
   defence: 50
   duration: 1200

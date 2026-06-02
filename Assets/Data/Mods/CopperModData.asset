@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CopperModData
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.ModData
   mod: 1
-  minigPower: 12
+  minigPower: 5
   attackPower: 2
   defence: 10
   duration: 480
