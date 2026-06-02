@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: SapphireBlock
   m_EditorClassIdentifier: 
-  name: Sapphire
+  name: Sapphire Block
   sprite: {fileID: -8625374221717104062, guid: 373795f6c0dbc6d4284b99088cce3b96, type: 3}
   stack: 64
   isPlacable: 1

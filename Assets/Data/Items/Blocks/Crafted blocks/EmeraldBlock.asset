@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: EmeraldBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: Emerald Block
+  name: Compacted Emerald
   sprite: {fileID: 918776021672919120, guid: 3c2b0762a9e518b47a0f30a9596e59b0, type: 3}
   stack: 64
   isPlacable: 1

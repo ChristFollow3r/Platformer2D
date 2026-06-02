@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: EmeraldBlock
   m_EditorClassIdentifier: 
-  name: Emerald
+  name: Emerald Block
   sprite: {fileID: 4063884222152227866, guid: 5111ad4af33566248878989b0f0c5d5d, type: 3}
   stack: 64
   isPlacable: 1

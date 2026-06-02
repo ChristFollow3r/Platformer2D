@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: TopazBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: Topaz Block
+  name: Compacted Topaz
   sprite: {fileID: 5154308357517920886, guid: 9416f9dc37c1f6c43b95858c428d85c3, type: 3}
   stack: 64
   isPlacable: 1

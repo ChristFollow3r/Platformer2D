@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: SurfaceClayBlock
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: Clay
+  name: Surface Clay Block
   sprite: {fileID: -3624004309756069102, guid: 3963c01cdcca0334eb15f5faa98c0d6c, type: 3}
   stack: 64
   isPlacable: 0

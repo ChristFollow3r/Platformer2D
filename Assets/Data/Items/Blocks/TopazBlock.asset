@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: TopazBlock
   m_EditorClassIdentifier: 
-  name: Topaz
+  name: Topaz Block
   sprite: {fileID: 152935856936865942, guid: 6def673fc9cdd6e4fb589d0bb4e1ead6, type: 3}
   stack: 64
   isPlacable: 1
