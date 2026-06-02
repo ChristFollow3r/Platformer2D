@@ -12,6 +12,7 @@ namespace Items.Overlays
     public enum EquipmentType
     {
         Mod,
+        NONE,
     }
 
     public enum Mod
@@ -104,20 +105,26 @@ namespace Items.Overlays
             #endregion
         }
 
-        public void AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
+        public bool AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
         {
             #region AddEquipment
-            Slot slot = equipmentSlots[(int)equipmentType];
-            slot.Add(itemStack);
-            OnSlotChanged?.Invoke(slot.id, slot.item);
+
+
+
 
             if (equipmentType == EquipmentType.Mod)
             {
+                Slot slot = equipmentSlots[(int)equipmentType];
+                slot.Add(itemStack);
+                OnSlotChanged?.Invoke(slot.id, slot.item);
+
                 OnModChange?.Invoke(true, itemStack.data.modData.mod);
                 GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
-                if (!playerGo) return;
+                if (!playerGo) return true;
                 playerGo.GetComponent<Animator>().runtimeAnimatorController = itemStack.data.modData.controller;
             }
+            else return false;
+            return true;
             #endregion
         }
 
@@ -150,8 +157,7 @@ namespace Items.Overlays
 
                 if (!itemStack.data.isConsumable) return false;
                 if ((int)itemStack.data.equipmentType != slotId) return false;
-                AddEquipment(itemStack.data.equipmentType, itemStack);
-                return true;
+                return AddEquipment(itemStack.data.equipmentType, itemStack);
             }
 
             bool isCraftingSlot = slotId >= EquipmentSlots && slotId < EquipmentSlots + CraftingSlots;

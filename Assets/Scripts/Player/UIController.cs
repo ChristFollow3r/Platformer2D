@@ -266,7 +266,11 @@ namespace Player
                 return;
             }
 
-            if (playerInput.UI.CloseOverlay.WasPressedThisFrame() && isOverlayOpen) CloseOverlay();
+            if (playerInput.UI.CloseOverlay.WasPressedThisFrame())
+            {
+                if (isOverlayOpen) CloseOverlay();
+                else ToggleMenu();
+            }
 
             #endregion
         }
