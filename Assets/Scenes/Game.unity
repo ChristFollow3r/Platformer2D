@@ -353,11 +353,11 @@ MonoBehaviour:
     isCaveEnemy: 0
     isFlying: 1
     spawnWeight: 28
-  daySpawnInterval: 36
-  nightSpawnInterval: 18
+  daySpawnInterval: 120
+  nightSpawnInterval: 32
   maxActiveEnemies: 16
   minSpawnDistance: 16
-  maxSpawnDistance: 24
+  maxSpawnDistance: 16
   despawnDistance: 32
   caveTransitionY: 55
 --- !u!4 &260356700
