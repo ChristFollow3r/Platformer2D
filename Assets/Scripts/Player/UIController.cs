@@ -6,6 +6,7 @@ using UI.Components;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 using Data;
 using Scriptable_Objects_Scripts;
 
@@ -187,7 +188,11 @@ namespace Player
             InitializeSettings(menuRoot);
 
             Button openMenuBtn = hud.rootVisualElement.Q<Button>("OpenMenu");
-            if (openMenuBtn != null) openMenuBtn.clicked += ToggleMenu;
+            if (openMenuBtn != null)
+            {
+                openMenuBtn.clicked += ToggleMenu;
+                openMenuBtn.clicked += () => PlaySound(defaultClickSound);
+            }
 
             Button backBtn = menuRoot.Q<Button>("Back");
             if (backBtn != null) backBtn.clicked += ToggleMenu;
@@ -202,7 +207,7 @@ namespace Player
             if (saveBtn != null) saveBtn.clicked += () => Debug.Log("Save");
 
             Button exitBtn = menuRoot.Q<Button>("Exit");
-            if (exitBtn != null) exitBtn.clicked += () => Application.Quit();
+            if (exitBtn != null) exitBtn.clicked += () => SceneManager.LoadScene("Menu");
 
             healthElm = hud.rootVisualElement.Q("health");
             modElm = hud.rootVisualElement.Q("mod");
@@ -527,28 +532,23 @@ namespace Player
 
             VisualElement keybindsContainer = new VisualElement();
 
-            // Force the container to take up 100% of the right column's width
             keybindsContainer.style.width = new Length(100, LengthUnit.Percent);
 
-            // This is the magic line that centers all the labels inside the container!
             keybindsContainer.style.alignItems = Align.Center;
 
-            // Use Absolute positioning to force it to the top, ignoring standard spacing rules
             keybindsContainer.style.position = Position.Absolute;
-            keybindsContainer.style.top = 90; // Decrease this number (e.g., 10 or 0) to move it even higher!
+            keybindsContainer.style.top = 90;
 
 
-            // 2. Title Setup
             Label titleLabel = new Label("Controls");
             if (fontPixel != null) titleLabel.style.unityFontDefinition = new StyleFontDefinition(fontPixel);
             titleLabel.style.fontSize = 28;
             titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
             titleLabel.style.marginBottom = 20;
-            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter; // Center text inside the label
+            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             keybindsContainer.Add(titleLabel);
 
 
-            // 3. Keybinds Loop
             string[] keybindsList = new string[]
             {
                 "Move: A / D",
@@ -566,11 +566,10 @@ namespace Player
                 bindLabel.style.fontSize = 22;
                 bindLabel.style.marginBottom = 15;
                 bindLabel.style.whiteSpace = WhiteSpace.Normal;
-                bindLabel.style.unityTextAlign = TextAnchor.MiddleCenter; // Center text inside the label
+                bindLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
                 keybindsContainer.Add(bindLabel);
             }
 
-            // 4. Add to right column
             if (rightColumn != null)
             {
                 rightColumn.Add(keybindsContainer);
