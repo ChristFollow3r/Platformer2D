@@ -54,7 +54,7 @@ Material:
     - _TorchRadius: 5
     m_Colors:
     - White: {r: 1, g: 1, b: 1, a: 1}
-    - _PlayerPosition: {r: 731.0034, g: 80.008965, b: 0, a: 0}
+    - _PlayerPosition: {r: 754.9236, g: 82.00896, b: 0, a: 0}
     - _WorldSize: {r: 3000, g: 400, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

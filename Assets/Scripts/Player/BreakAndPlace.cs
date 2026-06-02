@@ -14,7 +14,7 @@ namespace Player
     {
         [Header("Refs")][SerializeField] private PlayerMovement playerMovement;
 
-        [Header("Controls")] public int reachDistance = 5;
+        [Header("Controls")] public int reachDistance = 1;
 
         [Header("Prop Attack Hitbox (Matched to PlayerAttack)")]
         [SerializeField]
@@ -220,6 +220,7 @@ namespace Player
                 : (Vector2)transform.position;
             float distance = Vector2.Distance(actualMouseWorldPos, playerCenter);
 
+            if (distance > reachDistance) return;
 
             int x = Mathf.FloorToInt(actualMouseWorldPos.x / CellSize);
             int y = Mathf.FloorToInt(actualMouseWorldPos.y / CellSize);
