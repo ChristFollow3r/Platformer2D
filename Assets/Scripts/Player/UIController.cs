@@ -594,6 +594,7 @@ namespace Player
                 "Wall Slide: Hold A / D on wall",
                 "Attack: Right Click",
                 "Mine: Left Click",
+                "Consume: R",
                 "Build: Middle Mouse - Mouse Wheel"
             };
 
