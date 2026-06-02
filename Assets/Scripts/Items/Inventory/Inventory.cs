@@ -66,7 +66,7 @@ namespace Items
             #region Start
             foreach (ItemStackBuilder builder in startingItems)
             {
-                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount, };
+                ItemStack itemStack = new ItemStack(builder.data) { amount = builder.amount };
                 Add(itemStack);
             }
 

@@ -89,6 +89,7 @@ namespace UI.Components
                 {
                     item = item.data,
                     amount = item.amount,
+                    duration = item.duration
                 };
             }
             slots[slotId].item = itemElm;

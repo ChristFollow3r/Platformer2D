@@ -53,10 +53,12 @@ public class WorldLoader : MonoBehaviour
         load.allowSceneActivation = false;
         MainMenuUI.Singleton.SetLoading();
 
-        if (Sounds.UI.MenuMusicManager.Instance != null)
-        {
-            Sounds.UI.MenuMusicManager.Instance.FadeOutAndDestroy();
-        }
+        // if (Sounds.UI.MenuMusicManager.Instance != null)
+        // {
+        //     Sounds.UI.MenuMusicManager.Instance.FadeOutAndDestroy();
+        // }
+
+
 
         while (load.progress < 0.9f)
         {
