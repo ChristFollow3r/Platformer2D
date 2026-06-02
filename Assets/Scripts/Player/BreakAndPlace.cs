@@ -72,7 +72,7 @@ namespace Player
         {
             // Input.GetMouseButtonDown(2) is the Middle Mouse Button (Mouse Wheel Click).
             // (If you ever want to change this to Right-Click, just change the 2 to a 1!)
-            if (Input.GetMouseButtonDown(2))
+            if (Input.GetMouseButton(2))
             {
                 Vector3 realScreenPos = Input.mousePosition;
                 float camZ = Mathf.Abs(Camera.main.transform.position.z);
