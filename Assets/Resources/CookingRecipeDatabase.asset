@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: CookingRecipeDatabase
   m_EditorClassIdentifier: Assembly-CSharp::Data.CookingRecipeDatabase
   recipes:
-  - {fileID: 11400000, guid: 70f08c424df90154383f4c855e454f7b, type: 2}
-  - {fileID: 11400000, guid: a7d281c5151dbb4468c90f80d67904d4, type: 2}
-  - {fileID: 11400000, guid: 2a2266ae36549024dad39464d69a3f73, type: 2}
   - {fileID: 11400000, guid: 51f6e6107e5d3ab49aab2c13fcde7c4e, type: 2}
+  - {fileID: 11400000, guid: a7d281c5151dbb4468c90f80d67904d4, type: 2}
   - {fileID: 11400000, guid: a602e53ddbcc3e64cb9541ce5f4033f7, type: 2}
+  - {fileID: 11400000, guid: 70f08c424df90154383f4c855e454f7b, type: 2}
+  - {fileID: 11400000, guid: 2a2266ae36549024dad39464d69a3f73, type: 2}
+  - {fileID: 11400000, guid: 60e651fc17b4793469cdacdfea327591, type: 2}
