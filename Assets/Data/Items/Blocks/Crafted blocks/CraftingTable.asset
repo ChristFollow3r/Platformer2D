@@ -27,6 +27,6 @@ MonoBehaviour:
   drops:
   - item: {fileID: 11400000}
     minAmount: 1
-    maxAmount: 1
+    maxAmount: 0
     dropChance: 101
   hitSound: {fileID: 8300000, guid: ac6330d650f08914196df18b20666478, type: 3}
