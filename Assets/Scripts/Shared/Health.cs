@@ -95,7 +95,7 @@ namespace Shared
 
         public void SpawnHitDrops()
         {
-            if (Random.Range(0f, 100f) <= 40f)
+            if (Random.Range(0f, 100f) <= 25f)
             {
                 if (hitVFXPrefab != null)
                 {

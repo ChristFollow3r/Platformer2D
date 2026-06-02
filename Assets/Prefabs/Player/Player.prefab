@@ -421,7 +421,7 @@ MonoBehaviour:
   dropSound: {fileID: 8300000, guid: 33cc41cbb6bfb904bbd8f6345a333543, type: 3}
   jumpSound: {fileID: 8300000, guid: e9ab39b3f73dffd40a4b9c7e2480a98c, type: 3}
   slideSound: {fileID: 8300000, guid: 1f0b7e38dae600e41ad80d154b90d77e, type: 3}
-  hitSound: {fileID: 8300000, guid: 122bed81e6fce4d488d9fac0915326e2, type: 3}
+  hitSound: {fileID: 8300000, guid: f04e886c921e42d44bc2ad8562df2476, type: 3}
   gruntSound: {fileID: 8300000, guid: 6c2d6205a4cafa340a61e6bf762521d4, type: 3}
   pitchVariation: 0.1
   footstepMinPitch: 1.2

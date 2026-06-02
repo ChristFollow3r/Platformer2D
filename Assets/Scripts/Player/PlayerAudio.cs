@@ -109,7 +109,7 @@ namespace Player
 
         public void PlayHitSound()
         {
-            PlayRandomized(movementAudioSource, hitSound, 1f - pitchVariation, 1f + pitchVariation);
+            PlayRandomized(movementAudioSource, hitSound, 0.95f, 1.05f);
         }
 
         private void PlayRandomized(AudioSource source, AudioClip clip, float minPitch, float maxPitch)
