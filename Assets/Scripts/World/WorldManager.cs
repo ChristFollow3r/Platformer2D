@@ -52,6 +52,13 @@ namespace World
 
         private void Awake()
         {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(Instance.gameObject);
+            }
+
+            Instance = this;
+
             foreach (var block in blocks)
             {
                 if (WorldData.BlockDictionary.TryGetValue(block.blockType, out ItemData current))
@@ -60,16 +67,16 @@ namespace World
                 }
                 WorldData.BlockDictionary[block.blockType] = block;
             }
+
             foreach (var prop in props) WorldData.PropDictionary[prop.type] = prop;
+        }
 
-            if (Instance != null)
+        private void OnDestroy()
+        {
+            if (Instance == this)
             {
-                Destroy(gameObject);
-                return;
+                Instance = null;
             }
-
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
@@ -594,6 +601,8 @@ private void LoadWorld()
 
         private bool CheckCameraMovement()
         {
+            if (!mainCamera) return false;
+
             if (mainCamera.transform.position != cameraPosition)
             {
                 cameraPosition = mainCamera.transform.position;

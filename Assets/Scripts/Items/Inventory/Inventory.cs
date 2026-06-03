@@ -75,6 +75,18 @@ namespace Items
             isInitialized = true;
             #endregion
         }
+
+        private void OnDestroy()
+        {
+            #region OnDestroy
+
+            if (Singleton == this)
+            {
+                Singleton = null;
+            }
+
+            #endregion
+        }
         #endregion
 
         #region Methods

@@ -128,6 +128,23 @@ namespace Player
             #endregion
         }
 
+        private void OnDestroy()
+        {
+            #region OnDestroy
+
+            if (Singleton == this)
+            {
+                Singleton = null;
+            }
+
+            if (playerInput != null)
+            {
+                playerInput.Disable();
+            }
+
+            #endregion
+        }
+
         #endregion
 
         #region Recipe Book Data
@@ -212,6 +229,7 @@ namespace Player
             Button exitBtn = menuRoot.Q<Button>("Exit");
             if (exitBtn != null) exitBtn.clicked += () =>
             {
+                Time.timeScale = 1f;
                 WorldSerializer.Save();
                 SceneManager.LoadScene("Menu");
             };

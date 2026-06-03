@@ -65,7 +65,7 @@ public class WorldLoader : MonoBehaviour
             yield return null;
         }
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSecondsRealtime(1);
 
         load.allowSceneActivation = true;
         yield return load;

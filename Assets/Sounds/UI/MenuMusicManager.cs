@@ -58,7 +58,7 @@ namespace Sounds.UI
 
             while (timeElapsed < fadeDuration)
             {
-                timeElapsed += Time.deltaTime;
+                timeElapsed += Time.unscaledDeltaTime;
                 Debug.Log(Mathf.Lerp(startVolume, 0f, timeElapsed / fadeDuration));
                 audioSource.volume = Mathf.Lerp(startVolume, 0f, timeElapsed / fadeDuration);
                 yield return null;

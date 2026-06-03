@@ -65,11 +65,11 @@ public class MainMenuUI : MonoBehaviour
     private void Awake()
     {
         #region Awake
+
+        Time.timeScale = 1f;
+
         SetupSingleton();
-
-        // Grab the AudioSource component so we can play the sound
         audioSource = GetComponent<AudioSource>();
-
         GetElements();
         SubscribeEvents();
         #endregion
