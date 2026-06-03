@@ -86,13 +86,14 @@ namespace Items
         {
             if (player == null || Inventory.Singleton == null) return;
 
+            transform.rotation = Quaternion.Euler(transform.rotation * new Vector3(0, 0, 1));
             // DELAY CHECK: Prevents instant pickup when breaking blocks or dropping items
             if (Time.time < spawnTime + pickupDelay) return;
 
             // Magnet start logic (replaces OnTriggerStay2D)
             if (!isBeingPickedUp)
             {
-                transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
+                // transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
 
                 if (Vector2.Distance(transform.position, player.position) <= suckInRadius)
                 {

@@ -135,7 +135,9 @@ namespace Items
             if (item == null || item.data == null) return;
 
             if (PlayerMovement.Singleton == null) return;
-            Drop(item, PlayerMovement.Singleton.gameObject.transform.position);
+            Vector3 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(0.2f, 0.5f));
+            Vector2 spawnPos = PlayerMovement.Singleton.gameObject.transform.position + randomOffset;
+            Drop(item, spawnPos);
             #endregion
         }
 
@@ -143,9 +145,9 @@ namespace Items
         {
             #region Drop
             if (item == null || item.data == null) return;
-
-            GameObject droppedItem = Instantiate(itemEntityPrefab, pos, Quaternion.identity);
-            Vector2 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
+            Vector2 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(0.2f, 0.5f));
+            Vector2 spawnPos = pos + randomOffset;
+            GameObject droppedItem = Instantiate(itemEntityPrefab, spawnPos, Quaternion.identity);
             droppedItem.transform.position += (Vector3)randomOffset;
 
             if (droppedItem.TryGetComponent(out ItemEntity entity))

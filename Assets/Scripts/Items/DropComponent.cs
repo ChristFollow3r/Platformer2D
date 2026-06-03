@@ -65,10 +65,11 @@ namespace Items
             if (Inventory.Singleton == null || player == null) return;
 
             // Visual spinning effect
-            if (!isBeingPickedUp)
-            {
-                transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
-            }
+            // if (!isBeingPickedUp)
+            // {
+            //     transform.Rotate(Vector3.up, rotateSpeed * Time.deltaTime, Space.World);
+            // }
+            transform.rotation = Quaternion.Euler(transform.rotation * new Vector3(0, 0, 1));
 
             if (itemData == null) return;
 
