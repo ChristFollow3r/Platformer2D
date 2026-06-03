@@ -120,6 +120,7 @@ namespace Player
             CheckOverlay();
             MoveHand();
             Consume();
+            Drop();
             foreach (Overlay overlay in overlaysByBlockId.Values)
             {
                 overlay.Tick();
@@ -1022,6 +1023,18 @@ namespace Player
             }
             Items.Inventory.Singleton.RemoveFromHand();
 
+        }
+
+        private void Drop()
+        {
+            if (!playerInput.Player.Drop.WasPressedThisFrame()) return;
+            ItemStack hand = Items.Inventory.Singleton.hand;
+            if (hand != null)
+            {
+                ItemStack dropStack = new ItemStack(hand.data) { amount = 1, duration = hand.duration };
+                Items.Inventory.Singleton.Drop(dropStack);
+                Items.Inventory.Singleton.RemoveFromHand();
+            }
         }
         #endregion
     }

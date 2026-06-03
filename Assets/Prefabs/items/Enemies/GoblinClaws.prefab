@@ -145,6 +145,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.ItemEntity
   pickupDelay: 1
+  rotateSpeed: 100
+  popForceUp: 5
+  popForceSide: 2
   itemData: {fileID: 11400000, guid: 02ef9b267d4262640b9e2755f5016b01, type: 2}
 --- !u!114 &7243765266166736406
 MonoBehaviour:
@@ -165,6 +168,7 @@ MonoBehaviour:
   rotateSpeed: 0
   popForceUp: 5
   popForceSide: 2
+  pickupDelay: 0.5
   player: {fileID: 846664854750277049, guid: 7de4c731088f96349a5403327a7c7647, type: 3}
 --- !u!60 &3459221506591702278
 PolygonCollider2D:
@@ -243,7 +247,7 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_Interpolate: 1
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
