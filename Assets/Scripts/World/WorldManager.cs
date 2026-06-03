@@ -69,6 +69,7 @@ namespace World
             }
 
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
 
         private void Start()
@@ -101,57 +102,80 @@ namespace World
                 WorldSerializer.LoadPlayer();
         }
 
-        private void NewWorld()
+        private int GetDeterministicHash(string seed)
+{
+    if (string.IsNullOrEmpty(seed)) return UnityEngine.Random.Range(-100000, 100000);
+    unchecked
+    {
+        int hash = 23;
+        foreach (char c in seed)
         {
-            seedOffset = ComputeSeedOffset(WorldSerializer.Seed);
-            Random.InitState(WorldSerializer.Seed.GetHashCode());
-
-            WorldData.isGenerating = true;
-            GenerateWorld();
-            GenerateProps();
-            WorldData.isGenerating = false;
-            WorldSerializer.Save();
+            hash = hash * 31 + c;
         }
+        return hash;
+    }
+}
 
-        private void LoadWorld()
-        {
-            Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
+private float ComputeSeedOffset(int seedHash)
+{
+    System.Random prng = new System.Random(seedHash);
+    return prng.Next(-100000, 100000);
+}
 
-            WorldSaveData save = WorldSerializer.Load();
-            Random.InitState(save.seed.GetHashCode());
-            if (save == null)
-            {
-                Debug.LogError("[WorldManager] Save data is null, falling back to new world.");
-                NewWorld();
-                return;
-            }
+private void NewWorld()
+{
+    int seedHash = GetDeterministicHash(WorldSerializer.Seed);
+    seedOffset = ComputeSeedOffset(seedHash);
+    UnityEngine.Random.InitState(seedHash);
 
-            Debug.Log($"[WorldManager] Applying seed: '{save.seed}'");
-            seedOffset = ComputeSeedOffset(save.seed);
+    WorldData.isGenerating = true;
+    GenerateWorld();
+    GenerateProps();
+    WorldData.isGenerating = false;
+    WorldSerializer.Save();
+}
 
-            WorldData.isGenerating = true;
-            GenerateWorld();
-            GenerateProps();
-            WorldData.isGenerating = false;
-            Debug.Log("[WorldManager] Base generation done.");
+private void LoadWorld()
+{
+    Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
 
-            WorldData.isGenerating = true;
-            foreach (var b in save.blocks)
-                WorldData.World.SetBlockType(b.x, b.y, b.type);
-            foreach (var p in save.props)
-                WorldData.World.SetPropType(p.x, p.y, p.type);
-            WorldData.isGenerating = false;
-            Debug.Log($"[WorldManager] Applied {save.blocks.Length} block diffs, {save.props.Length} prop diffs.");
+    WorldSaveData save = WorldSerializer.Load();
+    if (save == null)
+    {
+        Debug.LogError("[WorldManager] Save data is null, falling back to new world.");
+        NewWorld();
+        return;
+    }
 
-            foreach (var b in save.blocks)
-                WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
-            foreach (var p in save.props)
-                WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
+    int seedHash = GetDeterministicHash(save.seed);
+    UnityEngine.Random.InitState(seedHash);
 
-            Debug.Log("[WorldManager] Loading overlays...");
-            WorldSerializer.LoadOverlays();
-            Debug.Log("[WorldManager] LoadWorld complete.");
-        }
+    Debug.Log($"[WorldManager] Applying seed: '{save.seed}'");
+    seedOffset = ComputeSeedOffset(seedHash);
+
+    WorldData.isGenerating = true;
+    GenerateWorld();
+    GenerateProps();
+    WorldData.isGenerating = false;
+    Debug.Log("[WorldManager] Base generation done.");
+
+    WorldData.isGenerating = true;
+    foreach (var b in save.blocks)
+        WorldData.World.SetBlockType(b.x, b.y, b.type);
+    foreach (var p in save.props)
+        WorldData.World.SetPropType(p.x, p.y, p.type);
+    WorldData.isGenerating = false;
+    Debug.Log($"[WorldManager] Applied {save.blocks.Length} block diffs, {save.props.Length} prop diffs.");
+
+    foreach (var b in save.blocks)
+        WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
+    foreach (var p in save.props)
+        WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
+
+    Debug.Log("[WorldManager] Loading overlays...");
+    WorldSerializer.LoadOverlays();
+    Debug.Log("[WorldManager] LoadWorld complete.");
+}
 
         private void Update()
         {
