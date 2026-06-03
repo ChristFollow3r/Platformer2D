@@ -615,6 +615,7 @@ namespace Player
                 "Attack: Right Click",
                 "Mine: Left Click",
                 "Consume: R",
+                "Drop Item: Q",
                 "Build: Middle Mouse - Mouse Wheel"
             };
 
