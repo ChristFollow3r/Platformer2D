@@ -1582,7 +1582,50 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 5
     m_NumAlphaKeys: 2
-  dayNightDuration: 300
+  dayNightDuration: 10
+  fogMaterial: {fileID: 2100000, guid: df9fc57e4abf49641ad33d59ccd8fcdf, type: 2}
+  fogOpacityCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0010384992
+      value: 0.99998474
+      inSlope: -5.0092726
+      outSlope: -5.0092726
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2007074
+      value: -0.00021117926
+      inSlope: -2.506053
+      outSlope: -2.506053
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7933141
+      value: -0.0018902421
+      inSlope: 2.4222856
+      outSlope: 2.4222856
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 4.8474045
+      outSlope: 4.8474045
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1709694531
 GameObject:
   m_ObjectHideFlags: 0
