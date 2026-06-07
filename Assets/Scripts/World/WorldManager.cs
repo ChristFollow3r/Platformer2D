@@ -612,45 +612,82 @@ private void LoadWorld()
             return false;
         }
 
-        private void CalculateLighting()
-        {
-            int width = WorldData.World.width;
-            int height = WorldData.World.height;
+       private void CalculateLighting()
+{
+    int width = WorldData.World.width;
+    int height = WorldData.World.height;
 
-            for (int i = 0; i < width; i++)
+    for (int i = 0; i < width; i++)
+    {
+        float currentSunlight = 1.0f;
+        for (int j = height - 1; j >= 0; j--)
+        {
+            BlockType blockType = WorldData.World.GetBlockTypes(i, j);
+
+            if (blockType != BlockType.Air)
             {
-                float currentSunlight = 1.0f;
-                for (int j = height - 1; j >= 0; j--)
-                {
-                    BlockType blockType = WorldData.World.GetBlockTypes(i, j);
-                    if (blockType != BlockType.Air) currentSunlight *= 0.82f;
-                    WorldData.World.lightValues[i, j] = currentSunlight;
-                }
+                currentSunlight -= 0.33f;
             }
 
-            for (int iteration = 0; iteration < 14; iteration++)
-            {
-                for (int i = 0; i < width; i++)
-                {
-                    for (int j = 0; j < height; j++)
-                    {
-                        BlockType type = WorldData.World.GetBlockTypes(i, j);
-                        float currentValue = WorldData.World.lightValues[i, j];
-                        float neighbourMax = 0f;
-                        if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
-                        if (i < width - 1)
-                            neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
-                        if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
-                        if (j < height - 1)
-                            neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+            currentSunlight = Mathf.Clamp01(currentSunlight);
+            WorldData.World.lightValues[i, j] = currentSunlight;
+        }
+    }
 
-                        float decay = (type == BlockType.Air) ? 0.94f : 0.84f;
-                        float spreadValue = neighbourMax * decay;
-                        if (spreadValue > currentValue) WorldData.World.lightValues[i, j] = spreadValue;
+    for (int iteration = 0; iteration < 14; iteration++)
+    {
+        if (iteration % 2 == 0)
+        {
+            for (int i = 0; i < width; i++)
+            {
+                for (int j = 0; j < height; j++)
+                {
+                    BlockType type = WorldData.World.GetBlockTypes(i, j);
+                    float currentValue = WorldData.World.lightValues[i, j];
+                    float neighbourMax = 0f;
+
+                    if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
+                    if (i < width - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
+                    if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
+                    if (j < height - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+
+                    float decay = (type == BlockType.Air) ? 0.05f : 0.33f;
+                    float spreadValue = neighbourMax - decay;
+
+                    if (spreadValue > currentValue)
+                    {
+                        WorldData.World.lightValues[i, j] = spreadValue;
                     }
                 }
             }
         }
+        else
+        {
+            for (int i = width - 1; i >= 0; i--)
+            {
+                for (int j = height - 1; j >= 0; j--)
+                {
+                    BlockType type = WorldData.World.GetBlockTypes(i, j);
+                    float currentValue = WorldData.World.lightValues[i, j];
+                    float neighbourMax = 0f;
+
+                    if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
+                    if (i < width - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
+                    if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
+                    if (j < height - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+
+                    float decay = (type == BlockType.Air) ? 0.05f : 0.33f;
+                    float spreadValue = neighbourMax - decay;
+
+                    if (spreadValue > currentValue)
+                    {
+                        WorldData.World.lightValues[i, j] = spreadValue;
+                    }
+                }
+            }
+        }
+    }
+}
 
         private void ApplyLightingToTexture()
         {

@@ -49,6 +49,9 @@ namespace Player
 
         [SerializeField] private LayerMask groundLayer;
 
+        [Header("Shader Setup")]
+        [SerializeField] private Material tilemapMaterial;
+
         [Header("Movement settings")]
         [SerializeField] private float speed = 8f;
         [SerializeField] private float jumpForce = 12f;
@@ -125,6 +128,8 @@ namespace Player
 
         private void Update()
         {
+            Shader.SetGlobalVector("_PlayerPosition", transform.position);
+
             if (enableTimer > 0)
             {
                 enableTimer -= Time.deltaTime;
@@ -138,7 +143,6 @@ namespace Player
             {
                 WorldManager.Instance.RespawnPlayer(gameObject);
             }
-
 
             if (UIController.Singleton.isOverlayOpen || UIController.Singleton.isMenuOpen) return;
 
@@ -359,9 +363,8 @@ namespace Player
         }
         private Vector2 FindSafeSpawnPosition(Vector2 startPos)
         {
-            Vector2 size = playerCollider.bounds.size * 0.8f; // slightly smaller to avoid edge touches
+            Vector2 size = playerCollider.bounds.size * 0.8f;
 
-            // Walk upward until we find a clear spot
             for (int i = 0; i < 20; i++)
             {
                 Vector2 candidate = startPos + new Vector2(0, i * 0.2f);
