@@ -33,11 +33,11 @@ namespace World
         private float[,] lightMapCache;
 
         [Header("Lighting Settings")]
-        [SerializeField] private float verticalSolidDecay = 0.2f;
-        [SerializeField] private float spreadSolidDecay = 0.15f;
-        [SerializeField] private float spreadAirDecay = 0.04f;
-        [SerializeField] private int lightUpdateRadius = 40;
-        [SerializeField] private int lightIterations = 14;
+        [SerializeField] private float verticalSolidDecay = 0.8f;
+        [SerializeField] private float spreadSolidDecay = 0.90f;
+        [SerializeField] private float spreadAirDecay = 0.7f;
+        [SerializeField] private int lightUpdateRadius = 20;
+        [SerializeField] private int lightIterations = 3;
 
         [Header("World Settings")] public int worldWidth = 150;
         public int worldHeight = 90;
@@ -98,7 +98,7 @@ namespace World
             cameraPosition = mainCamera.transform.position;
 
             lightmapTexture = new Texture2D(worldWidth, worldHeight, TextureFormat.RGBAHalf, false);
-            lightmapTexture.filterMode = FilterMode.Bilinear;
+            lightmapTexture.filterMode = FilterMode.Point;
             lightmapTexture.wrapMode = TextureWrapMode.Clamp;
 
             lightmapColors = new Color[worldWidth * worldHeight];
@@ -640,10 +640,9 @@ namespace World
 
                     if (!air)
                     {
-                        currentSunlight -= verticalSolidDecay;
+                        currentSunlight *= (1.0f - verticalSolidDecay);
                     }
 
-                    currentSunlight = currentSunlight < 0f ? 0f : (currentSunlight > 1f ? 1f : currentSunlight);
                     lightMapCache[i, j] = currentSunlight;
                 }
             }
@@ -665,7 +664,7 @@ namespace World
                             if (j < worldHeight - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
                             float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
-                            float spreadValue = neighbourMax - decay;
+                            float spreadValue = neighbourMax * (1.0f - decay);
 
                             if (spreadValue > currentValue)
                             {
@@ -689,7 +688,7 @@ namespace World
                             if (j < worldHeight - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
                             float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
-                            float spreadValue = neighbourMax - decay;
+                            float spreadValue = neighbourMax * (1.0f - decay);
 
                             if (spreadValue > currentValue)
                             {
@@ -709,6 +708,7 @@ namespace World
                     WorldData.World.lightValues[x, y] = finalLight;
 
                     finalLight *= finalMultiplier;
+                    finalLight = Mathf.Pow(finalLight, 1.5f);
                     lightmapColors[y * worldWidth + x] = new Color(finalLight, finalLight, finalLight, 1f);
                 }
             }
@@ -733,10 +733,9 @@ namespace World
 
                     if (!air)
                     {
-                        currentSunlight -= verticalSolidDecay;
+                        currentSunlight *= (1.0f - verticalSolidDecay);
                     }
 
-                    currentSunlight = currentSunlight < 0f ? 0f : (currentSunlight > 1f ? 1f : currentSunlight);
                     lightMapCache[i, j] = currentSunlight;
                 }
             }
@@ -758,7 +757,7 @@ namespace World
                             if (j < height - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
                             float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
-                            float spreadValue = neighbourMax - decay;
+                            float spreadValue = neighbourMax * (1.0f - decay);
 
                             if (spreadValue > currentValue)
                             {
@@ -782,7 +781,7 @@ namespace World
                             if (j < height - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
                             float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
-                            float spreadValue = neighbourMax - decay;
+                            float spreadValue = neighbourMax * (1.0f - decay);
 
                             if (spreadValue > currentValue)
                             {
@@ -802,6 +801,7 @@ namespace World
                     WorldData.World.lightValues[x, y] = finalLight;
 
                     finalLight *= finalMultiplier;
+                    finalLight = Mathf.Pow(finalLight, 1.5f);
                     lightmapColors[y * width + x] = new Color(finalLight, finalLight, finalLight, 1f);
                 }
             }
@@ -815,6 +815,7 @@ namespace World
                 for (int y = 0; y < worldHeight; y++)
                 {
                     float l = WorldData.World.lightValues[x, y] * finalMultiplier;
+                    l = Mathf.Pow(l, 1.5f);
                     int index = y * worldWidth + x;
                     lightmapColors[index] = new Color(l, l, l, 1f);
                 }
