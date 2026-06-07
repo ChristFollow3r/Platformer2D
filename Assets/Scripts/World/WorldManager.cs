@@ -616,9 +616,97 @@ namespace World
             return false;
         }
 
-        public void UpdateDynamicLighting()
+       public void UpdateDynamicLighting(int targetX, int targetY)
         {
-            CalculateLighting();
+            int minX = Mathf.Max(0, targetX - 15);
+            int maxX = Mathf.Min(worldWidth - 1, targetX + 15);
+            int minY = 0;
+            int maxY = worldHeight - 1;
+
+            for (int i = minX; i <= maxX; i++)
+            {
+                float currentSunlight = 1.0f;
+                for (int j = maxY; j >= 0; j--)
+                {
+                    BlockType blockType = WorldData.World.GetBlockTypes(i, j);
+                    bool air = blockType == BlockType.Air;
+                    isAirCache[i, j] = air;
+
+                    if (!air)
+                    {
+                        currentSunlight -= 0.33f;
+                    }
+
+                    currentSunlight = currentSunlight < 0f ? 0f : (currentSunlight > 1f ? 1f : currentSunlight);
+                    lightMapCache[i, j] = currentSunlight;
+                }
+            }
+
+            for (int iteration = 0; iteration < 14; iteration++)
+            {
+                if (iteration % 2 == 0)
+                {
+                    for (int i = minX; i <= maxX; i++)
+                    {
+                        for (int j = minY; j <= maxY; j++)
+                        {
+                            float currentValue = lightMapCache[i, j];
+                            float neighbourMax = 0f;
+
+                            if (i > 0 && lightMapCache[i - 1, j] > neighbourMax) neighbourMax = lightMapCache[i - 1, j];
+                            if (i < worldWidth - 1 && lightMapCache[i + 1, j] > neighbourMax) neighbourMax = lightMapCache[i + 1, j];
+                            if (j > 0 && lightMapCache[i, j - 1] > neighbourMax) neighbourMax = lightMapCache[i, j - 1];
+                            if (j < worldHeight - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
+
+                            float decay = isAirCache[i, j] ? 0.05f : 0.33f;
+                            float spreadValue = neighbourMax - decay;
+
+                            if (spreadValue > currentValue)
+                            {
+                                lightMapCache[i, j] = spreadValue;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = maxX; i >= minX; i--)
+                    {
+                        for (int j = maxY; j >= minY; j--)
+                        {
+                            float currentValue = lightMapCache[i, j];
+                            float neighbourMax = 0f;
+
+                            if (i > 0 && lightMapCache[i - 1, j] > neighbourMax) neighbourMax = lightMapCache[i - 1, j];
+                            if (i < worldWidth - 1 && lightMapCache[i + 1, j] > neighbourMax) neighbourMax = lightMapCache[i + 1, j];
+                            if (j > 0 && lightMapCache[i, j - 1] > neighbourMax) neighbourMax = lightMapCache[i, j - 1];
+                            if (j < worldHeight - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
+
+                            float decay = isAirCache[i, j] ? 0.05f : 0.33f;
+                            float spreadValue = neighbourMax - decay;
+
+                            if (spreadValue > currentValue)
+                            {
+                                lightMapCache[i, j] = spreadValue;
+                            }
+                        }
+                    }
+                }
+            }
+
+            float bloomMultiplier = 1.0f;
+            for (int x = minX; x <= maxX; x++)
+            {
+                for (int y = minY; y <= maxY; y++)
+                {
+                    float finalLight = lightMapCache[x, y];
+                    WorldData.World.lightValues[x, y] = finalLight;
+
+                    finalLight *= bloomMultiplier;
+                    lightmapColors[y * worldWidth + x] = new Color(finalLight, finalLight, finalLight, 1f);
+                }
+            }
+
             lightmapTexture.SetPixels(lightmapColors);
             lightmapTexture.Apply();
         }

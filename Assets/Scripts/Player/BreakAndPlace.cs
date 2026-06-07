@@ -315,7 +315,7 @@ namespace Player
 
             WorldData.World.SetBlockType(x, y, item.data.blockType);
             UpdateChunkVisuals(x, y);
-            WorldManager.Instance.UpdateDynamicLighting();
+            WorldManager.Instance.UpdateDynamicLighting(x, y);
 
             if (item.data.hitSound != null)
             {
@@ -363,7 +363,7 @@ namespace Player
 
             WorldData.World.SetBlockType(x, y, BlockType.Air);
             UpdateChunkVisuals(x, y);
-            WorldManager.Instance.UpdateDynamicLighting();
+            WorldManager.Instance.UpdateDynamicLighting(x, y);
         }
 
         private void BreakProp(PropType hitType, int checkX, int checkY)
@@ -386,7 +386,7 @@ namespace Player
 
             WorldData.World.SetPropType(checkX, checkY, PropType.None);
             UpdateChunkVisuals(checkX, checkY);
-            WorldManager.Instance.UpdateDynamicLighting();
+            WorldManager.Instance.UpdateDynamicLighting(checkX, checkY);
         }
 
         private void SpawnLoot(ItemData itemData, Vector2 position)
