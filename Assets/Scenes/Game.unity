@@ -1515,6 +1515,11 @@ MonoBehaviour:
   virtualCamera: {fileID: 91711888}
   currentSpawnPoint: {x: 0, y: 0, z: 0}
   tilemapMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
+  verticalSolidDecay: 0.2
+  spreadSolidDecay: 0.15
+  spreadAirDecay: 0.04
+  lightUpdateRadius: 40
+  lightIterations: 14
   worldWidth: 3000
   worldHeight: 400
   globalSpawnChance: 70
@@ -1582,7 +1587,7 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 5
     m_NumAlphaKeys: 2
-  dayNightDuration: 10
+  dayNightDuration: 300
   fogMaterial: {fileID: 2100000, guid: df9fc57e4abf49641ad33d59ccd8fcdf, type: 2}
   fogOpacityCurve:
     serializedVersion: 2

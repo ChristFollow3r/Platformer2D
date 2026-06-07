@@ -219,6 +219,18 @@ namespace Player
             int x = Mathf.FloorToInt(actualMouseWorldPos.x / CellSize);
             int y = Mathf.FloorToInt(actualMouseWorldPos.y / CellSize);
 
+            // --- CHECK FOR PROP ABOVE (NEW) ---
+            if (WorldData.World.SafeCheck(x, y + 1))
+            {
+                PropType propAbove = WorldData.World.GetPropType(x, y + 1);
+                if (propAbove != PropType.None)
+                {
+                    // Block is protected by the prop above it
+                    currentBlockDamage = 0f;
+                    return;
+                }
+            }
+
             if (currentMineTarget.x != x || currentMineTarget.y != y)
             {
                 currentMineTarget = new Vector2Int(x, y);
