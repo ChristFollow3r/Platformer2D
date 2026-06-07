@@ -20,7 +20,8 @@ namespace Shaders
             {
                 if (Vector3.SqrMagnitude(transform.position - lastPosition) > 0.001f)
                 {
-                    blockMaterial.SetVector(PlayerPosition, transform.position);
+                    Vector4 flatPosition = new Vector4(transform.position.x, transform.position.y, 0f, 0f);
+                    blockMaterial.SetVector(PlayerPosition, flatPosition);
                     lastPosition = transform.position;
                 }
 

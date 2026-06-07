@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 1957503140287811286}
   - component: {fileID: 1919748396387906056}
   - component: {fileID: 1509471125570610616}
+  - component: {fileID: -1023922905559742071}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -579,3 +580,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa88ebe00a467244cb36eb4a7dc94d80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player.PlaceFeedback
+--- !u!114 &-1023922905559742071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6493406502564964188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d5523cf6ce1613498a6f70254a8e649, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shaders.PlayerLightUpdate
+  blockMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}

@@ -17,15 +17,13 @@ namespace World
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
 
-        [Header("Player Settings")]
-        [SerializeField]
+        [Header("Player Settings")] [SerializeField]
         private GameObject playerPrefab;
 
         [SerializeField] private CinemachineCamera virtualCamera;
         public Vector3 currentSpawnPoint;
 
-        [Header("Shader Setup")]
-        [SerializeField]
+        [Header("Shader Setup")] [SerializeField]
         private Material tilemapMaterial;
 
         private Texture2D lightmapTexture;
@@ -35,8 +33,7 @@ namespace World
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
 
-        [Header("Autosave")]
-        [SerializeField] private float autosaveInterval = 60f;
+        [Header("Autosave")] [SerializeField] private float autosaveInterval = 60f;
         private float _autosaveTimer;
 
         public static WorldManager Instance { get; private set; }
@@ -63,8 +60,10 @@ namespace World
             {
                 if (WorldData.BlockDictionary.TryGetValue(block.blockType, out ItemData current))
                 {
-                    Debug.LogWarning($"Block {block.name} / {block.sprite} is trying to override {block.blockType} held by  {current.name} / {current.sprite}");
+                    Debug.LogWarning(
+                        $"Block {block.name} / {block.sprite} is trying to override {block.blockType} held by  {current.name} / {current.sprite}");
                 }
+
                 WorldData.BlockDictionary[block.blockType] = block;
             }
 
@@ -110,79 +109,80 @@ namespace World
         }
 
         private int GetDeterministicHash(string seed)
-{
-    if (string.IsNullOrEmpty(seed)) return UnityEngine.Random.Range(-100000, 100000);
-    unchecked
-    {
-        int hash = 23;
-        foreach (char c in seed)
         {
-            hash = hash * 31 + c;
+            if (string.IsNullOrEmpty(seed)) return UnityEngine.Random.Range(-100000, 100000);
+            unchecked
+            {
+                int hash = 23;
+                foreach (char c in seed)
+                {
+                    hash = hash * 31 + c;
+                }
+
+                return hash;
+            }
         }
-        return hash;
-    }
-}
 
-private float ComputeSeedOffset(int seedHash)
-{
-    System.Random prng = new System.Random(seedHash);
-    return prng.Next(-100000, 100000);
-}
+        private float ComputeSeedOffset(int seedHash)
+        {
+            System.Random prng = new System.Random(seedHash);
+            return prng.Next(-100000, 100000);
+        }
 
-private void NewWorld()
-{
-    int seedHash = GetDeterministicHash(WorldSerializer.Seed);
-    seedOffset = ComputeSeedOffset(seedHash);
-    UnityEngine.Random.InitState(seedHash);
+        private void NewWorld()
+        {
+            int seedHash = GetDeterministicHash(WorldSerializer.Seed);
+            seedOffset = ComputeSeedOffset(seedHash);
+            UnityEngine.Random.InitState(seedHash);
 
-    WorldData.isGenerating = true;
-    GenerateWorld();
-    GenerateProps();
-    WorldData.isGenerating = false;
-    WorldSerializer.Save();
-}
+            WorldData.isGenerating = true;
+            GenerateWorld();
+            GenerateProps();
+            WorldData.isGenerating = false;
+            WorldSerializer.Save();
+        }
 
-private void LoadWorld()
-{
-    Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
+        private void LoadWorld()
+        {
+            Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
 
-    WorldSaveData save = WorldSerializer.Load();
-    if (save == null)
-    {
-        Debug.LogError("[WorldManager] Save data is null, falling back to new world.");
-        NewWorld();
-        return;
-    }
+            WorldSaveData save = WorldSerializer.Load();
+            if (save == null)
+            {
+                Debug.LogError("[WorldManager] Save data is null, falling back to new world.");
+                NewWorld();
+                return;
+            }
 
-    int seedHash = GetDeterministicHash(save.seed);
-    UnityEngine.Random.InitState(seedHash);
+            int seedHash = GetDeterministicHash(save.seed);
+            UnityEngine.Random.InitState(seedHash);
 
-    Debug.Log($"[WorldManager] Applying seed: '{save.seed}'");
-    seedOffset = ComputeSeedOffset(seedHash);
+            Debug.Log($"[WorldManager] Applying seed: '{save.seed}'");
+            seedOffset = ComputeSeedOffset(seedHash);
 
-    WorldData.isGenerating = true;
-    GenerateWorld();
-    GenerateProps();
-    WorldData.isGenerating = false;
-    Debug.Log("[WorldManager] Base generation done.");
+            WorldData.isGenerating = true;
+            GenerateWorld();
+            GenerateProps();
+            WorldData.isGenerating = false;
+            Debug.Log("[WorldManager] Base generation done.");
 
-    WorldData.isGenerating = true;
-    foreach (var b in save.blocks)
-        WorldData.World.SetBlockType(b.x, b.y, b.type);
-    foreach (var p in save.props)
-        WorldData.World.SetPropType(p.x, p.y, p.type);
-    WorldData.isGenerating = false;
-    Debug.Log($"[WorldManager] Applied {save.blocks.Length} block diffs, {save.props.Length} prop diffs.");
+            WorldData.isGenerating = true;
+            foreach (var b in save.blocks)
+                WorldData.World.SetBlockType(b.x, b.y, b.type);
+            foreach (var p in save.props)
+                WorldData.World.SetPropType(p.x, p.y, p.type);
+            WorldData.isGenerating = false;
+            Debug.Log($"[WorldManager] Applied {save.blocks.Length} block diffs, {save.props.Length} prop diffs.");
 
-    foreach (var b in save.blocks)
-        WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
-    foreach (var p in save.props)
-        WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
+            foreach (var b in save.blocks)
+                WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
+            foreach (var p in save.props)
+                WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
 
-    Debug.Log("[WorldManager] Loading overlays...");
-    WorldSerializer.LoadOverlays();
-    Debug.Log("[WorldManager] LoadWorld complete.");
-}
+            Debug.Log("[WorldManager] Loading overlays...");
+            WorldSerializer.LoadOverlays();
+            Debug.Log("[WorldManager] LoadWorld complete.");
+        }
 
         private void Update()
         {
@@ -322,7 +322,8 @@ private void LoadWorld()
                     {
                         foundSurface = true;
 
-                        float surfaceWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, y * 0.2f + seedOffset) - 0.5f) * 0.15f;
+                        float surfaceWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, y * 0.2f + seedOffset) - 0.5f) *
+                                              0.15f;
                         float surfaceBiome = baseBiomeNoise + surfaceWobble;
 
                         BlockType topBlock = BlockType.Grass;
@@ -336,7 +337,9 @@ private void LoadWorld()
                             int currentY = y - d;
                             if (currentY >= 0 && WorldData.World.GetBlockTypes(x, currentY) != BlockType.Air)
                             {
-                                float subWobble = (Mathf.PerlinNoise(x * 0.2f + seedOffset, currentY * 0.2f + seedOffset) - 0.5f) * 0.15f;
+                                float subWobble =
+                                    (Mathf.PerlinNoise(x * 0.2f + seedOffset, currentY * 0.2f + seedOffset) - 0.5f) *
+                                    0.15f;
                                 float subBiome = baseBiomeNoise + subWobble;
 
                                 BlockType subBlock = BlockType.Dirt;
@@ -612,82 +615,86 @@ private void LoadWorld()
             return false;
         }
 
-       private void CalculateLighting()
-{
-    int width = WorldData.World.width;
-    int height = WorldData.World.height;
-
-    for (int i = 0; i < width; i++)
-    {
-        float currentSunlight = 1.0f;
-        for (int j = height - 1; j >= 0; j--)
+        private void CalculateLighting()
         {
-            BlockType blockType = WorldData.World.GetBlockTypes(i, j);
+            int width = WorldData.World.width;
+            int height = WorldData.World.height;
 
-            if (blockType != BlockType.Air)
-            {
-                currentSunlight -= 0.33f;
-            }
-
-            currentSunlight = Mathf.Clamp01(currentSunlight);
-            WorldData.World.lightValues[i, j] = currentSunlight;
-        }
-    }
-
-    for (int iteration = 0; iteration < 14; iteration++)
-    {
-        if (iteration % 2 == 0)
-        {
             for (int i = 0; i < width; i++)
             {
-                for (int j = 0; j < height; j++)
-                {
-                    BlockType type = WorldData.World.GetBlockTypes(i, j);
-                    float currentValue = WorldData.World.lightValues[i, j];
-                    float neighbourMax = 0f;
-
-                    if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
-                    if (i < width - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
-                    if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
-                    if (j < height - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
-
-                    float decay = (type == BlockType.Air) ? 0.05f : 0.33f;
-                    float spreadValue = neighbourMax - decay;
-
-                    if (spreadValue > currentValue)
-                    {
-                        WorldData.World.lightValues[i, j] = spreadValue;
-                    }
-                }
-            }
-        }
-        else
-        {
-            for (int i = width - 1; i >= 0; i--)
-            {
+                float currentSunlight = 1.0f;
                 for (int j = height - 1; j >= 0; j--)
                 {
-                    BlockType type = WorldData.World.GetBlockTypes(i, j);
-                    float currentValue = WorldData.World.lightValues[i, j];
-                    float neighbourMax = 0f;
+                    BlockType blockType = WorldData.World.GetBlockTypes(i, j);
 
-                    if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
-                    if (i < width - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
-                    if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
-                    if (j < height - 1) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
-
-                    float decay = (type == BlockType.Air) ? 0.05f : 0.33f;
-                    float spreadValue = neighbourMax - decay;
-
-                    if (spreadValue > currentValue)
+                    if (blockType != BlockType.Air)
                     {
-                        WorldData.World.lightValues[i, j] = spreadValue;
+                        currentSunlight -= 0.33f;
+                    }
+
+                    currentSunlight = Mathf.Clamp01(currentSunlight);
+                    WorldData.World.lightValues[i, j] = currentSunlight;
+                }
+            }
+
+            for (int iteration = 0; iteration < 14; iteration++)
+            {
+                if (iteration % 2 == 0)
+                {
+                    for (int i = 0; i < width; i++)
+                    {
+                        for (int j = 0; j < height; j++)
+                        {
+                            BlockType type = WorldData.World.GetBlockTypes(i, j);
+                            float currentValue = WorldData.World.lightValues[i, j];
+                            float neighbourMax = 0f;
+
+                            if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
+                            if (i < width - 1)
+                                neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
+                            if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
+                            if (j < height - 1)
+                                neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+
+                            float decay = (type == BlockType.Air) ? 0.05f : 0.33f;
+                            float spreadValue = neighbourMax - decay;
+
+                            if (spreadValue > currentValue)
+                            {
+                                WorldData.World.lightValues[i, j] = spreadValue;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = width - 1; i >= 0; i--)
+                    {
+                        for (int j = height - 1; j >= 0; j--)
+                        {
+                            BlockType type = WorldData.World.GetBlockTypes(i, j);
+                            float currentValue = WorldData.World.lightValues[i, j];
+                            float neighbourMax = 0f;
+
+                            if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
+                            if (i < width - 1)
+                                neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
+                            if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
+                            if (j < height - 1)
+                                neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+
+                            float decay = (type == BlockType.Air) ? 0.05f : 0.33f;
+                            float spreadValue = neighbourMax - decay;
+
+                            if (spreadValue > currentValue)
+                            {
+                                WorldData.World.lightValues[i, j] = spreadValue;
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-}
 
         private void ApplyLightingToTexture()
         {
@@ -763,7 +770,8 @@ private void LoadWorld()
         {
             playerObject.transform.position = currentSpawnPoint;
 
-            mainCamera.transform.position = new Vector3(currentSpawnPoint.x, currentSpawnPoint.y, mainCamera.transform.position.z);
+            mainCamera.transform.position =
+                new Vector3(currentSpawnPoint.x, currentSpawnPoint.y, mainCamera.transform.position.z);
             cameraPosition = mainCamera.transform.position;
 
             UpdateChunks();
@@ -797,6 +805,7 @@ private void LoadWorld()
 
             return false;
         }
+
         private void OnApplicationQuit()
         {
             if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
