@@ -27,6 +27,10 @@ namespace World
         private Material tilemapMaterial;
 
         private Texture2D lightmapTexture;
+        private Color[] lightmapColors;
+
+        private bool[,] isAirCache;
+        private float[,] lightMapCache;
 
         [Header("World Settings")] public int worldWidth = 150;
         public int worldHeight = 90;
@@ -91,6 +95,10 @@ namespace World
             lightmapTexture.filterMode = FilterMode.Bilinear;
             lightmapTexture.wrapMode = TextureWrapMode.Clamp;
 
+            lightmapColors = new Color[worldWidth * worldHeight];
+            isAirCache = new bool[worldWidth, worldHeight];
+            lightMapCache = new float[worldWidth, worldHeight];
+
             tilemapMaterial.SetTexture("_LightMap", lightmapTexture);
             tilemapMaterial.SetVector("_WorldSize", new Vector2(worldWidth, worldHeight));
             tilemapMaterial.SetFloat("_CellSize", gridParent.cellSize.x);
@@ -144,8 +152,6 @@ namespace World
 
         private void LoadWorld()
         {
-            Debug.Log($"[WorldManager] LoadWorld called. WorldName: '{WorldSerializer.WorldName}'");
-
             WorldSaveData save = WorldSerializer.Load();
             if (save == null)
             {
@@ -157,14 +163,12 @@ namespace World
             int seedHash = GetDeterministicHash(save.seed);
             UnityEngine.Random.InitState(seedHash);
 
-            Debug.Log($"[WorldManager] Applying seed: '{save.seed}'");
             seedOffset = ComputeSeedOffset(seedHash);
 
             WorldData.isGenerating = true;
             GenerateWorld();
             GenerateProps();
             WorldData.isGenerating = false;
-            Debug.Log("[WorldManager] Base generation done.");
 
             WorldData.isGenerating = true;
             foreach (var b in save.blocks)
@@ -172,16 +176,13 @@ namespace World
             foreach (var p in save.props)
                 WorldData.World.SetPropType(p.x, p.y, p.type);
             WorldData.isGenerating = false;
-            Debug.Log($"[WorldManager] Applied {save.blocks.Length} block diffs, {save.props.Length} prop diffs.");
 
             foreach (var b in save.blocks)
                 WorldData.dirtyBlocks.Add(new Vector2Int(b.x, b.y));
             foreach (var p in save.props)
                 WorldData.dirtyProps.Add(new Vector2Int(p.x, p.y));
 
-            Debug.Log("[WorldManager] Loading overlays...");
             WorldSerializer.LoadOverlays();
-            Debug.Log("[WorldManager] LoadWorld complete.");
         }
 
         private void Update()
@@ -615,6 +616,13 @@ namespace World
             return false;
         }
 
+        public void UpdateDynamicLighting()
+        {
+            CalculateLighting();
+            lightmapTexture.SetPixels(lightmapColors);
+            lightmapTexture.Apply();
+        }
+
         private void CalculateLighting()
         {
             int width = WorldData.World.width;
@@ -626,14 +634,16 @@ namespace World
                 for (int j = height - 1; j >= 0; j--)
                 {
                     BlockType blockType = WorldData.World.GetBlockTypes(i, j);
+                    bool air = (blockType == BlockType.Air);
+                    isAirCache[i, j] = air;
 
-                    if (blockType != BlockType.Air)
+                    if (!air)
                     {
                         currentSunlight -= 0.33f;
                     }
 
-                    currentSunlight = Mathf.Clamp01(currentSunlight);
-                    WorldData.World.lightValues[i, j] = currentSunlight;
+                    currentSunlight = currentSunlight < 0f ? 0f : (currentSunlight > 1f ? 1f : currentSunlight);
+                    lightMapCache[i, j] = currentSunlight;
                 }
             }
 
@@ -645,23 +655,20 @@ namespace World
                     {
                         for (int j = 0; j < height; j++)
                         {
-                            BlockType type = WorldData.World.GetBlockTypes(i, j);
-                            float currentValue = WorldData.World.lightValues[i, j];
+                            float currentValue = lightMapCache[i, j];
                             float neighbourMax = 0f;
 
-                            if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
-                            if (i < width - 1)
-                                neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
-                            if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
-                            if (j < height - 1)
-                                neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+                            if (i > 0 && lightMapCache[i - 1, j] > neighbourMax) neighbourMax = lightMapCache[i - 1, j];
+                            if (i < width - 1 && lightMapCache[i + 1, j] > neighbourMax) neighbourMax = lightMapCache[i + 1, j];
+                            if (j > 0 && lightMapCache[i, j - 1] > neighbourMax) neighbourMax = lightMapCache[i, j - 1];
+                            if (j < height - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
-                            float decay = (type == BlockType.Air) ? 0.05f : 0.33f;
+                            float decay = isAirCache[i, j] ? 0.05f : 0.33f;
                             float spreadValue = neighbourMax - decay;
 
                             if (spreadValue > currentValue)
                             {
-                                WorldData.World.lightValues[i, j] = spreadValue;
+                                lightMapCache[i, j] = spreadValue;
                             }
                         }
                     }
@@ -672,26 +679,36 @@ namespace World
                     {
                         for (int j = height - 1; j >= 0; j--)
                         {
-                            BlockType type = WorldData.World.GetBlockTypes(i, j);
-                            float currentValue = WorldData.World.lightValues[i, j];
+                            float currentValue = lightMapCache[i, j];
                             float neighbourMax = 0f;
 
-                            if (i > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i - 1, j]);
-                            if (i < width - 1)
-                                neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i + 1, j]);
-                            if (j > 0) neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j - 1]);
-                            if (j < height - 1)
-                                neighbourMax = Mathf.Max(neighbourMax, WorldData.World.lightValues[i, j + 1]);
+                            if (i > 0 && lightMapCache[i - 1, j] > neighbourMax) neighbourMax = lightMapCache[i - 1, j];
+                            if (i < width - 1 && lightMapCache[i + 1, j] > neighbourMax) neighbourMax = lightMapCache[i + 1, j];
+                            if (j > 0 && lightMapCache[i, j - 1] > neighbourMax) neighbourMax = lightMapCache[i, j - 1];
+                            if (j < height - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
-                            float decay = (type == BlockType.Air) ? 0.05f : 0.33f;
+                            float decay = isAirCache[i, j] ? 0.05f : 0.33f;
                             float spreadValue = neighbourMax - decay;
 
                             if (spreadValue > currentValue)
                             {
-                                WorldData.World.lightValues[i, j] = spreadValue;
+                                lightMapCache[i, j] = spreadValue;
                             }
                         }
                     }
+                }
+            }
+
+            float bloomMultiplier = 1.0f;
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    float finalLight = lightMapCache[x, y];
+                    WorldData.World.lightValues[x, y] = finalLight;
+
+                    finalLight *= bloomMultiplier;
+                    lightmapColors[y * width + x] = new Color(finalLight, finalLight, finalLight, 1f);
                 }
             }
         }
@@ -704,10 +721,12 @@ namespace World
                 for (int y = 0; y < worldHeight; y++)
                 {
                     float l = WorldData.World.lightValues[x, y] * bloomMultiplier;
-                    lightmapTexture.SetPixel(x, y, new Color(l, l, l, 1f));
+                    int index = y * worldWidth + x;
+                    lightmapColors[index] = new Color(l, l, l, 1f);
                 }
             }
 
+            lightmapTexture.SetPixels(lightmapColors);
             lightmapTexture.Apply();
         }
 
@@ -785,7 +804,6 @@ namespace World
             UIController.Singleton.UpdateHealth(1, 1);
         }
 
-
         public bool TrySetSpawnFromAnchor(Vector3 interactWorldPosition)
         {
             float cellSize = gridParent.cellSize.x;
@@ -813,7 +831,6 @@ namespace World
                 WorldSerializer.Save();
                 Debug.Log("[WorldManager] Saved on quit.");
             }
-
         }
     }
 }

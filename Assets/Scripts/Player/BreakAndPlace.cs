@@ -256,9 +256,7 @@ namespace Player
             float targetHardness = blockHitData.hardness;
             float miningPower = Equipment.Singleton.GetMiningPower();
 
-
             currentBlockDamage += miningPower;
-
 
             if (blockHitData.hitSound != null)
             {
@@ -317,6 +315,7 @@ namespace Player
 
             WorldData.World.SetBlockType(x, y, item.data.blockType);
             UpdateChunkVisuals(x, y);
+            WorldManager.Instance.UpdateDynamicLighting();
 
             if (item.data.hitSound != null)
             {
@@ -364,6 +363,7 @@ namespace Player
 
             WorldData.World.SetBlockType(x, y, BlockType.Air);
             UpdateChunkVisuals(x, y);
+            WorldManager.Instance.UpdateDynamicLighting();
         }
 
         private void BreakProp(PropType hitType, int checkX, int checkY)
@@ -386,6 +386,7 @@ namespace Player
 
             WorldData.World.SetPropType(checkX, checkY, PropType.None);
             UpdateChunkVisuals(checkX, checkY);
+            WorldManager.Instance.UpdateDynamicLighting();
         }
 
         private void SpawnLoot(ItemData itemData, Vector2 position)
