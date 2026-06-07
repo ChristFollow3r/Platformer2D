@@ -32,13 +32,20 @@ namespace World
         private bool[,] isAirCache;
         private float[,] lightMapCache;
 
+        [Header("Lighting Settings")]
+        [SerializeField] private float verticalSolidDecay = 0.2f;
+        [SerializeField] private float spreadSolidDecay = 0.15f;
+        [SerializeField] private float spreadAirDecay = 0.04f;
+        [SerializeField] private int lightUpdateRadius = 40;
+        [SerializeField] private int lightIterations = 14;
+
         [Header("World Settings")] public int worldWidth = 150;
         public int worldHeight = 90;
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
 
         [Header("Autosave")] [SerializeField] private float autosaveInterval = 60f;
-        private float _autosaveTimer;
+        private float autosaveTimer;
 
         public static WorldManager Instance { get; private set; }
 
@@ -64,8 +71,7 @@ namespace World
             {
                 if (WorldData.BlockDictionary.TryGetValue(block.blockType, out ItemData current))
                 {
-                    Debug.LogWarning(
-                        $"Block {block.name} / {block.sprite} is trying to override {block.blockType} held by  {current.name} / {current.sprite}");
+                    Debug.LogWarning($"Block {block.name} / {block.sprite} is trying to override {block.blockType} held by {current.name} / {current.sprite}");
                 }
 
                 WorldData.BlockDictionary[block.blockType] = block;
@@ -192,10 +198,10 @@ namespace World
 
             if (!string.IsNullOrEmpty(WorldSerializer.WorldName))
             {
-                _autosaveTimer += Time.deltaTime;
-                if (_autosaveTimer >= autosaveInterval)
+                autosaveTimer += Time.deltaTime;
+                if (autosaveTimer >= autosaveInterval)
                 {
-                    _autosaveTimer = 0f;
+                    autosaveTimer = 0f;
                     WorldSerializer.Save();
                     Debug.Log("[WorldManager] Autosaved.");
                 }
@@ -616,10 +622,10 @@ namespace World
             return false;
         }
 
-       public void UpdateDynamicLighting(int targetX, int targetY)
+        public void UpdateDynamicLighting(int targetX, int targetY)
         {
-            int minX = Mathf.Max(0, targetX - 15);
-            int maxX = Mathf.Min(worldWidth - 1, targetX + 15);
+            int minX = Mathf.Max(0, targetX - lightUpdateRadius);
+            int maxX = Mathf.Min(worldWidth - 1, targetX + lightUpdateRadius);
             int minY = 0;
             int maxY = worldHeight - 1;
 
@@ -634,7 +640,7 @@ namespace World
 
                     if (!air)
                     {
-                        currentSunlight -= 0.33f;
+                        currentSunlight -= verticalSolidDecay;
                     }
 
                     currentSunlight = currentSunlight < 0f ? 0f : (currentSunlight > 1f ? 1f : currentSunlight);
@@ -642,7 +648,7 @@ namespace World
                 }
             }
 
-            for (int iteration = 0; iteration < 14; iteration++)
+            for (int iteration = 0; iteration < lightIterations; iteration++)
             {
                 if (iteration % 2 == 0)
                 {
@@ -658,7 +664,7 @@ namespace World
                             if (j > 0 && lightMapCache[i, j - 1] > neighbourMax) neighbourMax = lightMapCache[i, j - 1];
                             if (j < worldHeight - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
-                            float decay = isAirCache[i, j] ? 0.05f : 0.33f;
+                            float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
                             float spreadValue = neighbourMax - decay;
 
                             if (spreadValue > currentValue)
@@ -682,7 +688,7 @@ namespace World
                             if (j > 0 && lightMapCache[i, j - 1] > neighbourMax) neighbourMax = lightMapCache[i, j - 1];
                             if (j < worldHeight - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
-                            float decay = isAirCache[i, j] ? 0.05f : 0.33f;
+                            float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
                             float spreadValue = neighbourMax - decay;
 
                             if (spreadValue > currentValue)
@@ -694,7 +700,7 @@ namespace World
                 }
             }
 
-            float bloomMultiplier = 1.0f;
+            float finalMultiplier = 1.0f;
             for (int x = minX; x <= maxX; x++)
             {
                 for (int y = minY; y <= maxY; y++)
@@ -702,7 +708,7 @@ namespace World
                     float finalLight = lightMapCache[x, y];
                     WorldData.World.lightValues[x, y] = finalLight;
 
-                    finalLight *= bloomMultiplier;
+                    finalLight *= finalMultiplier;
                     lightmapColors[y * worldWidth + x] = new Color(finalLight, finalLight, finalLight, 1f);
                 }
             }
@@ -727,7 +733,7 @@ namespace World
 
                     if (!air)
                     {
-                        currentSunlight -= 0.33f;
+                        currentSunlight -= verticalSolidDecay;
                     }
 
                     currentSunlight = currentSunlight < 0f ? 0f : (currentSunlight > 1f ? 1f : currentSunlight);
@@ -735,7 +741,7 @@ namespace World
                 }
             }
 
-            for (int iteration = 0; iteration < 14; iteration++)
+            for (int iteration = 0; iteration < lightIterations; iteration++)
             {
                 if (iteration % 2 == 0)
                 {
@@ -751,7 +757,7 @@ namespace World
                             if (j > 0 && lightMapCache[i, j - 1] > neighbourMax) neighbourMax = lightMapCache[i, j - 1];
                             if (j < height - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
-                            float decay = isAirCache[i, j] ? 0.05f : 0.33f;
+                            float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
                             float spreadValue = neighbourMax - decay;
 
                             if (spreadValue > currentValue)
@@ -775,7 +781,7 @@ namespace World
                             if (j > 0 && lightMapCache[i, j - 1] > neighbourMax) neighbourMax = lightMapCache[i, j - 1];
                             if (j < height - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
-                            float decay = isAirCache[i, j] ? 0.05f : 0.33f;
+                            float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
                             float spreadValue = neighbourMax - decay;
 
                             if (spreadValue > currentValue)
@@ -787,7 +793,7 @@ namespace World
                 }
             }
 
-            float bloomMultiplier = 1.0f;
+            float finalMultiplier = 1.0f;
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
@@ -795,7 +801,7 @@ namespace World
                     float finalLight = lightMapCache[x, y];
                     WorldData.World.lightValues[x, y] = finalLight;
 
-                    finalLight *= bloomMultiplier;
+                    finalLight *= finalMultiplier;
                     lightmapColors[y * width + x] = new Color(finalLight, finalLight, finalLight, 1f);
                 }
             }
@@ -803,12 +809,12 @@ namespace World
 
         private void ApplyLightingToTexture()
         {
-            float bloomMultiplier = 1.0f;
+            float finalMultiplier = 1.0f;
             for (int x = 0; x < worldWidth; x++)
             {
                 for (int y = 0; y < worldHeight; y++)
                 {
-                    float l = WorldData.World.lightValues[x, y] * bloomMultiplier;
+                    float l = WorldData.World.lightValues[x, y] * finalMultiplier;
                     int index = y * worldWidth + x;
                     lightmapColors[index] = new Color(l, l, l, 1f);
                 }
