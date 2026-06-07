@@ -97,7 +97,6 @@ namespace Player
 
         public float enableTimer = 1f;
 
-
         private void Awake()
         {
             SetupSingleton();
@@ -109,11 +108,12 @@ namespace Player
             playerInput = new InputSystem_Actions();
             playerInput.Enable();
         }
+
         void Start()
         {
             mainCamera = Camera.main;
-
         }
+
         private void OnEnable()
         {
             playerHealth.OnKnockbackRecieved += SlimeHitAnimation;
@@ -277,26 +277,32 @@ namespace Player
             if (knockbackTimer > 0f) return;
             if (Player.UIController.Singleton.isMenuOpen || Player.UIController.Singleton.isOverlayOpen) return;
 
-            if (Mouse.current.leftButton.wasPressedThisFrame && attackCooldownTimer <= 0f)
+            bool isShiftPressed = Keyboard.current.shiftKey.isPressed;
+
+            if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                attackCooldownTimer = attackCooldown;
-
-                lastAttackMousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                spriteRenderer.flipX = lastAttackMousePosition.x < transform.position.x;
-
-                attackPauseTimer = attackPauseDuration;
-                animator.SetTrigger(HasAttacked);
-            }
-
-            if (Mouse.current.rightButton.wasPressedThisFrame && mineCooldownTimer <= 0f)
-            {
-                mineCooldownTimer = mineCooldown;
-
-                lastMineMousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                spriteRenderer.flipX = lastMineMousePosition.x < transform.position.x;
-
-                attackPauseTimer = attackPauseDuration;
-                animator.SetTrigger(HasMined);
+                if (isShiftPressed)
+                {
+                    if (mineCooldownTimer <= 0f)
+                    {
+                        mineCooldownTimer = mineCooldown;
+                        lastMineMousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                        spriteRenderer.flipX = lastMineMousePosition.x < transform.position.x;
+                        attackPauseTimer = attackPauseDuration;
+                        animator.SetTrigger(HasMined);
+                    }
+                }
+                else
+                {
+                    if (attackCooldownTimer <= 0f)
+                    {
+                        attackCooldownTimer = attackCooldown;
+                        lastAttackMousePosition = mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                        spriteRenderer.flipX = lastAttackMousePosition.x < transform.position.x;
+                        attackPauseTimer = attackPauseDuration;
+                        animator.SetTrigger(HasAttacked);
+                    }
+                }
             }
         }
 
@@ -361,6 +367,7 @@ namespace Player
 
             playerHealth.ResetHealth();
         }
+
         private Vector2 FindSafeSpawnPosition(Vector2 startPos)
         {
             Vector2 size = playerCollider.bounds.size * 0.8f;
@@ -372,7 +379,6 @@ namespace Player
                     return candidate;
             }
 
-            Debug.LogWarning("[PlayerMovement] Could not find safe spawn position, using original.");
             return startPos;
         }
 
