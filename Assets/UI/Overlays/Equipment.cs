@@ -99,7 +99,7 @@ namespace UI.Components
             #region SubscribeEvents
             if (equipment == null) return;
             equipment.OnSlotChanged += OnSlotChanged;
-            this.Q<Button>("recipeBtn").clicked += () => UIController.Singleton.OpenBook();
+            this.Q<Button>("recipeBtn").clicked += () => UIController.Singleton.ToggleBook();
             #endregion
         }
 

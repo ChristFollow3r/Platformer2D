@@ -86,6 +86,7 @@ namespace Player
         [SerializeField] private RuntimeAnimatorController defaultController;
 
         [Header("JEI")]
+        private bool isBookOpen = false;
         private VisualElement recipeBookContainer;
 
         #endregion
@@ -162,10 +163,12 @@ namespace Player
             UI.Components.Inventory inventory = new UI.Components.Inventory();
             Hotbar overlayHotbar = new Hotbar { isMain = false };
 
-            overlay.rootVisualElement.Q("inventory").Add(inventory);
-            overlay.rootVisualElement.Q("holder").Add(overlayHotbar);
+            overlayRoot = overlay.rootVisualElement;
 
-            nameShower = overlay.rootVisualElement.Q("name-holder");
+            overlayRoot.Q("inventory").Add(inventory);
+            overlayRoot.Q("holder").Add(overlayHotbar);
+
+            nameShower = overlayRoot.Q("name-holder");
 
             Hotbar hudHotbar = new Hotbar { isMain = true };
             hud.rootVisualElement.Q("hotbar-holder").Add(hudHotbar);
@@ -281,13 +284,13 @@ namespace Player
         {
             #region OpenOverlay
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
-            overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
+            overlayRoot.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             isOverlayOpen = true;
 
             if (!overlaysByBlockId.TryGetValue(blockId, out Overlay foundOverlay)) return;
 
             VisualElement overlayElement = CreateElement(foundOverlay);
-            VisualElement left = overlay.rootVisualElement.Q("left");
+            VisualElement left = overlayRoot.Q("left");
             if (left.childCount != 0) left.RemoveAt(0);
             left.Add(overlayElement);
 
@@ -302,7 +305,7 @@ namespace Player
             #region CloseOverlay
             OnOverlayClose?.Invoke();
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
-            overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
+            overlayRoot.Q<VisualElement>("root").style.display = DisplayStyle.None;
             isOverlayOpen = false;
             #endregion
         }
@@ -769,14 +772,21 @@ namespace Player
                 Items.Inventory.Singleton.RemoveFromHand();
             }
         }
+        public void ToggleBook()
+        {
+            if (isBookOpen) CloseBook();
+            else OpenBook();
+        }
 
         public void OpenBook()
         {
+            isBookOpen = true;
             recipeBookContainer.style.display = DisplayStyle.Flex;
         }
 
         public void CloseBook()
         {
+            isBookOpen = false;
             recipeBookContainer.style.display = DisplayStyle.None;
         }
         #endregion
