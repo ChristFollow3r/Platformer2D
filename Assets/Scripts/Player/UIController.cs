@@ -787,6 +787,7 @@ namespace Player
         private VisualElement itemInfo;
 
         private UI.Components.Slot resultSlot;
+        private UI.Components.Slot cookingResult;
         private UI.Components.Slot[] craftingSlots = new UI.Components.Slot[16];
         private UI.Components.Slot[] cookingSlots = new UI.Components.Slot[4];
 
@@ -809,11 +810,31 @@ namespace Player
                 {
                     slotId = i,
                 };
+                int col = i % 4;
+                int row = i / 4;
+                if (col < 3) craftingSlots[i].AddToClassList("spaced-right");
+                if (row < 3) craftingSlots[i].AddToClassList("spaced-bottom");
                 craftingHolder.Add(craftingSlots[i]);
             }
             resultSlot = new UI.Components.Slot(null, false, true);
             itemRecipe.Q("crafting-holder").Add(resultSlot);
 
+            VisualElement cookingHolder = itemCookingRecipe.Q("cooking-grid");
+            for (short i = 0; i < 4; i++)
+            {
+                cookingSlots[i] = new UI.Components.Slot(null, false, true)
+                {
+                    slotId = i,
+                };
+
+                int col = i % 2;
+                int row = i / 2;
+                if (col < 1) cookingSlots[i].AddToClassList("spaced-right");
+                if (row < 1) cookingSlots[i].AddToClassList("spaced-bottom");
+                cookingHolder.Add(cookingSlots[i]);
+            }
+            cookingResult = new UI.Components.Slot(null, false, true);
+            itemCookingRecipe.Q("cooking-slots").Add(cookingResult);
 
 
             CloseBook();
@@ -857,8 +878,10 @@ namespace Player
 
         public void BookItemClicked(string itemId)
         {
-            Debug.Log($"Item: {itemId} clicked!");
             itemScroll.style.display = DisplayStyle.None;
+            itemRecipe.style.display = DisplayStyle.None;
+            itemCookingRecipe.style.display = DisplayStyle.None;
+            itemInfo.style.display = DisplayStyle.None;
 
             Recipe foundRecipe = rdb.recipes.Find(r => r.result.name == itemId);
             if (foundRecipe)
@@ -925,7 +948,7 @@ namespace Player
                 cookingSlots[i].item = item;
             }
 
-            resultSlot.item = new Item(null, false, false, true)
+            cookingResult.item = new Item(null, false, false, true)
             {
                 item = recipe.result,
                 amount = recipe.amount,
@@ -945,6 +968,8 @@ namespace Player
         {
             itemScroll.style.display = DisplayStyle.Flex;
             itemRecipe.style.display = DisplayStyle.None;
+            itemCookingRecipe.style.display = DisplayStyle.None;
+            itemInfo.style.display = DisplayStyle.None;
         }
 
         public void ToggleBook()
