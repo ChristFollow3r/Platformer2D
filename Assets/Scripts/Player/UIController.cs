@@ -785,6 +785,7 @@ namespace Player
         private VisualElement itemRecipe;
         private VisualElement itemCookingRecipe;
         private VisualElement itemInfo;
+        private Button listBtn;
         private Button backBtn;
 
         private UI.Components.Slot resultSlot;
@@ -797,6 +798,9 @@ namespace Player
         RecipeDatabase rdb;
         CookingRecipeDatabase crdb;
 
+        List<string> queue = new();
+        string current = "";
+
         private void SetupBook()
         {
 
@@ -806,7 +810,9 @@ namespace Player
             itemInfo = recipeBookContainer.Q("itemInfo");
 
             backBtn = recipeBookContainer.Q<Button>("back");
-            backBtn.clicked += () => BackToList();
+            backBtn.clicked += () => RecipeBack();
+            listBtn = recipeBookContainer.Q<Button>("list");
+            listBtn.clicked += () => BackToList();
 
             VisualElement craftingHolder = itemRecipe.Q("crafting-grid");
             for (short i = 0; i < 16; i++)
@@ -884,13 +890,16 @@ namespace Player
             }
         }
 
-        public void BookItemClicked(string itemId)
+        public void ShowBookItem(string itemId)
         {
+            if (!string.IsNullOrEmpty(current)) queue.Add(current);
+            current = itemId;
             itemScroll.style.display = DisplayStyle.None;
             itemRecipe.style.display = DisplayStyle.None;
             itemCookingRecipe.style.display = DisplayStyle.None;
             itemInfo.style.display = DisplayStyle.None;
-            backBtn.style.display = DisplayStyle.Flex;
+            if (queue.Count != 0) backBtn.style.display = DisplayStyle.Flex;
+            listBtn.style.display = DisplayStyle.Flex;
 
             Recipe foundRecipe = rdb.recipes.Find(r => r.result.name == itemId);
             if (foundRecipe)
@@ -992,7 +1001,25 @@ namespace Player
             itemRecipe.style.display = DisplayStyle.None;
             itemCookingRecipe.style.display = DisplayStyle.None;
             itemInfo.style.display = DisplayStyle.None;
+            listBtn.style.display = DisplayStyle.None;
             backBtn.style.display = DisplayStyle.None;
+            queue.Clear();
+            current = "";
+        }
+
+        public void RecipeBack()
+        {
+            if (queue.Count < 1)
+            {
+                BackToList();
+                return;
+            }
+
+            string now = queue[queue.Count - 1];
+            queue.RemoveAt(queue.Count - 1);
+            current = "";
+
+            ShowBookItem(now);
         }
 
         public void ToggleBook()

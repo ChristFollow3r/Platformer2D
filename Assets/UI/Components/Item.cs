@@ -131,7 +131,7 @@ namespace UI.Components
         {
             if (isStatic)
             {
-                UIController.Singleton.BookItemClicked(item.name);
+                UIController.Singleton.ShowBookItem(item.name);
                 return;
             }
             Slot ghostSlot = orphanAfterPickup ? null : slot;
