@@ -1,9 +1,9 @@
 .holder {
     flex-grow: 0;
-    width: 1300px;
+    width: 1150px;
     height: 800px;
     flex-shrink: 0;
-    background-color: rgb(92, 52, 30);
+    background-color: rgb(236, 222, 192);
 }
 
 .corners {
@@ -18,6 +18,11 @@
     flex-grow: 1;
     justify-content: center;
     align-items: center;
+    padding-top: 100px;
+    padding-right: 100px;
+    padding-bottom: 100px;
+    padding-left: 100px;
+    flex-direction: row;
 }
 
 .spaced-right {

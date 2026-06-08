@@ -51,7 +51,8 @@ namespace Player
         [SerializeField] private UIDocument thankScreen;
         public bool isMenuOpen = false;
 
-        [Header("Elements")][SerializeField] private UIDocument overlay;
+        [Header("Elements")]
+        [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
         [SerializeField] private Font fontPixel;
         private VisualElement nameShower;
@@ -81,6 +82,11 @@ namespace Player
         private Button closeSettingsBtn;
 
         private Label itemNameElm;
+
+        [SerializeField] private RuntimeAnimatorController defaultController;
+
+        [Header("JEI")]
+        private VisualElement recipeBookContainer;
 
         #endregion
 
@@ -145,33 +151,6 @@ namespace Player
 
             #endregion
         }
-
-        #endregion
-
-        #region Recipe Book Data
-
-        [Header("Recipe Book")]
-        [SerializeField]
-        private RecipeDatabase craftingDatabase;
-
-        [SerializeField] private CookingRecipeDatabase cookingDatabase;
-
-        [SerializeField] private RuntimeAnimatorController defaultController;
-
-        private int currentRecipeIndex = 0;
-
-        private VisualElement recipeBookContainer;
-
-        private Label leftTitleText;
-        private VisualElement leftGridContainer;
-        private Button prevPageBtn;
-
-        private Label rightTitleText;
-        private VisualElement rightGridContainer;
-        private Button nextPageBtn;
-
-        private Button closeRecipeBtn;
-
         #endregion
 
         #region Methods
@@ -204,7 +183,6 @@ namespace Player
                 }
             });
 
-            InitializeRecipeBook(menuRoot);
             InitializeControls(menuRoot);
             InitializeSettings(menuRoot);
 
@@ -221,8 +199,6 @@ namespace Player
             Button settingsBtn = menuRoot.Q<Button>("Settings");
             if (settingsBtn != null) settingsBtn.clicked += OpenSettings;
 
-            Button recipesBtn = menuRoot.Q<Button>("Recipes");
-            if (recipesBtn != null) recipesBtn.clicked += OpenRecipeBook;
 
             Button saveBtn = menuRoot.Q<Button>("Save");
             if (saveBtn != null) saveBtn.clicked += () => Debug.Log("Save");
@@ -239,6 +215,8 @@ namespace Player
             modElm = hud.rootVisualElement.Q("mod");
             itemNameElm = hud.rootVisualElement.Q<Label>("itemName");
             thankScreen.rootVisualElement.Q<Button>("continue").clicked += RemoveThankyouScreen;
+
+            recipeBookContainer = overlayRoot.Q("recipeBook");
             #endregion
         }
 
@@ -273,7 +251,6 @@ namespace Player
                 pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
                 hud.rootVisualElement.style.display = DisplayStyle.Flex;
 
-                CloseRecipeBook();
                 CloseSettings();
             }
         }
@@ -327,7 +304,6 @@ namespace Player
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
             isOverlayOpen = false;
-
             #endregion
         }
 
@@ -688,7 +664,6 @@ namespace Player
 
         private void OpenSettings()
         {
-            CloseRecipeBook();
             if (settingsContainer != null)
             {
                 settingsContainer.style.display = DisplayStyle.Flex;
@@ -703,249 +678,6 @@ namespace Player
             }
         }
 
-        #endregion
-
-        #region Recipe Book Logic
-
-        private void InitializeRecipeBook(VisualElement menuRoot)
-        {
-            recipeBookContainer = menuRoot.Q<VisualElement>("RecipeBookContainer");
-            if (recipeBookContainer == null) return;
-
-            recipeBookContainer.style.position = Position.Absolute;
-            recipeBookContainer.style.width = 800;
-            recipeBookContainer.style.height = 600;
-            recipeBookContainer.style.left = new Length(50, LengthUnit.Percent);
-            recipeBookContainer.style.top = new Length(50, LengthUnit.Percent);
-            recipeBookContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent),
-                new Length(-50, LengthUnit.Percent), 0));
-
-            leftTitleText = recipeBookContainer.Q<Label>("LeftPageTitle");
-            leftGridContainer = recipeBookContainer.Q<VisualElement>("LeftRecipeHolder");
-            prevPageBtn = recipeBookContainer.Q<Button>("PrevPage");
-
-            if (prevPageBtn != null)
-            {
-                prevPageBtn.style.position = Position.Absolute;
-                prevPageBtn.style.bottom = 20;
-                prevPageBtn.style.left = 20;
-                prevPageBtn.clicked += () =>
-                {
-                    TurnPage(-1);
-                    PlaySound(pageTurnSound);
-                };
-            }
-
-            rightTitleText = recipeBookContainer.Q<Label>("RightPageTitle");
-            rightGridContainer = recipeBookContainer.Q<VisualElement>("RightRecipeHolder");
-            nextPageBtn = recipeBookContainer.Q<Button>("NextPage");
-
-            if (nextPageBtn != null)
-            {
-                nextPageBtn.style.position = Position.Absolute;
-                nextPageBtn.style.bottom = 20;
-                nextPageBtn.style.right = 20;
-                nextPageBtn.clicked += () =>
-                {
-                    TurnPage(1);
-                    PlaySound(pageTurnSound);
-                };
-            }
-
-            closeRecipeBtn = recipeBookContainer.Q<Button>("CloseRecipeBtn");
-
-            if (closeRecipeBtn != null)
-            {
-                closeRecipeBtn.style.position = Position.Absolute;
-                closeRecipeBtn.style.top = 20;
-                closeRecipeBtn.style.left = 20;
-                closeRecipeBtn.clicked += CloseRecipeBook;
-            }
-
-            recipeBookContainer.style.display = DisplayStyle.None;
-        }
-
-        private int GetTotalRecipes()
-        {
-            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null
-                ? craftingDatabase.recipes.Count
-                : 0;
-            int cookingCount = cookingDatabase != null && cookingDatabase.recipes != null
-                ? cookingDatabase.recipes.Count
-                : 0;
-            return craftingCount + cookingCount;
-        }
-
-        private void OpenRecipeBook()
-        {
-            if (GetTotalRecipes() == 0) return;
-
-            CloseSettings();
-
-            recipeBookContainer.style.display = DisplayStyle.Flex;
-            currentRecipeIndex = 0;
-            DisplayPages();
-        }
-
-        private void CloseRecipeBook()
-        {
-            if (recipeBookContainer != null)
-            {
-                recipeBookContainer.style.display = DisplayStyle.None;
-            }
-        }
-
-        private void TurnPage(int direction)
-        {
-            int totalRecipes = GetTotalRecipes();
-            int newIndex = currentRecipeIndex + (direction * 2);
-
-            if (newIndex >= 0 && newIndex < totalRecipes)
-            {
-                currentRecipeIndex = newIndex;
-                DisplayPages();
-            }
-        }
-
-        private void DisplayPages()
-        {
-            int totalRecipes = GetTotalRecipes();
-
-            PopulatePageData(currentRecipeIndex, leftTitleText, leftGridContainer);
-
-            if (currentRecipeIndex + 1 < totalRecipes)
-            {
-                if (rightTitleText != null) rightTitleText.style.display = DisplayStyle.Flex;
-                if (rightGridContainer != null) rightGridContainer.style.display = DisplayStyle.Flex;
-                PopulatePageData(currentRecipeIndex + 1, rightTitleText, rightGridContainer);
-            }
-            else
-            {
-                if (rightTitleText != null) rightTitleText.text = "";
-                if (rightGridContainer != null) rightGridContainer.Clear();
-            }
-
-            if (prevPageBtn != null)
-                prevPageBtn.style.display = (currentRecipeIndex == 0) ? DisplayStyle.None : DisplayStyle.Flex;
-
-            if (nextPageBtn != null)
-                nextPageBtn.style.display =
-                    (currentRecipeIndex + 2 >= totalRecipes) ? DisplayStyle.None : DisplayStyle.Flex;
-        }
-
-        private void PopulatePageData(int index, Label titleLabel, VisualElement gridContainer)
-        {
-            if (titleLabel == null || gridContainer == null) return;
-
-            gridContainer.Clear();
-
-            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null
-                ? craftingDatabase.recipes.Count
-                : 0;
-
-            ItemData resultItem = null;
-            ItemData[] ingredientsArray = null;
-            int displayColumns = 4;
-
-            if (index < craftingCount)
-            {
-                var recipe = craftingDatabase.recipes[index];
-                resultItem = recipe.result;
-                ingredientsArray = recipe.ingredients;
-                displayColumns = 4;
-                if (titleLabel != null) titleLabel.text = "Crafting Table";
-            }
-            else
-            {
-                int cookingIndex = index - craftingCount;
-                var recipe = cookingDatabase.recipes[cookingIndex];
-                resultItem = recipe.result;
-                ingredientsArray = recipe.ingredients;
-                displayColumns = recipe.gridSize;
-                if (titleLabel != null) titleLabel.text = "Furnace";
-            }
-
-            VisualElement gridWrapper = new VisualElement();
-            float slotSize = 60f;
-
-            gridWrapper.style.width = (displayColumns * slotSize) + 4;
-            gridWrapper.style.flexDirection = FlexDirection.Row;
-            gridWrapper.style.flexWrap = Wrap.Wrap;
-            gridWrapper.style.justifyContent = Justify.Center;
-            gridWrapper.style.marginBottom = 30;
-
-            for (int i = 0; i < ingredientsArray.Length; i++)
-            {
-                VisualElement slot = new VisualElement();
-                slot.style.width = slotSize;
-                slot.style.height = slotSize;
-
-                slot.style.borderTopWidth = 1;
-                slot.style.borderBottomWidth = 1;
-                slot.style.borderLeftWidth = 1;
-                slot.style.borderRightWidth = 1;
-                slot.style.borderTopColor = new StyleColor(Color.black);
-                slot.style.borderBottomColor = new StyleColor(Color.black);
-                slot.style.borderLeftColor = new StyleColor(Color.black);
-                slot.style.borderRightColor = new StyleColor(Color.black);
-                slot.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.2f));
-
-                if (ingredientsArray[i] != null && ingredientsArray[i].sprite != null)
-                {
-                    Image icon = new Image();
-                    icon.sprite = ingredientsArray[i].sprite;
-                    icon.style.width = Length.Percent(100);
-                    icon.style.height = Length.Percent(100);
-                    slot.Add(icon);
-                }
-
-                gridWrapper.Add(slot);
-            }
-
-            gridContainer.Add(gridWrapper);
-
-            VisualElement resultWrapper = new VisualElement();
-            resultWrapper.style.alignItems = Align.Center;
-            resultWrapper.style.flexDirection = FlexDirection.Column;
-
-            VisualElement resultBox = new VisualElement();
-            resultBox.style.width = 90;
-            resultBox.style.height = 90;
-            resultBox.style.borderTopWidth = 2;
-            resultBox.style.borderBottomWidth = 2;
-            resultBox.style.borderLeftWidth = 2;
-            resultBox.style.borderRightWidth = 2;
-            resultBox.style.borderTopColor = new StyleColor(Color.black);
-            resultBox.style.borderBottomColor = new StyleColor(Color.black);
-            resultBox.style.borderLeftColor = new StyleColor(Color.black);
-            resultBox.style.borderRightColor = new StyleColor(Color.black);
-            resultBox.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.4f));
-
-            if (resultItem != null && resultItem.sprite != null)
-            {
-                Image resIcon = new Image();
-                resIcon.sprite = resultItem.sprite;
-                resIcon.style.width = Length.Percent(100);
-                resIcon.style.height = Length.Percent(100);
-                resultBox.Add(resIcon);
-            }
-
-            resultWrapper.Add(resultBox);
-
-            if (resultItem != null)
-            {
-                Label resultLabel = new Label();
-                resultLabel.text = resultItem.name;
-                resultLabel.style.marginTop = 10;
-                resultLabel.style.color = new StyleColor(Color.black);
-                resultLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-                resultLabel.style.fontSize = 18;
-
-                resultWrapper.Add(resultLabel);
-            }
-
-            gridContainer.Add(resultWrapper);
-        }
         public void UpdateHealth(int health, int maxHealth)
         {
             float percent = Mathf.Clamp01((float)health / (float)maxHealth);
@@ -1036,6 +768,16 @@ namespace Player
                 Items.Inventory.Singleton.Drop(dropStack);
                 Items.Inventory.Singleton.RemoveFromHand();
             }
+        }
+
+        public void OpenBook()
+        {
+            recipeBookContainer.style.display = DisplayStyle.Flex;
+        }
+
+        public void CloseBook()
+        {
+            recipeBookContainer.style.display = DisplayStyle.None;
         }
         #endregion
     }

@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: BoneDust
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.Recipe
   result: {fileID: 11400000, guid: e911c19e56500b94ca8652c4436b251b, type: 2}
-  amount: 1
+  amount: 4
   gridSize: 2
   ingredients:
   - {fileID: 0}
   - {fileID: 11400000, guid: 020c094d96fca704d80c6c0499c48a5b, type: 2}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 020c094d96fca704d80c6c0499c48a5b, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
