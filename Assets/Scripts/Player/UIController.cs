@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 using Data;
 using UnityEngine.InputSystem;
 using Shared;
+using Scriptable_Objects_Scripts;
 
 namespace Player
 {
@@ -51,7 +52,8 @@ namespace Player
         [SerializeField] private UIDocument thankScreen;
         public bool isMenuOpen = false;
 
-        [Header("Elements")][SerializeField] private UIDocument overlay;
+        [Header("Elements")]
+        [SerializeField] private UIDocument overlay;
         [SerializeField] private UIDocument hud;
         [SerializeField] private Font fontPixel;
         private VisualElement nameShower;
@@ -82,6 +84,12 @@ namespace Player
 
         private Label itemNameElm;
 
+        [SerializeField] private RuntimeAnimatorController defaultController;
+
+        [Header("JEI")]
+        private bool isBookOpen = false;
+        private VisualElement recipeBookContainer;
+
         #endregion
 
         #region Events
@@ -101,7 +109,7 @@ namespace Player
             playerInput = new InputSystem_Actions();
             playerInput.Enable();
             CreateUI();
-
+            SetupBook();
             #endregion
         }
 
@@ -145,33 +153,6 @@ namespace Player
 
             #endregion
         }
-
-        #endregion
-
-        #region Recipe Book Data
-
-        [Header("Recipe Book")]
-        [SerializeField]
-        private RecipeDatabase craftingDatabase;
-
-        [SerializeField] private CookingRecipeDatabase cookingDatabase;
-
-        [SerializeField] private RuntimeAnimatorController defaultController;
-
-        private int currentRecipeIndex = 0;
-
-        private VisualElement recipeBookContainer;
-
-        private Label leftTitleText;
-        private VisualElement leftGridContainer;
-        private Button prevPageBtn;
-
-        private Label rightTitleText;
-        private VisualElement rightGridContainer;
-        private Button nextPageBtn;
-
-        private Button closeRecipeBtn;
-
         #endregion
 
         #region Methods
@@ -183,10 +164,12 @@ namespace Player
             UI.Components.Inventory inventory = new UI.Components.Inventory();
             Hotbar overlayHotbar = new Hotbar { isMain = false };
 
-            overlay.rootVisualElement.Q("inventory").Add(inventory);
-            overlay.rootVisualElement.Q("holder").Add(overlayHotbar);
+            overlayRoot = overlay.rootVisualElement;
 
-            nameShower = overlay.rootVisualElement.Q("name-holder");
+            overlayRoot.Q("inventory").Add(inventory);
+            overlayRoot.Q("holder").Add(overlayHotbar);
+
+            nameShower = overlayRoot.Q("name-holder");
 
             Hotbar hudHotbar = new Hotbar { isMain = true };
             hud.rootVisualElement.Q("hotbar-holder").Add(hudHotbar);
@@ -204,7 +187,6 @@ namespace Player
                 }
             });
 
-            InitializeRecipeBook(menuRoot);
             InitializeControls(menuRoot);
             InitializeSettings(menuRoot);
 
@@ -221,8 +203,6 @@ namespace Player
             Button settingsBtn = menuRoot.Q<Button>("Settings");
             if (settingsBtn != null) settingsBtn.clicked += OpenSettings;
 
-            Button recipesBtn = menuRoot.Q<Button>("Recipes");
-            if (recipesBtn != null) recipesBtn.clicked += OpenRecipeBook;
 
             Button saveBtn = menuRoot.Q<Button>("Save");
             if (saveBtn != null) saveBtn.clicked += () => Debug.Log("Save");
@@ -239,6 +219,8 @@ namespace Player
             modElm = hud.rootVisualElement.Q("mod");
             itemNameElm = hud.rootVisualElement.Q<Label>("itemName");
             thankScreen.rootVisualElement.Q<Button>("continue").clicked += RemoveThankyouScreen;
+
+            recipeBookContainer = overlayRoot.Q("recipeBook");
             #endregion
         }
 
@@ -273,7 +255,6 @@ namespace Player
                 pauseMenu.rootVisualElement.style.display = DisplayStyle.None;
                 hud.rootVisualElement.style.display = DisplayStyle.Flex;
 
-                CloseRecipeBook();
                 CloseSettings();
             }
         }
@@ -304,13 +285,13 @@ namespace Player
         {
             #region OpenOverlay
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
-            overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
+            overlayRoot.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             isOverlayOpen = true;
 
             if (!overlaysByBlockId.TryGetValue(blockId, out Overlay foundOverlay)) return;
 
             VisualElement overlayElement = CreateElement(foundOverlay);
-            VisualElement left = overlay.rootVisualElement.Q("left");
+            VisualElement left = overlayRoot.Q("left");
             if (left.childCount != 0) left.RemoveAt(0);
             left.Add(overlayElement);
 
@@ -325,9 +306,8 @@ namespace Player
             #region CloseOverlay
             OnOverlayClose?.Invoke();
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
-            overlay.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.None;
+            overlayRoot.Q<VisualElement>("root").style.display = DisplayStyle.None;
             isOverlayOpen = false;
-
             #endregion
         }
 
@@ -441,11 +421,14 @@ namespace Player
             Items.Inventory.Singleton.handIndex = (short)slot;
         }
 
-        public void ShowName(string name, Vector2 pos)
+        public void ShowName(string name, Vector2 pos, bool isConsumable = false)
         {
             nameShower.style.display = DisplayStyle.Flex;
             Label nameLb = nameShower.Q<Label>("name");
-            nameLb.text = name;
+
+            string iName = name;
+            if (isConsumable) iName += " (Consumable)";
+            nameLb.text = iName;
             nameShower.style.width = name.Length * 20;
             nameShower.style.left = pos.x;
             nameShower.style.top = pos.y;
@@ -688,7 +671,6 @@ namespace Player
 
         private void OpenSettings()
         {
-            CloseRecipeBook();
             if (settingsContainer != null)
             {
                 settingsContainer.style.display = DisplayStyle.Flex;
@@ -703,249 +685,6 @@ namespace Player
             }
         }
 
-        #endregion
-
-        #region Recipe Book Logic
-
-        private void InitializeRecipeBook(VisualElement menuRoot)
-        {
-            recipeBookContainer = menuRoot.Q<VisualElement>("RecipeBookContainer");
-            if (recipeBookContainer == null) return;
-
-            recipeBookContainer.style.position = Position.Absolute;
-            recipeBookContainer.style.width = 800;
-            recipeBookContainer.style.height = 600;
-            recipeBookContainer.style.left = new Length(50, LengthUnit.Percent);
-            recipeBookContainer.style.top = new Length(50, LengthUnit.Percent);
-            recipeBookContainer.style.translate = new StyleTranslate(new Translate(new Length(-50, LengthUnit.Percent),
-                new Length(-50, LengthUnit.Percent), 0));
-
-            leftTitleText = recipeBookContainer.Q<Label>("LeftPageTitle");
-            leftGridContainer = recipeBookContainer.Q<VisualElement>("LeftRecipeHolder");
-            prevPageBtn = recipeBookContainer.Q<Button>("PrevPage");
-
-            if (prevPageBtn != null)
-            {
-                prevPageBtn.style.position = Position.Absolute;
-                prevPageBtn.style.bottom = 20;
-                prevPageBtn.style.left = 20;
-                prevPageBtn.clicked += () =>
-                {
-                    TurnPage(-1);
-                    PlaySound(pageTurnSound);
-                };
-            }
-
-            rightTitleText = recipeBookContainer.Q<Label>("RightPageTitle");
-            rightGridContainer = recipeBookContainer.Q<VisualElement>("RightRecipeHolder");
-            nextPageBtn = recipeBookContainer.Q<Button>("NextPage");
-
-            if (nextPageBtn != null)
-            {
-                nextPageBtn.style.position = Position.Absolute;
-                nextPageBtn.style.bottom = 20;
-                nextPageBtn.style.right = 20;
-                nextPageBtn.clicked += () =>
-                {
-                    TurnPage(1);
-                    PlaySound(pageTurnSound);
-                };
-            }
-
-            closeRecipeBtn = recipeBookContainer.Q<Button>("CloseRecipeBtn");
-
-            if (closeRecipeBtn != null)
-            {
-                closeRecipeBtn.style.position = Position.Absolute;
-                closeRecipeBtn.style.top = 20;
-                closeRecipeBtn.style.left = 20;
-                closeRecipeBtn.clicked += CloseRecipeBook;
-            }
-
-            recipeBookContainer.style.display = DisplayStyle.None;
-        }
-
-        private int GetTotalRecipes()
-        {
-            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null
-                ? craftingDatabase.recipes.Count
-                : 0;
-            int cookingCount = cookingDatabase != null && cookingDatabase.recipes != null
-                ? cookingDatabase.recipes.Count
-                : 0;
-            return craftingCount + cookingCount;
-        }
-
-        private void OpenRecipeBook()
-        {
-            if (GetTotalRecipes() == 0) return;
-
-            CloseSettings();
-
-            recipeBookContainer.style.display = DisplayStyle.Flex;
-            currentRecipeIndex = 0;
-            DisplayPages();
-        }
-
-        private void CloseRecipeBook()
-        {
-            if (recipeBookContainer != null)
-            {
-                recipeBookContainer.style.display = DisplayStyle.None;
-            }
-        }
-
-        private void TurnPage(int direction)
-        {
-            int totalRecipes = GetTotalRecipes();
-            int newIndex = currentRecipeIndex + (direction * 2);
-
-            if (newIndex >= 0 && newIndex < totalRecipes)
-            {
-                currentRecipeIndex = newIndex;
-                DisplayPages();
-            }
-        }
-
-        private void DisplayPages()
-        {
-            int totalRecipes = GetTotalRecipes();
-
-            PopulatePageData(currentRecipeIndex, leftTitleText, leftGridContainer);
-
-            if (currentRecipeIndex + 1 < totalRecipes)
-            {
-                if (rightTitleText != null) rightTitleText.style.display = DisplayStyle.Flex;
-                if (rightGridContainer != null) rightGridContainer.style.display = DisplayStyle.Flex;
-                PopulatePageData(currentRecipeIndex + 1, rightTitleText, rightGridContainer);
-            }
-            else
-            {
-                if (rightTitleText != null) rightTitleText.text = "";
-                if (rightGridContainer != null) rightGridContainer.Clear();
-            }
-
-            if (prevPageBtn != null)
-                prevPageBtn.style.display = (currentRecipeIndex == 0) ? DisplayStyle.None : DisplayStyle.Flex;
-
-            if (nextPageBtn != null)
-                nextPageBtn.style.display =
-                    (currentRecipeIndex + 2 >= totalRecipes) ? DisplayStyle.None : DisplayStyle.Flex;
-        }
-
-        private void PopulatePageData(int index, Label titleLabel, VisualElement gridContainer)
-        {
-            if (titleLabel == null || gridContainer == null) return;
-
-            gridContainer.Clear();
-
-            int craftingCount = craftingDatabase != null && craftingDatabase.recipes != null
-                ? craftingDatabase.recipes.Count
-                : 0;
-
-            ItemData resultItem = null;
-            ItemData[] ingredientsArray = null;
-            int displayColumns = 4;
-
-            if (index < craftingCount)
-            {
-                var recipe = craftingDatabase.recipes[index];
-                resultItem = recipe.result;
-                ingredientsArray = recipe.ingredients;
-                displayColumns = 4;
-                if (titleLabel != null) titleLabel.text = "Crafting Table";
-            }
-            else
-            {
-                int cookingIndex = index - craftingCount;
-                var recipe = cookingDatabase.recipes[cookingIndex];
-                resultItem = recipe.result;
-                ingredientsArray = recipe.ingredients;
-                displayColumns = recipe.gridSize;
-                if (titleLabel != null) titleLabel.text = "Furnace";
-            }
-
-            VisualElement gridWrapper = new VisualElement();
-            float slotSize = 60f;
-
-            gridWrapper.style.width = (displayColumns * slotSize) + 4;
-            gridWrapper.style.flexDirection = FlexDirection.Row;
-            gridWrapper.style.flexWrap = Wrap.Wrap;
-            gridWrapper.style.justifyContent = Justify.Center;
-            gridWrapper.style.marginBottom = 30;
-
-            for (int i = 0; i < ingredientsArray.Length; i++)
-            {
-                VisualElement slot = new VisualElement();
-                slot.style.width = slotSize;
-                slot.style.height = slotSize;
-
-                slot.style.borderTopWidth = 1;
-                slot.style.borderBottomWidth = 1;
-                slot.style.borderLeftWidth = 1;
-                slot.style.borderRightWidth = 1;
-                slot.style.borderTopColor = new StyleColor(Color.black);
-                slot.style.borderBottomColor = new StyleColor(Color.black);
-                slot.style.borderLeftColor = new StyleColor(Color.black);
-                slot.style.borderRightColor = new StyleColor(Color.black);
-                slot.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.2f));
-
-                if (ingredientsArray[i] != null && ingredientsArray[i].sprite != null)
-                {
-                    Image icon = new Image();
-                    icon.sprite = ingredientsArray[i].sprite;
-                    icon.style.width = Length.Percent(100);
-                    icon.style.height = Length.Percent(100);
-                    slot.Add(icon);
-                }
-
-                gridWrapper.Add(slot);
-            }
-
-            gridContainer.Add(gridWrapper);
-
-            VisualElement resultWrapper = new VisualElement();
-            resultWrapper.style.alignItems = Align.Center;
-            resultWrapper.style.flexDirection = FlexDirection.Column;
-
-            VisualElement resultBox = new VisualElement();
-            resultBox.style.width = 90;
-            resultBox.style.height = 90;
-            resultBox.style.borderTopWidth = 2;
-            resultBox.style.borderBottomWidth = 2;
-            resultBox.style.borderLeftWidth = 2;
-            resultBox.style.borderRightWidth = 2;
-            resultBox.style.borderTopColor = new StyleColor(Color.black);
-            resultBox.style.borderBottomColor = new StyleColor(Color.black);
-            resultBox.style.borderLeftColor = new StyleColor(Color.black);
-            resultBox.style.borderRightColor = new StyleColor(Color.black);
-            resultBox.style.backgroundColor = new StyleColor(new Color(0, 0, 0, 0.4f));
-
-            if (resultItem != null && resultItem.sprite != null)
-            {
-                Image resIcon = new Image();
-                resIcon.sprite = resultItem.sprite;
-                resIcon.style.width = Length.Percent(100);
-                resIcon.style.height = Length.Percent(100);
-                resultBox.Add(resIcon);
-            }
-
-            resultWrapper.Add(resultBox);
-
-            if (resultItem != null)
-            {
-                Label resultLabel = new Label();
-                resultLabel.text = resultItem.name;
-                resultLabel.style.marginTop = 10;
-                resultLabel.style.color = new StyleColor(Color.black);
-                resultLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-                resultLabel.style.fontSize = 18;
-
-                resultWrapper.Add(resultLabel);
-            }
-
-            gridContainer.Add(resultWrapper);
-        }
         public void UpdateHealth(int health, int maxHealth)
         {
             float percent = Mathf.Clamp01((float)health / (float)maxHealth);
@@ -1037,6 +776,272 @@ namespace Player
                 Items.Inventory.Singleton.RemoveFromHand();
             }
         }
+
+        #region JEI
+
+        const short JEICols = 6;
+
+        private VisualElement itemScroll;
+        private VisualElement itemRecipe;
+        private VisualElement itemCookingRecipe;
+        private VisualElement itemInfo;
+        private Button listBtn;
+        private Button backBtn;
+
+        private UI.Components.Slot resultSlot;
+        private UI.Components.Slot cookingResult;
+        private UI.Components.Slot infoSlot;
+        private UI.Components.Slot[] craftingSlots = new UI.Components.Slot[16];
+        private UI.Components.Slot[] cookingSlots = new UI.Components.Slot[4];
+
+        ItemDatabase idb;
+        RecipeDatabase rdb;
+        CookingRecipeDatabase crdb;
+
+        List<string> queue = new();
+        string current = "";
+
+        private void SetupBook()
+        {
+
+            itemScroll = recipeBookContainer.Q("itemScroll");
+            itemRecipe = recipeBookContainer.Q("itemRecipe");
+            itemCookingRecipe = recipeBookContainer.Q("itemCookingRecipe");
+            itemInfo = recipeBookContainer.Q("itemInfo");
+
+            backBtn = recipeBookContainer.Q<Button>("back");
+            backBtn.clicked += () => RecipeBack();
+            listBtn = recipeBookContainer.Q<Button>("list");
+            listBtn.clicked += () => BackToList();
+
+            VisualElement craftingHolder = itemRecipe.Q("crafting-grid");
+            for (short i = 0; i < 16; i++)
+            {
+                craftingSlots[i] = new UI.Components.Slot(null, false, true)
+                {
+                    slotId = i,
+                };
+                int col = i % 4;
+                int row = i / 4;
+                if (col < 3) craftingSlots[i].AddToClassList("spaced-right");
+                if (row < 3) craftingSlots[i].AddToClassList("spaced-bottom");
+                craftingHolder.Add(craftingSlots[i]);
+            }
+            resultSlot = new UI.Components.Slot(null, false, true);
+            itemRecipe.Q("crafting-holder").Add(resultSlot);
+
+            VisualElement cookingHolder = itemCookingRecipe.Q("cooking-grid");
+            for (short i = 0; i < 4; i++)
+            {
+                cookingSlots[i] = new UI.Components.Slot(null, false, true)
+                {
+                    slotId = i,
+                };
+
+                int col = i % 2;
+                int row = i / 2;
+                if (col < 1) cookingSlots[i].AddToClassList("spaced-right");
+                if (row < 1) cookingSlots[i].AddToClassList("spaced-bottom");
+                cookingHolder.Add(cookingSlots[i]);
+            }
+            cookingResult = new UI.Components.Slot(null, false, true);
+            itemCookingRecipe.Q("cooking-slots").Add(cookingResult);
+
+            infoSlot = new UI.Components.Slot(null, false, true);
+            itemInfo.Q("content").Add(infoSlot);
+
+
+            CloseBook();
+            BackToList();
+
+            idb = Resources.Load<ItemDatabase>("ItemDatabase");
+            rdb = Resources.Load<RecipeDatabase>("RecipeDatabase");
+            crdb = Resources.Load<CookingRecipeDatabase>("CookingRecipeDatabase");
+
+            // itemSlots = new Items.Slot[idb.items.Count];
+
+            int rows = idb.items.Count / JEICols;
+
+            VisualElement itemHolder = recipeBookContainer.Q("items");
+
+            for (short i = 0; i < idb.items.Count; i++)
+            {
+                UI.Components.Slot slot = new UI.Components.Slot(null, false, true)
+                {
+                    slotId = i,
+                };
+                ItemStack itemStack = new ItemStack(idb.items[i]);
+                ItemData itemData = itemStack.data;
+
+                UI.Components.Item item = new Item(null, false, false, true)
+                {
+                    item = itemData,
+                    amount = 1,
+                };
+
+                slot.item = item;
+
+                int col = i % JEICols;
+                int row = i / JEICols;
+
+                slot.AddToClassList("spaced-right");
+                if (row != rows) slot.AddToClassList("spaced-bottom");
+                itemHolder.Add(slot);
+            }
+        }
+
+        public void ShowBookItem(string itemId)
+        {
+            if (itemId == current) return;
+
+            if (!string.IsNullOrEmpty(current)) queue.Add(current);
+            current = itemId;
+            itemScroll.style.display = DisplayStyle.None;
+            itemRecipe.style.display = DisplayStyle.None;
+            itemCookingRecipe.style.display = DisplayStyle.None;
+            itemInfo.style.display = DisplayStyle.None;
+            if (queue.Count != 0) backBtn.style.display = DisplayStyle.Flex;
+            listBtn.style.display = DisplayStyle.Flex;
+
+            Recipe foundRecipe = rdb.recipes.Find(r => r.result.name == itemId);
+            if (foundRecipe)
+            {
+                Debug.Log($"Found recipe!");
+                PopulateRecipe(foundRecipe);
+                return;
+            }
+
+            CookingRecipe foundCookingRecipe = crdb.recipes.Find(r => r.result.name == itemId);
+            if (foundCookingRecipe)
+            {
+                Debug.Log($"Found cooking recipe!");
+                PopulateCookingRecipe(foundCookingRecipe);
+                return;
+            }
+            Debug.Log($"No recipe found!");
+            DisplayInfo(itemId);
+
+        }
+
+        private void PopulateRecipe(Recipe recipe)
+        {
+            itemRecipe.style.display = DisplayStyle.Flex;
+            for (int i = 0; i < 16; i++)
+            {
+                craftingSlots[i].item = null;
+                if (!recipe.ingredients[i]) continue;
+
+                ItemStack itemStack = new ItemStack(recipe.ingredients[i]);
+                ItemData itemData = itemStack.data;
+
+                UI.Components.Item item = new Item(null, false, false, true)
+                {
+                    item = itemData,
+                    amount = 1,
+                };
+
+                craftingSlots[i].item = item;
+            }
+
+            resultSlot.item = new Item(null, false, false, true)
+            {
+                item = recipe.result,
+                amount = recipe.amount,
+            };
+        }
+        private void PopulateCookingRecipe(CookingRecipe recipe)
+        {
+            itemCookingRecipe.style.display = DisplayStyle.Flex;
+            for (int i = 0; i < 4; i++)
+            {
+                cookingSlots[i].item = null;
+                if (!recipe.ingredients[i]) continue;
+                ItemStack itemStack = new ItemStack(recipe.ingredients[i]);
+                ItemData itemData = itemStack.data;
+
+                UI.Components.Item item = new Item(null, false, false, true)
+                {
+                    item = itemData,
+                    amount = 1,
+                };
+
+                cookingSlots[i].item = item;
+            }
+
+            cookingResult.item = new Item(null, false, false, true)
+            {
+                item = recipe.result,
+                amount = recipe.amount,
+            };
+        }
+
+        private void DisplayInfo(string item)
+        {
+            itemInfo.style.display = DisplayStyle.Flex;
+
+            ItemData foundItem = idb.items.Find(i => i.name == item);
+            if (!foundItem)
+            {
+                BackToList();
+                return;
+            }
+
+            infoSlot.item = new Item(null, false, false, true)
+            {
+                item = foundItem,
+                amount = 1,
+            };
+
+            itemInfo.Q<Label>("description").text = foundItem.description ?? "No info";
+
+        }
+
+
+        public void BackToList()
+        {
+            itemScroll.style.display = DisplayStyle.Flex;
+            itemRecipe.style.display = DisplayStyle.None;
+            itemCookingRecipe.style.display = DisplayStyle.None;
+            itemInfo.style.display = DisplayStyle.None;
+            listBtn.style.display = DisplayStyle.None;
+            backBtn.style.display = DisplayStyle.None;
+            queue.Clear();
+            current = "";
+        }
+
+        public void RecipeBack()
+        {
+            if (queue.Count < 1)
+            {
+                BackToList();
+                return;
+            }
+
+            string now = queue[queue.Count - 1];
+            queue.RemoveAt(queue.Count - 1);
+            current = "";
+
+            ShowBookItem(now);
+        }
+
+        public void ToggleBook()
+        {
+            if (isBookOpen) CloseBook();
+            else OpenBook();
+        }
+
+        public void OpenBook()
+        {
+            isBookOpen = true;
+            recipeBookContainer.style.display = DisplayStyle.Flex;
+        }
+
+        public void CloseBook()
+        {
+            isBookOpen = false;
+            recipeBookContainer.style.display = DisplayStyle.None;
+        }
+        #endregion
         #endregion
     }
 }

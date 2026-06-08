@@ -24,3 +24,6 @@ MonoBehaviour:
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
+  drops: []
+  hitSound: {fileID: 0}
+  description: Clay drops when mining clay blocks

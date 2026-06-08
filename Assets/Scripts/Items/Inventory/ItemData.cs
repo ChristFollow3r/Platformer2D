@@ -30,6 +30,8 @@ namespace Data
 
         [Header("Feedback")]
         public AudioClip hitSound;
+
+        public string description;
     }
 
 }

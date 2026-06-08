@@ -30,3 +30,5 @@ MonoBehaviour:
     maxAmount: 3
     dropChance: 101
   hitSound: {fileID: 8300000, guid: 0944551b2069bb344adb9cbf0e6dfbf1, type: 3}
+  description: The Clay Block can be found around the world, mining it will give
+    you clay.

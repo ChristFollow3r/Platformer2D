@@ -33,6 +33,7 @@ namespace UI.Components
 
         private Vector2 _dragOffset = new Vector2(50, 50);
         private bool isDraggable;
+        private bool isStatic;
         private IInventory inventory;
         public bool orphanAfterPickup = false;
         public static Item currentDraggedItem = null;
@@ -55,11 +56,12 @@ namespace UI.Components
 
         #region Constructor
         public Item() { Init(); }
-        public Item(IInventory inventory, bool isDraggable, bool isGhost = false)
+        public Item(IInventory inventory, bool isDraggable, bool isGhost = false, bool isStatic = false)
         {
             this.inventory = inventory;
             this.isDraggable = isDraggable;
             this.isGhost = isGhost;
+            this.isStatic = isStatic;
             Init();
         }
         #endregion
@@ -100,12 +102,20 @@ namespace UI.Components
         private void SubscribeEvents()
         {
             #region SubscribeEvents
+            rootElm.RegisterCallback<PointerEnterEvent>(OnPointerEnter);
+            rootElm.RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
+
+
+            if (isStatic)
+            {
+                rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
+                return;
+            }
+
             if (!isDraggable) return;
             rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
             rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);
 
-            rootElm.RegisterCallback<PointerEnterEvent>(OnPointerEnter);
-            rootElm.RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
             if (isGhost)
             {
                 UIController.Singleton.OnOverlayClose -= OnOverlayClose;
@@ -119,7 +129,11 @@ namespace UI.Components
 
         private void GrabItem(PointerDownEvent e)
         {
-
+            if (isStatic)
+            {
+                UIController.Singleton.ShowBookItem(item.name);
+                return;
+            }
             Slot ghostSlot = orphanAfterPickup ? null : slot;
             IInventory ghostInventory = orphanAfterPickup ? Items.Inventory.Singleton : inventory;
 
@@ -258,7 +272,7 @@ namespace UI.Components
         private void OnPointerEnter(PointerEnterEvent e)
         {
             Vector2 pos = rootElm.worldBound.position;
-            UIController.Singleton.ShowName(_item.name, pos + new Vector2(40, -10));
+            UIController.Singleton.ShowName(_item.name, pos + new Vector2(40, -10), _item.isConsumable);
             showingName = true;
         }
         private void OnPointerLeave(PointerLeaveEvent e)

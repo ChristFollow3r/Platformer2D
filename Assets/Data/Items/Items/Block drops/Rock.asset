@@ -26,3 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
+  description: Rocks drop when mining rocks on the surface

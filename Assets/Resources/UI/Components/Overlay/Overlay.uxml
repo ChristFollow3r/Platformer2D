@@ -1,10 +1,49 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/UI/Components/Overlay/OverlayStyles.uss?fileID=7433441132597879392&amp;guid=b6be7c9ecdd461945a76a7026df115d5&amp;type=3#OverlayStyles"/>
     <Style src="project://database/Assets/Resources/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
-    <ui:VisualElement name="root" class="root">
-        <ui:VisualElement name="holder" class="holder" style="padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px;">
+    <Style src="project://database/Assets/Resources/UI/Overlays/CraftingTable/CraftingTableStyles.uss?fileID=7433441132597879392&amp;guid=09337e631d36b344183cf688581357ee&amp;type=3#CraftingTableStyles"/>
+    <Style src="project://database/Assets/Resources/UI/Overlays/Furnace/FurnaceStyles.uss?fileID=7433441132597879392&amp;guid=7d01e9eafb420074a9e2474437a9d157&amp;type=3#FurnaceStyles"/>
+    <ui:VisualElement name="root" class="root" style="display: flex;">
+        <ui:VisualElement name="recipeBook" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Sprites/UI_Art/UI_Assets/BookEdited/FullPage.png?fileID=2800000&amp;guid=e7e1749ada902104ba6e8c96db0cbc06&amp;type=3#FullPage&quot;); -unity-slice-left: 15; -unity-slice-top: 15; -unity-slice-right: 15; -unity-slice-bottom: 15; position: relative; height: 800px; margin-left: auto; margin-top: auto; margin-right: 50px; margin-bottom: auto; flex-direction: column; align-items: center; justify-content: center; align-self: auto; flex-shrink: 0; display: flex; padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px; max-width: 520px; width: 520px;">
+            <ui:Label text="Items &amp; Recipes" style="font-size: 40px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);"/>
+            <ui:VisualElement name="spacer" style="flex-grow: 1; height: 20px;"/>
+            <ui:VisualElement name="content" style="flex-grow: 1; width: 100%; height: 100%;">
+                <ui:VisualElement name="itemRecipe" style="flex-grow: 1; position: absolute; top: 0; left: 0; bottom: 0; right: 0; display: none;">
+                    <ui:Label text="Crafting recipe" name="title" class="recipe-type"/>
+                    <ui:VisualElement name="crafting" class="equipment-crafting">
+                        <ui:VisualElement name="crafting-holder" class="crafing-holder">
+                            <ui:VisualElement name="crafting-grid" class="crafting-grid spaced-right"/>
+                            <ui:VisualElement name="spacer" class="space"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="itemCookingRecipe" style="flex-grow: 1; position: absolute; top: 0; left: 0; bottom: 0; right: 0; display: none;">
+                    <ui:Label text="Furnace recipe" name="title" class="recipe-type"/>
+                    <ui:VisualElement name="cooking-holder" class="cooking-holder" style="width: 100%; height: 100%;">
+                        <ui:VisualElement name="cooking-slots" class="cooking-slots" style="justify-content: center;">
+                            <ui:VisualElement name="cooking-grid" class="spaced-right cooking-grid"/>
+                            <ui:VisualElement name="spacer" class="space"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="itemInfo" style="flex-grow: 1; left: 0; top: 0; bottom: 0; right: 0; display: flex;">
+                    <ui:Label text="World drop" name="title" class="recipe-type" style="margin-bottom: 30px;"/>
+                    <ui:VisualElement name="content" style="flex-grow: 1; flex-direction: column-reverse; justify-content: flex-end;">
+                        <ui:Label text="Label" name="description" style="font-size: 20px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;); margin-top: 20px; white-space: normal;"/>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:ScrollView name="itemScroll" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; bottom: 0; right: 0;">
+                    <ui:VisualElement name="items" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row; flex-wrap: wrap; justify-content: flex-start;"/>
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-grow: 1; position: relative; width: 100%; flex-direction: row; justify-content: space-between;">
+                <ui:Button text="Items" name="list" class="button" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-image: url(&quot;project://database/Assets/Sprites/UI_Art/UI_Assets/Sprout%20Lands%20-%20UI%20Pack%20-%20Basic%20pack/Sprite%20sheets/UI%20Big%20Play%20Button.png?fileID=-7635131891296033614&amp;guid=37ff9dbef34be1143b9dd72cadecd16c&amp;type=3#UI Big Play Button_0&quot;); width: 180px; height: 60px; margin-top: 10px; margin-bottom: 10px; background-color: rgba(48, 48, 48, 0); font-size: 30px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);"/>
+                <ui:Button text="Back&#10;" name="back" class="button" style="border-top-width: 0; border-right-width: 0; border-bottom-width: 0; border-left-width: 0; background-image: url(&quot;project://database/Assets/Sprites/UI_Art/UI_Assets/Sprout%20Lands%20-%20UI%20Pack%20-%20Basic%20pack/Sprite%20sheets/UI%20Big%20Play%20Button.png?fileID=-7635131891296033614&amp;guid=37ff9dbef34be1143b9dd72cadecd16c&amp;type=3#UI Big Play Button_0&quot;); width: 180px; height: 60px; margin-top: 10px; margin-bottom: 10px; background-color: rgba(48, 48, 48, 0); font-size: 30px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);"/>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="holder" class="holder" style="padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px; display: flex;">
             <ui:Image name="corners" source="project://database/Assets/UI/Img/Corners.png?fileID=2800000&amp;guid=e8c2f38c17c96ea4f82ee1ebcd9abc0d&amp;type=3#Corners" scale-mode="StretchToFill" class="corners"/>
-            <ui:VisualElement name="left" style="flex-grow: 1; right: auto; width: 60%;"/>
+            <ui:VisualElement name="left" class="left" style="flex-grow: 1; right: auto; width: 60%;"/>
             <ui:VisualElement name="inventory" class="inventory-holder"/>
         </ui:VisualElement>
         <ui:VisualElement name="name-holder" class="item-name-holder" style="flex-direction: row; display: none;">
