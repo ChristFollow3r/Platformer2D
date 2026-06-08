@@ -118,10 +118,8 @@ namespace UI.Components
                     duration = item.duration,
                     orphanAfterPickup = isResultSlot
                 };
-
             }
             allSlots[slotId].item = itemElm;
-
             #endregion
         }
         #endregion

@@ -108,7 +108,7 @@ namespace Player
             playerInput = new InputSystem_Actions();
             playerInput.Enable();
             CreateUI();
-
+            SetupBook();
             #endregion
         }
 
@@ -420,11 +420,14 @@ namespace Player
             Items.Inventory.Singleton.handIndex = (short)slot;
         }
 
-        public void ShowName(string name, Vector2 pos)
+        public void ShowName(string name, Vector2 pos, bool isConsumable = false)
         {
             nameShower.style.display = DisplayStyle.Flex;
             Label nameLb = nameShower.Q<Label>("name");
-            nameLb.text = name;
+
+            string iName = name;
+            if (isConsumable) iName += " (Consumable)";
+            nameLb.text = iName;
             nameShower.style.width = name.Length * 20;
             nameShower.style.left = pos.x;
             nameShower.style.top = pos.y;
@@ -772,6 +775,69 @@ namespace Player
                 Items.Inventory.Singleton.RemoveFromHand();
             }
         }
+
+        #region JEI
+
+        const short JEICols = 6;
+
+        private VisualElement itemScroll;
+        private VisualElement itemRecipe;
+
+        private void SetupBook()
+        {
+            CloseBook();
+            BackToList();
+
+            ItemDatabase idb = Resources.Load<ItemDatabase>("ItemDatabase");
+            RecipeDatabase rdb = Resources.Load<RecipeDatabase>("RecipeDatabase");
+            CookingRecipeDatabase crdb = Resources.Load<CookingRecipeDatabase>("CookingRecipeDatabase");
+
+            // itemSlots = new Items.Slot[idb.items.Count];
+
+            int rows = idb.items.Count / JEICols;
+
+            VisualElement itemHolder = recipeBookContainer.Q("items");
+
+            for (short i = 0; i < idb.items.Count; i++)
+            {
+                UI.Components.Slot slot = new UI.Components.Slot(null, false, true)
+                {
+                    slotId = i,
+                };
+                ItemStack itemStack = new ItemStack(idb.items[i]);
+                ItemData itemData = itemStack.data;
+
+                UI.Components.Item item = new Item(null, false, false)
+                {
+                    item = itemData,
+                    amount = 1,
+                };
+
+                slot.item = item;
+
+                int col = i % JEICols;
+                int row = i / JEICols;
+
+                slot.AddToClassList("spaced-right");
+                if (row != rows) slot.AddToClassList("spaced-bottom");
+                itemHolder.Add(slot);
+            }
+        }
+
+        public void BookItemClicked(string itemId)
+        {
+            itemScroll.style.display = DisplayStyle.None;
+            itemRecipe.style.display = DisplayStyle.Flex;
+
+
+        }
+
+        public void BackToList()
+        {
+            itemScroll.style.display = DisplayStyle.Flex;
+            itemRecipe.style.display = DisplayStyle.None;
+        }
+
         public void ToggleBook()
         {
             if (isBookOpen) CloseBook();
@@ -789,6 +855,7 @@ namespace Player
             isBookOpen = false;
             recipeBookContainer.style.display = DisplayStyle.None;
         }
+        #endregion
         #endregion
     }
 }
