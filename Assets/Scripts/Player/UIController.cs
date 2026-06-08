@@ -786,6 +786,8 @@ namespace Player
         private VisualElement itemCookingRecipe;
         private VisualElement itemInfo;
 
+        private Button backBtn;
+
         private UI.Components.Slot resultSlot;
         private UI.Components.Slot cookingResult;
         private UI.Components.Slot[] craftingSlots = new UI.Components.Slot[16];
@@ -802,6 +804,9 @@ namespace Player
             itemRecipe = recipeBookContainer.Q("itemRecipe");
             itemCookingRecipe = recipeBookContainer.Q("itemCookingRecipe");
             itemInfo = recipeBookContainer.Q("itemInfo");
+
+            backBtn = recipeBookContainer.Q<Button>("back");
+            backBtn.clicked += () => BackToList();
 
             VisualElement craftingHolder = itemRecipe.Q("crafting-grid");
             for (short i = 0; i < 16; i++)
@@ -882,6 +887,7 @@ namespace Player
             itemRecipe.style.display = DisplayStyle.None;
             itemCookingRecipe.style.display = DisplayStyle.None;
             itemInfo.style.display = DisplayStyle.None;
+            backBtn.style.display = DisplayStyle.Flex;
 
             Recipe foundRecipe = rdb.recipes.Find(r => r.result.name == itemId);
             if (foundRecipe)
@@ -960,7 +966,7 @@ namespace Player
             itemInfo.style.display = DisplayStyle.Flex;
             // TODO: add  slot and desc or something
             // recipeBookContainer.Q<Label>()
-            BackToList();
+            // BackToList();
         }
 
 
@@ -970,6 +976,7 @@ namespace Player
             itemRecipe.style.display = DisplayStyle.None;
             itemCookingRecipe.style.display = DisplayStyle.None;
             itemInfo.style.display = DisplayStyle.None;
+            backBtn.style.display = DisplayStyle.None;
         }
 
         public void ToggleBook()
