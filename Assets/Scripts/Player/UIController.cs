@@ -783,9 +783,12 @@ namespace Player
 
         private VisualElement itemScroll;
         private VisualElement itemRecipe;
+        private VisualElement itemCookingRecipe;
+        private VisualElement itemInfo;
 
         private UI.Components.Slot resultSlot;
         private UI.Components.Slot[] craftingSlots = new UI.Components.Slot[16];
+        private UI.Components.Slot[] cookingSlots = new UI.Components.Slot[4];
 
         ItemDatabase idb;
         RecipeDatabase rdb;
@@ -796,6 +799,8 @@ namespace Player
 
             itemScroll = recipeBookContainer.Q("itemScroll");
             itemRecipe = recipeBookContainer.Q("itemRecipe");
+            itemCookingRecipe = recipeBookContainer.Q("itemCookingRecipe");
+            itemInfo = recipeBookContainer.Q("itemInfo");
 
             VisualElement craftingHolder = itemRecipe.Q("crafting-grid");
             for (short i = 0; i < 16; i++)
@@ -854,7 +859,6 @@ namespace Player
         {
             Debug.Log($"Item: {itemId} clicked!");
             itemScroll.style.display = DisplayStyle.None;
-            itemRecipe.style.display = DisplayStyle.Flex;
 
             Recipe foundRecipe = rdb.recipes.Find(r => r.result.name == itemId);
             if (foundRecipe)
@@ -878,6 +882,7 @@ namespace Player
 
         private void PopulateRecipe(Recipe recipe)
         {
+            itemRecipe.style.display = DisplayStyle.Flex;
             for (int i = 0; i < 16; i++)
             {
                 craftingSlots[i].item = null;
@@ -903,8 +908,11 @@ namespace Player
         }
         private void PopulateCookingRecipe(CookingRecipe recipe)
         {
+            itemCookingRecipe.style.display = DisplayStyle.Flex;
             for (int i = 0; i < 4; i++)
             {
+                cookingSlots[i].item = null;
+                if (!recipe.ingredients[i]) continue;
                 ItemStack itemStack = new ItemStack(recipe.ingredients[i]);
                 ItemData itemData = itemStack.data;
 
@@ -914,7 +922,7 @@ namespace Player
                     amount = 1,
                 };
 
-                craftingSlots[i].item = item;
+                cookingSlots[i].item = item;
             }
 
             resultSlot.item = new Item(null, false, false, true)
@@ -926,6 +934,7 @@ namespace Player
 
         private void DisplayInfo(string item)
         {
+            itemInfo.style.display = DisplayStyle.Flex;
             // TODO: add  slot and desc or something
             // recipeBookContainer.Q<Label>()
             BackToList();
