@@ -892,6 +892,8 @@ namespace Player
 
         public void ShowBookItem(string itemId)
         {
+            if (itemId == current) return;
+
             if (!string.IsNullOrEmpty(current)) queue.Add(current);
             current = itemId;
             itemScroll.style.display = DisplayStyle.None;
