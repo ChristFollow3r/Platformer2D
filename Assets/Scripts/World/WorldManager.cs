@@ -708,7 +708,7 @@ namespace World
                     WorldData.World.lightValues[x, y] = finalLight;
 
                     finalLight *= finalMultiplier;
-                    finalLight = Mathf.Pow(finalLight, 1.5f);
+                    finalLight = Mathf.SmoothStep(0f, 1f, finalLight);
                     lightmapColors[y * worldWidth + x] = new Color(finalLight, finalLight, finalLight, 1f);
                 }
             }
@@ -801,7 +801,7 @@ namespace World
                     WorldData.World.lightValues[x, y] = finalLight;
 
                     finalLight *= finalMultiplier;
-                    finalLight = Mathf.Pow(finalLight, 1.5f);
+                    finalLight = Mathf.SmoothStep(0f, 1f, finalLight);
                     lightmapColors[y * width + x] = new Color(finalLight, finalLight, finalLight, 1f);
                 }
             }
@@ -815,7 +815,7 @@ namespace World
                 for (int y = 0; y < worldHeight; y++)
                 {
                     float l = WorldData.World.lightValues[x, y] * finalMultiplier;
-                    l = Mathf.Pow(l, 1.5f);
+                    l = Mathf.SmoothStep(0f, 1f, l);
                     int index = y * worldWidth + x;
                     lightmapColors[index] = new Color(l, l, l, 1f);
                 }

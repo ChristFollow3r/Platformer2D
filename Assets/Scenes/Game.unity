@@ -1515,8 +1515,8 @@ MonoBehaviour:
   virtualCamera: {fileID: 91711888}
   currentSpawnPoint: {x: 0, y: 0, z: 0}
   tilemapMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
-  verticalSolidDecay: 0.2
-  spreadSolidDecay: 0.2
+  verticalSolidDecay: 0.15
+  spreadSolidDecay: 0.15
   spreadAirDecay: 0.05
   lightUpdateRadius: 30
   lightIterations: 7
