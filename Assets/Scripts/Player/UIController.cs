@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 using Data;
 using UnityEngine.InputSystem;
 using Shared;
+using Scriptable_Objects_Scripts;
 
 namespace Player
 {
@@ -783,14 +784,39 @@ namespace Player
         private VisualElement itemScroll;
         private VisualElement itemRecipe;
 
+        private UI.Components.Slot resultSlot;
+        private UI.Components.Slot[] craftingSlots = new UI.Components.Slot[16];
+
+        ItemDatabase idb;
+        RecipeDatabase rdb;
+        CookingRecipeDatabase crdb;
+
         private void SetupBook()
         {
+
+            itemScroll = recipeBookContainer.Q("itemScroll");
+            itemRecipe = recipeBookContainer.Q("itemRecipe");
+
+            VisualElement craftingHolder = itemRecipe.Q("crafting-grid");
+            for (short i = 0; i < 16; i++)
+            {
+                craftingSlots[i] = new UI.Components.Slot(null, false, true)
+                {
+                    slotId = i,
+                };
+                craftingHolder.Add(craftingSlots[i]);
+            }
+            resultSlot = new UI.Components.Slot(null, false, true);
+            itemRecipe.Q("crafting-holder").Add(resultSlot);
+
+
+
             CloseBook();
             BackToList();
 
-            ItemDatabase idb = Resources.Load<ItemDatabase>("ItemDatabase");
-            RecipeDatabase rdb = Resources.Load<RecipeDatabase>("RecipeDatabase");
-            CookingRecipeDatabase crdb = Resources.Load<CookingRecipeDatabase>("CookingRecipeDatabase");
+            idb = Resources.Load<ItemDatabase>("ItemDatabase");
+            rdb = Resources.Load<RecipeDatabase>("RecipeDatabase");
+            crdb = Resources.Load<CookingRecipeDatabase>("CookingRecipeDatabase");
 
             // itemSlots = new Items.Slot[idb.items.Count];
 
@@ -807,7 +833,7 @@ namespace Player
                 ItemStack itemStack = new ItemStack(idb.items[i]);
                 ItemData itemData = itemStack.data;
 
-                UI.Components.Item item = new Item(null, false, false)
+                UI.Components.Item item = new Item(null, false, false, true)
                 {
                     item = itemData,
                     amount = 1,
@@ -826,11 +852,85 @@ namespace Player
 
         public void BookItemClicked(string itemId)
         {
+            Debug.Log($"Item: {itemId} clicked!");
             itemScroll.style.display = DisplayStyle.None;
             itemRecipe.style.display = DisplayStyle.Flex;
 
+            Recipe foundRecipe = rdb.recipes.Find(r => r.result.name == itemId);
+            if (foundRecipe)
+            {
+                Debug.Log($"Found recipe!");
+                PopulateRecipe(foundRecipe);
+                return;
+            }
+
+            CookingRecipe foundCookingRecipe = crdb.recipes.Find(r => r.result.name == itemId);
+            if (foundCookingRecipe)
+            {
+                Debug.Log($"Found cooking recipe!");
+                PopulateCookingRecipe(foundCookingRecipe);
+                return;
+            }
+            Debug.Log($"No recipe found!");
+            DisplayInfo(itemId);
 
         }
+
+        private void PopulateRecipe(Recipe recipe)
+        {
+            for (int i = 0; i < 16; i++)
+            {
+                craftingSlots[i].item = null;
+                if (!recipe.ingredients[i]) continue;
+
+                ItemStack itemStack = new ItemStack(recipe.ingredients[i]);
+                ItemData itemData = itemStack.data;
+
+                UI.Components.Item item = new Item(null, false, false, true)
+                {
+                    item = itemData,
+                    amount = 1,
+                };
+
+                craftingSlots[i].item = item;
+            }
+
+            resultSlot.item = new Item(null, false, false, true)
+            {
+                item = recipe.result,
+                amount = recipe.amount,
+            };
+        }
+        private void PopulateCookingRecipe(CookingRecipe recipe)
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                ItemStack itemStack = new ItemStack(recipe.ingredients[i]);
+                ItemData itemData = itemStack.data;
+
+                UI.Components.Item item = new Item(null, false, false, true)
+                {
+                    item = itemData,
+                    amount = 1,
+                };
+
+                craftingSlots[i].item = item;
+            }
+
+            resultSlot.item = new Item(null, false, false, true)
+            {
+                item = recipe.result,
+                amount = recipe.amount,
+            };
+        }
+
+        private void DisplayInfo(string item)
+        {
+            // TODO: add  slot and desc or something
+            // recipeBookContainer.Q<Label>()
+            BackToList();
+        }
+
 
         public void BackToList()
         {

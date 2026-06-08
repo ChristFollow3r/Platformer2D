@@ -1,13 +1,24 @@
 <ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/Resources/UI/Components/Overlay/OverlayStyles.uss?fileID=7433441132597879392&amp;guid=b6be7c9ecdd461945a76a7026df115d5&amp;type=3#OverlayStyles"/>
     <Style src="project://database/Assets/Resources/GlobalStyles.uss?fileID=7433441132597879392&amp;guid=94c2131cb3efa034091aa9ef1e28a00c&amp;type=3#GlobalStyles"/>
+    <Style src="project://database/Assets/Resources/UI/Overlays/CraftingTable/CraftingTableStyles.uss?fileID=7433441132597879392&amp;guid=09337e631d36b344183cf688581357ee&amp;type=3#CraftingTableStyles"/>
     <ui:VisualElement name="root" class="root" style="display: flex;">
         <ui:VisualElement name="recipeBook" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/Sprites/UI_Art/UI_Assets/BookEdited/FullPage.png?fileID=2800000&amp;guid=e7e1749ada902104ba6e8c96db0cbc06&amp;type=3#FullPage&quot;); -unity-slice-left: 15; -unity-slice-top: 15; -unity-slice-right: 15; -unity-slice-bottom: 15; position: relative; height: 800px; margin-left: auto; margin-top: auto; margin-right: 50px; margin-bottom: auto; flex-direction: column; align-items: center; justify-content: center; align-self: auto; flex-shrink: 0; display: flex; padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px; max-width: 600px;">
             <ui:Label text="Items &amp; Recipes" style="font-size: 40px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);"/>
             <ui:VisualElement name="spacer" style="flex-grow: 1; height: 20px;"/>
-            <ui:ScrollView style="width: 100%; height: 100%;">
-                <ui:VisualElement name="items" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row; flex-wrap: wrap; justify-content: flex-start;"/>
-            </ui:ScrollView>
+            <ui:VisualElement name="content" style="flex-grow: 1; width: 100%; height: 100%;">
+                <ui:ScrollView name="itemScroll" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; bottom: 0; right: 0;">
+                    <ui:VisualElement name="items" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row; flex-wrap: wrap; justify-content: flex-start;"/>
+                </ui:ScrollView>
+                <ui:VisualElement name="itemRecipe" style="flex-grow: 1;">
+                    <ui:VisualElement name="crafting" class="equipment-crafting">
+                        <ui:VisualElement name="crafting-holder" class="crafing-holder">
+                            <ui:VisualElement name="crafting-grid" class="crafting-grid spaced-right"/>
+                            <ui:VisualElement name="spacer" class="space"/>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="holder" class="holder" style="padding-top: 30px; padding-right: 30px; padding-bottom: 30px; padding-left: 30px; display: flex;">
             <ui:Image name="corners" source="project://database/Assets/UI/Img/Corners.png?fileID=2800000&amp;guid=e8c2f38c17c96ea4f82ee1ebcd9abc0d&amp;type=3#Corners" scale-mode="StretchToFill" class="corners"/>

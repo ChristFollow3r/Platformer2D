@@ -33,6 +33,7 @@ namespace UI.Components
 
         private Vector2 _dragOffset = new Vector2(50, 50);
         private bool isDraggable;
+        private bool isStatic;
         private IInventory inventory;
         public bool orphanAfterPickup = false;
         public static Item currentDraggedItem = null;
@@ -55,11 +56,12 @@ namespace UI.Components
 
         #region Constructor
         public Item() { Init(); }
-        public Item(IInventory inventory, bool isDraggable, bool isGhost = false)
+        public Item(IInventory inventory, bool isDraggable, bool isGhost = false, bool isStatic = false)
         {
             this.inventory = inventory;
             this.isDraggable = isDraggable;
             this.isGhost = isGhost;
+            this.isStatic = isStatic;
             Init();
         }
         #endregion
@@ -104,6 +106,12 @@ namespace UI.Components
             rootElm.RegisterCallback<PointerLeaveEvent>(OnPointerLeave);
 
 
+            if (isStatic)
+            {
+                rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
+                return;
+            }
+
             if (!isDraggable) return;
             rootElm.RegisterCallback<PointerDownEvent>(OnPointerDown);
             rootElm.RegisterCallback<PointerMoveEvent>(OnPointerMove);
@@ -121,7 +129,7 @@ namespace UI.Components
 
         private void GrabItem(PointerDownEvent e)
         {
-            if (slot != null && slot.isStatic)
+            if (isStatic)
             {
                 UIController.Singleton.BookItemClicked(item.name);
                 return;
