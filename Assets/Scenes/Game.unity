@@ -345,7 +345,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 100
+  m_SortingOrder: -4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1082,7 +1082,7 @@ MonoBehaviour:
     backgroundSprite: {fileID: 4113829005332862926, guid: 5e3da585431fdb44eafd5184288e5c2c, type: 3}
     parallaxEffect: {x: 0.4, y: 1}
     yOffset: 0
-    sortingOrder: -3
+    sortingOrder: -5
     scale: 1
 --- !u!1 &859175070
 GameObject:
@@ -1516,10 +1516,10 @@ MonoBehaviour:
   currentSpawnPoint: {x: 0, y: 0, z: 0}
   tilemapMaterial: {fileID: 2100000, guid: e243280365ef2a944b63d3d359dbc1be, type: 2}
   verticalSolidDecay: 0.2
-  spreadSolidDecay: 0.15
-  spreadAirDecay: 0.04
-  lightUpdateRadius: 40
-  lightIterations: 14
+  spreadSolidDecay: 0.2
+  spreadAirDecay: 0.05
+  lightUpdateRadius: 30
+  lightIterations: 7
   worldWidth: 3000
   worldHeight: 400
   globalSpawnChance: 70

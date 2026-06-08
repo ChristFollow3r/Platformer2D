@@ -640,7 +640,7 @@ namespace World
 
                     if (!air)
                     {
-                        currentSunlight *= (1.0f - verticalSolidDecay);
+                        currentSunlight = Mathf.Max(0f, currentSunlight - verticalSolidDecay);
                     }
 
                     lightMapCache[i, j] = currentSunlight;
@@ -664,7 +664,7 @@ namespace World
                             if (j < worldHeight - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
                             float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
-                            float spreadValue = neighbourMax * (1.0f - decay);
+                            float spreadValue = Mathf.Max(0f, neighbourMax - decay);
 
                             if (spreadValue > currentValue)
                             {
@@ -688,7 +688,7 @@ namespace World
                             if (j < worldHeight - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
                             float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
-                            float spreadValue = neighbourMax * (1.0f - decay);
+                            float spreadValue = Mathf.Max(0f, neighbourMax - decay);
 
                             if (spreadValue > currentValue)
                             {
@@ -733,7 +733,7 @@ namespace World
 
                     if (!air)
                     {
-                        currentSunlight *= (1.0f - verticalSolidDecay);
+                        currentSunlight = Mathf.Max(0f, currentSunlight - verticalSolidDecay);
                     }
 
                     lightMapCache[i, j] = currentSunlight;
@@ -757,7 +757,7 @@ namespace World
                             if (j < height - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
                             float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
-                            float spreadValue = neighbourMax * (1.0f - decay);
+                            float spreadValue = Mathf.Max(0f, neighbourMax - decay);
 
                             if (spreadValue > currentValue)
                             {
@@ -781,7 +781,7 @@ namespace World
                             if (j < height - 1 && lightMapCache[i, j + 1] > neighbourMax) neighbourMax = lightMapCache[i, j + 1];
 
                             float decay = isAirCache[i, j] ? spreadAirDecay : spreadSolidDecay;
-                            float spreadValue = neighbourMax * (1.0f - decay);
+                            float spreadValue = Mathf.Max(0f, neighbourMax - decay);
 
                             if (spreadValue > currentValue)
                             {
