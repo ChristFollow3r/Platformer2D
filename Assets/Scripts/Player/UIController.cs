@@ -785,11 +785,11 @@ namespace Player
         private VisualElement itemRecipe;
         private VisualElement itemCookingRecipe;
         private VisualElement itemInfo;
-
         private Button backBtn;
 
         private UI.Components.Slot resultSlot;
         private UI.Components.Slot cookingResult;
+        private UI.Components.Slot infoSlot;
         private UI.Components.Slot[] craftingSlots = new UI.Components.Slot[16];
         private UI.Components.Slot[] cookingSlots = new UI.Components.Slot[4];
 
@@ -840,6 +840,9 @@ namespace Player
             }
             cookingResult = new UI.Components.Slot(null, false, true);
             itemCookingRecipe.Q("cooking-slots").Add(cookingResult);
+
+            infoSlot = new UI.Components.Slot(null, false, true);
+            itemInfo.Q("content").Add(infoSlot);
 
 
             CloseBook();
@@ -964,9 +967,22 @@ namespace Player
         private void DisplayInfo(string item)
         {
             itemInfo.style.display = DisplayStyle.Flex;
-            // TODO: add  slot and desc or something
-            // recipeBookContainer.Q<Label>()
-            // BackToList();
+
+            ItemData foundItem = idb.items.Find(i => i.name == item);
+            if (!foundItem)
+            {
+                BackToList();
+                return;
+            }
+
+            infoSlot.item = new Item(null, false, false, true)
+            {
+                item = foundItem,
+                amount = 1,
+            };
+
+            itemInfo.Q<Label>("description").text = foundItem.description ?? "No info";
+
         }
 
 

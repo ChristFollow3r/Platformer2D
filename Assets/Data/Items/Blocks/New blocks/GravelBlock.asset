@@ -30,3 +30,5 @@ MonoBehaviour:
     maxAmount: 1
     dropChance: 101
   hitSound: {fileID: 0}
+  description: The Gravel Block can be found around the world, you can mine it to
+    aquire it.

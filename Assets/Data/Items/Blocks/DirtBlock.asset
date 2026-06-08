@@ -30,3 +30,5 @@ MonoBehaviour:
     maxAmount: 1
     dropChance: 101
   hitSound: {fileID: 8300000, guid: 23d699944380ddf468ad1d3e8ef69943, type: 3}
+  description: The Grass Block can be found in the surface, you can mine it to aquire
+    it.

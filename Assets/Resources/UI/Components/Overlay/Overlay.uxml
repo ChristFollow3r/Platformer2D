@@ -28,7 +28,9 @@
                 </ui:VisualElement>
                 <ui:VisualElement name="itemInfo" style="flex-grow: 1; left: 0; top: 0; bottom: 0; right: 0; display: flex;">
                     <ui:Label text="World drop" name="title" class="recipe-type" style="margin-bottom: 30px;"/>
-                    <ui:Label text="Label" name="description" style="font-size: 20px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);"/>
+                    <ui:VisualElement name="content" style="flex-grow: 1; flex-direction: column-reverse;">
+                        <ui:Label text="Label" name="description" style="font-size: 20px; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;); margin-top: 20px;"/>
+                    </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:ScrollView name="itemScroll" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; bottom: 0; right: 0;">
                     <ui:VisualElement name="items" style="flex-grow: 1; width: 100%; height: 100%; flex-direction: row; flex-wrap: wrap; justify-content: flex-start;"/>
