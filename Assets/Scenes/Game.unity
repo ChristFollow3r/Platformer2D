@@ -1664,6 +1664,9 @@ MonoBehaviour:
   attackingClip: {fileID: 32900000, guid: 9ac2bb30ea3d1eb408015cf6d107ff2d, type: 3}
   miningClip: {fileID: 32900000, guid: d7b760fd4e537ef4ea8a5dbffdbe17c6, type: 3}
   placingClip: {fileID: 32900000, guid: 7001b27fb95ad214182ef4e7f87b2a5c, type: 3}
+  craftingTableVideo: {fileID: 0}
+  smeltResinVideo: {fileID: 0}
+  stoneUpgradeVideo: {fileID: 0}
 --- !u!4 &1487169907
 Transform:
   m_ObjectHideFlags: 0
@@ -2083,6 +2086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87925e76195fe474a9649861dc69837c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TutorialUI
+  customFont: {fileID: 12800000, guid: 74a5091d8707f334b9a5c31ef71a64ba, type: 3}
 --- !u!1 &1849100688
 GameObject:
   m_ObjectHideFlags: 0
