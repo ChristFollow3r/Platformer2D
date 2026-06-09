@@ -7,6 +7,10 @@ public class TutorialUI : MonoBehaviour
     private VisualElement popupContainer;
     private Label descriptionLabel;
     private Button closeButton;
+    private VisualElement goalTrackerContainer;
+
+    [Header("Styling")]
+    [SerializeField] private Font customFont;
 
     public static bool IsInputBlocked { get; private set; }
     private float unblockTimer = 0f;
@@ -17,6 +21,8 @@ public class TutorialUI : MonoBehaviour
         popupContainer = document.rootVisualElement.Q<VisualElement>("VideoPopup");
         descriptionLabel = document.rootVisualElement.Q<Label>("Description");
         closeButton = document.rootVisualElement.Q<Button>("CloseButton");
+
+        goalTrackerContainer = document.rootVisualElement.Q<VisualElement>("GoalTracker");
 
         if (closeButton != null)
         {
@@ -65,13 +71,36 @@ public class TutorialUI : MonoBehaviour
         unblockTimer = 0.2f;
     }
 
-    public void ShowGoal(string toggleName)
+    public void ClearGoals()
     {
-        Toggle toggleElement = document.rootVisualElement.Q<Toggle>(toggleName);
-        if (toggleElement != null)
+        if (goalTrackerContainer != null)
         {
-            toggleElement.style.display = DisplayStyle.Flex;
+            goalTrackerContainer.Clear();
         }
+    }
+
+    public void AddGoal(string goalId, string labelText)
+    {
+        if (goalTrackerContainer == null) return;
+
+        Toggle existingToggle = goalTrackerContainer.Q<Toggle>(goalId);
+        if (existingToggle != null) return;
+
+        Toggle newGoal = new Toggle();
+        newGoal.name = goalId;
+        newGoal.label = labelText;
+        newGoal.focusable = false;
+
+        newGoal.style.color = Color.white;
+
+        if (customFont != null)
+        {
+            newGoal.style.unityFont = customFont;
+            // This prevents Unity's default TMP asset from overriding your custom TTF/OTF font
+            newGoal.style.unityFontDefinition = StyleKeyword.None;
+        }
+
+        goalTrackerContainer.Add(newGoal);
     }
 
     public void CompleteGoal(string toggleName)
