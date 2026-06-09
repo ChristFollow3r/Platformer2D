@@ -13,7 +13,6 @@ public class TutorialManager : MonoBehaviour
     {
         BasicControls,
         Block1_Gather,
-        Block1_Interact,
         Block2_Gather,
         Block3_Smelt,
         Block3_CraftUpgrade,
@@ -44,7 +43,7 @@ public class TutorialManager : MonoBehaviour
     private bool isWaitingToAdvance = false;
 
     // Quest Tracking Flags
-    private bool b1_wood, b1_resin, b1_table, b1_interact;
+    private bool b1_wood, b1_resin, b1_table;
     private bool b2_fiber, b2_string, b2_rock, b2_resin, b2_rocks, b2_clay, b2_furnace;
     private bool b3_rocks, b3_smelt, b3_upgrade, b3_use;
 
@@ -101,16 +100,12 @@ public class TutorialManager : MonoBehaviour
             breakAndPlace.OnPlacePerformed += HandlePlace;
         }
 
-        // Subscribe to inventory changes for gathering quests
         Inventory.Singleton.OnSlotChanged += CheckInventoryQuests;
 
         InitializeBasicGoals();
         ProcessBasicState();
     }
 
-    // ==========================================
-    // PHASE 0: BASIC CONTROLS
-    // ==========================================
     private void InitializeBasicGoals()
     {
         tutorialUI.ClearGoals();
@@ -143,8 +138,8 @@ public class TutorialManager : MonoBehaviour
 
         if (basicState == BasicControlState.Done)
         {
-            currentPhase = TutorialPhase.Block1_Gather;
-            ProcessCurrentPhase();
+            // NEW: Play Crafting Table video instantly after basic controls finish, before Gather 1 starts
+            StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block1_Gather, craftingTableVideo, "Open your inventory with I to craft basic items", 0f));
         }
         else
         {
@@ -160,26 +155,22 @@ public class TutorialManager : MonoBehaviour
         {
             case BasicControlState.Movement:
                 videoPlayer.clip = movementClip; videoPlayer.Play();
-                tutorialUI.ShowPopup("Use A and D to move. SPACE to jump.");
+                tutorialUI.ShowPopup("Use A and D to move\nSPACE to jump and double Jump");
                 break;
             case BasicControlState.Attacking:
                 videoPlayer.clip = attackingClip; videoPlayer.Play();
-                tutorialUI.ShowPopup("Left Click to attack enemies or hit props.");
+                tutorialUI.ShowPopup("Left Click to attack enemies or hit props");
                 break;
             case BasicControlState.Mining:
                 videoPlayer.clip = miningClip; videoPlayer.Play();
-                tutorialUI.ShowPopup("Hold Shift + Left Click to mine blocks.");
+                tutorialUI.ShowPopup("Hold Shift + Left Click to mine blocks");
                 break;
             case BasicControlState.Placing:
                 videoPlayer.clip = placingClip; videoPlayer.Play();
-                tutorialUI.ShowPopup("Right Click to place a block.");
+                tutorialUI.ShowPopup("Right Click to place a block");
                 break;
         }
     }
-
-    // ==========================================
-    // ADVANCED QUEST BLOCKS (1, 2, and 3)
-    // ==========================================
 
     private int GetTotalItemAmount(string itemName)
     {
@@ -196,7 +187,6 @@ public class TutorialManager : MonoBehaviour
         return total;
     }
 
-    // Hooked to the OnSlotChanged event
     private void CheckInventoryQuests(int slotId, ItemStack item)
     {
         CheckInventoryQuests();
@@ -212,7 +202,11 @@ public class TutorialManager : MonoBehaviour
             if (!b1_resin && GetTotalItemAmount("Resin") >= 1) { b1_resin = true; tutorialUI.CompleteGoal("b1_resin"); }
             if (!b1_table && GetTotalItemAmount("Crafting Table") >= 1) { b1_table = true; tutorialUI.CompleteGoal("b1_table"); }
 
-            if (b1_wood && b1_resin && b1_table) StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block1_Interact, 1f));
+            // Because the Crafting Video already played, just advance with a delay
+            if (b1_wood && b1_resin && b1_table)
+            {
+                StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block2_Gather, 1f));
+            }
         }
         else if (currentPhase == TutorialPhase.Block2_Gather)
         {
@@ -224,16 +218,24 @@ public class TutorialManager : MonoBehaviour
             if (!b2_clay && GetTotalItemAmount("Clay") >= 6) { b2_clay = true; tutorialUI.CompleteGoal("b2_clay"); }
             if (!b2_furnace && GetTotalItemAmount("Furnace") >= 1) { b2_furnace = true; tutorialUI.CompleteGoal("b2_furnace"); }
 
+            // Trigger: Play Furnace video, then start smelting quest
             if (b2_fiber && b2_string && b2_rock && b2_resin && b2_rocks && b2_clay && b2_furnace)
             {
-                StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block3_Smelt, 1f));
+                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_Smelt, smeltResinVideo, "Place the furnace and add fuel to smelt materials", 1f));
             }
         }
         else if (currentPhase == TutorialPhase.Block3_Smelt)
         {
             if (!b3_rocks && GetTotalItemAmount("Rocks") >= 3) { b3_rocks = true; tutorialUI.CompleteGoal("b3_rocks"); }
-            // The b3_smelt flag is updated via NotifyResinSmelted
-            if (b3_rocks && b3_smelt) StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_CraftUpgrade, smeltResinVideo, 1f));
+
+            // NEW: Automatically checks your inventory for "Smelted Resin" instead of relying solely on the trigger!
+            if (!b3_smelt && GetTotalItemAmount("Smelted Resin") >= 1) { b3_smelt = true; tutorialUI.CompleteGoal("b3_smelt"); }
+
+            // Trigger: Play Upgrade video, then start crafting upgrade quest
+            if (b3_rocks && b3_smelt)
+            {
+                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_CraftUpgrade, stoneUpgradeVideo, "Craft upgrades to improve your tools", 1f));
+            }
         }
         else if (currentPhase == TutorialPhase.Block3_CraftUpgrade)
         {
@@ -241,7 +243,9 @@ public class TutorialManager : MonoBehaviour
             {
                 b3_upgrade = true;
                 tutorialUI.CompleteGoal("b3_upgrade");
-                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_UseUpgrade, stoneUpgradeVideo, 1f));
+
+                // Trigger: Delay, then start use upgrade quest
+                StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block3_UseUpgrade, 1f));
             }
         }
     }
@@ -255,14 +259,15 @@ public class TutorialManager : MonoBehaviour
         isWaitingToAdvance = false;
     }
 
-    private IEnumerator AdvancePhaseWithVideo(TutorialPhase nextPhase, VideoClip clip, float delay)
+    // NEW: Added a 'popupText' parameter so each video can have custom description text
+    private IEnumerator AdvancePhaseWithVideo(TutorialPhase nextPhase, VideoClip clip, string popupText, float delay)
     {
         isWaitingToAdvance = true;
         yield return new WaitForSeconds(delay);
 
         videoPlayer.clip = clip;
         videoPlayer.Play();
-        tutorialUI.ShowPopup("Pay attention to the new mechanic!");
+        tutorialUI.ShowPopup(popupText);
 
         currentPhase = nextPhase;
         ProcessCurrentPhase();
@@ -279,10 +284,7 @@ public class TutorialManager : MonoBehaviour
                 tutorialUI.AddGoal("b1_wood", "Gather 12 Wood");
                 tutorialUI.AddGoal("b1_resin", "Gather 1 Resin");
                 tutorialUI.AddGoal("b1_table", "Make a Crafting Table");
-                CheckInventoryQuests(); // Checks in case they already have the items
-                break;
-            case TutorialPhase.Block1_Interact:
-                tutorialUI.AddGoal("b1_interact", "Interact with the Crafting Table");
+                CheckInventoryQuests();
                 break;
             case TutorialPhase.Block2_Gather:
                 tutorialUI.AddGoal("b2_fiber", "Gather 18 Fiber");
@@ -314,18 +316,8 @@ public class TutorialManager : MonoBehaviour
     }
 
     // ==========================================
-    // EXTERNAL TRIGGERS (Call these from your other scripts!)
+    // EXTERNAL TRIGGERS
     // ==========================================
-
-    public void NotifyCraftingTableInteracted()
-    {
-        if (currentPhase == TutorialPhase.Block1_Interact && !b1_interact)
-        {
-            b1_interact = true;
-            tutorialUI.CompleteGoal("b1_interact");
-            StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block2_Gather, craftingTableVideo, 1f));
-        }
-    }
 
     public void NotifyResinSmelted()
     {
@@ -333,7 +325,7 @@ public class TutorialManager : MonoBehaviour
         {
             b3_smelt = true;
             tutorialUI.CompleteGoal("b3_smelt");
-            CheckInventoryQuests(); // Triggers the phase advance if they already crafted the rocks
+            CheckInventoryQuests();
         }
     }
 
