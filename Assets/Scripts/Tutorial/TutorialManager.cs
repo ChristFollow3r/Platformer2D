@@ -26,6 +26,8 @@ public class TutorialManager : MonoBehaviour
     private PlayerMovement playerMovement;
     private BreakAndPlace breakAndPlace;
 
+    private bool isWaitingToAdvance = false;
+
     private void Start()
     {
         StartCoroutine(WaitForPlayer());
@@ -73,34 +75,42 @@ public class TutorialManager : MonoBehaviour
 
     private void HandleMove()
     {
-        if (currentState == TutorialState.Movement)
+        if (currentState == TutorialState.Movement && !isWaitingToAdvance)
         {
-            AdvanceTutorial();
+            StartCoroutine(AdvanceTutorialWithDelay(1f));
         }
     }
 
     private void HandleAttack(Vector2 pos)
     {
-        if (currentState == TutorialState.Attacking)
+        if (currentState == TutorialState.Attacking && !isWaitingToAdvance)
         {
-            AdvanceTutorial();
+            StartCoroutine(AdvanceTutorialWithDelay(1f));
         }
     }
 
     private void HandleMine()
     {
-        if (currentState == TutorialState.Mining)
+        if (currentState == TutorialState.Mining && !isWaitingToAdvance)
         {
-            AdvanceTutorial();
+            StartCoroutine(AdvanceTutorialWithDelay(1f));
         }
     }
 
     private void HandlePlace()
     {
-        if (currentState == TutorialState.Placing)
+        if (currentState == TutorialState.Placing && !isWaitingToAdvance)
         {
-            AdvanceTutorial();
+            StartCoroutine(AdvanceTutorialWithDelay(1f));
         }
+    }
+
+    private IEnumerator AdvanceTutorialWithDelay(float delayTime)
+    {
+        isWaitingToAdvance = true;
+        yield return new WaitForSeconds(delayTime);
+        AdvanceTutorial();
+        isWaitingToAdvance = false;
     }
 
     public void AdvanceTutorial()
@@ -119,21 +129,21 @@ public class TutorialManager : MonoBehaviour
             case TutorialState.Movement:
                 videoPlayer.clip = movementClip;
                 videoPlayer.Play();
-                tutorialUI.ShowPopup("Use A and D to move. SPACE to jump.");
+                tutorialUI.ShowPopup("Use A and D to move. SPACE to jump and double jump.");
                 tutorialUI.ShowGoal("MovementToggle");
                 break;
             case TutorialState.Attacking:
                 tutorialUI.CompleteGoal("MovementToggle");
                 videoPlayer.clip = attackingClip;
                 videoPlayer.Play();
-                tutorialUI.ShowPopup("Click to attack enemies.");
+                tutorialUI.ShowPopup("Left Click to attack enemies or hit props.");
                 tutorialUI.ShowGoal("AttackingToggle");
                 break;
             case TutorialState.Mining:
                 tutorialUI.CompleteGoal("AttackingToggle");
                 videoPlayer.clip = miningClip;
                 videoPlayer.Play();
-                tutorialUI.ShowPopup("Hold Left Click to mine blocks.");
+                tutorialUI.ShowPopup("Hold Shift + Left Click to mine blocks.");
                 tutorialUI.ShowGoal("MiningToggle");
                 break;
             case TutorialState.Placing:
