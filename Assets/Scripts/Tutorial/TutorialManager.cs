@@ -234,7 +234,7 @@ public class TutorialManager : MonoBehaviour
             // Trigger: Play Upgrade video, then start crafting upgrade quest
             if (b3_rocks && b3_smelt)
             {
-                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_CraftUpgrade, stoneUpgradeVideo, "Craft upgrades to improve your tools", 1f));
+                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_CraftUpgrade, stoneUpgradeVideo, "Craft upgrades to improve your stats", 1f));
             }
         }
         else if (currentPhase == TutorialPhase.Block3_CraftUpgrade)
