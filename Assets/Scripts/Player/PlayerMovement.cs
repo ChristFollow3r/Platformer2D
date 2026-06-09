@@ -9,7 +9,6 @@ namespace Player
 {
     public class PlayerMovement : MonoBehaviour
     {
-
         #region Singleton setup
 
         public static PlayerMovement Singleton;
@@ -91,6 +90,7 @@ namespace Player
 
         public bool isGrounded { get; private set; }
 
+        public event Action OnMovePerformed;
         public event Action<Vector2> OnMinePerformed;
         public event Action<Vector2> OnAttackPerformed;
         public event Action OnJumpPerformed;
@@ -192,7 +192,18 @@ namespace Player
         {
             if (knockbackTimer > 0f) return;
 
-            float movement = playerInput.Player.Move.ReadValue<Vector2>().x;
+            float movement = 0f;
+
+            if (!TutorialUI.IsInputBlocked)
+            {
+                movement = playerInput.Player.Move.ReadValue<Vector2>().x;
+            }
+
+            if (Mathf.Abs(movement) > 0.1f)
+            {
+                OnMovePerformed?.Invoke();
+            }
+
             if (isGrounded) canDoubleJump = true;
 
             if (attackPauseTimer > 0f && !isGrounded)
@@ -212,6 +223,8 @@ namespace Player
 
             if (wallJumpTime > 0f) wallJumpTime -= Time.deltaTime;
             else rb.linearVelocityX = movement * speed;
+
+            if (TutorialUI.IsInputBlocked) return;
 
             if (jumpBufferCounter > 0f && jumpCooldownTimer <= 0f)
             {
@@ -249,7 +262,13 @@ namespace Player
 
         private void PlayerAnimations(bool isGrounded, bool isTouchingLeftWall, bool isTouchingRightWall)
         {
-            float moveInput = playerInput.Player.Move.ReadValue<Vector2>().x;
+            float moveInput = 0f;
+
+            if (!TutorialUI.IsInputBlocked)
+            {
+                moveInput = playerInput.Player.Move.ReadValue<Vector2>().x;
+            }
+
             bool isMoving = Mathf.Abs(moveInput) > 0.1f;
 
             bool isSliding = !isGrounded && rb.linearVelocityY < 0 &&
@@ -276,6 +295,8 @@ namespace Player
 
             if (knockbackTimer > 0f) return;
             if (Player.UIController.Singleton.isMenuOpen || Player.UIController.Singleton.isOverlayOpen) return;
+
+            if (TutorialUI.IsInputBlocked) return;
 
             bool isShiftPressed = Keyboard.current.shiftKey.isPressed;
 

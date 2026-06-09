@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Chunks;
 using Data;
@@ -42,6 +43,9 @@ namespace Player
         private Vector2 cachedTargetPosition;
         private readonly Collider2D[] hitResults = new Collider2D[10];
 
+        public event Action OnPlacePerformed;
+        public event Action OnBlockBroken;
+
         private BlockType[] entities = new BlockType[]
         {
             BlockType.Chest,
@@ -74,6 +78,8 @@ namespace Player
 
         private void Update()
         {
+            if (TutorialUI.IsInputBlocked) return;
+
             Vector3 realScreenPos = Input.mousePosition;
             float camZ = Mathf.Abs(Camera.main.transform.position.z);
             Vector2 worldMousePos = Camera.main.ScreenToWorldPoint(new Vector3(realScreenPos.x, realScreenPos.y, camZ));
@@ -219,13 +225,11 @@ namespace Player
             int x = Mathf.FloorToInt(actualMouseWorldPos.x / CellSize);
             int y = Mathf.FloorToInt(actualMouseWorldPos.y / CellSize);
 
-            // --- CHECK FOR PROP ABOVE (NEW) ---
             if (WorldData.World.SafeCheck(x, y + 1))
             {
                 PropType propAbove = WorldData.World.GetPropType(x, y + 1);
                 if (propAbove != PropType.None)
                 {
-                    // Block is protected by the prop above it
                     currentBlockDamage = 0f;
                     return;
                 }
@@ -313,6 +317,8 @@ namespace Player
                 UIController.Singleton.CreateOverlay(BlockIdUtils.From(x, y), item.data.overlayType);
             }
 
+            OnPlacePerformed?.Invoke();
+
             return false;
         }
 
@@ -326,10 +332,10 @@ namespace Player
             {
                 foreach (Drop drop in blockData.drops)
                 {
-                    bool doesDrop = Random.Range(0, 100) <= drop.dropChance;
+                    bool doesDrop = UnityEngine.Random.Range(0, 100) <= drop.dropChance;
                     if (!doesDrop) continue;
 
-                    int amount = Random.Range(drop.minAmount, drop.maxAmount + 1);
+                    int amount = UnityEngine.Random.Range(drop.minAmount, drop.maxAmount + 1);
 
                     for (int i = 0; i < amount; i++)
                     {
@@ -345,6 +351,8 @@ namespace Player
             WorldData.World.SetBlockType(x, y, BlockType.Air);
             UpdateChunkVisuals(x, y);
             WorldManager.Instance.UpdateDynamicLighting(x, y);
+
+            OnBlockBroken?.Invoke();
         }
 
         private void BreakProp(PropType hitType, int checkX, int checkY)
@@ -354,10 +362,10 @@ namespace Player
 
             foreach (Drop drop in propHitData.drops)
             {
-                bool doesDrop = Random.Range(0, 100) <= drop.dropChance;
+                bool doesDrop = UnityEngine.Random.Range(0, 100) <= drop.dropChance;
                 if (!doesDrop) continue;
 
-                int amount = Random.Range(drop.minAmount, drop.maxAmount + 1);
+                int amount = UnityEngine.Random.Range(drop.minAmount, drop.maxAmount + 1);
 
                 for (int i = 0; i < amount; i++)
                 {
@@ -368,6 +376,8 @@ namespace Player
             WorldData.World.SetPropType(checkX, checkY, PropType.None);
             UpdateChunkVisuals(checkX, checkY);
             WorldManager.Instance.UpdateDynamicLighting(checkX, checkY);
+
+            OnBlockBroken?.Invoke();
         }
 
         private void SpawnLoot(ItemData itemData, Vector2 position)
@@ -375,7 +385,7 @@ namespace Player
             if (itemData == null || itemEntityPrefab == null) return;
 
             GameObject droppedItem = Instantiate(itemEntityPrefab, position, Quaternion.identity);
-            Vector2 randomOffset = new Vector2(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f));
+            Vector2 randomOffset = new Vector2(UnityEngine.Random.Range(-0.2f, 0.2f), UnityEngine.Random.Range(-0.2f, 0.2f));
             droppedItem.transform.position += (Vector3)randomOffset;
 
             if (droppedItem.TryGetComponent(out ItemEntity entity))
