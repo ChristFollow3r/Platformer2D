@@ -229,7 +229,7 @@ public class TutorialManager : MonoBehaviour
             if (!b3_rocks && GetTotalItemAmount("Rocks") >= 3) { b3_rocks = true; tutorialUI.CompleteGoal("b3_rocks"); }
 
             // NEW: Automatically checks your inventory for "Smelted Resin" instead of relying solely on the trigger!
-            if (!b3_smelt && GetTotalItemAmount("Smelted Resin") >= 1) { b3_smelt = true; tutorialUI.CompleteGoal("b3_smelt"); }
+            if (!b3_smelt && GetTotalItemAmount("Melted Resin") >= 1) { b3_smelt = true; tutorialUI.CompleteGoal("b3_smelt"); }
 
             // Trigger: Play Upgrade video, then start crafting upgrade quest
             if (b3_rocks && b3_smelt)
