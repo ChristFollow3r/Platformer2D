@@ -12,6 +12,8 @@ public class TutorialUI : MonoBehaviour
     [Header("Styling")]
     [SerializeField] private Font customFont;
 
+    [SerializeField] private AudioClip goalCompleteSound;
+
     public static bool IsInputBlocked { get; private set; }
     private float unblockTimer = 0f;
 
@@ -106,9 +108,13 @@ public class TutorialUI : MonoBehaviour
     public void CompleteGoal(string toggleName)
     {
         Toggle toggleElement = document.rootVisualElement.Q<Toggle>(toggleName);
-        if (toggleElement != null)
+        if (!toggleElement.value)
         {
             toggleElement.value = true;
+            if (goalCompleteSound != null && Camera.main != null)
+            {
+                AudioSource.PlayClipAtPoint(goalCompleteSound, Camera.main.transform.position);
+            }
         }
     }
 }

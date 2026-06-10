@@ -773,7 +773,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Items.Inventory
   itemEntityPrefab: {fileID: 930996324388520816, guid: 9b10d5916f6136f458b805b4050ae45b, type: 3}
-  startingItems: []
+  startingItems:
+  - data: {fileID: 11400000, guid: de1d1797b176e544cbe036666f34714b, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: ebf5048b5b0cae84b90d6ddb9d454b54, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: 0a08883cc8b399740bf4f7b014c293a7, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: 5770df88f953965479fb144f4deb1752, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: 2f260f3f1ccaac54788fbf912453f8bd, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: 25561a64222709545841482360762211, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: 4791c8ddec30328448eae342ac48d416, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: 2b2ed0c050b29ae4bad71a28e2825a63, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: fa66d1ec14201da43b8c63eac2bde9bc, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: e64d754b9ca443e4e936069e80926ef3, type: 2}
+    amount: 60
+    duration: 0
+  - data: {fileID: 11400000, guid: c15f07e36b3d784419787d7e42331221, type: 2}
+    amount: 60
+    duration: 0
   pickupSound: {fileID: 8300000, guid: 30104bd62d2f2364f8cfce8f6a9912a7, type: 3}
 --- !u!114 &448283168
 MonoBehaviour:

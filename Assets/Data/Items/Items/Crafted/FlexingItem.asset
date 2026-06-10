@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc70e16a7a663c4e871d59f410bda58, type: 3}
   m_Name: FlexingItem
   m_EditorClassIdentifier: Assembly-CSharp::Data.ItemData
-  name: Flex
+  name: Destiny Stone
   sprite: {fileID: -5967532109180831246, guid: a2baad7096d07c643bf92b494fc91e82, type: 3}
   stack: 7
   isPlacable: 0
@@ -26,3 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
+  description: 

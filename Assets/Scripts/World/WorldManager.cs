@@ -878,6 +878,10 @@ namespace World
         public void SetSpawnPoint(Vector3 newSpawnPoint)
         {
             currentSpawnPoint = newSpawnPoint;
+            if (TutorialManager.Instance != null)
+            {
+                TutorialManager.Instance.NotifySpawnPointSet();
+            }
         }
 
         public void RespawnPlayer(GameObject playerObject)
