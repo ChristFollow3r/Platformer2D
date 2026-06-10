@@ -754,6 +754,11 @@ namespace Player
                 Health h = PlayerMovement.Singleton.GetComponent<Health>();
                 int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 25);
                 h.SetHealth(newHp);
+
+                if (TutorialManager.Instance != null)
+                {
+                    TutorialManager.Instance.NotifySlimeEssenceConsumed();
+                }
             }
             else if (hand.data.name == "Health Potion")
             {

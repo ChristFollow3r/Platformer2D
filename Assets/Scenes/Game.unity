@@ -1697,6 +1697,7 @@ MonoBehaviour:
   craftingTableVideo: {fileID: 32900000, guid: 4cb9ec3dabf76ad43ab49c948dcd1b51, type: 3}
   smeltResinVideo: {fileID: 32900000, guid: 1005ed10c73c64249af7f26fa8c4b1a8, type: 3}
   stoneUpgradeVideo: {fileID: 32900000, guid: c2417c2c28caa4d4cb8fc06ea9803129, type: 3}
+  consumableClip: {fileID: 32900000, guid: 3b4a4b92f87db1948a3f264bbeaa1a26, type: 3}
 --- !u!4 &1487169907
 Transform:
   m_ObjectHideFlags: 0
