@@ -26,5 +26,5 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Slime essence has a chance to be dropped when you take damage. Consume
-    it (R) to heal yourself for a small amount
+  description: Slime essence has a chance to drop when you take damage. Consume it
+    (R) to heal yourself for a small amount of HP.

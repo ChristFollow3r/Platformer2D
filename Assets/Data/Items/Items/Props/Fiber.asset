@@ -26,4 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Fiber can be aquired by chopping trees and bushes
+  description: Fiber can be aquired by breaking bushes or scarecrows.

@@ -26,4 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Magic essence can be aquired by killing enemies
+  description: Magic essence can be aquired by killing all kinds of enemies.

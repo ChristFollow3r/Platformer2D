@@ -26,4 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Clay drops when mining clay blocks
+  description: Clay drops when mining clay blocks.

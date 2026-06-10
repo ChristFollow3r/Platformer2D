@@ -26,4 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Emerald drops when mining emerald blocks
+  description: Emerald drops when mining emerald blocks.

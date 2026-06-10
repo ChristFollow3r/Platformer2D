@@ -29,6 +29,5 @@ MonoBehaviour:
     minAmount: 1
     maxAmount: 1
     dropChance: 101
-  hitSound: {fileID: 0}
-  description: The Gravel Block can be found around the world, you can mine it to
-    aquire it.
+  hitSound: {fileID: 8300000, guid: 23d699944380ddf468ad1d3e8ef69943, type: 3}
+  description: Gravel can be found underground. Mine it to get its block.

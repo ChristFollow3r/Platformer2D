@@ -26,4 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Copper drops when mining copper blocks
+  description: Copper ore drops when mining copper blocks.

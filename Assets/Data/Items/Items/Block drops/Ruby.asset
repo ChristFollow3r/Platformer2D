@@ -26,4 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Ruby drops when mining ruby blocks
+  description: Ruby drops when mining ruby blocks.

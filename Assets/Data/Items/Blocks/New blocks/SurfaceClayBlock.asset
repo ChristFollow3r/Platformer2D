@@ -30,5 +30,4 @@ MonoBehaviour:
     maxAmount: 3
     dropChance: 101
   hitSound: {fileID: 8300000, guid: 0944551b2069bb344adb9cbf0e6dfbf1, type: 3}
-  description: The Surface Clay Block can be found in the surface, mining it will
-    give you clay.
+  description: Clay can be found on the surface or underground. Mine it to get clay.

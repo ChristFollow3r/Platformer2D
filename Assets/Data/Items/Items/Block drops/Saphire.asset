@@ -26,4 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Sapphire drops when mining sapphire blocks
+  description: Sapphire drops when mining sapphire blocks.

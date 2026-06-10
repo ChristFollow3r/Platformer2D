@@ -26,4 +26,4 @@ MonoBehaviour:
   overlayType: 0
   drops: []
   hitSound: {fileID: 0}
-  description: Feathers can be aquired by killing enemies
+  description: Feathers can be aquired by killing winged enemies.
