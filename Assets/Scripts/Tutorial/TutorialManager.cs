@@ -521,7 +521,7 @@ public class TutorialManager : MonoBehaviour
         {
             b5_use = true;
             tutorialUI.CompleteGoal("b5_use");
-            StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block6_Consume, consumableClip, "Consume an item from your inventory to gain its effects", 1f));
+            StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block6_Consume, consumableClip, "Pres R with a consumable in your hand slot to consume it", 1f));
         }
     }
 
