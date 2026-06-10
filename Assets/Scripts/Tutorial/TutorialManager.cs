@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Video;
 using Player;
@@ -46,6 +47,10 @@ public class TutorialManager : MonoBehaviour
     private bool b1_wood, b1_resin, b1_table;
     private bool b2_fiber, b2_string, b2_rock, b2_resin, b2_rocks, b2_clay, b2_furnace;
     private bool b3_rocks, b3_smelt, b3_upgrade, b3_use;
+
+    // NEW: Dictionaries to track cumulative item gathering
+    private Dictionary<string, int> previousInventoryState = new Dictionary<string, int>();
+    private Dictionary<string, int> cumulativeItemsGathered = new Dictionary<string, int>();
 
     private void Awake()
     {
@@ -102,6 +107,9 @@ public class TutorialManager : MonoBehaviour
 
         Inventory.Singleton.OnSlotChanged += CheckInventoryQuests;
 
+        // Prime the inventory tracking so starting items aren't counted as newly gathered
+        PrimeInventoryTracking();
+
         InitializeBasicGoals();
         ProcessBasicState();
     }
@@ -138,7 +146,6 @@ public class TutorialManager : MonoBehaviour
 
         if (basicState == BasicControlState.Done)
         {
-            // NEW: Play Crafting Table video instantly after basic controls finish, before Gather 1 starts
             StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block1_Gather, craftingTableVideo, "Open your inventory with I to craft basic items", 0f));
         }
         else
@@ -172,6 +179,69 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    // ==========================================
+    // CUMULATIVE INVENTORY TRACKING
+    // ==========================================
+
+    private void PrimeInventoryTracking()
+    {
+        if (Inventory.Singleton == null || Inventory.Singleton.slots == null) return;
+
+        previousInventoryState.Clear();
+        foreach (var slot in Inventory.Singleton.slots)
+        {
+            if (!slot.isEmpty && slot.item != null && slot.item.data != null)
+            {
+                string itemName = slot.item.data.name;
+                if (!previousInventoryState.ContainsKey(itemName))
+                    previousInventoryState[itemName] = 0;
+
+                previousInventoryState[itemName] += slot.item.amount;
+            }
+        }
+    }
+
+    private void UpdateInventoryTracking()
+    {
+        if (Inventory.Singleton == null || Inventory.Singleton.slots == null) return;
+
+        Dictionary<string, int> currentTotals = new Dictionary<string, int>();
+        foreach (var slot in Inventory.Singleton.slots)
+        {
+            if (!slot.isEmpty && slot.item != null && slot.item.data != null)
+            {
+                string itemName = slot.item.data.name;
+                if (!currentTotals.ContainsKey(itemName))
+                    currentTotals[itemName] = 0;
+
+                currentTotals[itemName] += slot.item.amount;
+            }
+        }
+
+        foreach (var kvp in currentTotals)
+        {
+            string itemName = kvp.Key;
+            int currentAmt = kvp.Value;
+            int prevAmt = previousInventoryState.ContainsKey(itemName) ? previousInventoryState[itemName] : 0;
+
+            if (currentAmt > prevAmt)
+            {
+                if (!cumulativeItemsGathered.ContainsKey(itemName))
+                    cumulativeItemsGathered[itemName] = 0;
+
+                cumulativeItemsGathered[itemName] += (currentAmt - prevAmt);
+            }
+        }
+
+        previousInventoryState = currentTotals;
+    }
+
+    private int GetCumulativeItemAmount(string itemName)
+    {
+        return cumulativeItemsGathered.ContainsKey(itemName) ? cumulativeItemsGathered[itemName] : 0;
+    }
+
+    // Retained in case you need it for specific snapshot checks in the future
     private int GetTotalItemAmount(string itemName)
     {
         if (Inventory.Singleton == null || Inventory.Singleton.slots == null) return 0;
@@ -187,8 +257,13 @@ public class TutorialManager : MonoBehaviour
         return total;
     }
 
+    // ==========================================
+    // QUEST LOGIC
+    // ==========================================
+
     private void CheckInventoryQuests(int slotId, ItemStack item)
     {
+        UpdateInventoryTracking();
         CheckInventoryQuests();
     }
 
@@ -198,11 +273,10 @@ public class TutorialManager : MonoBehaviour
 
         if (currentPhase == TutorialPhase.Block1_Gather)
         {
-            if (!b1_wood && GetTotalItemAmount("Wood") >= 12) { b1_wood = true; tutorialUI.CompleteGoal("b1_wood"); }
-            if (!b1_resin && GetTotalItemAmount("Resin") >= 1) { b1_resin = true; tutorialUI.CompleteGoal("b1_resin"); }
-            if (!b1_table && GetTotalItemAmount("Crafting Table") >= 1) { b1_table = true; tutorialUI.CompleteGoal("b1_table"); }
+            if (!b1_wood && GetCumulativeItemAmount("Wood") >= 12) { b1_wood = true; tutorialUI.CompleteGoal("b1_wood"); }
+            if (!b1_resin && GetCumulativeItemAmount("Resin") >= 1) { b1_resin = true; tutorialUI.CompleteGoal("b1_resin"); }
+            if (!b1_table && GetCumulativeItemAmount("Crafting Table") >= 1) { b1_table = true; tutorialUI.CompleteGoal("b1_table"); }
 
-            // Because the Crafting Video already played, just advance with a delay
             if (b1_wood && b1_resin && b1_table)
             {
                 StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block2_Gather, 1f));
@@ -210,15 +284,14 @@ public class TutorialManager : MonoBehaviour
         }
         else if (currentPhase == TutorialPhase.Block2_Gather)
         {
-            if (!b2_fiber && GetTotalItemAmount("Fiber") >= 18) { b2_fiber = true; tutorialUI.CompleteGoal("b2_fiber"); }
-            if (!b2_string && GetTotalItemAmount("String") >= 6) { b2_string = true; tutorialUI.CompleteGoal("b2_string"); }
-            if (!b2_rock && GetTotalItemAmount("Rock") >= 12) { b2_rock = true; tutorialUI.CompleteGoal("b2_rock"); }
-            if (!b2_resin && GetTotalItemAmount("Resin") >= 6) { b2_resin = true; tutorialUI.CompleteGoal("b2_resin"); }
-            if (!b2_rocks && GetTotalItemAmount("Rocks") >= 6) { b2_rocks = true; tutorialUI.CompleteGoal("b2_rocks"); }
-            if (!b2_clay && GetTotalItemAmount("Clay") >= 6) { b2_clay = true; tutorialUI.CompleteGoal("b2_clay"); }
-            if (!b2_furnace && GetTotalItemAmount("Furnace") >= 1) { b2_furnace = true; tutorialUI.CompleteGoal("b2_furnace"); }
+            if (!b2_fiber && GetCumulativeItemAmount("Fiber") >= 18) { b2_fiber = true; tutorialUI.CompleteGoal("b2_fiber"); }
+            if (!b2_string && GetCumulativeItemAmount("String") >= 6) { b2_string = true; tutorialUI.CompleteGoal("b2_string"); }
+            if (!b2_rock && GetCumulativeItemAmount("Rock") >= 12) { b2_rock = true; tutorialUI.CompleteGoal("b2_rock"); }
+            if (!b2_resin && GetCumulativeItemAmount("Resin") >= 6) { b2_resin = true; tutorialUI.CompleteGoal("b2_resin"); }
+            if (!b2_rocks && GetCumulativeItemAmount("Rocks") >= 6) { b2_rocks = true; tutorialUI.CompleteGoal("b2_rocks"); }
+            if (!b2_clay && GetCumulativeItemAmount("Clay") >= 6) { b2_clay = true; tutorialUI.CompleteGoal("b2_clay"); }
+            if (!b2_furnace && GetCumulativeItemAmount("Furnace") >= 1) { b2_furnace = true; tutorialUI.CompleteGoal("b2_furnace"); }
 
-            // Trigger: Play Furnace video, then start smelting quest
             if (b2_fiber && b2_string && b2_rock && b2_resin && b2_rocks && b2_clay && b2_furnace)
             {
                 StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_Smelt, smeltResinVideo, "Place the furnace and add fuel to smelt materials", 1f));
@@ -226,12 +299,9 @@ public class TutorialManager : MonoBehaviour
         }
         else if (currentPhase == TutorialPhase.Block3_Smelt)
         {
-            if (!b3_rocks && GetTotalItemAmount("Rocks") >= 3) { b3_rocks = true; tutorialUI.CompleteGoal("b3_rocks"); }
+            if (!b3_rocks && GetCumulativeItemAmount("Rocks") >= 3) { b3_rocks = true; tutorialUI.CompleteGoal("b3_rocks"); }
+            if (!b3_smelt && GetCumulativeItemAmount("Melted Resin") >= 1) { b3_smelt = true; tutorialUI.CompleteGoal("b3_smelt"); }
 
-            // NEW: Automatically checks your inventory for "Smelted Resin" instead of relying solely on the trigger!
-            if (!b3_smelt && GetTotalItemAmount("Melted Resin") >= 1) { b3_smelt = true; tutorialUI.CompleteGoal("b3_smelt"); }
-
-            // Trigger: Play Upgrade video, then start crafting upgrade quest
             if (b3_rocks && b3_smelt)
             {
                 StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_CraftUpgrade, stoneUpgradeVideo, "Craft upgrades to improve your stats", 1f));
@@ -239,12 +309,10 @@ public class TutorialManager : MonoBehaviour
         }
         else if (currentPhase == TutorialPhase.Block3_CraftUpgrade)
         {
-            if (!b3_upgrade && GetTotalItemAmount("Stone Upgrade") >= 1)
+            if (!b3_upgrade && GetCumulativeItemAmount("Stone Upgrade") >= 1)
             {
                 b3_upgrade = true;
                 tutorialUI.CompleteGoal("b3_upgrade");
-
-                // Trigger: Delay, then start use upgrade quest
                 StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block3_UseUpgrade, 1f));
             }
         }
@@ -259,7 +327,6 @@ public class TutorialManager : MonoBehaviour
         isWaitingToAdvance = false;
     }
 
-    // NEW: Added a 'popupText' parameter so each video can have custom description text
     private IEnumerator AdvancePhaseWithVideo(TutorialPhase nextPhase, VideoClip clip, string popupText, float delay)
     {
         isWaitingToAdvance = true;

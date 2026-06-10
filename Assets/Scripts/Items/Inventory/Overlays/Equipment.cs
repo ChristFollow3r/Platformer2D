@@ -108,10 +108,6 @@ namespace Items.Overlays
         public bool AddEquipment(EquipmentType equipmentType, ItemStack itemStack)
         {
             #region AddEquipment
-
-
-
-
             if (equipmentType == EquipmentType.Mod)
             {
                 Slot slot = equipmentSlots[(int)equipmentType];
@@ -120,10 +116,23 @@ namespace Items.Overlays
 
                 OnModChange?.Invoke(true, itemStack.data.modData.mod);
                 GameObject playerGo = GameObject.FindGameObjectWithTag("Player");
-                if (!playerGo) return true;
-                playerGo.GetComponent<Animator>().runtimeAnimatorController = itemStack.data.modData.controller;
+
+                if (playerGo)
+                {
+                    playerGo.GetComponent<Animator>().runtimeAnimatorController = itemStack.data.modData.controller;
+                }
+
+                // ==========================================
+                // NEW: Trigger the tutorial progression here
+                // ==========================================
+                if (TutorialManager.Instance != null && itemStack.data.modData.mod == Mod.Stone)
+                {
+                    TutorialManager.Instance.NotifyStoneUpgradeUsed();
+                }
+
             }
             else return false;
+
             return true;
             #endregion
         }

@@ -1662,7 +1662,7 @@ MonoBehaviour:
   miningClip: {fileID: 32900000, guid: d7b760fd4e537ef4ea8a5dbffdbe17c6, type: 3}
   placingClip: {fileID: 32900000, guid: 7001b27fb95ad214182ef4e7f87b2a5c, type: 3}
   craftingTableVideo: {fileID: 32900000, guid: 4cb9ec3dabf76ad43ab49c948dcd1b51, type: 3}
-  smeltResinVideo: {fileID: 32900000, guid: 7576c35f4f4abc94185e5d38086569bd, type: 3}
+  smeltResinVideo: {fileID: 32900000, guid: 1005ed10c73c64249af7f26fa8c4b1a8, type: 3}
   stoneUpgradeVideo: {fileID: 32900000, guid: c2417c2c28caa4d4cb8fc06ea9803129, type: 3}
 --- !u!4 &1487169907
 Transform:
