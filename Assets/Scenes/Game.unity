@@ -2117,6 +2117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TutorialUI
   customFont: {fileID: 12800000, guid: 74a5091d8707f334b9a5c31ef71a64ba, type: 3}
+  goalCompleteSound: {fileID: 8300000, guid: d4121e3c21149f342a137d2fdc81ea05, type: 3}
 --- !u!1 &1849100688
 GameObject:
   m_ObjectHideFlags: 0
