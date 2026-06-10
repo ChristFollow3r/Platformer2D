@@ -174,7 +174,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case BasicControlState.Placing:
                 videoPlayer.clip = placingClip; videoPlayer.Play();
-                tutorialUI.ShowPopup("Right Click to place a block");
+                tutorialUI.ShowPopup("Right Click to place a block while holding it in your hand slot");
                 break;
         }
     }
