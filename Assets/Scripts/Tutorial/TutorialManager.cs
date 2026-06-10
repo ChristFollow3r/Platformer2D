@@ -123,10 +123,10 @@ public class TutorialManager : MonoBehaviour
         tutorialUI.AddGoal("PlacingBlock", "Place a Block");
     }
 
-    private void HandleMove() { if (basicState == BasicControlState.Movement && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(1f)); }
-    private void HandleAttack(Vector2 pos) { if (basicState == BasicControlState.Attacking && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(1f)); }
-    private void HandleMine() { if (basicState == BasicControlState.Mining && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(1f)); }
-    private void HandlePlace() { if (basicState == BasicControlState.Placing && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(1f)); }
+    private void HandleMove() { if (basicState == BasicControlState.Movement && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(3f)); }
+    private void HandleAttack(Vector2 pos) { if (basicState == BasicControlState.Attacking && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(3f)); }
+    private void HandleMine() { if (basicState == BasicControlState.Mining && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(3f)); }
+    private void HandlePlace() { if (basicState == BasicControlState.Placing && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(2f)); }
 
     private IEnumerator AdvanceBasicTutorial(float delayTime)
     {
@@ -146,7 +146,7 @@ public class TutorialManager : MonoBehaviour
 
         if (basicState == BasicControlState.Done)
         {
-            StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block1_Gather, craftingTableVideo, "Open your inventory with I to craft basic items", 0f));
+            StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block1_Gather, craftingTableVideo, "Open your inventory with I to craft basic items", 1f));
         }
         else
         {
@@ -294,7 +294,7 @@ public class TutorialManager : MonoBehaviour
 
             if (b2_fiber && b2_string && b2_rock && b2_resin && b2_rocks && b2_clay && b2_furnace)
             {
-                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_Smelt, smeltResinVideo, "Place the furnace and add fuel to smelt materials", 1f));
+                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_Smelt, smeltResinVideo, "Place the furnace and add fuel to smelt materials", 3f));
             }
         }
         else if (currentPhase == TutorialPhase.Block3_Smelt)
@@ -304,7 +304,7 @@ public class TutorialManager : MonoBehaviour
 
             if (b3_rocks && b3_smelt)
             {
-                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_CraftUpgrade, stoneUpgradeVideo, "Craft upgrades to improve your stats", 1f));
+                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_CraftUpgrade, stoneUpgradeVideo, "Craft upgrades to improve your stats", 3f));
             }
         }
         else if (currentPhase == TutorialPhase.Block3_CraftUpgrade)
