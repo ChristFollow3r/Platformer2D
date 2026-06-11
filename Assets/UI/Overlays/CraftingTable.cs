@@ -1,5 +1,6 @@
 
 using Items;
+using Player;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -85,6 +86,7 @@ namespace UI.Components
             #region SubscribeEvents
             if (craftingTable == null) return;
             craftingTable.OnSlotChanged += OnSlotChanged;
+            this.Q<Button>("recipeBtn").clicked += () => UIController.Singleton.ToggleBook();
             #endregion
         }
 

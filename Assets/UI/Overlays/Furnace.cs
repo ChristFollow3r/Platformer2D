@@ -1,5 +1,6 @@
 
 using Items;
+using Player;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -102,6 +103,8 @@ namespace UI.Components
             furnace.OnSlotChanged += OnSlotChanged;
             furnace.OnFillChanged += OnFillChanged;
             furnace.OnFuelFillChanged += OnFuelFillChanged;
+
+            this.Q<Button>("recipeBtn").clicked += () => UIController.Singleton.ToggleBook();
             #endregion
         }
 
