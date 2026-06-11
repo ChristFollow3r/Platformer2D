@@ -21,6 +21,7 @@ namespace Data
         public EquipmentType equipmentType;
         public BlockType blockType;
         public float hardness;
+        public float requiredMiningPower = 0f;
         public float fuelDuration;
         public ModData modData;
         public OverlayType overlayType;

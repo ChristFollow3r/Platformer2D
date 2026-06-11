@@ -327,7 +327,7 @@ MonoBehaviour:
   jumpBufferTime: 0.15
   attackPauseDuration: 0.2
   jumpCooldown: 0.1
-  attackCooldown: 0.2
+  attackCooldown: 0.4
   mineCooldown: 0.6
   deathVFX: {fileID: 7111893719700219089, guid: e7785114cefe80f4c91185771514b69b, type: 3}
   enableTimer: 1

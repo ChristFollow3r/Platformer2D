@@ -21,6 +21,7 @@ MonoBehaviour:
   equipmentType: 0
   blockType: 25
   hardness: 1
+  requiredMiningPower: 1
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 3
@@ -30,3 +31,4 @@ MonoBehaviour:
     maxAmount: 0
     dropChance: 101
   hitSound: {fileID: 8300000, guid: ac6330d650f08914196df18b20666478, type: 3}
+  description: 
