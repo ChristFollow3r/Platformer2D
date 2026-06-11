@@ -16,5 +16,5 @@ MonoBehaviour:
   minigPower: 3
   attackPower: 17
   defence: 14
-  duration: 480
+  duration: 420
   controller: {fileID: 9100000, guid: 21bbff6f1187bf3408eb89dae2a0f50e, type: 2}
