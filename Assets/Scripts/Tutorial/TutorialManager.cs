@@ -148,6 +148,7 @@ public class TutorialManager : MonoBehaviour
             {
                 ProcessCurrentPhase();
                 RestoreCompletedGoals();
+                CheckInventoryQuests();
             }
         }
         else
@@ -473,6 +474,8 @@ public class TutorialManager : MonoBehaviour
 
     private void ProcessCurrentPhase()
     {
+        PrimeInventoryTracking();
+        SeedCumulativeFromInventory();
         tutorialUI.ClearGoals();
 
         switch (currentPhase)
@@ -495,7 +498,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case TutorialPhase.Block3_Smelt:
                 tutorialUI.AddGoal("b3_rocks", "Craft 3 Rocks");
-                tutorialUI.AddGoal("b3_smelt", "Smelt 1 Resin");
+                tutorialUI.AddGoal("b3_smelt", "Make 1 Smelted Resin");
                 CheckInventoryQuests();
                 break;
             case TutorialPhase.Block4_CraftUpgrade:
