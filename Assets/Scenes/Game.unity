@@ -798,6 +798,7 @@ MonoBehaviour:
   defaultClickSound: {fileID: 8300000, guid: 1e7ca19f8662e604785e8c9a05ca5c43, type: 3}
   pageTurnSound: {fileID: 8300000, guid: 1e7ca19f8662e604785e8c9a05ca5c43, type: 3}
   mainAudioMixer: {fileID: 24100000, guid: a96ebfb9af9687a4b8632c755d798dc7, type: 2}
+  preventMenu: 0
   defaultController: {fileID: 9100000, guid: e061f26e16934ab41ac0d7b58478b23e, type: 2}
 --- !u!1 &519420028
 GameObject:
@@ -2086,6 +2087,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TutorialUI
   customFont: {fileID: 12800000, guid: 74a5091d8707f334b9a5c31ef71a64ba, type: 3}
   goalCompleteSound: {fileID: 8300000, guid: d4121e3c21149f342a137d2fdc81ea05, type: 3}
+  uncheckedSprite: {fileID: 2701315124404743235, guid: 85707a2e52c8fa540ac07c7f133422bd, type: 3}
+  checkedSprite: {fileID: -7712619005452793277, guid: 85707a2e52c8fa540ac07c7f133422bd, type: 3}
 --- !u!1 &1849100688
 GameObject:
   m_ObjectHideFlags: 0

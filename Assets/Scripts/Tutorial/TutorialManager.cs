@@ -134,7 +134,7 @@ public class TutorialManager : MonoBehaviour
         PrimeInventoryTracking();
         if (isRestoring) SeedCumulativeFromInventory();
 
-        yield return new WaitForSeconds(2);
+        // yield return new WaitForSeconds(2);
 
         if (isRestoring)
         {
