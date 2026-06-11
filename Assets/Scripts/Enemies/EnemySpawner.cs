@@ -17,6 +17,27 @@ namespace Enemies
             [Range(1f, 100f)] public float spawnWeight = 10f;
         }
 
+        #region Singleton setup
+
+        public static EnemySpawner Singleton;
+
+        private void SetupSingleton()
+        {
+            #region SetupSingleton
+
+            if (Singleton != null && Singleton != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Singleton = this;
+
+            #endregion
+        }
+
+        #endregion
+
         [Header("Dependencies")]
         [SerializeField] private DayNightCycle dayNightCycle;
         [SerializeField] private float cellSize = 0.5f;
@@ -36,6 +57,14 @@ namespace Enemies
 
         private float spawnTimer;
         private List<GameObject> activeEnemies = new List<GameObject>();
+
+        /// <summary>Ran by unity on load</summary>
+        private void Awake()
+        {
+            #region Awake
+            SetupSingleton();
+            #endregion
+        }
 
         private void Update()
         {

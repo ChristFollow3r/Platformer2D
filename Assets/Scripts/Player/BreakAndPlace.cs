@@ -8,6 +8,7 @@ using World;
 using Items;
 using Items.Overlays;
 using System.Linq;
+using Unity.VisualScripting;
 
 namespace Player
 {
@@ -123,6 +124,7 @@ namespace Player
 
                 if (item != null && item.data.isPlacable)
                 {
+                    if (UIController.Singleton.isOverlayOpen) return;
                     TryPlaceBlock(item, worldMousePos);
                 }
             }

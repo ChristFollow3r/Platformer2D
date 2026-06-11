@@ -5,6 +5,7 @@ using UnityEngine.Video;
 using Player;
 using Items;
 using Data;
+using Enemies;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -190,6 +191,7 @@ public class TutorialManager : MonoBehaviour
 
         if (basicState == BasicControlState.Done)
         {
+            EnemySpawner.Singleton.gameObject.SetActive(true);
             StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block1_Gather, craftingTableVideo, "Open your inventory with I to craft basic items", 1f));
         }
         else
@@ -202,6 +204,7 @@ public class TutorialManager : MonoBehaviour
 
     private void ProcessBasicState()
     {
+        EnemySpawner.Singleton.gameObject.SetActive(false);
         switch (basicState)
         {
             case BasicControlState.Movement:
