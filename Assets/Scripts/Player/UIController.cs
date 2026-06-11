@@ -305,6 +305,7 @@ namespace Player
         {
             #region CloseOverlay
             OnOverlayClose?.Invoke();
+            CloseBook();
             hud.rootVisualElement.Q<VisualElement>("root").style.display = DisplayStyle.Flex;
             overlayRoot.Q<VisualElement>("root").style.display = DisplayStyle.None;
             isOverlayOpen = false;
