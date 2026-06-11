@@ -377,7 +377,7 @@ namespace Player
             UpdateChunkVisuals(checkX, checkY);
             WorldManager.Instance.UpdateDynamicLighting(checkX, checkY);
 
-            OnBlockBroken?.Invoke();
+            // OnBlockBroken?.Invoke();
         }
 
         private void SpawnLoot(ItemData itemData, Vector2 position)
