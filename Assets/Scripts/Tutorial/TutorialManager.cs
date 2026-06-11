@@ -7,6 +7,9 @@ using Items;
 
 public class TutorialManager : MonoBehaviour
 {
+
+
+
     public static TutorialManager Instance { get; private set; }
 
     public enum BasicControlState { Movement, Attacking, Mining, Placing, Done }
@@ -64,6 +67,8 @@ public class TutorialManager : MonoBehaviour
     private bool b11_slime, b11_greater, b11_emerald, b11_ruby, b11_topaz, b11_onyx, b11_primordialUpgrade;
     private bool b12_destinyStone, b12_interactDestiny;
 
+
+    private bool isRestoring = false;
     private Dictionary<string, int> previousInventoryState = new Dictionary<string, int>();
     private Dictionary<string, int> cumulativeItemsGathered = new Dictionary<string, int>();
 
@@ -75,7 +80,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(WaitForPlayer());
+        // StartCoroutine(WaitForPlayer());
     }
 
     private void OnDestroy()
@@ -121,13 +126,31 @@ public class TutorialManager : MonoBehaviour
         }
 
         Inventory.Singleton.OnSlotChanged += CheckInventoryQuests;
-
         PrimeInventoryTracking();
-
-        InitializeBasicGoals();
+        if (isRestoring) SeedCumulativeFromInventory();
 
         yield return new WaitForSeconds(2);
-        ProcessBasicState();
+
+        if (isRestoring)
+        {
+            isRestoring = false;
+            if (currentPhase == TutorialPhase.BasicControls)
+            {
+                InitializeBasicGoals();
+                RestoreBasicControlTicks();
+                ProcessBasicState();
+            }
+            else
+            {
+                ProcessCurrentPhase();
+                RestoreCompletedGoals();
+            }
+        }
+        else
+        {
+            InitializeBasicGoals();
+            ProcessBasicState();
+        }
     }
 
     private void InitializeBasicGoals()
@@ -556,4 +579,178 @@ public class TutorialManager : MonoBehaviour
             CheckInventoryQuests();
         }
     }
+
+    private void SeedCumulativeFromInventory()
+    {
+        foreach (var kvp in previousInventoryState)
+        {
+            if (!cumulativeItemsGathered.ContainsKey(kvp.Key))
+                cumulativeItemsGathered[kvp.Key] = 0;
+
+            cumulativeItemsGathered[kvp.Key] = Mathf.Max(cumulativeItemsGathered[kvp.Key], kvp.Value);
+        }
+    }
+
+    public string Serialize()
+    {
+        TutorialData data = new()
+        {
+            basicState = (int)basicState,
+            objectivesState = (int)currentPhase,
+
+            b1_wood = b1_wood,
+            b1_resin = b1_resin,
+            b1_table = b1_table,
+            b2_fiber = b2_fiber,
+            b2_string = b2_string,
+            b2_rock = b2_rock,
+            b2_resin = b2_resin,
+            b2_rocks = b2_rocks,
+            b2_clay = b2_clay,
+            b2_furnace = b2_furnace,
+            b3_rocks = b3_rocks,
+            b3_smelt = b3_smelt,
+            b4_upgrade = b4_upgrade,
+            b5_use = b5_use,
+            b6_consume_slime = b6_consume_slime,
+            b7_copperOre = b7_copperOre,
+            b7_magic = b7_magic,
+            b7_copperIngot = b7_copperIngot,
+            b7_copperUpgrade = b7_copperUpgrade,
+            b8_stoneBlock = b8_stoneBlock,
+            b8_magic = b8_magic,
+            b8_slime = b8_slime,
+            b8_anchor = b8_anchor,
+            b8_setSpawn = b8_setSpawn,
+            b9_tinOre = b9_tinOre,
+            b9_copperOre = b9_copperOre,
+            b9_bronzeIngot = b9_bronzeIngot,
+            b9_compressed = b9_compressed,
+            b9_bronzeUpgrade = b9_bronzeUpgrade,
+            b10_ironOre = b10_ironOre,
+            b10_compressed = b10_compressed,
+            b10_greater = b10_greater,
+            b10_ironUpgrade = b10_ironUpgrade,
+            b11_slime = b11_slime,
+            b11_greater = b11_greater,
+            b11_emerald = b11_emerald,
+            b11_ruby = b11_ruby,
+            b11_topaz = b11_topaz,
+            b11_onyx = b11_onyx,
+            b11_primordialUpgrade = b11_primordialUpgrade,
+            b12_destinyStone = b12_destinyStone,
+            b12_interactDestiny = b12_interactDestiny
+        };
+
+        return JsonUtility.ToJson(data);
+    }
+
+    public void Deserialize(string json)
+    {
+        TutorialData save = JsonUtility.FromJson<TutorialData>(json);
+
+        basicState = (BasicControlState)save.basicState;
+        currentPhase = (TutorialPhase)save.objectivesState;
+
+        b1_wood = save.b1_wood; b1_resin = save.b1_resin; b1_table = save.b1_table;
+        b2_fiber = save.b2_fiber; b2_string = save.b2_string; b2_rock = save.b2_rock;
+        b2_resin = save.b2_resin; b2_rocks = save.b2_rocks; b2_clay = save.b2_clay; b2_furnace = save.b2_furnace;
+        b3_rocks = save.b3_rocks; b3_smelt = save.b3_smelt;
+        b4_upgrade = save.b4_upgrade;
+        b5_use = save.b5_use;
+        b6_consume_slime = save.b6_consume_slime;
+        b7_copperOre = save.b7_copperOre; b7_magic = save.b7_magic; b7_copperIngot = save.b7_copperIngot; b7_copperUpgrade = save.b7_copperUpgrade;
+        b8_stoneBlock = save.b8_stoneBlock; b8_magic = save.b8_magic; b8_slime = save.b8_slime; b8_anchor = save.b8_anchor; b8_setSpawn = save.b8_setSpawn;
+        b9_tinOre = save.b9_tinOre; b9_copperOre = save.b9_copperOre; b9_bronzeIngot = save.b9_bronzeIngot; b9_compressed = save.b9_compressed; b9_bronzeUpgrade = save.b9_bronzeUpgrade;
+        b10_ironOre = save.b10_ironOre; b10_compressed = save.b10_compressed; b10_greater = save.b10_greater; b10_ironUpgrade = save.b10_ironUpgrade;
+        b11_slime = save.b11_slime; b11_greater = save.b11_greater; b11_emerald = save.b11_emerald; b11_ruby = save.b11_ruby;
+        b11_topaz = save.b11_topaz; b11_onyx = save.b11_onyx; b11_primordialUpgrade = save.b11_primordialUpgrade;
+        b12_destinyStone = save.b12_destinyStone; b12_interactDestiny = save.b12_interactDestiny;
+
+        isRestoring = true;
+        StartCoroutine(WaitForPlayer());
+    }
+
+
+    private void RestoreBasicControlTicks()
+    {
+        if (basicState > BasicControlState.Movement) tutorialUI.CompleteGoal("MovementToggle");
+        if (basicState > BasicControlState.Attacking) tutorialUI.CompleteGoal("AttackingToggle");
+        if (basicState > BasicControlState.Mining) tutorialUI.CompleteGoal("MiningToggle");
+        if (basicState > BasicControlState.Placing) tutorialUI.CompleteGoal("PlacingBlock");
+    }
+
+    private void RestoreCompletedGoals()
+    {
+        switch (currentPhase)
+        {
+            case TutorialPhase.Block1_Gather:
+                if (b1_wood) tutorialUI.CompleteGoal("b1_wood");
+                if (b1_resin) tutorialUI.CompleteGoal("b1_resin");
+                if (b1_table) tutorialUI.CompleteGoal("b1_table");
+                break;
+            case TutorialPhase.Block2_Gather:
+                if (b2_fiber) tutorialUI.CompleteGoal("b2_fiber");
+                if (b2_string) tutorialUI.CompleteGoal("b2_string");
+                if (b2_rock) tutorialUI.CompleteGoal("b2_rock");
+                if (b2_resin) tutorialUI.CompleteGoal("b2_resin");
+                if (b2_rocks) tutorialUI.CompleteGoal("b2_rocks");
+                if (b2_clay) tutorialUI.CompleteGoal("b2_clay");
+                if (b2_furnace) tutorialUI.CompleteGoal("b2_furnace");
+                break;
+            case TutorialPhase.Block3_Smelt:
+                if (b3_rocks) tutorialUI.CompleteGoal("b3_rocks");
+                if (b3_smelt) tutorialUI.CompleteGoal("b3_smelt");
+                break;
+            case TutorialPhase.Block4_CraftUpgrade:
+                if (b4_upgrade) tutorialUI.CompleteGoal("b4_upgrade");
+                break;
+            case TutorialPhase.Block5_UseUpgrade:
+                if (b5_use) tutorialUI.CompleteGoal("b5_use");
+                break;
+            case TutorialPhase.Block6_Consume:
+                if (b6_consume_slime) tutorialUI.CompleteGoal("b6_consume_slime");
+                break;
+            case TutorialPhase.Block7_Copper:
+                if (b7_copperOre) tutorialUI.CompleteGoal("b7_copperOre");
+                if (b7_magic) tutorialUI.CompleteGoal("b7_magic");
+                if (b7_copperIngot) tutorialUI.CompleteGoal("b7_copperIngot");
+                if (b7_copperUpgrade) tutorialUI.CompleteGoal("b7_copperUpgrade");
+                break;
+            case TutorialPhase.Block8_Anchor:
+                if (b8_stoneBlock) tutorialUI.CompleteGoal("b8_stoneBlock");
+                if (b8_magic) tutorialUI.CompleteGoal("b8_magic");
+                if (b8_slime) tutorialUI.CompleteGoal("b8_slime");
+                if (b8_anchor) tutorialUI.CompleteGoal("b8_anchor");
+                if (b8_setSpawn) tutorialUI.CompleteGoal("b8_setSpawn");
+                break;
+            case TutorialPhase.Block9_Bronze:
+                if (b9_tinOre) tutorialUI.CompleteGoal("b9_tinOre");
+                if (b9_copperOre) tutorialUI.CompleteGoal("b9_copperOre");
+                if (b9_bronzeIngot) tutorialUI.CompleteGoal("b9_bronzeIngot");
+                if (b9_compressed) tutorialUI.CompleteGoal("b9_compressed");
+                if (b9_bronzeUpgrade) tutorialUI.CompleteGoal("b9_bronzeUpgrade");
+                break;
+            case TutorialPhase.Block10_Iron:
+                if (b10_ironOre) tutorialUI.CompleteGoal("b10_ironOre");
+                if (b10_compressed) tutorialUI.CompleteGoal("b10_compressed");
+                if (b10_greater) tutorialUI.CompleteGoal("b10_greater");
+                if (b10_ironUpgrade) tutorialUI.CompleteGoal("b10_ironUpgrade");
+                break;
+            case TutorialPhase.Block11_Primordial:
+                if (b11_slime) tutorialUI.CompleteGoal("b11_slime");
+                if (b11_greater) tutorialUI.CompleteGoal("b11_greater");
+                if (b11_emerald) tutorialUI.CompleteGoal("b11_emerald");
+                if (b11_ruby) tutorialUI.CompleteGoal("b11_ruby");
+                if (b11_topaz) tutorialUI.CompleteGoal("b11_topaz");
+                if (b11_onyx) tutorialUI.CompleteGoal("b11_onyx");
+                if (b11_primordialUpgrade) tutorialUI.CompleteGoal("b11_primordialUpgrade");
+                break;
+            case TutorialPhase.Block12_Destiny:
+                if (b12_destinyStone) tutorialUI.CompleteGoal("b12_destinyStone");
+                if (b12_interactDestiny) tutorialUI.CompleteGoal("b12_interactDestiny");
+                break;
+        }
+    }
+
 }

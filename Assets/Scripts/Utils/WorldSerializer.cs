@@ -67,6 +67,26 @@ public class PropDiff { public int x, y; public PropType type; }
 [Serializable]
 public class PlayerSaveData { public Vector2 pos; public int health; public Vector3 spawnPoint; }
 
+[Serializable]
+public class TutorialData
+{
+    public int basicState;
+    public int objectivesState;
+
+    public bool b1_wood, b1_resin, b1_table;
+    public bool b2_fiber, b2_string, b2_rock, b2_resin, b2_rocks, b2_clay, b2_furnace;
+    public bool b3_rocks, b3_smelt;
+    public bool b4_upgrade;
+    public bool b5_use;
+    public bool b6_consume_slime;
+    public bool b7_copperOre, b7_magic, b7_copperIngot, b7_copperUpgrade;
+    public bool b8_stoneBlock, b8_magic, b8_slime, b8_anchor, b8_setSpawn;
+    public bool b9_tinOre, b9_copperOre, b9_bronzeIngot, b9_compressed, b9_bronzeUpgrade;
+    public bool b10_ironOre, b10_compressed, b10_greater, b10_ironUpgrade;
+    public bool b11_slime, b11_greater, b11_emerald, b11_ruby, b11_topaz, b11_onyx, b11_primordialUpgrade;
+    public bool b12_destinyStone, b12_interactDestiny;
+}
+
 static class WorldSerializer
 {
     public static bool isNewWorld;
@@ -79,6 +99,7 @@ static class WorldSerializer
     private static string WorldPath(string saveName) => Path.Combine(SaveFolder(saveName), "world.json");
     private static string OverlaysPath(string saveName) => Path.Combine(SaveFolder(saveName), "overlays.json");
     private static string PlayerPath(string saveName) => Path.Combine(SaveFolder(saveName), "player.json");
+    private static string TutorialPath(string saveName) => Path.Combine(SaveFolder(saveName), "tutorial.json");
 
     public static bool Exists(string saveName) => File.Exists(WorldPath(saveName));
 
@@ -105,8 +126,9 @@ static class WorldSerializer
 
         File.WriteAllText(WorldPath(WorldName), JsonUtility.ToJson(data));
         File.WriteAllText(OverlaysPath(WorldName), UIController.Singleton.SerializeAll());
-        if (!PlayerMovement.Singleton) return;
-        File.WriteAllText(PlayerPath(WorldName), PlayerMovement.Singleton.Serialize());
+        if (PlayerMovement.Singleton) File.WriteAllText(PlayerPath(WorldName), PlayerMovement.Singleton.Serialize());
+        if (TutorialManager.Instance) File.WriteAllText(TutorialPath(WorldName), TutorialManager.Instance.Serialize());
+
     }
 
     public static WorldSaveData Load()
@@ -170,5 +192,23 @@ static class WorldSerializer
 
         PlayerMovement.Singleton.Deserialize(json);
         Debug.Log("[WorldSerializer] Player deserialized.");
+    }
+
+    public static void LoadTutorial()
+    {
+        string path = TutorialPath(WorldName);
+        Debug.Log($"[WorldSerializer] Loading tutorial from: {path}");
+
+        if (!File.Exists(path))
+        {
+            Debug.LogWarning($"[WorldSerializer] Tutorial file not found at: {path}");
+            return;
+        }
+
+        string json = File.ReadAllText(path);
+        Debug.Log($"[WorldSerializer] Tutorial JSON length: {json.Length}");
+
+        TutorialManager.Instance.Deserialize(json);
+        Debug.Log("[WorldSerializer] Tutorial deserialized.");
     }
 }

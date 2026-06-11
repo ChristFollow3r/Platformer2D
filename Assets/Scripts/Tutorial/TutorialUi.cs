@@ -121,12 +121,13 @@ public class TutorialUI : MonoBehaviour
         goalTrackerContainer.Add(goalRow);
     }
 
-    public void CompleteGoal(string toggleName)
+    public void CompleteGoal(string toggleName, bool quiet = false)
     {
         Toggle toggleElement = document.rootVisualElement.Q<Toggle>(toggleName);
         if (!toggleElement.value)
         {
             toggleElement.value = true;
+            if (quiet) return;
             if (goalCompleteSound != null && Camera.main != null)
             {
                 AudioSource.PlayClipAtPoint(goalCompleteSound, Camera.main.transform.position);

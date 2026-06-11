@@ -17,13 +17,15 @@ namespace World
         [SerializeField] private Grid gridParent;
         [SerializeField] private Camera mainCamera;
 
-        [Header("Player Settings")] [SerializeField]
+        [Header("Player Settings")]
+        [SerializeField]
         private GameObject playerPrefab;
 
         [SerializeField] private CinemachineCamera virtualCamera;
         public Vector3 currentSpawnPoint;
 
-        [Header("Shader Setup")] [SerializeField]
+        [Header("Shader Setup")]
+        [SerializeField]
         private Material tilemapMaterial;
 
         private Texture2D lightmapTexture;
@@ -44,7 +46,7 @@ namespace World
         [SerializeField] private float globalSpawnChance;
         [SerializeField] private int dirtLayerThickness;
 
-        [Header("Autosave")] [SerializeField] private float autosaveInterval = 60f;
+        [Header("Autosave")][SerializeField] private float autosaveInterval = 60f;
         private float autosaveTimer;
 
         public static WorldManager Instance { get; private set; }
@@ -120,6 +122,8 @@ namespace World
 
             if (!WorldSerializer.isNewWorld)
                 WorldSerializer.LoadPlayer();
+
+            WorldSerializer.LoadTutorial();
         }
 
         private int GetDeterministicHash(string seed)
