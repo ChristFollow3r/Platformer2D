@@ -426,6 +426,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenuUI
   clickSound: {fileID: 8300000, guid: 1e7ca19f8662e604785e8c9a05ca5c43, type: 3}
+  mainAudioMixer: {fileID: 24100000, guid: a96ebfb9af9687a4b8632c755d798dc7, type: 2}
+  sliderBarSprite: {fileID: -8942107932711748470, guid: 3e9d06f0c27362045b51408ce2866bfb, type: 3}
+  sliderKnobSprite: {fileID: -8689445763351215703, guid: 85707a2e52c8fa540ac07c7f133422bd, type: 3}
   doc: {fileID: 1478460918}
   loader: {fileID: 1478460921}
 --- !u!114 &1478460921
@@ -450,7 +453,7 @@ AudioSource:
   m_GameObject: {fileID: 1478460917}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -6369074884130611552, guid: a96ebfb9af9687a4b8632c755d798dc7, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 1
