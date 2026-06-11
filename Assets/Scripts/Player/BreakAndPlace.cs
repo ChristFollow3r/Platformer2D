@@ -88,7 +88,7 @@ namespace Player
             {
                 BlockType clickedBlock = GetClickedBlock(worldMousePos, out ulong blockId);
 
-                if (IsBlockEntity(clickedBlock))
+                if (IsBlockEntity(clickedBlock) && !UIController.Singleton.isOverlayOpen)
                 {
                     UIController.Singleton.OpenOverlay(blockId);
                     return;
