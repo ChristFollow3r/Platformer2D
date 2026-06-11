@@ -11,7 +11,6 @@ public class TutorialUI : MonoBehaviour
 
     [Header("Styling")]
     [SerializeField] private Font customFont;
-
     [SerializeField] private AudioClip goalCompleteSound;
 
     public static bool IsInputBlocked { get; private set; }
@@ -23,7 +22,6 @@ public class TutorialUI : MonoBehaviour
         popupContainer = document.rootVisualElement.Q<VisualElement>("VideoPopup");
         descriptionLabel = document.rootVisualElement.Q<Label>("Description");
         closeButton = document.rootVisualElement.Q<Button>("CloseButton");
-
         goalTrackerContainer = document.rootVisualElement.Q<VisualElement>("GoalTracker");
 
         if (closeButton != null)
@@ -88,21 +86,29 @@ public class TutorialUI : MonoBehaviour
         Toggle existingToggle = goalTrackerContainer.Q<Toggle>(goalId);
         if (existingToggle != null) return;
 
-        Toggle newGoal = new Toggle();
-        newGoal.name = goalId;
-        newGoal.label = labelText;
-        newGoal.focusable = false;
+        VisualElement goalRow = new VisualElement();
+        goalRow.style.flexDirection = FlexDirection.Row;
+        goalRow.style.justifyContent = Justify.SpaceBetween;
+        goalRow.style.alignItems = Align.Center;
+        goalRow.style.width = Length.Percent(100);
 
-        newGoal.style.color = Color.white;
+        Label goalLabel = new Label(labelText);
+        goalLabel.style.color = Color.white;
 
         if (customFont != null)
         {
-            newGoal.style.unityFont = customFont;
-            // This prevents Unity's default TMP asset from overriding your custom TTF/OTF font
-            newGoal.style.unityFontDefinition = StyleKeyword.None;
+            goalLabel.style.unityFont = customFont;
+            goalLabel.style.unityFontDefinition = StyleKeyword.None;
         }
 
-        goalTrackerContainer.Add(newGoal);
+        Toggle newGoal = new Toggle();
+        newGoal.name = goalId;
+        newGoal.focusable = false;
+
+        goalRow.Add(goalLabel);
+        goalRow.Add(newGoal);
+
+        goalTrackerContainer.Add(goalRow);
     }
 
     public void CompleteGoal(string toggleName)
