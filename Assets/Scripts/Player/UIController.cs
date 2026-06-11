@@ -81,7 +81,7 @@ namespace Player
 
         [Header("Settings Panel")] private VisualElement settingsContainer;
         private Button closeSettingsBtn;
-
+        public bool preventMenu = false;
         private Label itemNameElm;
 
         [SerializeField] private RuntimeAnimatorController defaultController;
@@ -89,6 +89,8 @@ namespace Player
         [Header("JEI")]
         private bool isBookOpen = false;
         private VisualElement recipeBookContainer;
+
+
 
         #endregion
 
@@ -275,7 +277,7 @@ namespace Player
             if (playerInput.UI.CloseOverlay.WasPressedThisFrame())
             {
                 if (isOverlayOpen) CloseOverlay();
-                else ToggleMenu();
+                else if (!preventMenu) ToggleMenu();
             }
 
             #endregion

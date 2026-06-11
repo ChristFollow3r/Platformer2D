@@ -1,4 +1,6 @@
+using Player;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
 
 public class TutorialUI : MonoBehaviour
@@ -15,6 +17,7 @@ public class TutorialUI : MonoBehaviour
 
     public static bool IsInputBlocked { get; private set; }
     private float unblockTimer = 0f;
+    private bool isPopupVisible = false;
 
     private void Awake()
     {
@@ -40,8 +43,10 @@ public class TutorialUI : MonoBehaviour
             if (unblockTimer <= 0f)
             {
                 IsInputBlocked = false;
+                isPopupVisible = false;
             }
         }
+        if (Keyboard.current.escapeKey.wasPressedThisFrame && isPopupVisible) HidePopup();
     }
 
     private void OnDestroy()
@@ -55,7 +60,10 @@ public class TutorialUI : MonoBehaviour
 
     public void ShowPopup(string textDescription)
     {
+        Time.timeScale = 0f;
         IsInputBlocked = true;
+        isPopupVisible = true;
+        UIController.Singleton.preventMenu = true;
         unblockTimer = 0f;
 
         if (descriptionLabel != null)
@@ -67,6 +75,8 @@ public class TutorialUI : MonoBehaviour
 
     public void HidePopup()
     {
+        Time.timeScale = 1f;
+        UIController.Singleton.preventMenu = false;
         popupContainer.style.display = DisplayStyle.None;
         unblockTimer = 0.2f;
     }

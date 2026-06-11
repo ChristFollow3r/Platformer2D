@@ -125,6 +125,8 @@ public class TutorialManager : MonoBehaviour
         PrimeInventoryTracking();
 
         InitializeBasicGoals();
+
+        yield return new WaitForSeconds(2);
         ProcessBasicState();
     }
 
