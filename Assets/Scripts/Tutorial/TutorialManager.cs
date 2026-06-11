@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Video;
 using Player;
 using Items;
+using Data;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -71,6 +72,9 @@ public class TutorialManager : MonoBehaviour
     private bool isRestoring = false;
     private Dictionary<string, int> previousInventoryState = new Dictionary<string, int>();
     private Dictionary<string, int> cumulativeItemsGathered = new Dictionary<string, int>();
+    private Dictionary<string, int> cumulativeCrafted = new Dictionary<string, int>();
+
+
 
     private void Awake()
     {
@@ -305,116 +309,142 @@ public class TutorialManager : MonoBehaviour
         {
             if (!b1_wood && GetCumulativeItemAmount("Wood") >= 12) { b1_wood = true; tutorialUI.CompleteGoal("b1_wood"); }
             if (!b1_resin && GetCumulativeItemAmount("Resin") >= 1) { b1_resin = true; tutorialUI.CompleteGoal("b1_resin"); }
-            if (!b1_table && GetCumulativeItemAmount("Crafting Table") >= 1) { b1_table = true; tutorialUI.CompleteGoal("b1_table"); }
-
             if (b1_wood && b1_resin && b1_table) StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block2_Gather, 1f));
         }
         else if (currentPhase == TutorialPhase.Block2_Gather)
         {
             if (!b2_fiber && GetCumulativeItemAmount("Fiber") >= 18) { b2_fiber = true; tutorialUI.CompleteGoal("b2_fiber"); }
-            if (!b2_string && GetCumulativeItemAmount("String") >= 6) { b2_string = true; tutorialUI.CompleteGoal("b2_string"); }
             if (!b2_rock && GetCumulativeItemAmount("Rock") >= 12) { b2_rock = true; tutorialUI.CompleteGoal("b2_rock"); }
             if (!b2_resin && GetCumulativeItemAmount("Resin") >= 6) { b2_resin = true; tutorialUI.CompleteGoal("b2_resin"); }
-            if (!b2_rocks && GetCumulativeItemAmount("Rocks") >= 6) { b2_rocks = true; tutorialUI.CompleteGoal("b2_rocks"); }
             if (!b2_clay && GetCumulativeItemAmount("Clay") >= 6) { b2_clay = true; tutorialUI.CompleteGoal("b2_clay"); }
-            if (!b2_furnace && GetCumulativeItemAmount("Furnace") >= 1) { b2_furnace = true; tutorialUI.CompleteGoal("b2_furnace"); }
-
             if (b2_fiber && b2_string && b2_rock && b2_resin && b2_rocks && b2_clay && b2_furnace)
-            {
                 StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_Smelt, smeltResinVideo, "Place the furnace and add fuel to smelt materials", 3f));
-            }
         }
         else if (currentPhase == TutorialPhase.Block3_Smelt)
         {
-            if (!b3_rocks && GetCumulativeItemAmount("Rocks") >= 3) { b3_rocks = true; tutorialUI.CompleteGoal("b3_rocks"); }
             if (!b3_smelt && GetCumulativeItemAmount("Melted Resin") >= 1) { b3_smelt = true; tutorialUI.CompleteGoal("b3_smelt"); }
-
             if (b3_rocks && b3_smelt)
-            {
                 StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block4_CraftUpgrade, stoneUpgradeVideo, "Craft upgrades to improve your stats", 3f));
-            }
-        }
-        else if (currentPhase == TutorialPhase.Block4_CraftUpgrade)
-        {
-            if (!b4_upgrade && GetCumulativeItemAmount("Stone Upgrade") >= 1)
-            {
-                b4_upgrade = true;
-                tutorialUI.CompleteGoal("b4_upgrade");
-                StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block5_UseUpgrade, 1f));
-            }
         }
         else if (currentPhase == TutorialPhase.Block7_Copper)
         {
             if (!b7_copperOre && GetCumulativeItemAmount("Copper Ore") >= 16) { b7_copperOre = true; tutorialUI.CompleteGoal("b7_copperOre"); }
             if (!b7_magic && GetCumulativeItemAmount("Magic Essence") >= 8) { b7_magic = true; tutorialUI.CompleteGoal("b7_magic"); }
-            if (!b7_copperIngot && GetCumulativeItemAmount("Copper Ingot") >= 4) { b7_copperIngot = true; tutorialUI.CompleteGoal("b7_copperIngot"); }
-            if (!b7_copperUpgrade && GetCumulativeItemAmount("Copper Upgrade") >= 1) { b7_copperUpgrade = true; tutorialUI.CompleteGoal("b7_copperUpgrade"); }
-
             if (b7_copperOre && b7_magic && b7_copperIngot && b7_copperUpgrade)
-            {
                 StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block8_Anchor, 1f));
-            }
         }
         else if (currentPhase == TutorialPhase.Block8_Anchor)
         {
             if (!b8_stoneBlock && GetCumulativeItemAmount("Stone Block") >= 8) { b8_stoneBlock = true; tutorialUI.CompleteGoal("b8_stoneBlock"); }
             if (!b8_magic && GetCumulativeItemAmount("Magic Essence") >= 4) { b8_magic = true; tutorialUI.CompleteGoal("b8_magic"); }
             if (!b8_slime && GetCumulativeItemAmount("Slime Essence") >= 4) { b8_slime = true; tutorialUI.CompleteGoal("b8_slime"); }
-            if (!b8_anchor && GetCumulativeItemAmount("Respawn Anchor") >= 1) { b8_anchor = true; tutorialUI.CompleteGoal("b8_anchor"); }
-
             if (b8_stoneBlock && b8_magic && b8_slime && b8_anchor && b8_setSpawn)
-            {
                 StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block9_Bronze, 1f));
-            }
         }
         else if (currentPhase == TutorialPhase.Block9_Bronze)
         {
             if (!b9_tinOre && GetCumulativeItemAmount("Tin Ore") >= 32) { b9_tinOre = true; tutorialUI.CompleteGoal("b9_tinOre"); }
             if (!b9_copperOre && GetCumulativeItemAmount("Copper Ore") >= 32) { b9_copperOre = true; tutorialUI.CompleteGoal("b9_copperOre"); }
-            if (!b9_bronzeIngot && GetCumulativeItemAmount("Bronze Ingot") >= 4) { b9_bronzeIngot = true; tutorialUI.CompleteGoal("b9_bronzeIngot"); }
-            if (!b9_compressed && GetCumulativeItemAmount("Compressed Magic Essence") >= 8) { b9_compressed = true; tutorialUI.CompleteGoal("b9_compressed"); }
-            if (!b9_bronzeUpgrade && GetCumulativeItemAmount("Bronze Upgrade") >= 1) { b9_bronzeUpgrade = true; tutorialUI.CompleteGoal("b9_bronzeUpgrade"); }
-
             if (b9_tinOre && b9_copperOre && b9_bronzeIngot && b9_compressed && b9_bronzeUpgrade)
-            {
                 StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block10_Iron, 1f));
-            }
         }
         else if (currentPhase == TutorialPhase.Block10_Iron)
         {
             if (!b10_ironOre && GetCumulativeItemAmount("Iron Ore") >= 16) { b10_ironOre = true; tutorialUI.CompleteGoal("b10_ironOre"); }
-            if (!b10_compressed && GetCumulativeItemAmount("Compressed Magic Essence") >= 8) { b10_compressed = true; tutorialUI.CompleteGoal("b10_compressed"); }
-            if (!b10_greater && GetCumulativeItemAmount("Greater Magic Essence") >= 4) { b10_greater = true; tutorialUI.CompleteGoal("b10_greater"); }
-            if (!b10_ironUpgrade && GetCumulativeItemAmount("Iron Upgrade") >= 1) { b10_ironUpgrade = true; tutorialUI.CompleteGoal("b10_ironUpgrade"); }
-
             if (b10_ironOre && b10_compressed && b10_greater && b10_ironUpgrade)
-            {
                 StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block11_Primordial, 1f));
-            }
         }
         else if (currentPhase == TutorialPhase.Block11_Primordial)
         {
             if (!b11_slime && GetCumulativeItemAmount("Slime Essence") >= 4) { b11_slime = true; tutorialUI.CompleteGoal("b11_slime"); }
-            if (!b11_greater && GetCumulativeItemAmount("Greater Magic Essence") >= 8) { b11_greater = true; tutorialUI.CompleteGoal("b11_greater"); }
             if (!b11_emerald && GetCumulativeItemAmount("Emerald") >= 1) { b11_emerald = true; tutorialUI.CompleteGoal("b11_emerald"); }
             if (!b11_ruby && GetCumulativeItemAmount("Ruby") >= 1) { b11_ruby = true; tutorialUI.CompleteGoal("b11_ruby"); }
             if (!b11_topaz && GetCumulativeItemAmount("Topaz") >= 1) { b11_topaz = true; tutorialUI.CompleteGoal("b11_topaz"); }
             if (!b11_onyx && GetCumulativeItemAmount("Onyx") >= 1) { b11_onyx = true; tutorialUI.CompleteGoal("b11_onyx"); }
-            if (!b11_primordialUpgrade && GetCumulativeItemAmount("Primordial Upgrade") >= 1) { b11_primordialUpgrade = true; tutorialUI.CompleteGoal("b11_primordialUpgrade"); }
-
             if (b11_slime && b11_greater && b11_emerald && b11_ruby && b11_topaz && b11_onyx && b11_primordialUpgrade)
-            {
                 StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block12_Destiny, 1f));
-            }
         }
         else if (currentPhase == TutorialPhase.Block12_Destiny)
         {
-            if (!b12_destinyStone && GetCumulativeItemAmount("Destiny Stone") >= 1) { b12_destinyStone = true; tutorialUI.CompleteGoal("b12_destinyStone"); }
-
             if (b12_destinyStone && b12_interactDestiny)
-            {
                 StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Completed, 1f));
-            }
+        }
+    }
+
+    private void CheckCraftQuests()
+    {
+        if (isWaitingToAdvance) return;
+
+        switch (currentPhase)
+        {
+            case TutorialPhase.Block1_Gather:
+                if (!b1_table && GetCumulativeCraftAmount("Crafting Table") >= 1) { b1_table = true; tutorialUI.CompleteGoal("b1_table"); }
+                if (b1_wood && b1_resin && b1_table) StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block2_Gather, 1f));
+                break;
+
+            case TutorialPhase.Block2_Gather:
+                if (!b2_string && GetCumulativeCraftAmount("String") >= 6) { b2_string = true; tutorialUI.CompleteGoal("b2_string"); }
+                if (!b2_rocks && GetCumulativeCraftAmount("Rocks") >= 6) { b2_rocks = true; tutorialUI.CompleteGoal("b2_rocks"); }
+                if (!b2_furnace && GetCumulativeCraftAmount("Furnace") >= 1) { b2_furnace = true; tutorialUI.CompleteGoal("b2_furnace"); }
+                if (b2_fiber && b2_string && b2_rock && b2_resin && b2_rocks && b2_clay && b2_furnace)
+                    StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block3_Smelt, smeltResinVideo, "Place the furnace and add fuel to smelt materials", 3f));
+                break;
+
+            case TutorialPhase.Block3_Smelt:
+                if (!b3_rocks && GetCumulativeCraftAmount("Rocks") >= 3) { b3_rocks = true; tutorialUI.CompleteGoal("b3_rocks"); }
+                if (b3_rocks && b3_smelt)
+                    StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block4_CraftUpgrade, stoneUpgradeVideo, "Craft upgrades to improve your stats", 3f));
+                break;
+
+            case TutorialPhase.Block4_CraftUpgrade:
+                if (!b4_upgrade && GetCumulativeCraftAmount("Stone Upgrade") >= 1)
+                {
+                    b4_upgrade = true; tutorialUI.CompleteGoal("b4_upgrade");
+                    StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block5_UseUpgrade, 1f));
+                }
+                break;
+
+            case TutorialPhase.Block7_Copper:
+                if (!b7_copperIngot && GetCumulativeCraftAmount("Copper Ingot") >= 4) { b7_copperIngot = true; tutorialUI.CompleteGoal("b7_copperIngot"); }
+                if (!b7_copperUpgrade && GetCumulativeCraftAmount("Copper Upgrade") >= 1) { b7_copperUpgrade = true; tutorialUI.CompleteGoal("b7_copperUpgrade"); }
+                if (b7_copperOre && b7_magic && b7_copperIngot && b7_copperUpgrade)
+                    StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block8_Anchor, 1f));
+                break;
+
+            case TutorialPhase.Block8_Anchor:
+                if (!b8_anchor && GetCumulativeCraftAmount("Respawn Anchor") >= 1) { b8_anchor = true; tutorialUI.CompleteGoal("b8_anchor"); }
+                if (b8_stoneBlock && b8_magic && b8_slime && b8_anchor && b8_setSpawn)
+                    StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block9_Bronze, 1f));
+                break;
+
+            case TutorialPhase.Block9_Bronze:
+                if (!b9_bronzeIngot && GetCumulativeCraftAmount("Bronze Ingot") >= 4) { b9_bronzeIngot = true; tutorialUI.CompleteGoal("b9_bronzeIngot"); }
+                if (!b9_compressed && GetCumulativeCraftAmount("Compressed Magic Essence") >= 8) { b9_compressed = true; tutorialUI.CompleteGoal("b9_compressed"); }
+                if (!b9_bronzeUpgrade && GetCumulativeCraftAmount("Bronze Upgrade") >= 1) { b9_bronzeUpgrade = true; tutorialUI.CompleteGoal("b9_bronzeUpgrade"); }
+                if (b9_tinOre && b9_copperOre && b9_bronzeIngot && b9_compressed && b9_bronzeUpgrade)
+                    StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block10_Iron, 1f));
+                break;
+
+            case TutorialPhase.Block10_Iron:
+                if (!b10_compressed && GetCumulativeCraftAmount("Compressed Magic Essence") >= 8) { b10_compressed = true; tutorialUI.CompleteGoal("b10_compressed"); }
+                if (!b10_greater && GetCumulativeCraftAmount("Greater Magic Essence") >= 4) { b10_greater = true; tutorialUI.CompleteGoal("b10_greater"); }
+                if (!b10_ironUpgrade && GetCumulativeCraftAmount("Iron Upgrade") >= 1) { b10_ironUpgrade = true; tutorialUI.CompleteGoal("b10_ironUpgrade"); }
+                if (b10_ironOre && b10_compressed && b10_greater && b10_ironUpgrade)
+                    StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block11_Primordial, 1f));
+                break;
+
+            case TutorialPhase.Block11_Primordial:
+                if (!b11_greater && GetCumulativeCraftAmount("Greater Magic Essence") >= 8) { b11_greater = true; tutorialUI.CompleteGoal("b11_greater"); }
+                if (!b11_primordialUpgrade && GetCumulativeCraftAmount("Primordial Upgrade") >= 1) { b11_primordialUpgrade = true; tutorialUI.CompleteGoal("b11_primordialUpgrade"); }
+                if (b11_slime && b11_greater && b11_emerald && b11_ruby && b11_topaz && b11_onyx && b11_primordialUpgrade)
+                    StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block12_Destiny, 1f));
+                break;
+
+            case TutorialPhase.Block12_Destiny:
+                if (!b12_destinyStone && GetCumulativeCraftAmount("Destiny Stone") >= 1) { b12_destinyStone = true; tutorialUI.CompleteGoal("b12_destinyStone"); }
+                if (b12_destinyStone && b12_interactDestiny)
+                    StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Completed, 1f));
+                break;
         }
     }
 
@@ -591,6 +621,12 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
+    private int GetCumulativeCraftAmount(string itemName)
+    {
+        return cumulativeCrafted.ContainsKey(itemName) ? cumulativeCrafted[itemName] : 0;
+    }
+
+
     public string Serialize()
     {
         TutorialData data = new()
@@ -674,10 +710,10 @@ public class TutorialManager : MonoBehaviour
 
     private void RestoreBasicControlTicks()
     {
-        if (basicState > BasicControlState.Movement) tutorialUI.CompleteGoal("MovementToggle");
-        if (basicState > BasicControlState.Attacking) tutorialUI.CompleteGoal("AttackingToggle");
-        if (basicState > BasicControlState.Mining) tutorialUI.CompleteGoal("MiningToggle");
-        if (basicState > BasicControlState.Placing) tutorialUI.CompleteGoal("PlacingBlock");
+        if (basicState > BasicControlState.Movement) tutorialUI.CompleteGoal("MovementToggle", true);
+        if (basicState > BasicControlState.Attacking) tutorialUI.CompleteGoal("AttackingToggle", true);
+        if (basicState > BasicControlState.Mining) tutorialUI.CompleteGoal("MiningToggle", true);
+        if (basicState > BasicControlState.Placing) tutorialUI.CompleteGoal("PlacingBlock", true);
     }
 
     private void RestoreCompletedGoals()
@@ -685,72 +721,84 @@ public class TutorialManager : MonoBehaviour
         switch (currentPhase)
         {
             case TutorialPhase.Block1_Gather:
-                if (b1_wood) tutorialUI.CompleteGoal("b1_wood");
-                if (b1_resin) tutorialUI.CompleteGoal("b1_resin");
-                if (b1_table) tutorialUI.CompleteGoal("b1_table");
+                if (b1_wood) tutorialUI.CompleteGoal("b1_wood", true);
+                if (b1_resin) tutorialUI.CompleteGoal("b1_resin", true);
+                if (b1_table) tutorialUI.CompleteGoal("b1_table", true);
                 break;
             case TutorialPhase.Block2_Gather:
-                if (b2_fiber) tutorialUI.CompleteGoal("b2_fiber");
-                if (b2_string) tutorialUI.CompleteGoal("b2_string");
-                if (b2_rock) tutorialUI.CompleteGoal("b2_rock");
-                if (b2_resin) tutorialUI.CompleteGoal("b2_resin");
-                if (b2_rocks) tutorialUI.CompleteGoal("b2_rocks");
-                if (b2_clay) tutorialUI.CompleteGoal("b2_clay");
-                if (b2_furnace) tutorialUI.CompleteGoal("b2_furnace");
+                if (b2_fiber) tutorialUI.CompleteGoal("b2_fiber", true);
+                if (b2_string) tutorialUI.CompleteGoal("b2_string", true);
+                if (b2_rock) tutorialUI.CompleteGoal("b2_rock", true);
+                if (b2_resin) tutorialUI.CompleteGoal("b2_resin", true);
+                if (b2_rocks) tutorialUI.CompleteGoal("b2_rocks", true);
+                if (b2_clay) tutorialUI.CompleteGoal("b2_clay", true);
+                if (b2_furnace) tutorialUI.CompleteGoal("b2_furnace", true);
                 break;
             case TutorialPhase.Block3_Smelt:
-                if (b3_rocks) tutorialUI.CompleteGoal("b3_rocks");
-                if (b3_smelt) tutorialUI.CompleteGoal("b3_smelt");
+                if (b3_rocks) tutorialUI.CompleteGoal("b3_rocks", true);
+                if (b3_smelt) tutorialUI.CompleteGoal("b3_smelt", true);
                 break;
             case TutorialPhase.Block4_CraftUpgrade:
-                if (b4_upgrade) tutorialUI.CompleteGoal("b4_upgrade");
+                if (b4_upgrade) tutorialUI.CompleteGoal("b4_upgrade", true);
                 break;
             case TutorialPhase.Block5_UseUpgrade:
-                if (b5_use) tutorialUI.CompleteGoal("b5_use");
+                if (b5_use) tutorialUI.CompleteGoal("b5_use", true);
                 break;
             case TutorialPhase.Block6_Consume:
-                if (b6_consume_slime) tutorialUI.CompleteGoal("b6_consume_slime");
+                if (b6_consume_slime) tutorialUI.CompleteGoal("b6_consume_slime", true);
                 break;
             case TutorialPhase.Block7_Copper:
-                if (b7_copperOre) tutorialUI.CompleteGoal("b7_copperOre");
-                if (b7_magic) tutorialUI.CompleteGoal("b7_magic");
-                if (b7_copperIngot) tutorialUI.CompleteGoal("b7_copperIngot");
-                if (b7_copperUpgrade) tutorialUI.CompleteGoal("b7_copperUpgrade");
+                if (b7_copperOre) tutorialUI.CompleteGoal("b7_copperOre", true);
+                if (b7_magic) tutorialUI.CompleteGoal("b7_magic", true);
+                if (b7_copperIngot) tutorialUI.CompleteGoal("b7_copperIngot", true);
+                if (b7_copperUpgrade) tutorialUI.CompleteGoal("b7_copperUpgrade", true);
                 break;
             case TutorialPhase.Block8_Anchor:
-                if (b8_stoneBlock) tutorialUI.CompleteGoal("b8_stoneBlock");
-                if (b8_magic) tutorialUI.CompleteGoal("b8_magic");
-                if (b8_slime) tutorialUI.CompleteGoal("b8_slime");
-                if (b8_anchor) tutorialUI.CompleteGoal("b8_anchor");
-                if (b8_setSpawn) tutorialUI.CompleteGoal("b8_setSpawn");
+                if (b8_stoneBlock) tutorialUI.CompleteGoal("b8_stoneBlock", true);
+                if (b8_magic) tutorialUI.CompleteGoal("b8_magic", true);
+                if (b8_slime) tutorialUI.CompleteGoal("b8_slime", true);
+                if (b8_anchor) tutorialUI.CompleteGoal("b8_anchor", true);
+                if (b8_setSpawn) tutorialUI.CompleteGoal("b8_setSpawn", true);
                 break;
             case TutorialPhase.Block9_Bronze:
-                if (b9_tinOre) tutorialUI.CompleteGoal("b9_tinOre");
-                if (b9_copperOre) tutorialUI.CompleteGoal("b9_copperOre");
-                if (b9_bronzeIngot) tutorialUI.CompleteGoal("b9_bronzeIngot");
-                if (b9_compressed) tutorialUI.CompleteGoal("b9_compressed");
-                if (b9_bronzeUpgrade) tutorialUI.CompleteGoal("b9_bronzeUpgrade");
+                if (b9_tinOre) tutorialUI.CompleteGoal("b9_tinOre", true);
+                if (b9_copperOre) tutorialUI.CompleteGoal("b9_copperOre", true);
+                if (b9_bronzeIngot) tutorialUI.CompleteGoal("b9_bronzeIngot", true);
+                if (b9_compressed) tutorialUI.CompleteGoal("b9_compressed", true);
+                if (b9_bronzeUpgrade) tutorialUI.CompleteGoal("b9_bronzeUpgrade", true);
                 break;
             case TutorialPhase.Block10_Iron:
-                if (b10_ironOre) tutorialUI.CompleteGoal("b10_ironOre");
-                if (b10_compressed) tutorialUI.CompleteGoal("b10_compressed");
-                if (b10_greater) tutorialUI.CompleteGoal("b10_greater");
-                if (b10_ironUpgrade) tutorialUI.CompleteGoal("b10_ironUpgrade");
+                if (b10_ironOre) tutorialUI.CompleteGoal("b10_ironOre", true);
+                if (b10_compressed) tutorialUI.CompleteGoal("b10_compressed", true);
+                if (b10_greater) tutorialUI.CompleteGoal("b10_greater", true);
+                if (b10_ironUpgrade) tutorialUI.CompleteGoal("b10_ironUpgrade", true);
                 break;
             case TutorialPhase.Block11_Primordial:
-                if (b11_slime) tutorialUI.CompleteGoal("b11_slime");
-                if (b11_greater) tutorialUI.CompleteGoal("b11_greater");
-                if (b11_emerald) tutorialUI.CompleteGoal("b11_emerald");
-                if (b11_ruby) tutorialUI.CompleteGoal("b11_ruby");
-                if (b11_topaz) tutorialUI.CompleteGoal("b11_topaz");
-                if (b11_onyx) tutorialUI.CompleteGoal("b11_onyx");
-                if (b11_primordialUpgrade) tutorialUI.CompleteGoal("b11_primordialUpgrade");
+                if (b11_slime) tutorialUI.CompleteGoal("b11_slime", true);
+                if (b11_greater) tutorialUI.CompleteGoal("b11_greater", true);
+                if (b11_emerald) tutorialUI.CompleteGoal("b11_emerald", true);
+                if (b11_ruby) tutorialUI.CompleteGoal("b11_ruby", true);
+                if (b11_topaz) tutorialUI.CompleteGoal("b11_topaz", true);
+                if (b11_onyx) tutorialUI.CompleteGoal("b11_onyx", true);
+                if (b11_primordialUpgrade) tutorialUI.CompleteGoal("b11_primordialUpgrade", true);
                 break;
             case TutorialPhase.Block12_Destiny:
-                if (b12_destinyStone) tutorialUI.CompleteGoal("b12_destinyStone");
-                if (b12_interactDestiny) tutorialUI.CompleteGoal("b12_interactDestiny");
+                if (b12_destinyStone) tutorialUI.CompleteGoal("b12_destinyStone", true);
+                if (b12_interactDestiny) tutorialUI.CompleteGoal("b12_interactDestiny", true);
                 break;
         }
+    }
+
+    public void OnCrafted(ItemData itemData, int amount = 1)
+    {
+        if (itemData == null || isWaitingToAdvance) return;
+
+        string itemName = itemData.name;
+        if (!cumulativeCrafted.ContainsKey(itemName))
+            cumulativeCrafted[itemName] = 0;
+        cumulativeCrafted[itemName] += amount;
+
+        CheckCraftQuests();
     }
 
 }

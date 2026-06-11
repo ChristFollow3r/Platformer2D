@@ -125,6 +125,7 @@ namespace Items.Overlays
             OnSlotChanged?.Invoke(slotId, null);
 
             EvaluateCraft();
+            if (isResultSlot) TutorialManager.Instance.OnCrafted(itemStack.data, itemStack.amount);
             return itemStack;
             #endregion
         }

@@ -246,6 +246,8 @@ namespace Items.Overlays
                 }
             }
 
+
+            if (isResultSlot) TutorialManager.Instance.OnCrafted(itemStack.data, itemStack.amount);
             return itemStack;
             #endregion
         }
