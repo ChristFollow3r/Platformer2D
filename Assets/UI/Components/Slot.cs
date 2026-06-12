@@ -10,6 +10,8 @@ namespace UI.Components
     {
         #region Data
         [UxmlAttribute] public Item item { get => _item; set => SetItem(value); }
+        [UxmlAttribute] public int number { get => _number; set => SetNumber(value); }
+        private int _number = -1;
         public short slotId;
         public bool hasItem => item != null;
 
@@ -47,6 +49,14 @@ namespace UI.Components
             if (item == null) return;
             itemHolderElm.Add(item);
             item.slot = this;
+            #endregion
+        }
+
+        private void SetNumber(int number)
+        {
+            #region SetNumber
+            this.Q("number-holder").style.display = DisplayStyle.Flex;
+            this.Q<Label>("number").text = number.ToString();
             #endregion
         }
         #endregion

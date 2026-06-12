@@ -79,6 +79,7 @@ namespace UI.Components
                 rootElm.Add(slot);
                 slots[i] = slot;
                 slot.slotId = i;
+                slot.number = i == 9 ? 0 : i + 1;
             }
             #endregion
         }
