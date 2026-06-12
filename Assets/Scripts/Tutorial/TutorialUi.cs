@@ -1,4 +1,3 @@
-using Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UIElements;
@@ -14,6 +13,10 @@ public class TutorialUI : MonoBehaviour
     [Header("Styling")]
     [SerializeField] private Font customFont;
     [SerializeField] private AudioClip goalCompleteSound;
+
+    [Header("Toggle Sprites")]
+    [SerializeField] private Sprite uncheckedSprite;
+    [SerializeField] private Sprite checkedSprite;
 
     public static bool IsInputBlocked { get; private set; }
     private float unblockTimer = 0f;
@@ -63,7 +66,7 @@ public class TutorialUI : MonoBehaviour
         Time.timeScale = 0f;
         IsInputBlocked = true;
         isPopupVisible = true;
-        UIController.Singleton.preventMenu = true;
+        Player.UIController.Singleton.preventMenu = true;
         unblockTimer = 0f;
 
         if (descriptionLabel != null)
@@ -76,7 +79,7 @@ public class TutorialUI : MonoBehaviour
     public void HidePopup()
     {
         Time.timeScale = 1f;
-        UIController.Singleton.preventMenu = false;
+        Player.UIController.Singleton.preventMenu = false;
         popupContainer.style.display = DisplayStyle.None;
         unblockTimer = 0.2f;
     }
@@ -115,6 +118,37 @@ public class TutorialUI : MonoBehaviour
         newGoal.name = goalId;
         newGoal.focusable = false;
 
+        newGoal.RegisterCallback<GeometryChangedEvent>(evt =>
+        {
+            VisualElement checkmark = newGoal.Q(className: "unity-toggle__checkmark");
+            if (checkmark != null)
+            {
+                checkmark.style.backgroundColor = Color.clear;
+                checkmark.style.borderTopWidth = 0;
+                checkmark.style.borderBottomWidth = 0;
+                checkmark.style.borderLeftWidth = 0;
+                checkmark.style.borderRightWidth = 0;
+
+                checkmark.style.unityBackgroundImageTintColor = Color.white;
+
+                if (uncheckedSprite != null)
+                    checkmark.style.backgroundImage = new StyleBackground(uncheckedSprite);
+            }
+        });
+
+        newGoal.RegisterValueChangedCallback(evt =>
+        {
+            VisualElement checkmark = newGoal.Q(className: "unity-toggle__checkmark");
+            if (checkmark != null)
+            {
+                Sprite spriteToUse = evt.newValue ? checkedSprite : uncheckedSprite;
+                if (spriteToUse != null)
+                {
+                    checkmark.style.backgroundImage = new StyleBackground(spriteToUse);
+                }
+            }
+        });
+
         goalRow.Add(goalLabel);
         goalRow.Add(newGoal);
 
@@ -124,6 +158,8 @@ public class TutorialUI : MonoBehaviour
     public void CompleteGoal(string toggleName, bool quiet = false)
     {
         Toggle toggleElement = document.rootVisualElement.Q<Toggle>(toggleName);
+        if (toggleElement == null) return;
+
         if (!toggleElement.value)
         {
             toggleElement.value = true;

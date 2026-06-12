@@ -28,7 +28,7 @@ namespace Player
 
         [Header("Mining Data")]
         private Vector2Int currentMineTarget = new Vector2Int(-999, -999);
-        private float currentBlockDamage = 3f;
+        private float currentBlockDamage = 0f; // Reset default to 0
         private Collider2D playerCollider;
 
         [Header("Prop Attack Data")]
@@ -249,9 +249,21 @@ namespace Player
 
             ItemData blockHitData = WorldData.BlockDictionary[clickedBlock];
 
-            float targetHardness = blockHitData.hardness;
+            // --- THE NEW LOGIC STARTS HERE ---
             float miningPower = Equipment.Singleton.GetMiningPower();
 
+            // 1. Check if the player has a high enough tier to scratch the block
+            // (If blockHitData.requiredMiningPower doesn't exist yet, add it to your ItemData.cs script!)
+            if (miningPower < blockHitData.requiredMiningPower)
+            {
+                // The player is too weak. Return early, dealing 0 damage.
+                return;
+            }
+
+            // 2. Since they are strong enough, get the block's total Health (Hardness)
+            float targetHardness = blockHitData.hardness;
+
+            // 3. Add their damage to the block
             currentBlockDamage += miningPower;
 
             if (blockHitData.hitSound != null)
@@ -265,6 +277,7 @@ namespace Player
                 StartCoroutine(HitFlashRoutine(blockHitData.sprite, cellCenter));
             }
 
+            // 4. Check if the health pool is empty
             if (currentBlockDamage >= targetHardness)
             {
                 BreakBlock(x, y, clickedBlock);
@@ -378,8 +391,6 @@ namespace Player
             WorldData.World.SetPropType(checkX, checkY, PropType.None);
             UpdateChunkVisuals(checkX, checkY);
             WorldManager.Instance.UpdateDynamicLighting(checkX, checkY);
-
-            // OnBlockBroken?.Invoke();
         }
 
         private void SpawnLoot(ItemData itemData, Vector2 position)

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: StoneModData
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.ModData
   mod: 0
-  minigPower: 3
-  attackPower: 26
+  minigPower: 2
+  attackPower: 15
   defence: 8
-  duration: 240
+  duration: 180
   controller: {fileID: 9100000, guid: 5216ba85069c70a4d90be216d1f0c9af, type: 2}

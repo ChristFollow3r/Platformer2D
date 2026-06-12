@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BronzeModData
   m_EditorClassIdentifier: Assembly-CSharp::Scriptable_Objects_Scripts.ModData
   mod: 2
-  minigPower: 7
-  attackPower: 58
+  minigPower: 4
+  attackPower: 20
   defence: 24
   duration: 600
   controller: {fileID: 9100000, guid: d67aabd821c507841aa6ab3d0da81a2e, type: 2}

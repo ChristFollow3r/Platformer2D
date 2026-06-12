@@ -20,7 +20,8 @@ MonoBehaviour:
   isFuel: 0
   equipmentType: 0
   blockType: 32
-  hardness: 2
+  hardness: 5
+  requiredMiningPower: 1
   fuelDuration: 0
   modData: {fileID: 11400000, guid: 4ae3e51b445aeb24cb5a3bac7ccfbb72, type: 2}
   overlayType: 0
@@ -30,3 +31,4 @@ MonoBehaviour:
     maxAmount: 1
     dropChance: 101
   hitSound: {fileID: 8300000, guid: 671703ee3f6ea2e41b94b4344f79905d, type: 3}
+  description: 
