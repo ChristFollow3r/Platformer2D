@@ -794,8 +794,13 @@ namespace Player
                 int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 80);
                 h.SetHealth(newHp);
             }
-            Items.Inventory.Singleton.RemoveFromHand();
+            // ADD THIS BLOCK RIGHT HERE:
+            else if (hand.data.name == "Destiny Stone") // Replace "destiny" with the EXACT name from your ItemData
+            {
+                ShowThankYouScreen();
+            }
 
+            Items.Inventory.Singleton.RemoveFromHand();
         }
 
         private void Drop()

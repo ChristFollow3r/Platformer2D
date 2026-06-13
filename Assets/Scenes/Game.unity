@@ -1721,7 +1721,7 @@ VideoPlayer:
   m_DataSource: 0
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
+  m_AudioOutputMode: 0
   m_TargetAudioSources:
   - {fileID: 0}
   m_DirectAudioVolumes:
@@ -2052,7 +2052,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: 78ecd2e92b0fa5f4bbda4e5aee1bd21a, type: 2}
   m_ParentUI: {fileID: 0}
   sourceAsset: {fileID: 9197481963319205126, guid: 828b7b2f0de827a448be8c0edac5f7e0, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 100
   m_Position: 0
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
