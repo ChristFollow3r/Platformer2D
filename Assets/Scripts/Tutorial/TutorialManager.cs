@@ -337,7 +337,7 @@ public class TutorialManager : MonoBehaviour
         }
         else if (currentPhase == TutorialPhase.Block2_Gather)
         {
-            if (!b2_fiber && IsInInventory("Fiber", 18)) { b2_fiber = true; tutorialUI.CompleteGoal("b2_fiber"); }
+            if (!b2_fiber && IsInInventory("Fiber", 9)) { b2_fiber = true; tutorialUI.CompleteGoal("b2_fiber"); }
             if (!b2_rock && IsInInventory("Rock", 12)) { b2_rock = true; tutorialUI.CompleteGoal("b2_rock"); }
             if (!b2_resin && IsInInventory("Resin", 6)) { b2_resin = true; tutorialUI.CompleteGoal("b2_resin"); }
             if (!b2_clay && IsInInventory("Clay", 6)) { b2_clay = true; tutorialUI.CompleteGoal("b2_clay"); }
@@ -510,7 +510,7 @@ public class TutorialManager : MonoBehaviour
                 CheckInventoryQuests();
                 break;
             case TutorialPhase.Block2_Gather:
-                tutorialUI.AddGoal("b2_fiber", "Gather 18 Fiber");
+                tutorialUI.AddGoal("b2_fiber", "Gather 9 Fiber");
                 tutorialUI.AddGoal("b2_string", "Craft 6 String");
                 tutorialUI.AddGoal("b2_rock", "Gather 12 Rock");
                 tutorialUI.AddGoal("b2_resin", "Gather 6 Resin");
