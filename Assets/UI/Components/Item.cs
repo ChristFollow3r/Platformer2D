@@ -186,8 +186,6 @@ namespace UI.Components
                 // register as the currently dragged ghost and enable global pointer move
                 currentDraggedItem = ghost;
                 if (ghost.panel != null) ghost.panel.visualTree.RegisterCallback<PointerMoveEvent>(ghost.OnGlobalPointerMove);
-
-                Debug.Log($"Creating ghost with amount {amount}");
                 if (slot != null) inventory.ClearSlot(slot.slotId);
             }
         }

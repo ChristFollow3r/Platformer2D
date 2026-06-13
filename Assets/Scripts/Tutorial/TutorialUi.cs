@@ -160,14 +160,13 @@ public class TutorialUI : MonoBehaviour
         Toggle toggleElement = document.rootVisualElement.Q<Toggle>(toggleName);
         if (toggleElement == null) return;
 
-        if (!toggleElement.value)
+        Debug.Log($"Completing goal {toggleName} | {toggleElement == null}");
+        toggleElement.value = true;
+        if (quiet) return;
+        if (goalCompleteSound != null && Camera.main != null)
         {
-            toggleElement.value = true;
-            if (quiet) return;
-            if (goalCompleteSound != null && Camera.main != null)
-            {
-                AudioSource.PlayClipAtPoint(goalCompleteSound, Camera.main.transform.position);
-            }
+            AudioSource.PlayClipAtPoint(goalCompleteSound, Camera.main.transform.position);
         }
+
     }
 }
