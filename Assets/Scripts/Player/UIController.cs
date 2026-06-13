@@ -597,7 +597,6 @@ namespace Player
             {
                 "Move: A / D",
                 "Jump & Double Jump: Space",
-                "Wall Slide: Hold A / D on wall",
                 "Attack: Left click",
                 "Mine: Shift + Attack",
                 "Build: Right Click",

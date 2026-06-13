@@ -114,6 +114,7 @@ public class TutorialManager : MonoBehaviour
         {
             yield return null;
         }
+        EnemySpawner.Singleton.gameObject.SetActive(false);
         yield return new WaitForSecondsRealtime(1);
 
         playerMovement = PlayerMovement.Singleton;

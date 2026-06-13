@@ -29,7 +29,7 @@ public class TutorialUI : MonoBehaviour
         descriptionLabel = document.rootVisualElement.Q<Label>("Description");
         closeButton = document.rootVisualElement.Q<Button>("CloseButton");
         goalTrackerContainer = document.rootVisualElement.Q<VisualElement>("GoalTracker");
-
+        goalTrackerContainer.pickingMode = PickingMode.Ignore;
         if (closeButton != null)
         {
             closeButton.clicked += HidePopup;
