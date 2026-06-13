@@ -92,6 +92,7 @@ public class TutorialUI : MonoBehaviour
         }
     }
 
+
     public void AddGoal(string goalId, string labelText)
     {
         if (goalTrackerContainer == null) return;
@@ -117,6 +118,9 @@ public class TutorialUI : MonoBehaviour
         Toggle newGoal = new Toggle();
         newGoal.name = goalId;
         newGoal.focusable = false;
+        newGoal.SetEnabled(false);
+        newGoal.style.opacity = 1f;
+
 
         newGoal.RegisterCallback<GeometryChangedEvent>(evt =>
         {
