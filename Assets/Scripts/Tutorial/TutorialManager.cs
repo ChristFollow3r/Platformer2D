@@ -9,12 +9,10 @@ using Enemies;
 
 public class TutorialManager : MonoBehaviour
 {
-
-
-
     public static TutorialManager Instance { get; private set; }
 
-    public enum BasicControlState { Movement, Attacking, Mining, Placing, Done }
+    // UPDATED: Wallsliding moved to the end
+    public enum BasicControlState { Movement, Attacking, Mining, Placing, Wallsliding, Done }
     public enum TutorialPhase
     {
         BasicControls,
@@ -45,9 +43,11 @@ public class TutorialManager : MonoBehaviour
     public VideoClip attackingClip;
     public VideoClip miningClip;
     public VideoClip placingClip;
+    public VideoClip wallslideTutorial;
 
     [Header("Advanced Quest Videos")]
     public VideoClip craftingTableVideo;
+    public VideoClip interactingWithBlockVideo; // ADDED: Interacting video
     public VideoClip smeltResinVideo;
     public VideoClip stoneUpgradeVideo;
     public VideoClip consumableClip;
@@ -69,13 +69,7 @@ public class TutorialManager : MonoBehaviour
     private bool b11_slime, b11_greater, b11_emerald, b11_ruby, b11_topaz, b11_onyx, b11_primordialUpgrade;
     private bool b12_destinyStone, b12_interactDestiny;
 
-
     private bool isRestoring = false;
-    // private Dictionary<string, int> previousInventoryState = new Dictionary<string, int>();
-    // private Dictionary<string, int> cumulativeItemsGathered = new Dictionary<string, int>();
-    // private Dictionary<string, int> cumulativeCrafted = new Dictionary<string, int>();
-
-
 
     private void Awake()
     {
@@ -93,6 +87,7 @@ public class TutorialManager : MonoBehaviour
         if (playerMovement != null)
         {
             playerMovement.OnMovePerformed -= HandleMove;
+            playerMovement.OnWallslidePerformed -= HandleWallslide;
             playerMovement.OnAttackPerformed -= HandleAttack;
         }
 
@@ -123,6 +118,7 @@ public class TutorialManager : MonoBehaviour
         if (playerMovement != null)
         {
             playerMovement.OnMovePerformed += HandleMove;
+            playerMovement.OnWallslidePerformed += HandleWallslide;
             playerMovement.OnAttackPerformed += HandleAttack;
         }
 
@@ -166,12 +162,14 @@ public class TutorialManager : MonoBehaviour
         tutorialUI.AddGoal("AttackingToggle", "Attack");
         tutorialUI.AddGoal("MiningToggle", "Mine a Block");
         tutorialUI.AddGoal("PlacingBlock", "Place a Block");
+        tutorialUI.AddGoal("WallslideToggle", "Wallslide down a block"); // UPDATED: Moved to the end
     }
 
     private void HandleMove() { if (basicState == BasicControlState.Movement && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(2f)); }
     private void HandleAttack(Vector2 pos) { if (basicState == BasicControlState.Attacking && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(2f)); }
     private void HandleMine() { if (basicState == BasicControlState.Mining && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(2f)); }
     private void HandlePlace() { if (basicState == BasicControlState.Placing && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(1f)); }
+    private void HandleWallslide() { if (basicState == BasicControlState.Wallsliding && !isWaitingToAdvance) StartCoroutine(AdvanceBasicTutorial(2f)); }
 
     private IEnumerator AdvanceBasicTutorial(float delayTime)
     {
@@ -183,6 +181,7 @@ public class TutorialManager : MonoBehaviour
             case BasicControlState.Attacking: tutorialUI.CompleteGoal("AttackingToggle"); break;
             case BasicControlState.Mining: tutorialUI.CompleteGoal("MiningToggle"); break;
             case BasicControlState.Placing: tutorialUI.CompleteGoal("PlacingBlock"); break;
+            case BasicControlState.Wallsliding: tutorialUI.CompleteGoal("WallslideToggle"); break;
         }
 
         yield return new WaitForSeconds(delayTime);
@@ -223,85 +222,15 @@ public class TutorialManager : MonoBehaviour
                 videoPlayer.clip = placingClip; videoPlayer.Play();
                 tutorialUI.ShowPopup("Right Click to place a block while holding it in your hand slot");
                 break;
+            case BasicControlState.Wallsliding:
+                videoPlayer.clip = wallslideTutorial; videoPlayer.Play();
+                tutorialUI.ShowPopup("Jump against a wall and hold the direction to slide down");
+                break;
         }
     }
 
-    // private void PrimeInventoryTracking()
-    // {
-    //     if (Inventory.Singleton == null || Inventory.Singleton.slots == null) return;
-
-    //     previousInventoryState.Clear();
-    //     foreach (var slot in Inventory.Singleton.slots)
-    //     {
-    //         if (!slot.isEmpty && slot.item != null && slot.item.data != null)
-    //         {
-    //             string itemName = slot.item.data.name;
-    //             if (!previousInventoryState.ContainsKey(itemName))
-    //                 previousInventoryState[itemName] = 0;
-
-    //             previousInventoryState[itemName] += slot.item.amount;
-    //         }
-    //     }
-    // }
-
-    // private void UpdateInventoryTracking()
-    // {
-    //     if (Inventory.Singleton == null || Inventory.Singleton.slots == null) return;
-
-    //     Dictionary<string, int> currentTotals = new Dictionary<string, int>();
-    //     foreach (var slot in Inventory.Singleton.slots)
-    //     {
-    //         if (!slot.isEmpty && slot.item != null && slot.item.data != null)
-    //         {
-    //             string itemName = slot.item.data.name;
-    //             if (!currentTotals.ContainsKey(itemName))
-    //                 currentTotals[itemName] = 0;
-
-    //             currentTotals[itemName] += slot.item.amount;
-    //         }
-    //     }
-
-    //     foreach (var kvp in currentTotals)
-    //     {
-    //         string itemName = kvp.Key;
-    //         int currentAmt = kvp.Value;
-    //         int prevAmt = previousInventoryState.ContainsKey(itemName) ? previousInventoryState[itemName] : 0;
-
-    //         if (currentAmt > prevAmt)
-    //         {
-    //             if (!cumulativeItemsGathered.ContainsKey(itemName))
-    //                 cumulativeItemsGathered[itemName] = 0;
-
-    //             cumulativeItemsGathered[itemName] += (currentAmt - prevAmt);
-    //         }
-    //     }
-
-    //     previousInventoryState = currentTotals;
-    // }
-
-    // private int IsInInventory(string itemName)
-    // {
-    //     return cumulativeItemsGathered.ContainsKey(itemName) ? cumulativeItemsGathered[itemName] : 0;
-    // }
-
-    // private int GetTotalItemAmount(string itemName)
-    // {
-    //     if (Inventory.Singleton == null || Inventory.Singleton.slots == null) return 0;
-
-    //     int total = 0;
-    //     foreach (var slot in Inventory.Singleton.slots)
-    //     {
-    //         if (!slot.isEmpty && slot.item.data.name == itemName)
-    //         {
-    //             total += slot.item.amount;
-    //         }
-    //     }
-    //     return total;
-    // }
-
     private void CheckInventoryQuests(int slotId, ItemStack item)
     {
-        // UpdateInventoryTracking();
         CheckInventoryQuests();
     }
 
@@ -333,7 +262,10 @@ public class TutorialManager : MonoBehaviour
         {
             if (!b1_wood && IsInInventory("Wood", 12)) { b1_wood = true; tutorialUI.CompleteGoal("b1_wood"); }
             if (!b1_resin && IsInInventory("Resin", 1)) { b1_resin = true; tutorialUI.CompleteGoal("b1_resin"); }
-            if (b1_wood && b1_resin && b1_table) StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block2_Gather, 1f));
+
+            // UPDATED: Plays the interact video as soon as they finish phase 1 (which means they crafted the table)
+            if (b1_wood && b1_resin && b1_table)
+                StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block2_Gather, interactingWithBlockVideo, "Right Click a block to interact with it", 1f));
         }
         else if (currentPhase == TutorialPhase.Block2_Gather)
         {
@@ -403,7 +335,10 @@ public class TutorialManager : MonoBehaviour
         {
             case TutorialPhase.Block1_Gather:
                 if (!b1_table && IsInInventory("Crafting Table", 1, itemData, amount)) { b1_table = true; tutorialUI.CompleteGoal("b1_table"); }
-                if (b1_wood && b1_resin && b1_table) StartCoroutine(AdvancePhaseWithDelay(TutorialPhase.Block2_Gather, 1f));
+
+                // UPDATED: Plays the interact video as soon as they finish phase 1
+                if (b1_wood && b1_resin && b1_table)
+                    StartCoroutine(AdvancePhaseWithVideo(TutorialPhase.Block2_Gather, interactingWithBlockVideo, "Right Click a block to interact with it", 1f));
                 break;
 
             case TutorialPhase.Block2_Gather:
@@ -497,8 +432,6 @@ public class TutorialManager : MonoBehaviour
 
     private void ProcessCurrentPhase()
     {
-        // PrimeInventoryTracking();
-        // SeedCumulativeFromInventory();
         tutorialUI.ClearGoals();
 
         switch (currentPhase)
@@ -636,23 +569,6 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    // private void SeedCumulativeFromInventory()
-    // {
-    //     foreach (var kvp in previousInventoryState)
-    //     {
-    //         if (!cumulativeItemsGathered.ContainsKey(kvp.Key))
-    //             cumulativeItemsGathered[kvp.Key] = 0;
-
-    //         cumulativeItemsGathered[kvp.Key] = Mathf.Max(cumulativeItemsGathered[kvp.Key], kvp.Value);
-    //     }
-    // }
-
-    // private int GetCumulativeCraftAmount(string itemName)
-    // {
-    //     return cumulativeCrafted.ContainsKey(itemName) ? cumulativeCrafted[itemName] : 0;
-    // }
-
-
     public string Serialize()
     {
         TutorialData data = new()
@@ -740,6 +656,7 @@ public class TutorialManager : MonoBehaviour
         if (basicState > BasicControlState.Attacking) tutorialUI.CompleteGoal("AttackingToggle", true);
         if (basicState > BasicControlState.Mining) tutorialUI.CompleteGoal("MiningToggle", true);
         if (basicState > BasicControlState.Placing) tutorialUI.CompleteGoal("PlacingBlock", true);
+        if (basicState > BasicControlState.Wallsliding) tutorialUI.CompleteGoal("WallslideToggle", true);
     }
 
     private void RestoreCompletedGoals()
@@ -818,13 +735,6 @@ public class TutorialManager : MonoBehaviour
     public void OnCrafted(ItemData itemData, int amount = 1)
     {
         if (itemData == null || isWaitingToAdvance) return;
-
-        // string itemName = itemData.name;
-        // if (!cumulativeCrafted.ContainsKey(itemName))
-        //     cumulativeCrafted[itemName] = 0;
-        // cumulativeCrafted[itemName] += amount;
-
         CheckCraftQuests(itemData, amount);
     }
-
 }

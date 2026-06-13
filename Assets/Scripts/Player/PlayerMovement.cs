@@ -91,6 +91,7 @@ namespace Player
         public bool isGrounded { get; private set; }
 
         public event Action OnMovePerformed;
+        public event Action OnWallslidePerformed; // ADDED: Event for Wallsliding
         public event Action<Vector2> OnMinePerformed;
         public event Action<Vector2> OnAttackPerformed;
         public event Action OnJumpPerformed;
@@ -219,7 +220,10 @@ namespace Player
                              ((isTouchingLeftWall && movement < 0) || (isTouchingRightWall && movement > 0));
 
             if (isSliding)
+            {
                 rb.linearVelocity = new Vector2(rb.linearVelocityX, Mathf.Max(rb.linearVelocityY, -wallSlideSpeed));
+                OnWallslidePerformed?.Invoke(); // ADDED: Trigger event while sliding
+            }
 
             if (wallJumpTime > 0f) wallJumpTime -= Time.deltaTime;
             else rb.linearVelocityX = movement * speed;
