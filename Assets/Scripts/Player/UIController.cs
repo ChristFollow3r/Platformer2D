@@ -465,7 +465,7 @@ namespace Player
 
         #region Settings Logic
 
-        private void InitializeSettings(VisualElement menuRoot)
+       private void InitializeSettings(VisualElement menuRoot)
         {
             settingsContainer = menuRoot.Q<VisualElement>("SettingsContainer");
             if (settingsContainer == null) return;
@@ -575,14 +575,10 @@ namespace Player
             }
 
             VisualElement keybindsContainer = new VisualElement();
-
             keybindsContainer.style.width = new Length(100, LengthUnit.Percent);
-
             keybindsContainer.style.alignItems = Align.Center;
-
             keybindsContainer.style.position = Position.Absolute;
-            keybindsContainer.style.top = 90;
-
+            keybindsContainer.style.top = 40;
 
             Label titleLabel = new Label("Controls");
             if (fontPixel != null) titleLabel.style.unityFontDefinition = new StyleFontDefinition(fontPixel);
@@ -592,6 +588,11 @@ namespace Player
             titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             keybindsContainer.Add(titleLabel);
 
+            VisualElement listContainer = new VisualElement();
+            listContainer.style.alignItems = Align.FlexStart;
+
+            // --- NEW: Added left margin to push it away from the dividing line ---
+            listContainer.style.marginLeft = 40;
 
             string[] keybindsList = new string[]
             {
@@ -599,22 +600,46 @@ namespace Player
                 "Jump & Double Jump: Space",
                 "Attack: Left click",
                 "Mine: Shift + Attack",
-                "Build: Right Click",
+                "Build and Interact: Right Click",
                 "Move Hand: Mouse Wheel / Numbers",
                 "Consume: R",
                 "Drop Item: Q",
+                "Open Inventory: I",
+                "Wall-slide: Move towards a wall while falling"
             };
 
             foreach (string bind in keybindsList)
             {
-                Label bindLabel = new Label(bind);
+                Label bindLabel = new Label();
+                bindLabel.enableRichText = true;
+
+                string[] parts = bind.Split(':');
+                if (parts.Length == 2)
+                {
+                    string action = parts[0];
+                    string input = parts[1];
+                    bindLabel.text = $"<color=#C84C4C>{action}:</color> <size=18><color=#333333>{input}</color></size>";
+                }
+                else
+                {
+                    bindLabel.text = bind;
+                }
+
                 if (fontPixel != null) bindLabel.style.unityFontDefinition = new StyleFontDefinition(fontPixel);
                 bindLabel.style.fontSize = 22;
-                bindLabel.style.marginBottom = 15;
+
+                // --- THE SPACING FIX ---
+                bindLabel.style.marginBottom = 12; // Reduced from 15 to bring them much closer
+                bindLabel.style.marginTop = 0;    // Forces Unity to drop default top margins
+                bindLabel.style.paddingTop = 0;   // Removes internal top padding
+                bindLabel.style.paddingBottom = 0; // Removes internal bottom padding
+
                 bindLabel.style.whiteSpace = WhiteSpace.Normal;
-                bindLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-                keybindsContainer.Add(bindLabel);
+                bindLabel.style.unityTextAlign = TextAnchor.MiddleLeft;
+                listContainer.Add(bindLabel);
             }
+
+            keybindsContainer.Add(listContainer);
 
             if (rightColumn != null)
             {
