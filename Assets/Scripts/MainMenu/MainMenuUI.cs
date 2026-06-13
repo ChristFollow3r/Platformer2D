@@ -92,14 +92,8 @@ public class MainMenuUI : MonoBehaviour
         Button loadBack = loadPanel?.Q<Button>("Back");
         if (loadBack != null) backBtns.Add(loadBack);
 
-        if (settingsPanel != null)
-        {
-            Button settingsBack = settingsPanel.Q<Button>("CloseSettingsBtn");
-            if (settingsBack != null)
-            {
-                backBtns.Add(settingsBack);
-            }
-        }
+        Button settingsBack = settingsPanel?.Q<Button>("Back");
+        if (settingsBack != null) backBtns.Add(settingsBack);
 
         nameF = newPanel?.Q<TextField>("NameF");
         seedF = newPanel?.Q<TextField>("SeedF");
@@ -312,48 +306,48 @@ public class MainMenuUI : MonoBehaviour
 
     private void StyleSlider(Slider slider)
     {
-        slider.style.marginTop = 10;
-        slider.style.marginBottom = 10;
-        slider.style.width = 280;
-        slider.style.minWidth = 280;
-        slider.style.height = 40;
-        slider.style.alignSelf = Align.Center;
-        slider.style.flexDirection = FlexDirection.Row;
+        // slider.style.marginTop = 10;
+        // slider.style.marginBottom = 10;
+        // slider.style.width = 280;
+        // slider.style.minWidth = 280;
+        // slider.style.height = 40;
+        // slider.style.alignSelf = Align.Center;
+        // slider.style.flexDirection = FlexDirection.Row;
 
-        Label label = slider.Q<Label>();
-        if (label != null)
-        {
-            label.style.width = 120;
-            label.style.minWidth = 120;
-            label.style.fontSize = 24;
-            label.style.unityTextAlign = TextAnchor.MiddleLeft;
+        // Label label = slider.Q<Label>();
+        // if (label != null)
+        // {
+        //     label.style.width = 120;
+        //     label.style.minWidth = 120;
+        //     label.style.fontSize = 24;
+        //     label.style.unityTextAlign = TextAnchor.MiddleLeft;
 
-            label.style.paddingTop = 0;
-            label.style.paddingBottom = 0;
-            label.style.marginTop = 0;
-            label.style.marginBottom = 0;
-            label.style.paddingLeft = 10;
-        }
+        //     label.style.paddingTop = 0;
+        //     label.style.paddingBottom = 0;
+        //     label.style.marginTop = 0;
+        //     label.style.marginBottom = 0;
+        //     label.style.paddingLeft = 10;
+        // }
 
-        var dragContainer = slider.Q<VisualElement>("unity-drag-container");
-        if (dragContainer != null)
-        {
-            dragContainer.style.flexGrow = 1;
-            dragContainer.style.justifyContent = Justify.Center;
-            dragContainer.style.marginRight = 10;
-        }
+        // var dragContainer = slider.Q<VisualElement>("unity-drag-container");
+        // if (dragContainer != null)
+        // {
+        //     dragContainer.style.flexGrow = 1;
+        //     dragContainer.style.justifyContent = Justify.Center;
+        //     dragContainer.style.marginRight = 10;
+        // }
 
         var tracker = slider.Q<VisualElement>("unity-tracker");
         if (tracker != null)
         {
-            tracker.style.position = Position.Relative;
-            tracker.style.top = StyleKeyword.Auto;
-            tracker.style.marginTop = 0;
-            tracker.style.height = 16;
-            tracker.style.borderTopWidth = 0;
-            tracker.style.borderBottomWidth = 0;
-            tracker.style.borderLeftWidth = 0;
-            tracker.style.borderRightWidth = 0;
+            // tracker.style.position = Position.Relative;
+            // tracker.style.top = StyleKeyword.Auto;
+            // tracker.style.marginTop = 0;
+            // tracker.style.height = 16;
+            // tracker.style.borderTopWidth = 0;
+            // tracker.style.borderBottomWidth = 0;
+            // tracker.style.borderLeftWidth = 0;
+            // tracker.style.borderRightWidth = 0;
 
             if (sliderBarSprite != null)
             {

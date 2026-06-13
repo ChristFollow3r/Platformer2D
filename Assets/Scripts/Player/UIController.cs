@@ -597,12 +597,12 @@ namespace Player
             {
                 "Move: A / D",
                 "Jump & Double Jump: Space",
-                "Wall Slide: Hold A / D on wall",
-                "Attack: Right Click",
-                "Mine: Left Click",
+                "Attack: Left click",
+                "Mine: Shift + Attack",
+                "Build: Right Click",
+                "Move Hand: Mouse Wheel / Numbers",
                 "Consume: R",
                 "Drop Item: Q",
-                "Build: Middle Mouse - Mouse Wheel"
             };
 
             foreach (string bind in keybindsList)

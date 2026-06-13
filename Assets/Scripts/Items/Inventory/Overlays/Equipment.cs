@@ -215,17 +215,12 @@ namespace Items.Overlays
                 slot = isCraftingSlot ? craftingSlots[slotId - EquipmentSlots] : equipmentSlots[slotId];
             }
 
-            if (slot.isEmpty)
-            {
-                Debug.Log($"Slot is empty");
-                return null;
-            }
+            if (slot.isEmpty) return null;
 
             ItemStack itemStack = slot.item;
             slot.item = null;
 
             OnSlotChanged?.Invoke(slotId, null);
-            Debug.Log($"Slot cleared!");
 
             if (isCraftingSlot || isResultSlot) EvaluateCraft();
             if (isResultSlot)

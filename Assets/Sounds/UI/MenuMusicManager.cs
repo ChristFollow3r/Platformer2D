@@ -52,14 +52,12 @@ namespace Sounds.UI
 
         private IEnumerator FadeOutCoroutine()
         {
-            Debug.Log("Fading out");
             float startVolume = audioSource.volume;
             float timeElapsed = 0f;
 
             while (timeElapsed < fadeDuration)
             {
                 timeElapsed += Time.unscaledDeltaTime;
-                Debug.Log(Mathf.Lerp(startVolume, 0f, timeElapsed / fadeDuration));
                 audioSource.volume = Mathf.Lerp(startVolume, 0f, timeElapsed / fadeDuration);
                 yield return null;
             }

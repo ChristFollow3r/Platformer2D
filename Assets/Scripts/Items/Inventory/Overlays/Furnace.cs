@@ -203,7 +203,7 @@ namespace Items.Overlays
             OnSlotChanged?.Invoke(slotId, null);
 
             if (!isResultSlot && !isfueldSlot) EvaluateCook();
-
+            if (isResultSlot) TutorialManager.Instance.OnCrafted(itemStack.data, itemStack.amount);
             return itemStack;
             #endregion
         }

@@ -3,5 +3,8 @@
     <ui:VisualElement name="root" class="slot-root">
         <ui:VisualElement name="bg" class="slot-bg"/>
         <ui:VisualElement name="item-holder" class="item-holder"/>
+        <ui:VisualElement name="number-holder" style="flex-grow: 0; position: absolute; right: -10px; bottom: -10px; width: 20px; height: 20px; justify-content: center; align-items: center; background-color: rgb(219, 184, 138); border-top-left-radius: 2px; border-top-right-radius: 2px; border-bottom-right-radius: 2px; border-bottom-left-radius: 2px; color: rgba(0, 0, 0, 0.67); display: none;">
+            <ui:Label text="0" name="number" style="margin-top: 0; margin-right: 0; margin-bottom: 0; margin-left: 3px; padding-top: 0; padding-right: 0; padding-bottom: 0; padding-left: 0; -unity-text-align: middle-center; -unity-font-style: bold; -unity-font-definition: url(&quot;project://database/Packages/com.unity.render-pipelines.core/Runtime/Debugging/Prefabs/Fonts/PerfectDOSVGA437.ttf?fileID=12800000&amp;guid=74a5091d8707f334b9a5c31ef71a64ba&amp;type=3#PerfectDOSVGA437&quot;);"/>
+        </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

@@ -29,7 +29,7 @@ public class TutorialUI : MonoBehaviour
         descriptionLabel = document.rootVisualElement.Q<Label>("Description");
         closeButton = document.rootVisualElement.Q<Button>("CloseButton");
         goalTrackerContainer = document.rootVisualElement.Q<VisualElement>("GoalTracker");
-
+        goalTrackerContainer.pickingMode = PickingMode.Ignore;
         if (closeButton != null)
         {
             closeButton.clicked += HidePopup;
@@ -92,6 +92,7 @@ public class TutorialUI : MonoBehaviour
         }
     }
 
+
     public void AddGoal(string goalId, string labelText)
     {
         if (goalTrackerContainer == null) return;
@@ -117,6 +118,9 @@ public class TutorialUI : MonoBehaviour
         Toggle newGoal = new Toggle();
         newGoal.name = goalId;
         newGoal.focusable = false;
+        newGoal.SetEnabled(false);
+        newGoal.style.opacity = 1f;
+
 
         newGoal.RegisterCallback<GeometryChangedEvent>(evt =>
         {
@@ -160,14 +164,13 @@ public class TutorialUI : MonoBehaviour
         Toggle toggleElement = document.rootVisualElement.Q<Toggle>(toggleName);
         if (toggleElement == null) return;
 
-        if (!toggleElement.value)
+        Debug.Log($"Completing goal {toggleName} | {toggleElement == null}");
+        toggleElement.value = true;
+        if (quiet) return;
+        if (goalCompleteSound != null && Camera.main != null)
         {
-            toggleElement.value = true;
-            if (quiet) return;
-            if (goalCompleteSound != null && Camera.main != null)
-            {
-                AudioSource.PlayClipAtPoint(goalCompleteSound, Camera.main.transform.position);
-            }
+            AudioSource.PlayClipAtPoint(goalCompleteSound, Camera.main.transform.position);
         }
+
     }
 }
