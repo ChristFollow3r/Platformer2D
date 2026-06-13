@@ -205,6 +205,8 @@ namespace UI.Components
                 {
                     ItemStack pulled = targetSlot.inventory.ClearSlot(targetSlot.slotId);
                     if (pulled != null) amount += pulled.amount;
+
+                    TutorialManager.Instance.OnCrafted(item, amount);
                     return;
                 }
 
