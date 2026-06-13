@@ -444,12 +444,12 @@ MonoBehaviour:
     isCaveEnemy: 0
     isFlying: 1
     spawnWeight: 28
-  daySpawnInterval: 120
-  nightSpawnInterval: 32
+  daySpawnInterval: 48
+  nightSpawnInterval: 16
   maxActiveEnemies: 16
   minSpawnDistance: 16
-  maxSpawnDistance: 16
-  despawnDistance: 32
+  maxSpawnDistance: 32
+  despawnDistance: 28
   caveTransitionY: 55
 --- !u!4 &260356700
 Transform:

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drops:
   - item: {fileID: 11400000, guid: 8bccc04a6493cad44924dda7a77d8b01, type: 2}
-    minAmount: 6
-    maxAmount: 9
+    minAmount: 13
+    maxAmount: 20
     dropChance: 101
   - item: {fileID: 11400000, guid: 4cbeef3361d9433489cebb1c75120ad3, type: 2}
     minAmount: 5
