@@ -465,7 +465,7 @@ namespace Player
 
         #region Settings Logic
 
-       private void InitializeSettings(VisualElement menuRoot)
+        private void InitializeSettings(VisualElement menuRoot)
         {
             settingsContainer = menuRoot.Q<VisualElement>("SettingsContainer");
             if (settingsContainer == null) return;
@@ -794,10 +794,10 @@ namespace Player
                 int newHp = Mathf.Min(h.maxHealth, h.currentHealth + 80);
                 h.SetHealth(newHp);
             }
-            // ADD THIS BLOCK RIGHT HERE:
-            else if (hand.data.name == "Destiny Stone") // Replace "destiny" with the EXACT name from your ItemData
+            else if (hand.data.name == "Destiny Stone")
             {
                 ShowThankYouScreen();
+                TutorialManager.Instance.Complete();
             }
 
             Items.Inventory.Singleton.RemoveFromHand();

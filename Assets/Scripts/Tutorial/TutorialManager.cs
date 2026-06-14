@@ -509,7 +509,7 @@ public class TutorialManager : MonoBehaviour
                 break;
             case TutorialPhase.Block12_Destiny:
                 tutorialUI.AddGoal("b12_destinyStone", "Craft 1 Destiny Stone");
-                tutorialUI.AddGoal("b12_interactDestiny", "Interact with the Destiny Stone");
+                tutorialUI.AddGoal("b12_interactDestiny", "Consume the Destiny Stone");
                 CheckInventoryQuests();
                 break;
             case TutorialPhase.Completed:
@@ -730,6 +730,12 @@ public class TutorialManager : MonoBehaviour
                 if (b12_interactDestiny) tutorialUI.CompleteGoal("b12_interactDestiny", true);
                 break;
         }
+    }
+
+    public void Complete()
+    {
+        b12_interactDestiny = true;
+        tutorialUI.CompleteGoal("b12_interactDestiny");
     }
 
     public void OnCrafted(ItemData itemData, int amount = 1)
